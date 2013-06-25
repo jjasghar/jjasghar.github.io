@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2013-06-25T11:32:12-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[testing this out]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/06/25/testing-this-out/"/>
+    <updated>2013-06-25T11:28:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/06/25/testing-this-out</id>
+    <content type="html"><![CDATA[<p>This is a test, lets see it work</p>
+]]></content>
+  </entry>
+  
+</feed>
