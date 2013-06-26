@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: chef,vagrant | jjasghar rants and ramblings]]></title>
-  <link href="http://jjasghar.github.io/blog/categories/chef-vagrant/atom.xml" rel="self"/>
+  <title><![CDATA[Category: vagrant | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-06-26T13:55:42-05:00</updated>
+  <updated>2013-06-26T13:56:12-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
