@@ -3,7 +3,7 @@ layout: post
 title: "chef-jenkins-vagrant"
 date: 2013-06-25 11:43
 comments: true
-categories: chef,vagrant
+categories: chef vagrant
 ---
 
 To quote the top of my [README.md](https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md):
