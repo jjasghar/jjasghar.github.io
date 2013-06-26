@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ansible | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/ansible/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-06-26T13:56:12-05:00</updated>
+  <updated>2013-06-26T13:58:48-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[ansible vs chef vs puppet]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/25/ansible-vs-chef-vs-puppet/"/>
-    <updated>2013-06-25T14:58:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/25/ansible-vs-chef-vs-puppet</id>
+    <link href="http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet/"/>
+    <updated>2013-06-26T13:58:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet</id>
     <content type="html"><![CDATA[<h2>Intro</h2>
 
 <p>First off, I&rsquo;m going to say I&rsquo;m a chef zealot, but I&rsquo;m attempting to put together an intelligent discussion of the battle that has popped up in sysadmin discussion groups now-a-days.  Secondly, I&rsquo;m only focusing on the three systems I have exposure to, ansible the least, puppet the second, and chef the most.  I could also probably throw salt, cfengine, and others in there, but that&rsquo;s superfluous, this is my discussion so I&rsquo;m going to keep it in my scope.</p>
