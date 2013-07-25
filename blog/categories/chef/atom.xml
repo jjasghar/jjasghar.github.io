@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2013-07-17T18:10:34-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[serverspec the new best way to learn and audit your infrastructure]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/"/>
+    <updated>2013-07-12T15:06:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure</id>
+    <content type="html"><![CDATA[<p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
+
+<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
+
+<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
+You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
+
+<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
+
+<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.
+``` ruby
+require &lsquo;spec_helper&rsquo;</p>
+
+<p>describe package(&lsquo;httpd&rsquo;) do
+  it { should be_installed }
+end</p>
+
+<p>describe service(&lsquo;httpd&rsquo;) do
+  it { should be_enabled   }
+  it { should be_running   }
+end</p>
+
+<p>describe port(80) do
+  it { should be_listening }
+end</p>
+
+<p>describe file(&lsquo;/etc/httpd/conf/httpd.conf&rsquo;) do
+  it { should be_file }
+  it { should contain &ldquo;ServerName my-server-name&rdquo; }
+end
+<code>``
+That's it, now all you have to do is</code>rake spec` and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
+
+<h2>nagios (or automated process monitoring) vs serverspec</h2>
+
+<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
+
+<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
+
+<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
+
+<h2>Conclusion</h2>
+
+<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ansible vs chef vs puppet]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet/"/>
+    <updated>2013-06-26T13:58:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet</id>
+    <content type="html"><![CDATA[<h2>Intro</h2>
+
+<p>First off, I&rsquo;m going to say I&rsquo;m a chef zealot, but I&rsquo;m attempting to put together an intelligent discussion of the battle that has popped up in sysadmin discussion groups now-a-days.  Secondly, I&rsquo;m only focusing on the three systems I have exposure to, ansible the least, puppet the second, and chef the most.  I could also probably throw salt, cfengine, and others in there, but that&rsquo;s superfluous, this is my discussion so I&rsquo;m going to keep it in my scope.</p>
+
+<p>I&rsquo;m going focus on the pluses of each, and use the &ldquo;Overall&rdquo; section to combine them.  In my conclusion my true thoughts will come out, so if you want the tl;dr I&rsquo;d skip down there.</p>
+
+<h2>ansible</h2>
+
+<p>Links:
+<a href="http://www.ansibleworks.com/">homepage</a>, a great <a href="https://github.com/leucos/ansible-tuto">tutorial</a></p>
+
+<ul>
+<li>Low overhead</li>
+<li>python based</li>
+<li>playbook based</li>
+</ul>
+
+
+<p>To quote Wikipedia:</p>
+
+<blockquote><p>Ansible is an open-source software platform for configuring and managing computers. It combines multi-node software deployment, ad-hoc task execution, and configuration management. It manages nodes over SSH and does not require any additional remote software to be installed on them. Modules work over JSON and standard output and can be written in any programming language. The system uses YAML to express reusable descriptions of systems.</p></blockquote>
+
+<p>Probably the neatest thing about ansible is that it only requires ssh to work.  You do the work on a local box, and run the &ldquo;play book&rdquo; and it walks through the steps.  its designed to be something fast and quick to spin up boxes.  The disadvantage of this is that creep can happen; you can make sure the box is what you expect but you don&rsquo;t have the focused control of something like chef or puppet.  If you need just a webserver that is configured one way and is disposable then this is the way to go.  If you have to support something for long term though, it seems its out of scope of this product. I could be wrong but that&rsquo;s how I interperat it.</p>
+
+<h2>chef</h2>
+
+<p>Links:
+<a href="http://www.opscode.com/">homepage</a>, a great <a href="https://learnchef.opscode.com/">tutorial</a></p>
+
+<ul>
+<li>gem or <a href="http://www.opscode.com/blog/2012/06/29/omnibus-chef-packaging/">omnibus</a> installer</li>
+<li>server based or <a href="http://docs.opscode.com/chef_solo.html">chef-solo</a></li>
+<li>cookbook or recipe based</li>
+</ul>
+
+
+<p>To quote Wikipedia:</p>
+
+<blockquote><p>chef is a configuration management tool written in Ruby and Erlang. It uses a pure-Ruby, domain-specific language (DSL) for writing system configuration &ldquo;recipes&rdquo; or &ldquo;cookbooks&rdquo;. chef was written by Opscode and is released as open source under the Apache License 2.0. chef is a DevOps tool used for configuring cloud services or to streamline the task of configuring a company&rsquo;s internal servers. chef automatically sets up and tweaks the operating systems and programs that run in massive data centers.</p></blockquote>
+
+<p>As I said in the intro, I love chef.  Hell if I could I&rsquo;d probably work for opscode.  As soon as I got my head wrapped around chef (which is chef&rsquo;s main problem), its quick and efficient, and its slick.  I&rsquo;ve only ever used chef with a chef server, never really touched chef-solo.  I also leveraged <a href="https://github.com/jkeiser/chef-zero">chef-zero</a> in my testing because I like the idea of uploading the cookbooks and pulling them down.  Having cookbooks on a centralized chef server, its a true &ldquo;system of record&rdquo; that doesn&rsquo;t rely on your laptop or workstation, if you do a <code>knife server create 'role[web]'</code> you know what you are going to get.</p>
+
+<p>Something I would like to say though, a huge disadvantage of chef is the way cookbooks are controlled.  It requires constant babying, or plugins like <a href="https://github.com/jonlives/knife-spork">knife-spork</a> to make sure people don&rsquo;t mess with each others work.  I am lucky enough to work in an environment with only 2 others that have any real use for chef, so I am able to be a good gatekeeper.  I could only imagine the cluster with larger teams.  As of 6/26/13 I know this is a conversation topic and pain point, I&rsquo;d be interested to see how the workflow matures.</p>
+
+<h2>puppet</h2>
+
+<p>Links:
+<a href="http://www.puppetlabs.com/">homepage</a>, a great <a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">cheat sheet</a></p>
+
+<ul>
+<li>an official <a href="http://info.puppetlabs.com/download-learning-puppet-VM.html">learning</a> vm</li>
+<li><a href="https://puppetlabs.com/puppet/puppet-open-source/">package</a> based</li>
+<li>server based or local puppet-apply</li>
+<li>manifest based</li>
+</ul>
+
+
+<p>To quote Wikipedia:</p>
+
+<blockquote><p>puppet is a tool designed to manage the configuration of Unix-like and Microsoft Windows systems declaratively. The user describes system resources and their state, either using puppet&rsquo;s declarative language or a Ruby DSL (domain-specific language). This information is stored in files called &ldquo;puppet manifests&rdquo;. puppet discovers the system information via a utility called Facter, and compiles the puppet manifests into a system-specific catalog containing resources and resource dependency, which are applied against the target systems. Any actions taken by puppet are then reported.</p></blockquote>
+
+<p>Something I&rsquo;ve always loved about puppet is the trifecta. You can easily create a manifest to control the package/file/service in only a few lines.  (check that cheat sheet above for an example) I was able to take over an infrastructure in an extremely short period of time with just that.  I didn&rsquo;t have that long to control every facet of the groupings but the investment to the reward was mind boggling fast.</p>
+
+<h2>Overall</h2>
+
+<p>Ok, now that my little tl;dr of the pluses are done, I can start my views overall.  puppet is a very &ldquo;eins, zwei, eins, zwei,&rdquo; type application.  With marrying it with something like <a href="http://www.cobblerd.org/">cobbler</a> you can in theory rack mount a machine, hit the power button and have a machine exactly how you want it to be in &ldquo;x&rdquo; about of time.  This is great for big companies that always want machines to cookie cutter. It could be that that&rsquo;s how I saw puppet being used, but comparing them to the two other config management systems; it really fits. Speaking of cobbler, yes, I do understand you can leverage cobbler with each of these tools, but as you can <a href="https://github.com/cobbler/cobbler/wiki/Using%20cobbler%20with%20a%20configuration%20management%20system">see</a> it just seems that cobbler and puppet are a match made in heaven.  chef on the other hand seems like it&rsquo;s designed for smaller companies with smaller teams.  It looks for cooperation, nay, requires cooperation, and its to its strength and its weakness.  Unlike puppet, chef doesn&rsquo;t default to an &ldquo;active&rdquo; mode (Ok, that&rsquo;s not fully true about puppet either, but the better practice is to have puppet in active mode from the get go).  puppet runs by default every 30 mins, to make sure its what you want to be, chef on the other hand is a pull based config-management that they even suggest &ldquo;putting chef-client&rdquo; in your crontab.  This originally bothered me, coming from the puppet world, but as i learned more about chef i realized that isn&rsquo;t its bread and butter.  chef is a way to spin up boxes for an elastic environment like AWS.  You have a massive blast of traffic, chef will trigger throw your machines in the load balancer, install apache or whatever, and you have what you expect, and 2-3 hours later you blow it away.  This is different than ansible because it is not &ldquo;automated&rdquo; per se. Remember the play books site in your local machine, you have interact with the provisioning, which for a startup seems like the correct path. In a startup you have to know exactly what machines are running, not only because of OPEX but because its your baby, you want focus and tweak; you <em>probably</em> don&rsquo;t have the budget to just blow away the boxes.</p>
+
+<h2>Conclusion</h2>
+
+<p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[chef-jenkins-vagrant]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant/"/>
+    <updated>2013-06-25T11:43:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant</id>
+    <content type="html"><![CDATA[<p>To quote the top of my <a href="https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md">README.md</a>:</p>
+
+<blockquote><p>This is my &ldquo;recipe&rdquo; on how I got Chef Jenkins and Vagrant to play nice. After watching this (<a href="http://www.youtube.com/watch?v=h_IEfNklzW4">http://www.youtube.com/watch?v=h_IEfNklzW4</a>) video, I realized I could do this. I searched high and low for a tutorial on how to bulid this stack, and nothing. So I decided to create a github doc to centralize my setup and hopefully let the community suggest additions.</p></blockquote>
+
+<p>I want to thank <a href="https://github.com/bscott">Brian Scott</a>, because after his video it really opened my eyes.  I&rsquo;ve now had 3 people run through this tutorial and all come out with a working <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> set ups and learned to extend it to where I had never thought of.</p>
+
+<p>I understand and that a lot of people wonder why someone would want to build this from scratch, instead of using, for instance <a href="https://github.com/fnichol">Fletcher Nichol&rsquo;s</a> <em>ahem</em><a href="https://github.com/jamie-ci/jamie">jamie-ci</a><em>ahem</em> test-kitchen, and this is what I&rsquo;m going to write about.</p>
+
+<p>I see <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> is more for writing cookbooks and recipes for the general public.  You can easily create faux VMs, per <a href="https://github.com/sethvargo">Seth Vergo&rsquo;s</a> awesome <a href="https://github.com/customink/fauxhai">fauxhai</a> to test cookbooks across multiple setups and multiple provisioned systems to see if they work.  This is great for developing a cookbooks but I can&rsquo;t see it working in a sysadmins workflow.</p>
+
+<p>Sysadmins have a select few boxes; they have their known quantities, they know they aren&rsquo;t going to have RHEL/DEB/tar based machines.  They build infrastructures to have uniformity, they stick with one of them.  Granted, some of the sysadmnis out there are unlucky and DO have these environments, but I truly believe that&rsquo;s the minority not the majority.</p>
+
+<p>A sysadmin needs a way to provision his machines, in a safe manner before pushing changes out to production. This sounds obvious, but how many places I&rsquo;ve been where have I heard &ldquo;Oh, it&rsquo;s just an /etc/hosts file update, just push it out.&rdquo;  Just yesterday, (06/25/2013) as I was victim if that short cut and caused an outage to some our backend machines.  If you are curious, it seems, we had a hardcoded IP to DNS name in /etc/hosts (not DNS) that was required for our application to work.  If I held true to my statements earlier I would have noticed this change from my CI builds and not looked like the dumbass I was.</p>
+
+<p>I built this <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> howto so I don&rsquo;t have an excuse anymore, I have a proven way to build and implement good practices in an quick manner.  I hope you find it useful, and if you have suggestions or additions PRs are always welcome.</p>
+
+<p>Mind your <code>rm -rf *</code>,</p>
+
+<p>JJ Asghar</p>
+]]></content>
+  </entry>
+  
+</feed>

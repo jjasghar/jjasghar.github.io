@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rackspace | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/rackspace/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2013-07-17T18:10:34-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Nagios-status-rackspace]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace/"/>
+    <updated>2013-07-09T15:05:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace</id>
+    <content type="html"><![CDATA[<p>I posted a <a href="http://redd.it/1gefnf">this</a> on <a href="http://www.reddit.com/r/sysadmin">/r/sysadmin/</a> back on 6/15/13.  I wanted to put some context around why I created the nagios checks and why the <a href="https://status.rackspace.com/index/rss">RSS</a> after all that discussion still didn&rsquo;t fulfill my requirements.</p>
+
+<p>The biggest problem I have with the RSS feed is that it is everything inside the rackspace status page.  As I said to <a href="http://www.reddit.com/user/rackerkev">/u/rackerkev</a>; as a customer in ORD I don&rsquo;t want to be paged or alerted when something in LON happens.  This seems be the default for the RSS feed, a water hose of what that status page says.</p>
+
+<p>After our account manager suggested us to check <a href="http://status.rackspace.com">http://status.rackspace.com</a> a developer on my team asked if there was an automated way to check this.  I ran a quick <code>curl http://status.rackspace.com</code> and discovered it&rsquo;s flat html.  Boom, I had a way to get the data, I just needed a way to parse it.</p>
+
+<p>I had a default nagios check template and all I had to do was put that <code>curl</code> in to parse it out.
+``` bash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>stateid=
+SOMECMD=`echo &ldquo;something&rdquo;
+SOMETHING=something</p>
+
+<p>if [ &ldquo;${SOMECMD}&rdquo; == ${SOMETHING} ];
+ then
+   echo ${SOMETHING} is something
+   stateid=0</p>
+
+<h1>elif [  &ldquo;${SOMECMD}&rdquo; == ${SOMETHING} ];</h1>
+
+<h1>then</h1>
+
+<h1>echo This is a Warning</h1>
+
+<h1>stateid=1</h1>
+
+<p>elif [ &ldquo;${SOMECMD}&rdquo; != ${SOMETHING} ];
+ then
+   echo Something is broken!
+   stateid=2
+ fi
+exit $stateid
+```
+I don&rsquo;t think this actually works, but hell you get the point.</p>
+
+<p>So with some patience using <code>sed</code> and <code>grep</code> I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about &ldquo;You should write it as one script and then add flags or variables at the end.&rdquo; I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have <code>curl</code> installed and write the command stanza, like my suggestion in the <a href="https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md">README.md</a> you should be off to the races.</p>
+
+<p>Now something interesting I learned posting these checks.  The quote that says &ldquo;rackspace only updates the status page if enough customers complain about some problem some place&rdquo; is true.  There is no automated update to the status page, it requires human intervention to update.  When I first heard of the status page, I like most though it was programmatic way to see into rackspace infrastructure.  This makes me a sad panda; and as I have learned the best way to get anything done with rackspace is to call yell and yell more.</p>
+]]></content>
+  </entry>
+  
+</feed>

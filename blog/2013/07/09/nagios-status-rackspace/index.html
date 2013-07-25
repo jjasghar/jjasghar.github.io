@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Nagios-status-rackspace - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="I posted a this on /r/sysadmin/ back on 6/15/13. I wanted to put some context around why I created the nagios checks and why the RSS after all that &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Nagios-status-rackspace</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-09T15:05:00-05:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I posted a <a href="http://redd.it/1gefnf">this</a> on <a href="http://www.reddit.com/r/sysadmin">/r/sysadmin/</a> back on 6/15/13.  I wanted to put some context around why I created the nagios checks and why the <a href="https://status.rackspace.com/index/rss">RSS</a> after all that discussion still didn&rsquo;t fulfill my requirements.</p>
+
+<p>The biggest problem I have with the RSS feed is that it is everything inside the rackspace status page.  As I said to <a href="http://www.reddit.com/user/rackerkev">/u/rackerkev</a>; as a customer in ORD I don&rsquo;t want to be paged or alerted when something in LON happens.  This seems be the default for the RSS feed, a water hose of what that status page says.</p>
+
+<p>After our account manager suggested us to check <a href="http://status.rackspace.com">http://status.rackspace.com</a> a developer on my team asked if there was an automated way to check this.  I ran a quick <code>curl http://status.rackspace.com</code> and discovered it&rsquo;s flat html.  Boom, I had a way to get the data, I just needed a way to parse it.</p>
+
+<p>I had a default nagios check template and all I had to do was put that <code>curl</code> in to parse it out.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
+</span><span class='line'><span class="nv">SOMECMD</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="s2">&quot;something&quot;</span>
+</span><span class='line'><span class="nv">SOMETHING</span><span class="o">=</span>something
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> <span class="o">==</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
+</span><span class='line'> <span class="k">then</span>
+</span><span class='line'><span class="k">   </span><span class="nb">echo</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> is something
+</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
+</span><span class='line'><span class="c">#elif [  &quot;${SOMECMD}&quot; == ${SOMETHING} ];</span>
+</span><span class='line'><span class="c">#  then</span>
+</span><span class='line'><span class="c">#  echo This is a Warning</span>
+</span><span class='line'><span class="c">#  stateid=1</span>
+</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> !<span class="o">=</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
+</span><span class='line'> <span class="k">then</span>
+</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Something is broken!
+</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
+</span><span class='line'> <span class="k">fi</span>
+</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t think this actually works, but hell you get the point.</p>
+
+<p>So with some patience using <code>sed</code> and <code>grep</code> I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about &ldquo;You should write it as one script and then add flags or variables at the end.&rdquo; I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have <code>curl</code> installed and write the command stanza, like my suggestion in the <a href="https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md">README.md</a> you should be off to the races.</p>
+
+<p>Now something interesting I learned posting these checks.  The quote that says &ldquo;rackspace only updates the status page if enough customers complain about some problem some place&rdquo; is true.  There is no automated update to the status page, it requires human intervention to update.  When I first heard of the status page, I like most though it was programmatic way to see into rackspace infrastructure.  This makes me a sad panda; and as I have learned the best way to get anything done with rackspace is to call yell and yell more.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-09T15:05:00-05:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/monitoring/'>monitoring</a>, <a class='category' href='/blog/categories/nagios/'>nagios</a>, <a class='category' href='/blog/categories/rackspace/'>rackspace</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/26/ansible-vs-chef-vs-puppet/" title="Previous Post: ansible vs chef vs puppet">&laquo; ansible vs chef vs puppet</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/" title="Next Post: serverspec the new best way to learn and audit your infrastructure">serverspec the new best way to learn and audit your infrastructure &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/">Serverspec the New Best Way to Learn and Audit Your Infrastructure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/09/nagios-status-rackspace/">Nagios-status-rackspace</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/26/ansible-vs-chef-vs-puppet/">Ansible vs Chef vs Puppet</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/25/chef-jenkins-vagrant/">Chef-jenkins-vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/25/testing-this-out/">Testing This Out</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
