@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-09-11T13:09:50-05:00</updated>
+  <updated>2013-09-11T13:55:50-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -34,6 +34,8 @@
 
 
 <p>Dang you really do learn something new every day.</p>
+
+<p>Note: A good friend of mine <a href="https://github.com/awaxa/">awaxa</a> pointed out that {1..10} is the fastest in this case because it&rsquo;s a built into bash.  Thanks awaxa!</p>
 ]]></content>
   </entry>
   
