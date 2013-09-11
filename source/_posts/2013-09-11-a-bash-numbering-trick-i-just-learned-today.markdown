@@ -15,3 +15,5 @@ for i in `seq 1 10` ; do echo $i; done
 for i in {1..10} ; do echo $i; done
 ```
 Dang you really do learn something new every day.
+
+Note: A good friend of mine [awaxa](https://github.com/awaxa/) pointed out that {1..10} is the fastest in this case because it's a built into bash.  Thanks awaxa!
