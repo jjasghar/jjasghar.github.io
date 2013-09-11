@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-07-17T18:10:34-05:00</updated>
+  <updated>2013-08-02T15:51:12-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Adventures with chef-solo]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/"/>
+    <updated>2013-08-02T14:36:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo</id>
+    <content type="html"><![CDATA[<p>I started my chef career with inheriting a chef infrastructure with an opensource chef server.  I read all of the blog posts, and the tutorials, tried to wrap my head around what a cookbook, recipe, or data bag was.  I know now, this was the <em>wrong</em> way to learn chef.  chef with chef-client/server adds a level of complexity that just is unfounded.  I decided to spend a copy hours to master chef-solo, and damn I wish I had started there.</p>
+
+<h2>My hands on learning project</h2>
+
+<p>I had a requirement of setting up a unicorn nginx instance on a VPS.  I thought hell, there&rsquo;s gotta be a way to do this with chef. (I normally use passenger+apache, so I had to learn nginx and unicorn too, but that&rsquo;s a different post&hellip;well kinda) So I looked around for a nice <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">tutorial</a> and came across that guy.  I started reading it, realized holy crap, this is awesome.  I stole the <code>solo.json</code> and the <code>solo.rb</code> and <code>install.sh</code> because I was lazy.<br/>
+I changed the <code>install.sh</code> around a little bit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># This run as root on the machine</span>
+</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
+</span><span class='line'>
+</span><span class='line'><span class="c"># are we not bootstrapped?</span>
+</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
+</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
+</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>
+</span><span class='line'>chef-solo -c solo.rb -j solo.json
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can tell, its ubuntu focused, but basically if I want to provision a box after making a change to one of the cookbooks I just had to run <code>./install.sh</code>.  Interestingly, I had heard bad things about the 1.9.1 ruby binaries for ubuntu, but so far, it is a ton better than doing that compile from src. ;)</p>
+
+<p>So, basically with those three files, running that curl in the script, and creating a <code>cookbooks/</code> directory, I had my framework to make this project happen.</p>
+
+<p>Now I made a mistake here.  I started off with a simple &ldquo;generic&rdquo; cookbook, with a simple <code>default.rb</code> file that called a <code>packages.rb</code> file to add some pkgs I love and run on a daily basis.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%w{build-essential git-core libgdbm-dev libreadline-dev libssl-dev libyaml-dev s3cmd tmux tk-dev vim wget zlib1g-dev zsh}</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">pkg</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">package</span> <span class="n">pkg</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">action</span> <span class="o">[</span><span class="ss">:install</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now to an passive onlooker there seems nothing wrong with this, and 3 weeks ago JJ would agree with you.  JJ now says, &ldquo;Stop that, start with the webserver and the deps for that instead of the convince of something easy like package management.&rdquo;  LEARN <a href="http://berkshelf.com/">berkshelf</a> and don&rsquo;t make excuses. (at this writing, 8/2/13, I still actually haven&rsquo;t learned it, the best analogy is this, dling cookbooks is like building from source, and berkshelf is like using apt-get) Anyway I digress.</p>
+
+<p>Back to the original story.</p>
+
+<p>I made the <code>cookbooks/</code> directory, and when to github to pull down the newest <a href="https://github.com/opscode-cookbooks/nginx">nginx</a> cookbook.  <code>git clone https://github.com/opscode-cookbooks/nginx.git</code> in the directory and then because  I hate submodules, I ran <code>rm -rf .git/</code>. I <code>cd ~/chef-solo</code> then ran <code>install.sh</code>. Crossed my fingers and no, didn&rsquo;t work. Turns out I needed a bunch of dependences (hence the berkself statement). I resolved them all, and then ran the beautiful <code>./install.sh</code>. BOOM, it worked.  I took a moment, realized what I had just done.  I created a git repo off this work, created a branch &ldquo;nginx&rdquo; and committed my changes. Now whenever I need to spin up an nginx box, all I have to do is clone my chef-solo repo and checkout nginx and run <code>install.sh</code>.</p>
+
+<p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
+
+<p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[semver or how I learned that versioning everywhere where I've worked is stupid and semver is the way to go]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/07/25/semver-or-how-i-learned-that-versioning-everywhere-where-ive-worked-is-stupid-and-semver-is-the-way-to-go/"/>
+    <updated>2013-07-25T16:37:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/07/25/semver-or-how-i-learned-that-versioning-everywhere-where-ive-worked-is-stupid-and-semver-is-the-way-to-go</id>
+    <content type="html"><![CDATA[<p>In the chef world the way that cookbooks are named versioned is something called semver.  Before i watched Jamie Winsor&rsquo;s <a href="https://www.youtube.com/watch?v=hYt0E84kYUI">Berkself Way</a> I didn&rsquo;t know understand how the versioning worked.  I quickly discovered <a href="http://www.semver.org">http://www.semver.org</a> and fell in love.</p>
+
+<p>TODO.</p>
+
+<p>Seriously, though it really is awesome.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[serverspec the new best way to learn and audit your infrastructure]]></title>
