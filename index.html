@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I started my chef career with inheriting a chef infrastructure with an opensource chef server. I read all of the blog posts, and the tutorials, tried &hellip;">
+  <meta name="description" content="I&rsquo;ve been using bash for&hellip;a really really long time. I&rsquo;ve always done seq 1 10 in my for loops to get 1 2 3 4 5 6 7 8 9 10. Today I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +66,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/">A Bash Numbering Trick I Just Learned Today</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-11T13:05:00-05:00" pubdate data-updated="true">Sep 11<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been using bash for&hellip;a really really long time.  I&rsquo;ve always done <code>seq 1 10</code> in my for loops to get <code>1 2 3 4 5 6 7 8 9 10</code>.  Today I learned these three ways do the exact same thing. (Note: bash v4 above) I&rsquo;m writing this out, mainly because I want to remind myself of this again one day.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span>1; i&lt;<span class="o">=</span>10; i++<span class="o">))</span>; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>seq 1 10<span class="sb">`</span> ; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for </span>i in <span class="o">{</span>1..10<span class="o">}</span> ; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Dang you really do learn something new every day.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -609,6 +660,10 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/">A Bash Numbering Trick I Just Learned Today</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/02/adventures-with-chef-solo/">Adventures With Chef-solo</a>
       </li>
     
@@ -622,10 +677,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
     
       <li class="post">
         <a href="/blog/2013/07/09/nagios-status-rackspace/">Nagios-status-rackspace</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/26/ansible-vs-chef-vs-puppet/">Ansible vs Chef vs Puppet</a>
       </li>
     
   </ul>

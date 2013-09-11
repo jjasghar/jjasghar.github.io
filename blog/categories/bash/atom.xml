@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: bash | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/bash/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2013-09-11T13:09:50-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[a bash numbering trick I just learned today]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/"/>
+    <updated>2013-09-11T13:05:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been using bash for&hellip;a really really long time.  I&rsquo;ve always done <code>seq 1 10</code> in my for loops to get <code>1 2 3 4 5 6 7 8 9 10</code>.  Today I learned these three ways do the exact same thing. (Note: bash v4 above) I&rsquo;m writing this out, mainly because I want to remind myself of this again one day.
+```bash
+for ((i=1; i&lt;=10; i++)); do echo $i; done</p>
+
+<p>for i in <code>seq 1 10</code> ; do echo $i; done</p>
+
+<p>for i in {1..10} ; do echo $i; done
+```
+Dang you really do learn something new every day.</p>
+]]></content>
+  </entry>
+  
+</feed>
