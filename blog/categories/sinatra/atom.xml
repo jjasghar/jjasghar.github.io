@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sinatra | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sinatra/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-09-13T15:45:42-05:00</updated>
+  <updated>2013-09-13T15:46:26-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -18,9 +18,11 @@
     <link href="http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here/"/>
     <updated>2013-09-13T15:29:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here</id>
-    <content type="html"><![CDATA[<p>I&rsquo;d like to start off by thanking Darren Jones, for writing the book <a href="[http://sitepoint.com/jumpstart-sinatra">Jump Start Sinatra</a>.  This book is amazing, it&rsquo;s extremely well written, straight forward and hands on. Darren was able to break down and explain how sinatra works, runs and what you can do with it in a rapid fire primer.
-Darren has you create a simple &ldquo;sinatra song web site&rdquo; with a database backed, css, javascript (via coffeescript), and even gets you to post to heroku.  The book is only about 166 pages long, and fast, but gives you the primer to understand what you need to get done to make a functional app with little trouble and overhead. With in the first couple chapters Darren spurred me to wonder how a json object with curl POST was able to be put the data into a db, and with the this tutorial Darren has opened the avenue for me to be able to figure it out.
-One issue that I had with the book, it doesn&rsquo;t you how to write tests against the app you create.  Due to new programming practices, this seems like a nasty gap.  I&rsquo;ve decided before I figure out how to get my json input output working, I&rsquo;m going to figure out how to write tests against the app I created.</p>
+    <content type="html"><![CDATA[<p>I&rsquo;d like to start off by thanking Darren Jones, for writing the book <a href="[http://sitepoint.com/jumpstart-sinatra">Jump Start Sinatra</a>.  This book is amazing, it&rsquo;s extremely well written, straight forward and hands on. Darren was able to break down and explain how sinatra works, runs and what you can do with it in a rapid fire primer.</p>
+
+<p>Darren has you create a simple &ldquo;sinatra song web site&rdquo; with a database backed, css, javascript (via coffeescript), and even gets you to post to heroku.  The book is only about 166 pages long, and fast, but gives you the primer to understand what you need to get done to make a functional app with little trouble and overhead. With in the first couple chapters Darren spurred me to wonder how a json object with curl POST was able to be put the data into a db, and with the this tutorial Darren has opened the avenue for me to be able to figure it out.</p>
+
+<p>One issue that I had with the book, it doesn&rsquo;t you how to write tests against the app you create.  Due to new programming practices, this seems like a nasty gap.  I&rsquo;ve decided before I figure out how to get my json input output working, I&rsquo;m going to figure out how to write tests against the app I created.</p>
 
 <p>If you are curious on the app that is built from this book, I have posted it <a href="https://github.com/jjasghar/sinatra_song_app">here</a>, but as time progresses I&rsquo;ll probably add things to it. Fair warning there.</p>
 ]]></content>
