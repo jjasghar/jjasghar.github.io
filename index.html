@@ -143,7 +143,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>It worked like a charm. The <pre>watch &ldquo;redis-cli -h redis-slave info | grep master_sync_left_bytes &rdquo;</pre> started giving me data, and before I knew it I had a working master slave configuration.  This was a lot of cruft to basically say <code>slaveof redis-master 6379</code> but hell it&rsquo;s sometimes nice to see the thought process around it.  Oh!, the latency, did spike to 800 from .05, but I discovered that was in milliseconds and only ONE sample.  So yeah one call to the master with a spike of something still sub-second, was still in the risk params.
+<p>It worked like a charm. The <code>watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "</code> started showing me the amount of data left for the transfer, and before I knew it I had a working master slave configuration.  This was a lot of cruft to basically say <code>slaveof redis-master 6379</code> but hell it&rsquo;s sometimes nice to see the thought process around it.  Oh!, the latency, did spike to 800 from .05, but I discovered that was in milliseconds and only ONE sample.  So yeah one call to the master with a spike of something still sub-second, was still in the risk params.
 Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post about my monitoring of this, it&rsquo;s not <em>that</em> exciting, but it is useful.</p>
 </div>
   
