@@ -95,15 +95,23 @@
   </header>
 
 
-  <div class="entry-content"><p>Like most sysadmins out there, I read the blogs and posts about new technologies that are relevant to my product(s).  There has been a lot of buzz about NoSQL and the key value store type db&rsquo;s out there, yet I have never really focused directly on it.  I have paid passing attention, until I realized that we use one heavily at my company.
-<a href="http://redis.io">Redis</a> is a key value store that runs completely in memory. It&rsquo;s fast, REALLY fast, and after spending some time with a few tutorials like <a href="http://openmymind.net/2012/1/23/The-Little-Redis-Book/">The Little Redis Book</a> by <a href="https://twitter.com/karlseguin">Karl Seguin</a>, it makes a ton of sense, and an extremely neat backend piece of software.
-I started to learn more about it, and I started talking to a coworker and he said that he really wanted to upgrade from 2.4 redis to 2.6 redis. I took this as a challenge, and ran with it.
-The first part of the migration is creating a slave.  We had .aof and .rdb snapshotting, but we didn&rsquo;t have a slave. This post is be going to be chronicling my adventures getting from 2.4.16 to 2.6.16.
-Another coworker of mine, <a href="https://github.com/lwoodson">Lance Woodson</a>, created a script called &ldquo;<a href="https://gist.github.com/jjasghar/423d040444a4f4cbea1d">bloater</a>&rdquo; to start putting trash keys in the redis db.  As you can see it&rsquo;s pretty straight forward, I do strongly suggest using <code>bloater.clear!</code> if you are playing with it.  I leveraged this to simulate creating a slave already in production, the theory being I&rsquo;ll have data inside the redis db, things talking to db, and the sync happening.  I understand that a lot of people have tested this situation, but I couldn&rsquo;t seem to find any direct examples.  Hopefully this will be useful to someone.
-The first step after getting my 2.4.16 redis machine running, I ran <code>bloater.bloat! 2295000000</code> to get an .rdb file that was ~2 gigs.  I configured the snapshotting at the default values so it created it without a hitch.  I copied it off called it something like <code>2gig-dump.rdb</code> or something.  Then I ran <code>bloater.bloat! 4295000000</code> to create the 4gig dump file.  I copied that off next and then I had my two dumpfiles that I could play with.  You are probably wondering why 2 and 4 gigs, and also &ldquo;Dang, that&rsquo;s a huge redis db.&rdquo; Yes, yes it is, I focused on the &ldquo;oh crap, our db is too big&rdquo; situation, so if redis handles that, then I know it&rsquo;ll deal with the 100 meg db just fine.
-Secondly I did my <code>FLUSHALL</code> command, then shutdown my redis instance then copied the 2 gig db, in the <code>/var/lib/redis/</code> location.  I spun up redis, and ran the <code>INFO</code> command, like all redis admins learn to love to do.  I saw that it was 2 gigs, and yay, now I had my foundation to start my testing.
-I went through quite a few different iterations, but I&rsquo;ll just explain the basic trouble shooting that I did, and maybe you can leverage off it.
-So with my redis 2.4 instance with a 2 gig db, and my 2.6 blank db instance it was time to start the fun.  I ran the following commands in a tmux session on my main workstation.  I liked the idea of a 3rd party machine actually looking at all this stuff instead of running directly on one of the machines.</p>
+  <div class="entry-content"><p>Like most sysadmins out there, I read the blogs and posts about new technologies that are relevant to my product(s).  There has been a lot of buzz about NoSQL and the key value store type db&rsquo;s out there, yet I have never really focused directly on it.  I have paid passing attention, until I realized that we use one heavily at my company.</p>
+
+<p><a href="http://redis.io">Redis</a> is a key value store that runs completely in memory. It&rsquo;s fast, REALLY fast, and after spending some time with a few tutorials like <a href="http://openmymind.net/2012/1/23/The-Little-Redis-Book/">The Little Redis Book</a> by <a href="https://twitter.com/karlseguin">Karl Seguin</a>, it makes a ton of sense, and an extremely neat backend piece of software.</p>
+
+<p>I started to learn more about it, and I started talking to a coworker and he said that he really wanted to upgrade from 2.4 redis to 2.6 redis. I took this as a challenge, and ran with it.</p>
+
+<p>The first part of the migration is creating a slave.  We had .aof and .rdb snapshotting, but we didn&rsquo;t have a slave. This post is be going to be chronicling my adventures getting from 2.4.16 to 2.6.16.</p>
+
+<p>Another coworker of mine, <a href="https://github.com/lwoodson">Lance Woodson</a>, created a script called &ldquo;<a href="https://gist.github.com/jjasghar/423d040444a4f4cbea1d">bloater</a>&rdquo; to start putting trash keys in the redis db.  As you can see it&rsquo;s pretty straight forward, I do strongly suggest using <code>bloater.clear!</code> if you are playing with it.  I leveraged this to simulate creating a slave already in production, the theory being I&rsquo;ll have data inside the redis db, things talking to db, and the sync happening.  I understand that a lot of people have tested this situation, but I couldn&rsquo;t seem to find any direct examples.  Hopefully this will be useful to someone.</p>
+
+<p>The first step after getting my 2.4.16 redis machine running, I ran <code>bloater.bloat! 2295000000</code> to get an .rdb file that was ~2 gigs.  I configured the snapshotting at the default values so it created it without a hitch.  I copied it off called it something like <code>2gig-dump.rdb</code> or something.  Then I ran <code>bloater.bloat! 4295000000</code> to create the 4gig dump file.  I copied that off next and then I had my two dumpfiles that I could play with.  You are probably wondering why 2 and 4 gigs, and also &ldquo;Dang, that&rsquo;s a huge redis db.&rdquo; Yes, yes it is, I focused on the &ldquo;oh crap, our db is too big&rdquo; situation, so if redis handles that, then I know it&rsquo;ll deal with the 100 meg db just fine.</p>
+
+<p>Secondly I did my <code>FLUSHALL</code> command, then shutdown my redis instance then copied the 2 gig db, in the <code>/var/lib/redis/</code> location.  I spun up redis, and ran the <code>INFO</code> command, like all redis admins learn to love to do.  I saw that it was 2 gigs, and yay, now I had my foundation to start my testing.</p>
+
+<p>I went through quite a few different iterations, but I&rsquo;ll just explain the basic trouble shooting that I did, and maybe you can leverage off it.</p>
+
+<p>So with my redis 2.4 instance with a 2 gig db, and my 2.6 blank db instance it was time to start the fun.  I ran the following commands in a tmux session on my main workstation.  I liked the idea of a 3rd party machine actually looking at all this stuff instead of running directly on one of the machines.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -120,8 +128,9 @@ So with my redis 2.4 instance with a 2 gig db, and my 2.6 blank db instance it w
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Most, if not all are pretty self explanatory.  The most interesting one of them all is probably the last one, the <code>--latency</code>.  It used it as a way to emulate something poking my redis instance during the inital clone. The thing we, [where|are|still] worried about is customer impact, and as long as the number didn&rsquo;t sky rocket then stay high it was an acceptable risk.
-After I got the tmux session all up and happy, i  ran these two commands to start the <code>slaveof</code>:</p>
+<p>Most, if not all are pretty self explanatory.  The most interesting one of them all is probably the last one, the <code>--latency</code>.  It used it as a way to emulate something poking my redis instance during the inital clone. The thing we, [where|are|still] worried about is customer impact, and as long as the number didn&rsquo;t sky rocket then stay high it was an acceptable risk.</p>
+
+<p>After I got the tmux session all up and happy, i  ran these two commands to start the <code>slaveof</code>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
