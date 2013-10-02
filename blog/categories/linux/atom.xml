@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-09-30T21:01:58-05:00</updated>
+  <updated>2013-10-02T18:09:39-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (Part 2)]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2/"/>
+    <updated>2013-10-01T18:11:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2</id>
+    <content type="html"><![CDATA[<h1>Monitoring</h1>
+
+<p>Everyone loves monitoring. Ok, that&rsquo;s a lie, only [DevOps|Sysadmins] love monitoring. Ok, that&rsquo;s probably a lie too, hell I love monitoring, and I love nagios.  I&rsquo;ve followed used nagios in some shape or another since nagios-1.0b6. My first real paid job as an &ldquo;IT guy&rdquo; was setting up nagios for a company.  I&rsquo;ve actually gotten in the habit of walking into a new company using <a href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/">serverspec</a>, to learn what each machine does, then implementing nagios behind the serverspec scripts for a proactive monitoring on error conditions. This might seem redundant, but I don&rsquo;t think so. serverspec is great for spot checking, while nagios gives the best &ldquo;state of the union&rdquo; snapshot. Granted a lot of the time creating these checks are reactive, but sometimes like here, I wrote some proactive monitoring because I know there are certain error conditions on the slaves I&rsquo;ve spun up.</p>
+
+<p>I use nrpe to monitor my machines, and I set up my <code>nrpe.cfg</code> to something like the following. I use chef, so the <code>&lt;%= node['hostname'] %&gt;</code> is from <a href="https://github.com/opscode/ohai">ohai</a>.</p>
+
+<p><code>ini
+command[check_redisserver]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C redis-server
+command[check_redis_replication]=/usr/lib/nagios/plugins/check_redis_replication -h &lt;%= node['hostname'] %&gt; -w 20 -c 45
+command[check_redis_rdb_age]=/usr/lib/nagios/plugins/check_redis_rdb_age &lt;%= node['hostname'] %&gt;
+</code></p>
+
+<p>The first line is pretty self explanatory.  Obviously I&rsquo;d like to check that redis is running, and that&rsquo;s what it does.</p>
+
+<p>The second line is where I started creating the new monitoring.  I have all my monitors right now at a 3 strike out rule, I have played with the idea of tweaking it, but it seems 3 strikes then an email seems to cut down on the noise I get.</p>
+
+<p>```ruby</p>
+
+<h1>!/usr/bin/env ruby</h1>
+
+<p>require &lsquo;optparse&rsquo;
+options  = {}
+required = [:warning, :critical, :host]</p>
+
+<p>parser   = OptionParser.new do |opts|</p>
+
+<pre><code>opts.banner = "Usage: check_redis_replication [options]"
+  opts.on("-h", "--host redishost", "The hostname of the redis slave") do |h|
+    options[:host] = h
+  end
+  opts.on("-w", "--warning percentage", "Warning threshold") do |w|
+    options[:warning] = w
+  end
+  opts.on("-c", "--critical critical", "Critical threshold") do |c|
+    options[:critical] = c
+ end
+</code></pre>
+
+<p>end
+parser.parse!
+abort parser.to_s if !required.all? { |k| options.has_key?(k) }</p>
+
+<p>master_last_io_seconds_ago = <code>/opt/redis/bin/redis-cli info | grep master_last_io_seconds_ago</code>.split(&lsquo;:&rsquo;).last.to_i rescue -1</p>
+
+<p>status = &ldquo;A-Ok!&rdquo;
+if master_last_io_seconds_ago &lt; 0 || master_last_io_seconds_ago >= options[:critical].to_i
+  status = :critical
+elsif master_last_io_seconds_ago >= options[:warning].to_i
+  status = :warning
+end</p>
+
+<p>status_detail = master_last_io_seconds_ago == -1 ? &lsquo;ERROR&rsquo; : &ldquo;#{ master_last_io_seconds_ago.to_s }s&rdquo;
+puts &ldquo;#{status.to_s.upcase} &ndash; replication lag: #{status_detail}&rdquo;</p>
+
+<p>if status == :critical
+  exit(2)
+elsif status == :warning
+  exit(1)
+end
+```</p>
+
+<p>I stole this monitor from <a href="http://blog.winfieldpeterson.com/2012/12/13/monitoring-redis-replication-in-nagios/">here</a> but as you can tell the <code>redis-cli</code> is edited and the default status too.  <a href="https://twitter.com/miah_">Miah</a>&rsquo;s <a href="https://github.com/miah/chef-redis">cookbook</a> is great, works like a charm, but it puts the <code>redis-cli</code> in <code>/opt/redis/bin/</code>.</p>
+
+<p>As a side note: I even put in a <a href="https://github.com/miah/chef-redis/pull/55">PR</a> to update to 2.6.16, because of this project.  I ran all the <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> tests and it passed like a charm.  I actually learned about <a href="https://github.com/sstephenson/bats">bats</a> in the process, and honestly I&rsquo;m pretty damn impressed with something so straight forward.  Because serverspec fulfills my requirements at the moment, I don&rsquo;t have to use it; but I like the idea of having it in my back pocket.  The replication between master and slave seems extremely important, so this monitor has been a god sent.  I never have seen it spike over 45 seconds, but then the next check pop back to &lt;3 seconds.</p>
+
+<p>The second monitor I wrote was this:
+```bash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>stateid=
+LAST_SYNC_HUMAN=<code>/opt/redis/bin/redis-cli -h $1 info | grep rdb_last_save_time | awk -F : {'print $2'} | xargs -I {} date -d @{}</code>
+LAST_SYNC=<code>/opt/redis/bin/redis-cli -h $1 info | grep rdb_last_save_time | awk -F : {'print $2'} | tr -d '\r'</code>
+LAST_15MIN=<code>date -d '15 minutes ago' +%s</code>
+LAST_20MIN=<code>date -d '20 minutes ago' +%s</code></p>
+
+<p>if [ &ldquo;${LAST_15MIN}&rdquo; -lt &ldquo;${LAST_SYNC}&rdquo; ];
+  then
+  echo Sync has happened in the last 15 mins or less at ${LAST_SYNC_HUMAN}
+  stateid=0
+elif [ &ldquo;${LAST_15MIN}&rdquo; -ge &ldquo;${LAST_SYNC}&rdquo; ] &amp;&amp; [ &ldquo;${LAST_20MIN}&rdquo; -lt &ldquo;${LAST_SYNC}&rdquo; ];
+  then
+  echo Sync happened a little longer than we would like, the last at ${LAST_SYNC_HUMAN}
+  stateid=1
+elif [ &ldquo;${LAST_20MIN}&rdquo; -ge &ldquo;${LAST_SYNC}&rdquo; ];
+  then
+  echo Sync took over 20 mins, something might be wrong, the last sync happened at ${LAST_SYNC_HUMAN}
+  stateid=2
+fi
+exit $stateid
+```
+This monitor I took from my typical <a href="https://github.com/jjasghar/scripts/blob/master/nagios_check_generic_template.sh">bash nagios template</a> and added the error states.  It seems like the .rdb file should always be in &ldquo;close&rdquo; proximity to the last write of to slave, and it would be nice to be alarmed about it if it went out of wack.  From what I&rsquo;ve seen it&rsquo;s never more than 1 or 2 minutes behind; so this worked out.  Writing a monitor for something and never seeing it fire till there is a real problem, that&rsquo;s a great place to be in.</p>
+
+<h2>Non-nagios monitoring</h2>
+
+<p>I started looking around for some type of dashboard to get some visual data about the redis instance.  It turns out there is a TON of these bastards, from a paid product like <a href="https://scoutapp.com/plugin_urls/271-redis-monitoring">Scout</a> to <a href="https://github.com/junegunn/redis-stat">redis-stat</a>.  I picked redis-stat because well, it&rsquo;s un-intrusive and fast.  I have it polling against my master slave on two instances of the gem running, and it&rsquo;s really nice to have a easily digestible view of the health of it.  I have noticed that it has doubled up the info because of the syncing, so be warned, you probably should run it via just the master and then maybe put all the slaves on one? (I&rsquo;m still trying to figure this one out.)</p>
+
+<p>If you do read this and have good suggestions please through them my <a href="http://jjasghar.github.io/about/">way</a>, the <code>INFO</code> command gives you a lot of data, and redis-stat doesn&rsquo;t store anything so treading over time isn&rsquo;t an option. I was thinking about putting some of this data in ganglia, (another favorite of mine) but to have something just redis focused seems like the correct move here.</p>
+
+<hr />
+
+<p>So, so far these is the monitors that I&rsquo;m using for my new master slave set up.  My next challenge is creating the VIP in front of the master slave, and have a &ldquo;hot fail over.&rdquo; This is going to require some pretty interesting engineering; it&rsquo;s fun, but man the more I think about it the more it hurts my brain.  So I haven&rsquo;t actually talked about the migration yet either.  From what I&rsquo;ve understood it seems that 2.4.16 is actually <em>inside</em> 2.6.16, so if I get this VIP in front of this master slave then fail over to the slave turning off the read-only, this should be seamless. I need to do some testing; but that seems like the best course of action. For just the migration though, the &ldquo;hot fail over&rdquo; isn&rsquo;t required, but I want it to be in the fore-front of the design because I&rsquo;d rather be additive than have to rip out everything after we get up dated.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (part 1)]]></title>
@@ -152,58 +262,6 @@ end
 <p>TODO.</p>
 
 <p>Seriously, though it really is awesome.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[serverspec the new best way to learn and audit your infrastructure]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/"/>
-    <updated>2013-07-12T15:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure</id>
-    <content type="html"><![CDATA[<p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
-
-<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
-
-<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
-You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
-
-<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
-
-<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.
-``` ruby
-require &lsquo;spec_helper&rsquo;</p>
-
-<p>describe package(&lsquo;httpd&rsquo;) do
-  it { should be_installed }
-end</p>
-
-<p>describe service(&lsquo;httpd&rsquo;) do
-  it { should be_enabled   }
-  it { should be_running   }
-end</p>
-
-<p>describe port(80) do
-  it { should be_listening }
-end</p>
-
-<p>describe file(&lsquo;/etc/httpd/conf/httpd.conf&rsquo;) do
-  it { should be_file }
-  it { should contain &ldquo;ServerName my-server-name&rdquo; }
-end
-<code>``
-That's it, now all you have to do is</code>rake spec` and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
-
-<h2>nagios (or automated process monitoring) vs serverspec</h2>
-
-<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
-
-<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
-
-<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
-
-<h2>Conclusion</h2>
-
-<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
 ]]></content>
   </entry>
   
