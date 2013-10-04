@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-02T18:09:39-05:00</updated>
+  <updated>2013-10-04T16:36:53-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,203 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Moving from one chef to multiple chefs]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs/"/>
+    <updated>2013-10-04T14:00:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs</id>
+    <content type="html"><![CDATA[<p>There&rsquo;s a organic growth of a Ops team using chef goes through.  You start out with a <code>chef_repo</code> then you post it to github/some DVCS.  From there you tell people to clone it down and put PRs against it. From there you attempt to be a gate keeper, looking at the commits in the log, realizing that there is no match ups. From there you say to yourself &ldquo;Hey, ok, these guys are pretty smart, as long as I spot check, they should be able to merge things in and I can trust them right?&rdquo; NO you are lying to yourself you just don&rsquo;t realize it yet.</p>
+
+<p>Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push&hellip;and nothing happens. Oh I&rsquo;m 2x behind where I thought great, bump and push. Oh&hellip;it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded&hellip;crap. (And other situations like this can pop up.)</p>
+
+<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathan Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
+
+<h2>Installation</h2>
+
+<p>Obviously the first thing you need to do is install it. Luckily it&rsquo;s a gem so you can just do the following. If you read the docs there are a bunch of places that you <code>.yml</code> gets read from, but I chose this because I like having all my chef stuff in <code>.chef</code> so I don&rsquo;t have to think about pulling anything other than <code>.chef</code> if I want to move boxes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>gem install knife-spork
+</span><span class='line'>mkdir -p ~/.chef/plugins/knife/
+</span><span class='line'>cp ~/.rvm/gems/ruby-2.0.0-p195/gems/knife-spork-1.2.2/lib/chef/knife/spork-*.rb !<span class="err">$</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see I&rsquo;m using rvm, so you&rsquo;ll need to figure out where you&rsquo;re gems are, but you need to copy those .rb files into that directory you created on line 2.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>touch ~/.chef/spork-config.yml
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After copying and creating the files in you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
+
+<p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">default_environments</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">development</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">production</span>
+</span><span class='line'><span class="l-Scalar-Plain">environment_groups</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">qa_group</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">quality_assurance</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">staging</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">test_group</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">user_testing</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">acceptance_testing</span>
+</span><span class='line'><span class="l-Scalar-Plain">version_change_threshold</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2</span>
+</span><span class='line'><span class="l-Scalar-Plain">environment_path</span><span class="p-Indicator">:</span> <span class="s">&quot;/home/me/environments&quot;</span>
+</span><span class='line'><span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">campfire</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">account</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myaccount</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">a1b2c3d4...</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">hipchat</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">api_token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ABC123</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">General</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Web Operations</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">notify</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">color</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yellow</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">jabber</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURUSER</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURPASSWORD</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">nickname</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Chef Bot</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server_name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your.jabberserver.com</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5222</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">engineering@your.conference.com/spork</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">systems@your.conference.com/spork</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">irccat</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">irccat.mydomain.com</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">12345</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">gist</span><span class="p-Indicator">:</span> <span class="s">&quot;/usr/bin/gist&quot;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">channel</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;chef-annoucements&quot;</span><span class="p-Indicator">]</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">graphite</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">graphite.mydomain.com</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2003</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">eventinator</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://eventinator.mydomain.com/events/oneshot</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All in all this seems pretty self <a href="https://github.com/jonlives/knife-spork#default-environments">explanatory</a> but the most important things to change are <code>environment_path</code> and disabling the plugins (by removing them) here.  For my company I only used the git plugin and&hellip;well that was it. :)</p>
+
+<p>By the way there are only a few plugins, <a href="https://github.com/jonlives/knife-spork/tree/master/plugins">here</a> is a link to the different .md files on each.</p>
+
+<p>Ok, so you have everything set up, what do you do now?</p>
+
+<h2>Usage</h2>
+
+<p>The first step is to run <code>knife spork check COOKBOOK --all</code> where COOKBOOK is one of your commonly updated/tweaked cookbooks.  Spork checks against what you have locally compared to what&rsquo;s in the server, like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">knife spork check COOKBOOK --all</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Checking versions <span class="k">for </span>cookbook nagios...
+</span><span class='line'>
+</span><span class='line'>Local Version:
+</span><span class='line'>  5.1.5
+</span><span class='line'>
+</span><span class='line'>Remote Versions: <span class="o">(</span>* indicates frozen<span class="o">)</span>
+</span><span class='line'>  5.1.5
+</span><span class='line'>  5.1.4
+</span><span class='line'>  5.1.3
+</span><span class='line'>  5.1.2
+</span><span class='line'>
+</span><span class='line'>ERROR: The version 5.1.5 exists on the server and is not frozen. Uploading will overwrite!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see with the error, it&rsquo;s pretty self explaintory.</p>
+
+<p>The second step is to bump the version:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>knife spark bump nagios patch
+</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
+</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
+</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
+</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
+</span><span class='line'>Successfully bumped nagios to v5.1.6!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now as you can see I have the git plugin working, and it without thinking about it, updates the metadata.rb so you don&rsquo;t have to. (I HATE that part of chef, I always forget.) Now you can go off make your changes.</p>
+
+<p>From here you&rsquo;re happy, you&rsquo;ve commited your new <code>chef_repo</code> back to the DVCS that you use.  This is where the magic happens: <code>knife spork upload COOKBOOK</code>.  This thing is great, it (to quote the <code>README.md</code>) <em>This function works mostly the same as normal knife cookbook upload COOKBOOK except that this automatically freezes cookbooks when you upload them.</em> Which is the bread and butter of spork.  The freezing is crazy important, by freezing the upload you take &ldquo;ownership&rdquo; of that version of the cookbook.  Your changes are yours, and no-one can mess with them.  So in turn you don&rsquo;t step on your coworkers toes and he doesen&rsquo;t step on yours.</p>
+
+<p>Ok, so this was the cheatsheet, we have implymented this at my company now, so hopefully this goes great. If not&hellip;well that&rsquo;s a different conversation.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (Part 2)]]></title>
