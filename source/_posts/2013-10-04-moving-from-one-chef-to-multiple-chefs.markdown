@@ -10,7 +10,7 @@ There's a organic growth of a Ops team using chef goes through.  You start out w
 
 Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push...and nothing happens. Oh I'm 2x behind where I thought great, bump and push. Oh...it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded...crap. (And other situations like this can pop up.) 
 
-So, I pinged [Nathan Harvey](https://twitter.com/nathenharvey) at Opscode asking for some guidance, he suggested [knife-spork](https://github.com/jonlives/knife-spork).  So far with my initial tests it looks like it is the correct answer,  so I'm also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)
+So, I pinged [Nathen Harvey](https://twitter.com/nathenharvey) at Opscode asking for some guidance, he suggested [knife-spork](https://github.com/jonlives/knife-spork).  So far with my initial tests it looks like it is the correct answer,  so I'm also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)
 
 Installation
 ------------
@@ -114,7 +114,7 @@ As you can see with the error, it's pretty self explaintory.
 
 The second step is to bump the version:
 ```bash
-knife spark bump nagios patch
+knife spork bump nagios patch
 Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
 Pulling latest changes from git submodules (if any)
 Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
