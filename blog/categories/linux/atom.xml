@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-04T19:52:54-05:00</updated>
+  <updated>2013-10-05T17:04:37-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
+    <updated>2013-10-05T16:59:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
+    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
+
+<p>If you play with open source chef you might run into this.</p>
+
+<p><code>
+18:42 j^2 so i’m having trouble with chef-client
+18:42 j^2 why does it default to https://chef/blahblah?
+18:43 j^2 example:
+18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
+18:44 j^2 any advice?
+18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
+18:45 maek j^2:  I just got hit with this also
+18:45 maek i think becuase chef 11 is now fronted with nginx
+18:45 maek its doing a rewrite
+18:45 maek for the name configured in nginx
+18:45 maek in this case its hostname
+18:45 maek but i assume that box cant resolve chef
+18:46 j^2 lame
+18:46 maek j^2:  I had to end up adding a hosts entry
+18:46 maek while I wait for dns
+18:46 maek I think you could do
+18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
+18:47 maek you could reconfigure chef
+18:47 maek to use its ip
+18:47 maek instead of its hostname
+18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
+18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
+18:48 maek i dont see it htought
+18:48 j^2 oh!
+18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
+18:48 j^2 nice looking
+18:48 maek yeah
+18:48 maek there it is
+</code></p>
+
+<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
+
+<p><code>
+18:48 maek so you can do
+18:49 maek in /etc/chef-server/chef-server.rb
+18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
+18:50 j^2 yeah i dont thave that file. :(
+18:50 maek and run chef-server-ctl reconfigure
+18:50 j^2 ah cool
+18:50 maek its for overrides
+18:50 maek just make it
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
+    <updated>2013-10-05T16:06:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
+    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
+
+<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
+
+<p><code>bash
+root@boe:/tmp# rm /var/cache/nagios3/objects.cache
+root@boe:/tmp# service nagios restart
+Running configuration check…done.
+Stopping nagios: .done.
+Starting nagios: done.
+root@boe:/tmp# cd /var/cache/nagios3
+root@boe:/var/cache/nagios3# ls
+objects.cache  status.dat
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving from one chef to multiple chefs]]></title>
@@ -325,85 +402,6 @@ redis-cli -h redis-master --latency
 
 <p>It worked like a charm. The <code>watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "</code> started showing me the amount of data left for the transfer, and before I knew it I had a working master slave configuration.  This was a lot of cruft to basically say <code>slaveof redis-master 6379</code> but hell it&rsquo;s sometimes nice to see the thought process around it.  Oh!, the latency, did spike to 800 from .05, but I discovered that was in milliseconds and only ONE sample.  So yeah one call to the master with a spike of something still sub-second, was still in the risk params.
 Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post about my monitoring of this, it&rsquo;s not <em>that</em> exciting, but it is useful.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[a bash numbering trick I just learned today]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/"/>
-    <updated>2013-09-11T13:05:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been using bash for&hellip;a really really long time.  I&rsquo;ve always done <code>seq 1 10</code> in my for loops to get <code>1 2 3 4 5 6 7 8 9 10</code>.  Today I learned these three ways do the exact same thing. (Note: bash v4 above) I&rsquo;m writing this out, mainly because I want to remind myself of this again one day.
-```bash
-for ((i=1; i&lt;=10; i++)); do echo $i; done</p>
-
-<p>for i in <code>seq 1 10</code> ; do echo $i; done</p>
-
-<p>for i in {1..10} ; do echo $i; done
-```
-Dang you really do learn something new every day.</p>
-
-<p>Note: A good friend of mine <a href="https://github.com/awaxa/">awaxa</a> pointed out that {1..10} is the fastest in this case because it&rsquo;s a built into bash.  Thanks awaxa!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Adventures with chef-solo]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/"/>
-    <updated>2013-08-02T14:36:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo</id>
-    <content type="html"><![CDATA[<p>I started my chef career with inheriting a chef infrastructure with an opensource chef server.  I read all of the blog posts, and the tutorials, tried to wrap my head around what a cookbook, recipe, or data bag was.  I know now, this was the <em>wrong</em> way to learn chef.  chef with chef-client/server adds a level of complexity that just is unfounded.  I decided to spend a copy hours to master chef-solo, and damn I wish I had started there.</p>
-
-<h2>My hands on learning project</h2>
-
-<p>I had a requirement of setting up a unicorn nginx instance on a VPS.  I thought hell, there&rsquo;s gotta be a way to do this with chef. (I normally use passenger+apache, so I had to learn nginx and unicorn too, but that&rsquo;s a different post&hellip;well kinda) So I looked around for a nice <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">tutorial</a> and came across that guy.  I started reading it, realized holy crap, this is awesome.  I stole the <code>solo.json</code> and the <code>solo.rb</code> and <code>install.sh</code> because I was lazy.<br/>
-I changed the <code>install.sh</code> around a little bit:
-```bash</p>
-
-<h1>!/bin/bash</h1>
-
-<h1>This run as root on the machine</h1>
-
-<p>chef_binary=/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo</p>
-
-<h1>are we not bootstrapped?</h1>
-
-<p>if ! test -f &ldquo;$chef_binary&rdquo;; then
-  export DEBIAN_FRONTEND=noniteractive
-  apt-get update &amp;&amp;
-  apt-get dist-upgrade -y &amp;&amp;
-  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y &amp;&amp;
-  curl -L <a href="https://www.opscode.com/chef/install.sh">https://www.opscode.com/chef/install.sh</a> | sudo bash
-fi &amp;&amp;</p>
-
-<p>chef-solo -c solo.rb -j solo.json
-<code>``
-As you can tell, its ubuntu focused, but basically if I want to provision a box after making a change to one of the cookbooks I just had to run</code>./install.sh`.  Interestingly, I had heard bad things about the 1.9.1 ruby binaries for ubuntu, but so far, it is a ton better than doing that compile from src. ;)</p>
-
-<p>So, basically with those three files, running that curl in the script, and creating a <code>cookbooks/</code> directory, I had my framework to make this project happen.</p>
-
-<p>Now I made a mistake here.  I started off with a simple &ldquo;generic&rdquo; cookbook, with a simple <code>default.rb</code> file that called a <code>packages.rb</code> file to add some pkgs I love and run on a daily basis.</p>
-
-<p>```ruby
-%w{build-essential git-core libgdbm-dev libreadline-dev libssl-dev libyaml-dev s3cmd tmux tk-dev vim wget zlib1g-dev zsh}.each do |pkg|
-  package pkg do</p>
-
-<pre><code>action [:install]
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>Now to an passive onlooker there seems nothing wrong with this, and 3 weeks ago JJ would agree with you.  JJ now says, &ldquo;Stop that, start with the webserver and the deps for that instead of the convince of something easy like package management.&rdquo;  LEARN <a href="http://berkshelf.com/">berkshelf</a> and don&rsquo;t make excuses. (at this writing, 8/2/13, I still actually haven&rsquo;t learned it, the best analogy is this, dling cookbooks is like building from source, and berkshelf is like using apt-get) Anyway I digress.</p>
-
-<p>Back to the original story.</p>
-
-<p>I made the <code>cookbooks/</code> directory, and when to github to pull down the newest <a href="https://github.com/opscode-cookbooks/nginx">nginx</a> cookbook.  <code>git clone https://github.com/opscode-cookbooks/nginx.git</code> in the directory and then because  I hate submodules, I ran <code>rm -rf .git/</code>. I <code>cd ~/chef-solo</code> then ran <code>install.sh</code>. Crossed my fingers and no, didn&rsquo;t work. Turns out I needed a bunch of dependences (hence the berkself statement). I resolved them all, and then ran the beautiful <code>./install.sh</code>. BOOM, it worked.  I took a moment, realized what I had just done.  I created a git repo off this work, created a branch &ldquo;nginx&rdquo; and committed my changes. Now whenever I need to spin up an nginx box, all I have to do is clone my chef-solo repo and checkout nginx and run <code>install.sh</code>.</p>
-
-<p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
-
-<p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
 ]]></content>
   </entry>
   
