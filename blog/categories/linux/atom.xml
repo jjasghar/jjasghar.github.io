@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-04T16:36:53-05:00</updated>
+  <updated>2013-10-04T19:52:54-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -22,7 +22,7 @@
 
 <p>Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push&hellip;and nothing happens. Oh I&rsquo;m 2x behind where I thought great, bump and push. Oh&hellip;it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded&hellip;crap. (And other situations like this can pop up.)</p>
 
-<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathan Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
+<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathen Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
 
 <h2>Installation</h2>
 
@@ -152,7 +152,7 @@ Checking versions for cookbook nagios&hellip;</p>
 
 <p>The second step is to bump the version:
 <code>bash
-knife spark bump nagios patch
+knife spork bump nagios patch
 Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
 Pulling latest changes from git submodules (if any)
 Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
