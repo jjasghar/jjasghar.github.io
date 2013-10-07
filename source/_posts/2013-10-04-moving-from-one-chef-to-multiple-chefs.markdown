@@ -3,12 +3,12 @@ layout: post
 title: "Moving from one chef to multiple chefs"
 date: 2013-10-04 14:00
 comments: true
-categories: linux chef sysadmin 
+categories: linux chef sysadmin
 ---
 
 There's a organic growth of a Ops team using chef goes through.  You start out with a `chef_repo` then you post it to github/some DVCS.  From there you tell people to clone it down and put PRs against it. From there you attempt to be a gate keeper, looking at the commits in the log, realizing that there is no match ups. From there you say to yourself "Hey, ok, these guys are pretty smart, as long as I spot check, they should be able to merge things in and I can trust them right?" NO you are lying to yourself you just don't realize it yet.
 
-Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push...and nothing happens. Oh I'm 2x behind where I thought great, bump and push. Oh...it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded...crap. (And other situations like this can pop up.) 
+Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push...and nothing happens. Oh I'm 2x behind where I thought great, bump and push. Oh...it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded...crap. (And other situations like this can pop up.)
 
 So, I pinged [Nathen Harvey](https://twitter.com/nathenharvey) at Opscode asking for some guidance, he suggested [knife-spork](https://github.com/jonlives/knife-spork).  So far with my initial tests it looks like it is the correct answer,  so I'm also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)
 
@@ -18,17 +18,10 @@ Obviously the first thing you need to do is install it. Luckily it's a gem so yo
 
 ```bash
 gem install knife-spork
-mkdir -p ~/.chef/plugins/knife/
-cp ~/.rvm/gems/ruby-2.0.0-p195/gems/knife-spork-1.2.2/lib/chef/knife/spork-*.rb !$
-```
-
-As you can see I'm using rvm, so you'll need to figure out where you're gems are, but you need to copy those .rb files into that directory you created on line 2.
-
-```bash
 touch ~/.chef/spork-config.yml
 ```
 
-After copying and creating the files in you can run `knife spork info`, it should say everything is disabled.  If so, then you are read to create the config file.
+After installing the gem and touching the file, you can run `knife spork info`, it should say everything is disabled.  If so, then you are read to create the config file.
 
 The example [config](https://raw.github.com/jonlives/knife-spork/master/README.md) is on the main site, but I copied the demo one here too.
 
