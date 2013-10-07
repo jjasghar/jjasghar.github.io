@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-05T17:04:37-05:00</updated>
+  <updated>2013-10-07T10:45:15-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -85,17 +85,10 @@
 
 <p><code>bash
 gem install knife-spork
-mkdir -p ~/.chef/plugins/knife/
-cp ~/.rvm/gems/ruby-2.0.0-p195/gems/knife-spork-1.2.2/lib/chef/knife/spork-*.rb !$
-</code></p>
-
-<p>As you can see I&rsquo;m using rvm, so you&rsquo;ll need to figure out where you&rsquo;re gems are, but you need to copy those .rb files into that directory you created on line 2.</p>
-
-<p><code>bash
 touch ~/.chef/spork-config.yml
 </code></p>
 
-<p>After copying and creating the files in you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
+<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
 
 <p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
 
