@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nagios | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/nagios/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-07T10:45:15-05:00</updated>
+  <updated>2013-10-16T12:45:28-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Checking CPU WAIT via nagios]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios/"/>
+    <updated>2013-10-16T11:11:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios</id>
+    <content type="html"><![CDATA[<p>So our machines swap&hellip;.swap alot. There are the  typical nagios system checks, you can have the <code>check_swap</code> call, but at my company the &lt; 20 % hits so often we needed to figure out a way to get warned about crippling proformance. We discovered that when a machine has CPU WAIT spikes, the proformance for the machine tanks, so I tried to find a check for specificly monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.</p>
+
+<p>I took a stab at creating a check myself and the following is a simple nagios check that you can run via NRPE.  The <code>PERCENTAGE</code> line is changeable, I&rsquo;d make sure your alarm reflects your error cases. We choose 10 % because that&rsquo;s when we started seeing real prefomance issues, but as all sysadmins know any CPU WAIT is bad in general.</p>
+
+<p>```bash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>stateid=
+CPUWAIT=<code>top -b -n 1| grep 'wa,' | awk -F ',' {'print $5'} | cut -d . -f 1 | tr -d ' '</code>
+PERCENTAGE=10</p>
+
+<p>if [ ${CPUWAIT} -le ${PERCENTAGE} ]
+ then
+   echo Your CPU WAIT is under ${PERCENTAGE}%
+   stateid=0
+elif [ ${CPUWAIT} -ge ${PERCENTAGE} ]
+ then
+   echo Your CPU WAIT is at ${CPUWAIT}%, your machine aint happy
+   stateid=2
+ fi
+exit $stateid
+```</p>
+
+<p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
