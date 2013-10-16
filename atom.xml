@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-04T19:52:54-05:00</updated>
+  <updated>2013-10-07T10:45:15-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
+    <updated>2013-10-05T16:59:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
+    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
+
+<p>If you play with open source chef you might run into this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>18:42 j^2 so i’m having trouble with chef-client
+</span><span class='line'>18:42 j^2 why does it default to https://chef/blahblah?
+</span><span class='line'>18:43 j^2 example:
+</span><span class='line'>18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
+</span><span class='line'>18:44 j^2 any advice?
+</span><span class='line'>18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
+</span><span class='line'>18:45 maek j^2:  I just got hit with this also
+</span><span class='line'>18:45 maek i think becuase chef 11 is now fronted with nginx
+</span><span class='line'>18:45 maek its doing a rewrite
+</span><span class='line'>18:45 maek for the name configured in nginx
+</span><span class='line'>18:45 maek in this case its hostname
+</span><span class='line'>18:45 maek but i assume that box cant resolve chef
+</span><span class='line'>18:46 j^2 lame
+</span><span class='line'>18:46 maek j^2:  I had to end up adding a hosts entry
+</span><span class='line'>18:46 maek while I wait for dns
+</span><span class='line'>18:46 maek I think you could do
+</span><span class='line'>18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
+</span><span class='line'>18:47 maek you could reconfigure chef
+</span><span class='line'>18:47 maek to use its ip
+</span><span class='line'>18:47 maek instead of its hostname
+</span><span class='line'>18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
+</span><span class='line'>18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
+</span><span class='line'>18:48 maek i dont see it htought
+</span><span class='line'>18:48 j^2 oh!
+</span><span class='line'>18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
+</span><span class='line'>18:48 j^2 nice looking
+</span><span class='line'>18:48 maek yeah
+</span><span class='line'>18:48 maek there it is</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>18:48 maek so you can do
+</span><span class='line'>18:49 maek in /etc/chef-server/chef-server.rb
+</span><span class='line'>18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
+</span><span class='line'>18:50 j^2 yeah i dont thave that file. :(
+</span><span class='line'>18:50 maek and run chef-server-ctl reconfigure
+</span><span class='line'>18:50 j^2 ah cool
+</span><span class='line'>18:50 maek its for overrides
+</span><span class='line'>18:50 maek just make it</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
+    <updated>2013-10-05T16:06:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
+    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
+
+<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>root@boe:/tmp# rm /var/cache/nagios3/objects.cache
+</span><span class='line'>root@boe:/tmp# service nagios restart
+</span><span class='line'>Running configuration check…done.
+</span><span class='line'>Stopping nagios: .done.
+</span><span class='line'>Starting nagios: <span class="k">done</span>.
+</span><span class='line'>root@boe:/tmp# <span class="nb">cd</span> /var/cache/nagios3
+</span><span class='line'>root@boe:/var/cache/nagios3# ls
+</span><span class='line'>objects.cache  status.dat
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving from one chef to multiple chefs]]></title>
@@ -30,21 +151,12 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>gem install knife-spork
-</span><span class='line'>mkdir -p ~/.chef/plugins/knife/
-</span><span class='line'>cp ~/.rvm/gems/ruby-2.0.0-p195/gems/knife-spork-1.2.2/lib/chef/knife/spork-*.rb !<span class="err">$</span>
+</span><span class='line'>touch ~/.chef/spork-config.yml
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>As you can see I&rsquo;m using rvm, so you&rsquo;ll need to figure out where you&rsquo;re gems are, but you need to copy those .rb files into that directory you created on line 2.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>touch ~/.chef/spork-config.yml
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After copying and creating the files in you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
+<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
 
 <p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
 

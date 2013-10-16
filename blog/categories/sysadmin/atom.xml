@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-04T19:52:54-05:00</updated>
+  <updated>2013-10-07T10:45:15-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
+    <updated>2013-10-05T16:59:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
+    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
+
+<p>If you play with open source chef you might run into this.</p>
+
+<p><code>
+18:42 j^2 so i’m having trouble with chef-client
+18:42 j^2 why does it default to https://chef/blahblah?
+18:43 j^2 example:
+18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
+18:44 j^2 any advice?
+18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
+18:45 maek j^2:  I just got hit with this also
+18:45 maek i think becuase chef 11 is now fronted with nginx
+18:45 maek its doing a rewrite
+18:45 maek for the name configured in nginx
+18:45 maek in this case its hostname
+18:45 maek but i assume that box cant resolve chef
+18:46 j^2 lame
+18:46 maek j^2:  I had to end up adding a hosts entry
+18:46 maek while I wait for dns
+18:46 maek I think you could do
+18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
+18:47 maek you could reconfigure chef
+18:47 maek to use its ip
+18:47 maek instead of its hostname
+18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
+18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
+18:48 maek i dont see it htought
+18:48 j^2 oh!
+18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
+18:48 j^2 nice looking
+18:48 maek yeah
+18:48 maek there it is
+</code></p>
+
+<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
+
+<p><code>
+18:48 maek so you can do
+18:49 maek in /etc/chef-server/chef-server.rb
+18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
+18:50 j^2 yeah i dont thave that file. :(
+18:50 maek and run chef-server-ctl reconfigure
+18:50 j^2 ah cool
+18:50 maek its for overrides
+18:50 maek just make it
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
+    <updated>2013-10-05T16:06:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
+    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
+
+<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
+
+<p><code>bash
+root@boe:/tmp# rm /var/cache/nagios3/objects.cache
+root@boe:/tmp# service nagios restart
+Running configuration check…done.
+Stopping nagios: .done.
+Starting nagios: done.
+root@boe:/tmp# cd /var/cache/nagios3
+root@boe:/var/cache/nagios3# ls
+objects.cache  status.dat
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving from one chef to multiple chefs]]></title>
@@ -30,17 +107,10 @@
 
 <p><code>bash
 gem install knife-spork
-mkdir -p ~/.chef/plugins/knife/
-cp ~/.rvm/gems/ruby-2.0.0-p195/gems/knife-spork-1.2.2/lib/chef/knife/spork-*.rb !$
-</code></p>
-
-<p>As you can see I&rsquo;m using rvm, so you&rsquo;ll need to figure out where you&rsquo;re gems are, but you need to copy those .rb files into that directory you created on line 2.</p>
-
-<p><code>bash
 touch ~/.chef/spork-config.yml
 </code></p>
 
-<p>After copying and creating the files in you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
+<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
 
 <p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
 
@@ -325,58 +395,6 @@ redis-cli -h redis-master --latency
 
 <p>It worked like a charm. The <code>watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "</code> started showing me the amount of data left for the transfer, and before I knew it I had a working master slave configuration.  This was a lot of cruft to basically say <code>slaveof redis-master 6379</code> but hell it&rsquo;s sometimes nice to see the thought process around it.  Oh!, the latency, did spike to 800 from .05, but I discovered that was in milliseconds and only ONE sample.  So yeah one call to the master with a spike of something still sub-second, was still in the risk params.
 Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post about my monitoring of this, it&rsquo;s not <em>that</em> exciting, but it is useful.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[serverspec the new best way to learn and audit your infrastructure]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/"/>
-    <updated>2013-07-12T15:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure</id>
-    <content type="html"><![CDATA[<p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
-
-<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
-
-<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
-You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
-
-<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
-
-<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.
-``` ruby
-require &lsquo;spec_helper&rsquo;</p>
-
-<p>describe package(&lsquo;httpd&rsquo;) do
-  it { should be_installed }
-end</p>
-
-<p>describe service(&lsquo;httpd&rsquo;) do
-  it { should be_enabled   }
-  it { should be_running   }
-end</p>
-
-<p>describe port(80) do
-  it { should be_listening }
-end</p>
-
-<p>describe file(&lsquo;/etc/httpd/conf/httpd.conf&rsquo;) do
-  it { should be_file }
-  it { should contain &ldquo;ServerName my-server-name&rdquo; }
-end
-<code>``
-That's it, now all you have to do is</code>rake spec` and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
-
-<h2>nagios (or automated process monitoring) vs serverspec</h2>
-
-<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
-
-<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
-
-<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
-
-<h2>Conclusion</h2>
-
-<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
 ]]></content>
   </entry>
   

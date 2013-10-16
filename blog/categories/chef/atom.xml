@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-04T19:52:54-05:00</updated>
+  <updated>2013-10-07T10:45:15-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
+    <updated>2013-10-05T16:59:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
+    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
+
+<p>If you play with open source chef you might run into this.</p>
+
+<p><code>
+18:42 j^2 so i’m having trouble with chef-client
+18:42 j^2 why does it default to https://chef/blahblah?
+18:43 j^2 example:
+18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
+18:44 j^2 any advice?
+18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
+18:45 maek j^2:  I just got hit with this also
+18:45 maek i think becuase chef 11 is now fronted with nginx
+18:45 maek its doing a rewrite
+18:45 maek for the name configured in nginx
+18:45 maek in this case its hostname
+18:45 maek but i assume that box cant resolve chef
+18:46 j^2 lame
+18:46 maek j^2:  I had to end up adding a hosts entry
+18:46 maek while I wait for dns
+18:46 maek I think you could do
+18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
+18:47 maek you could reconfigure chef
+18:47 maek to use its ip
+18:47 maek instead of its hostname
+18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
+18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
+18:48 maek i dont see it htought
+18:48 j^2 oh!
+18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
+18:48 j^2 nice looking
+18:48 maek yeah
+18:48 maek there it is
+</code></p>
+
+<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
+
+<p><code>
+18:48 maek so you can do
+18:49 maek in /etc/chef-server/chef-server.rb
+18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
+18:50 j^2 yeah i dont thave that file. :(
+18:50 maek and run chef-server-ctl reconfigure
+18:50 j^2 ah cool
+18:50 maek its for overrides
+18:50 maek just make it
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving from one chef to multiple chefs]]></title>
@@ -30,17 +85,10 @@
 
 <p><code>bash
 gem install knife-spork
-mkdir -p ~/.chef/plugins/knife/
-cp ~/.rvm/gems/ruby-2.0.0-p195/gems/knife-spork-1.2.2/lib/chef/knife/spork-*.rb !$
-</code></p>
-
-<p>As you can see I&rsquo;m using rvm, so you&rsquo;ll need to figure out where you&rsquo;re gems are, but you need to copy those .rb files into that directory you created on line 2.</p>
-
-<p><code>bash
 touch ~/.chef/spork-config.yml
 </code></p>
 
-<p>After copying and creating the files in you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
+<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
 
 <p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
 
@@ -355,33 +403,6 @@ That's it, now all you have to do is</code>rake spec` and you have a test that c
 <h2>Conclusion</h2>
 
 <p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[chef-jenkins-vagrant]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant/"/>
-    <updated>2013-06-25T11:43:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant</id>
-    <content type="html"><![CDATA[<p>To quote the top of my <a href="https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md">README.md</a>:</p>
-
-<blockquote><p>This is my &ldquo;recipe&rdquo; on how I got Chef Jenkins and Vagrant to play nice. After watching this (<a href="http://www.youtube.com/watch?v=h_IEfNklzW4">http://www.youtube.com/watch?v=h_IEfNklzW4</a>) video, I realized I could do this. I searched high and low for a tutorial on how to bulid this stack, and nothing. So I decided to create a github doc to centralize my setup and hopefully let the community suggest additions.</p></blockquote>
-
-<p>I want to thank <a href="https://github.com/bscott">Brian Scott</a>, because after his video it really opened my eyes.  I&rsquo;ve now had 3 people run through this tutorial and all come out with a working <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> set ups and learned to extend it to where I had never thought of.</p>
-
-<p>I understand and that a lot of people wonder why someone would want to build this from scratch, instead of using, for instance <a href="https://github.com/fnichol">Fletcher Nichol&rsquo;s</a> <em>ahem</em><a href="https://github.com/jamie-ci/jamie">jamie-ci</a><em>ahem</em> test-kitchen, and this is what I&rsquo;m going to write about.</p>
-
-<p>I see <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> is more for writing cookbooks and recipes for the general public.  You can easily create faux VMs, per <a href="https://github.com/sethvargo">Seth Vergo&rsquo;s</a> awesome <a href="https://github.com/customink/fauxhai">fauxhai</a> to test cookbooks across multiple setups and multiple provisioned systems to see if they work.  This is great for developing a cookbooks but I can&rsquo;t see it working in a sysadmins workflow.</p>
-
-<p>Sysadmins have a select few boxes; they have their known quantities, they know they aren&rsquo;t going to have RHEL/DEB/tar based machines.  They build infrastructures to have uniformity, they stick with one of them.  Granted, some of the sysadmnis out there are unlucky and DO have these environments, but I truly believe that&rsquo;s the minority not the majority.</p>
-
-<p>A sysadmin needs a way to provision his machines, in a safe manner before pushing changes out to production. This sounds obvious, but how many places I&rsquo;ve been where have I heard &ldquo;Oh, it&rsquo;s just an /etc/hosts file update, just push it out.&rdquo;  Just yesterday, (06/25/2013) as I was victim if that short cut and caused an outage to some our backend machines.  If you are curious, it seems, we had a hardcoded IP to DNS name in /etc/hosts (not DNS) that was required for our application to work.  If I held true to my statements earlier I would have noticed this change from my CI builds and not looked like the dumbass I was.</p>
-
-<p>I built this <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> howto so I don&rsquo;t have an excuse anymore, I have a proven way to build and implement good practices in an quick manner.  I hope you find it useful, and if you have suggestions or additions PRs are always welcome.</p>
-
-<p>Mind your <code>rm -rf *</code>,</p>
-
-<p>JJ Asghar</p>
 ]]></content>
   </entry>
   
