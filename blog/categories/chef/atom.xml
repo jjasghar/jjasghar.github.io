@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-16T12:45:28-05:00</updated>
+  <updated>2013-10-18T16:03:19-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[People keep asking me how to start with chef]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/"/>
+    <updated>2013-10-18T10:19:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef</id>
+    <content type="html"><![CDATA[<p>So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do from the beginning. I completely acknowledge that chef can be extremely confusing to start with. If you really want to learn it you&rsquo;ll have to stick with it, and do it. Good god, nothing is better than running it on a vagrant box and seeing what you expect happen happen.</p>
+
+<h2>chef-solo is your best friend (step 1)</h2>
+
+<p>A lot of people can start here, and end here believe it or not.  chef-solo is unbelievably powerful and can full-fill 90% of all requirements for basic usage. I spent some time looking around for a good tutorial (doing all of them that I could find), and <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">this</a> on was the best &ldquo;I have no idea what the fuck I&rsquo;m doing.&rdquo; situation.  Modern chef installs are a tad bit different than this guy, so the &ldquo;install.sh&rdquo; changes I suggest are this:
+```bash</p>
+
+<h1>!/bin/bash</h1>
+
+<h1>This run as root on the machine</h1>
+
+<p>chef_binary=/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo</p>
+
+<h1>are we not bootstrapped?</h1>
+
+<p>if ! test -f &ldquo;$chef_binary&rdquo;; then
+  export DEBIAN_FRONTEND=noniteractive
+  apt-get update &amp;&amp;
+  apt-get dist-upgrade -y &amp;&amp;
+  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y &amp;&amp;
+  curl -L <a href="https://www.opscode.com/chef/install.sh">https://www.opscode.com/chef/install.sh</a> | sudo bash
+fi &amp;&amp;</p>
+
+<p>chef-solo -c solo.rb -j solo.json
+<code>``
+As you can see I use the omnibus installer, not the gem, and choose the ruby version you want ;), and yes if you use those lame-ass rpm-based distros,</code>apt-get` won&rsquo;t work for you.</p>
+
+<h2>There&rsquo;s something clever here (step 2)</h2>
+
+<p>So awesome, you walked through the suggested tutorial, you can now run your <code>install.sh</code> and get your changes in. Grats! If you think about it, hit up the <a href="http://docs.opscode.com">Opscode Docs</a> and you&rsquo;ll discover that there&rsquo;s a resource to provision every which way. As I said at the beginning this might be all you need, if it is then use it; no real need to go any farther.</p>
+
+<p>Ah, you&rsquo;re still here. So you DO want to farther, awesome. In step two I suggested going to the docs, that&rsquo;s cool, but sometimes you need more verbose help, that&rsquo;s my second point, it&rsquo;s time to start asking questions. Your first stop is <a href="http://webchat.freenode.net/?channels=chef">#chef</a>; it&rsquo;s manned basically 24x7, and <em>normally</em> extremely helpful. Don&rsquo;t be a douche, if you have to paste something use <a href="http://gist.github.com">gist</a> or something.  After that the main Opscode <a href="http://lists.opscode.com/sympa">mailing list</a> is great. It&rsquo;s slower, but you get much more in depth questions and conversations. Finally the third sub step is speak up, ask questions the only way to learn this is to be like &ldquo;I don&rsquo;t understand it, help!&rdquo;</p>
+
+<h2>The only book worth a damn as of 2013/10/18 (step 3)</h2>
+
+<p>Step three of the journey is probably the one that most people jump to initially, and this is usually where the confusion starts.  There&rsquo;s a handful of books out there on chef, this <a href="http://www.packtpub.com/chef-starter/book">one</a> is the only one worth any money.  With a strong understanding of how to provision a simple box, and where to ask questions this book will be extremely straight forward and build upon those building blocks. I&rsquo;m constantly looking for another chef bible, but most nuggets of how-to things are spread all over the internet in blog form.</p>
+
+<h2>The fun starts here (step 4)</h2>
+
+<p>Step four you need a chef server, you need to be able to provision multiple boxes, you understand/can find out what a role or environment is, and you need different <code>run_lists</code>.Good for you.  From here you should look at the open source <a href="http://www.opscode.com/chef/install/">chef server</a> and spin it up on another box. I should say you can use the <a href="https://getchef.opscode.com/signup">hosted chef</a>, you get up to 5 nodes with it for free, which is cool, but if you want to see everything work from the ground up, open source chef server is the way to go. (NOTE: if you are doing it in AWS/<code>$cloudprovider</code> you&rsquo;ll need at least a 4 gig box, and that&rsquo;s pushing it. You&rsquo;ve been warned.) Now spin up another box, a machine that can talk to the server that you want to provision. Start playing with <code>knife</code> add a knife plug-in for you <code>$cloudprovider</code> see if you can spin up another box using the <a href="http://docs.opscode.com/knife_bootstrap.html">knife bootstrap</a>.  Start using <a href="http://community.opscode.com/cookbooks/minitest-handler">minitest-handler-cookbook</a>, <a href="https://github.com/opscode/test-kitchen">test-kitchen</a>, and even <a href="https://github.com/acrmp/chefspec">chef-spec</a> if your feeling sassy. If you&rsquo;ve made it this far, you&rsquo;ve probably been exposed to a myriad of other tools, run with them. Trust me if someone built if for chef the chance of being helpful is extremely high.</p>
+
+<h2>D'oh why did I do it this way? (step 5)</h2>
+
+<p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
+
+<p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
@@ -325,84 +379,6 @@ That's it, now all you have to do is</code>rake spec` and you have a test that c
 <h2>Conclusion</h2>
 
 <p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ansible vs chef vs puppet]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet/"/>
-    <updated>2013-06-26T13:58:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet</id>
-    <content type="html"><![CDATA[<h2>Intro</h2>
-
-<p>First off, I&rsquo;m going to say I&rsquo;m a chef zealot, but I&rsquo;m attempting to put together an intelligent discussion of the battle that has popped up in sysadmin discussion groups now-a-days.  Secondly, I&rsquo;m only focusing on the three systems I have exposure to, ansible the least, puppet the second, and chef the most.  I could also probably throw salt, cfengine, and others in there, but that&rsquo;s superfluous, this is my discussion so I&rsquo;m going to keep it in my scope.</p>
-
-<p>I&rsquo;m going focus on the pluses of each, and use the &ldquo;Overall&rdquo; section to combine them.  In my conclusion my true thoughts will come out, so if you want the tl;dr I&rsquo;d skip down there.</p>
-
-<h2>ansible</h2>
-
-<p>Links:
-<a href="http://www.ansibleworks.com/">homepage</a>, a great <a href="https://github.com/leucos/ansible-tuto">tutorial</a></p>
-
-<ul>
-<li>Low overhead</li>
-<li>python based</li>
-<li>playbook based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>Ansible is an open-source software platform for configuring and managing computers. It combines multi-node software deployment, ad-hoc task execution, and configuration management. It manages nodes over SSH and does not require any additional remote software to be installed on them. Modules work over JSON and standard output and can be written in any programming language. The system uses YAML to express reusable descriptions of systems.</p></blockquote>
-
-<p>Probably the neatest thing about ansible is that it only requires ssh to work.  You do the work on a local box, and run the &ldquo;play book&rdquo; and it walks through the steps.  its designed to be something fast and quick to spin up boxes.  The disadvantage of this is that creep can happen; you can make sure the box is what you expect but you don&rsquo;t have the focused control of something like chef or puppet.  If you need just a webserver that is configured one way and is disposable then this is the way to go.  If you have to support something for long term though, it seems its out of scope of this product. I could be wrong but that&rsquo;s how I interperat it.</p>
-
-<h2>chef</h2>
-
-<p>Links:
-<a href="http://www.opscode.com/">homepage</a>, a great <a href="https://learnchef.opscode.com/">tutorial</a></p>
-
-<ul>
-<li>gem or <a href="http://www.opscode.com/blog/2012/06/29/omnibus-chef-packaging/">omnibus</a> installer</li>
-<li>server based or <a href="http://docs.opscode.com/chef_solo.html">chef-solo</a></li>
-<li>cookbook or recipe based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>chef is a configuration management tool written in Ruby and Erlang. It uses a pure-Ruby, domain-specific language (DSL) for writing system configuration &ldquo;recipes&rdquo; or &ldquo;cookbooks&rdquo;. chef was written by Opscode and is released as open source under the Apache License 2.0. chef is a DevOps tool used for configuring cloud services or to streamline the task of configuring a company&rsquo;s internal servers. chef automatically sets up and tweaks the operating systems and programs that run in massive data centers.</p></blockquote>
-
-<p>As I said in the intro, I love chef.  Hell if I could I&rsquo;d probably work for opscode.  As soon as I got my head wrapped around chef (which is chef&rsquo;s main problem), its quick and efficient, and its slick.  I&rsquo;ve only ever used chef with a chef server, never really touched chef-solo.  I also leveraged <a href="https://github.com/jkeiser/chef-zero">chef-zero</a> in my testing because I like the idea of uploading the cookbooks and pulling them down.  Having cookbooks on a centralized chef server, its a true &ldquo;system of record&rdquo; that doesn&rsquo;t rely on your laptop or workstation, if you do a <code>knife server create 'role[web]'</code> you know what you are going to get.</p>
-
-<p>Something I would like to say though, a huge disadvantage of chef is the way cookbooks are controlled.  It requires constant babying, or plugins like <a href="https://github.com/jonlives/knife-spork">knife-spork</a> to make sure people don&rsquo;t mess with each others work.  I am lucky enough to work in an environment with only 2 others that have any real use for chef, so I am able to be a good gatekeeper.  I could only imagine the cluster with larger teams.  As of 6/26/13 I know this is a conversation topic and pain point, I&rsquo;d be interested to see how the workflow matures.</p>
-
-<h2>puppet</h2>
-
-<p>Links:
-<a href="http://www.puppetlabs.com/">homepage</a>, a great <a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">cheat sheet</a></p>
-
-<ul>
-<li>an official <a href="http://info.puppetlabs.com/download-learning-puppet-VM.html">learning</a> vm</li>
-<li><a href="https://puppetlabs.com/puppet/puppet-open-source/">package</a> based</li>
-<li>server based or local puppet-apply</li>
-<li>manifest based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>puppet is a tool designed to manage the configuration of Unix-like and Microsoft Windows systems declaratively. The user describes system resources and their state, either using puppet&rsquo;s declarative language or a Ruby DSL (domain-specific language). This information is stored in files called &ldquo;puppet manifests&rdquo;. puppet discovers the system information via a utility called Facter, and compiles the puppet manifests into a system-specific catalog containing resources and resource dependency, which are applied against the target systems. Any actions taken by puppet are then reported.</p></blockquote>
-
-<p>Something I&rsquo;ve always loved about puppet is the trifecta. You can easily create a manifest to control the package/file/service in only a few lines.  (check that cheat sheet above for an example) I was able to take over an infrastructure in an extremely short period of time with just that.  I didn&rsquo;t have that long to control every facet of the groupings but the investment to the reward was mind boggling fast.</p>
-
-<h2>Overall</h2>
-
-<p>Ok, now that my little tl;dr of the pluses are done, I can start my views overall.  puppet is a very &ldquo;eins, zwei, eins, zwei,&rdquo; type application.  With marrying it with something like <a href="http://www.cobblerd.org/">cobbler</a> you can in theory rack mount a machine, hit the power button and have a machine exactly how you want it to be in &ldquo;x&rdquo; about of time.  This is great for big companies that always want machines to cookie cutter. It could be that that&rsquo;s how I saw puppet being used, but comparing them to the two other config management systems; it really fits. Speaking of cobbler, yes, I do understand you can leverage cobbler with each of these tools, but as you can <a href="https://github.com/cobbler/cobbler/wiki/Using%20cobbler%20with%20a%20configuration%20management%20system">see</a> it just seems that cobbler and puppet are a match made in heaven.  chef on the other hand seems like it&rsquo;s designed for smaller companies with smaller teams.  It looks for cooperation, nay, requires cooperation, and its to its strength and its weakness.  Unlike puppet, chef doesn&rsquo;t default to an &ldquo;active&rdquo; mode (Ok, that&rsquo;s not fully true about puppet either, but the better practice is to have puppet in active mode from the get go).  puppet runs by default every 30 mins, to make sure its what you want to be, chef on the other hand is a pull based config-management that they even suggest &ldquo;putting chef-client&rdquo; in your crontab.  This originally bothered me, coming from the puppet world, but as i learned more about chef i realized that isn&rsquo;t its bread and butter.  chef is a way to spin up boxes for an elastic environment like AWS.  You have a massive blast of traffic, chef will trigger throw your machines in the load balancer, install apache or whatever, and you have what you expect, and 2-3 hours later you blow it away.  This is different than ansible because it is not &ldquo;automated&rdquo; per se. Remember the play books site in your local machine, you have interact with the provisioning, which for a startup seems like the correct path. In a startup you have to know exactly what machines are running, not only because of OPEX but because its your baby, you want focus and tweak; you <em>probably</em> don&rsquo;t have the budget to just blow away the boxes.</p>
-
-<h2>Conclusion</h2>
-
-<p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
 ]]></content>
   </entry>
   
