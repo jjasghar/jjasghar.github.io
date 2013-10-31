@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2013-10-31T11:19:30-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[hub workflow]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/31/hub-workflow/"/>
+    <updated>2013-10-31T11:01:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/31/hub-workflow</id>
+    <content type="html"><![CDATA[<p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:
+<code>bash
+[~/repo/learning_git/fakedir1] % hub pull-request
+Error creating pull request: Unprocessable Entity (HTTP 422)
+Missing field: "head_sha"
+Missing field: "base_sha"
+No commits between jjasghar:master and jjasghar:blah
+</code>
+WTF man? What the hell does this mean? It seems I wasn&rsquo;t the only one that had this <a href="https://github.com/github/hub/issues/189">problem</a>.  It seems that the work flow (at least in my case) was the problem. Here&rsquo;s a quick fix to be able to open up a PR off a forked branch:
+<code>bash
+[~/repo/learning_git/fakedir1] % git add some_file
+[~/repo/learning_git/fakedir1] % git commit -m "blah"
+[~/repo/learning_git/fakedir1] % git push -u origin blah
+Counting objects: 7, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 351 bytes | 0 bytes/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+To git@github.com:jjasghar/learning_git.git
+   5224edf..88ad1af  blah -&gt; blah
+Branch blah set up to track remote branch blah from origin.
+[~/repo/learning_git/fakedir1] % hub pull-request
+https://github.com/jjasghar/learning_git/pull/1
+</code>
+Pretty slick eh?</p>
+
+<p>Bonus round you can attach your PR to an issue!
+<code>bash
+[~/repo/learning_git/fakedir1] % hub pull-request -i 3
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>
