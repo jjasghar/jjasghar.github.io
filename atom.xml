@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-31T11:19:30-05:00</updated>
+  <updated>2013-11-27T12:12:11-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hubot+Herkou+Campfire and how I spent much more time than I thought I should]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/"/>
+    <updated>2013-11-27T11:41:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should</id>
+    <content type="html"><![CDATA[<p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
+with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
+node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
+
+<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is what the doc says&hellip;.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
+</span><span class='line'>% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Damn, nope.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I figured I&rsquo;d try with <code>https://</code>&hellip;..</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Damnit.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do&#8217;h!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Boom, it worked.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[hub workflow]]></title>

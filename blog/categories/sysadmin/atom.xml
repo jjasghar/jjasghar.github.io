@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-31T11:19:30-05:00</updated>
+  <updated>2013-11-27T12:12:11-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hubot+Herkou+Campfire and how I spent much more time than I thought I should]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/"/>
+    <updated>2013-11-27T11:41:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should</id>
+    <content type="html"><![CDATA[<p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
+with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
+node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
+
+<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:
+<code>
+ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
+</code>
+This is what the doc says&hellip;.
+<code>
+% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
+% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken
+</code>
+I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?
+<code>
+HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com
+</code>
+I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:
+<code>
+HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com
+</code>
+Damn, nope.
+<code>
+ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
+</code>
+I figured I&rsquo;d try with <code>https://</code>&hellip;..
+<code>
+HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com
+</code>
+Damnit.
+<code>
+ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
+</code>
+Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do'h!
+<code>
+HUBOT_CAMPFIRE_ACCOUNT=myaccountname
+</code>
+Boom, it worked.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[hub workflow]]></title>
@@ -189,28 +235,6 @@ exit $stateid
 18:50 j^2 ah cool
 18:50 maek its for overrides
 18:50 maek just make it
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
-    <updated>2013-10-05T16:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
-    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
-
-<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
-
-<p><code>bash
-root@boe:/tmp# rm /var/cache/nagios3/objects.cache
-root@boe:/tmp# service nagios restart
-Running configuration check…done.
-Stopping nagios: .done.
-Starting nagios: done.
-root@boe:/tmp# cd /var/cache/nagios3
-root@boe:/var/cache/nagios3# ls
-objects.cache  status.dat
 </code></p>
 ]]></content>
   </entry>
