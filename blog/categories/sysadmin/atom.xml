@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-11-27T12:12:11-06:00</updated>
+  <updated>2013-12-17T18:27:00-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,45 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Learning git realizing that I know nothing]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/"/>
+    <updated>2013-12-17T13:56:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing</id>
+    <content type="html"><![CDATA[<p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ffBJ4sVUb4 "></iframe></div></p>
+
+<p>I strongly suggest taking the 99ish mins to watch it, it&rsquo;s a great tutorial, with great visual examples.</p>
+
+<p>I&rsquo;ve also stolen some aliases that he suggests!
+<code>bash
+alias glp="git log --graph --pretty --all"
+alias gld="git log --graph --decorate --all"
+</code></p>
+
+<p>Some useful notes that this video helped clear up for me:</p>
+
+<p>Something else that finally cleared up to me <code>origin/master</code> means a label, while <code>origin master</code> means the remote origin with the label of master on it&rsquo;s remote side. This works with <code>origin/bugfix</code> and <code>origin bugfix</code> also, it&rsquo;s just unfortunate that the master is used twice is a very similar context.</p>
+
+<p><code>git merge master</code> merges master into the current branch you have checked out. <code>git merge origin/master</code> merges the upstream changes of master into your current branch. <code>git merge master bugfix</code> merges the master branch into bugfix explicitly.</p>
+
+<p><code>git push --set-upstream (or -u) origin bugfix</code> sets the upstream branch on origin to bugfix, if from your local repo.</p>
+
+<p><code>refs/head/blah</code> is a fancy way of saying <code>blah</code> is the branch.</p>
+
+<p><code>git push origin --tags</code> to push your tags on the local repo to the origin</p>
+
+<p>A detached HEAD isn&rsquo;t a bad thing; it just means there&rsquo;s no branch associated with it. It&rsquo;s good to check things out but you can always <code>git checkout -b &lt;branch_name&gt;</code> if needed.</p>
+
+<p><code>git rebase -i HEAD^^</code> go back to rebase 2 commits; rebase goes bottom up, to squash up to the top one.</p>
+
+<p><code>rebase</code> creates a <em>new</em> line of history, not REWRITES history.</p>
+
+<p>Once you&rsquo;ve pushed, never rebase; it&rsquo;s not worth it. :(</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hubot+Herkou+Campfire and how I spent much more time than I thought I should]]></title>
@@ -181,61 +220,6 @@ exit $stateid
 ```</p>
 
 <p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
-    <updated>2013-10-05T16:59:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
-    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
-
-<p>If you play with open source chef you might run into this.</p>
-
-<p><code>
-18:42 j^2 so i’m having trouble with chef-client
-18:42 j^2 why does it default to https://chef/blahblah?
-18:43 j^2 example:
-18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
-18:44 j^2 any advice?
-18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
-18:45 maek j^2:  I just got hit with this also
-18:45 maek i think becuase chef 11 is now fronted with nginx
-18:45 maek its doing a rewrite
-18:45 maek for the name configured in nginx
-18:45 maek in this case its hostname
-18:45 maek but i assume that box cant resolve chef
-18:46 j^2 lame
-18:46 maek j^2:  I had to end up adding a hosts entry
-18:46 maek while I wait for dns
-18:46 maek I think you could do
-18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
-18:47 maek you could reconfigure chef
-18:47 maek to use its ip
-18:47 maek instead of its hostname
-18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
-18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
-18:48 maek i dont see it htought
-18:48 j^2 oh!
-18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
-18:48 j^2 nice looking
-18:48 maek yeah
-18:48 maek there it is
-</code></p>
-
-<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
-
-<p><code>
-18:48 maek so you can do
-18:49 maek in /etc/chef-server/chef-server.rb
-18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
-18:50 j^2 yeah i dont thave that file. :(
-18:50 maek and run chef-server-ctl reconfigure
-18:50 j^2 ah cool
-18:50 maek its for overrides
-18:50 maek just make it
-</code></p>
 ]]></content>
   </entry>
   

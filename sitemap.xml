@@ -2,110 +2,116 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/06/25/testing-this-out/</loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant/</loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet/</loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace/</loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/
         </loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/07/25/semver-or-how-i-learned-that-versioning-everywhere-where-ive-worked-is-stupid-and-semver-is-the-way-to-go/
         </loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/</loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/
         </loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here/
         </loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/09/30/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis/
         </loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2/
         </loc>
-        <lastmod>2013-10-02T18:08:25-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs/
         </loc>
-        <lastmod>2013-10-07T10:44:34-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/</loc>
-        <lastmod>2013-10-05T16:53:46-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/
         </loc>
-        <lastmod>2013-10-05T17:03:10-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios/</loc>
-        <lastmod>2013-10-16T12:45:14-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/
         </loc>
-        <lastmod>2013-10-18T16:02:51-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/2013/10/31/hub-workflow/</loc>
-        <lastmod>2013-10-31T11:18:08-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>
             http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/
         </loc>
-        <lastmod>2013-11-27T12:11:48-06:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/
+        </loc>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/about/</loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/blog/archives/</loc>
-        <lastmod>2013-11-27T12:11:48-06:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/</loc>
-        <lastmod>2013-11-27T12:11:48-06:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
     <url>
         <loc>http://jjasghar.github.io/robots.txt</loc>
-        <lastmod>2013-09-30T20:57:48-05:00</lastmod>
+        <lastmod>2013-12-17T18:26:28-06:00</lastmod>
     </url>
 </urlset>
