@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-12-17T18:27:00-06:00</updated>
+  <updated>2013-12-23T17:00:47-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,101 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/"/>
+    <updated>2013-12-23T10:36:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance</id>
+    <content type="html"><![CDATA[<p>So congrats you got your new &ldquo;<a href="http://www.rackspace.com/cloud/private/">Private Cloud</a>&rdquo; from Rackspace. You are probably ecstatic to start building your new machines.
+I know I was; but alas with all new toys sometimes you hit a couple stags. Here are a couple things I ran into on my first few days.</p>
+
+<h3>First issue</h3>
+
+<p>So I&rsquo;m a chef shop, as you might now by now (assuming you&rsquo;ve read any of my other posts). I&rsquo;ve used <a href="https://github.com/opscode/knife-rackspace">knife-rackspace</a> tons of times; and hell I even have a <a href="https://github.com/opscode/knife-rackspace/commits?author=jjasghar">commit bit</a>. So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
+You end up having to install <a href="https://github.com/opscode/knife-openstack">knife-openstack</a>. That in itself isn&rsquo;t bad at all&hellip;
+<code>bash
+[~] % gem install knife-openstack
+</code>
+Now you need to update your <code>knife.rb</code>
+<code>bash
+[~] % vim ~/.chef/knife.rb
+</code>
+In your handoff ticket, you probably got something that looks like this:
+<code>bash
+export OS_USERNAME=Im_awesome_admin
+export OS_PASSWORD=$omeCr@zyA$$passwD
+export OS_TENANT_NAME=MyCompanyName
+export OS_AUTH_URL=http://10.219.0.254:5000/v2.0/
+export OS_AUTH_STRATEGY=keystone:
+</code>
+Go ahead and copy them out to what they need to be, something like&hellip;
+```ruby
+knife[:openstack_username] = &ldquo;Your OpenStack Dashboard username&rdquo;
+knife[:openstack_password] = &ldquo;Your OpenStack Dashboard password&rdquo;</p>
+
+<h3>Note: If you are not proxying HTTPS to the OpenStack auth port, the scheme should be HTTP</h3>
+
+<p>knife[:openstack_auth_url] = &ldquo;<a href="http://cloud.mycompany.com:5000/v2.0/tokens">http://cloud.mycompany.com:5000/v2.0/tokens</a>&rdquo;
+knife[:openstack_tenant] = &ldquo;Your OpenStack tenant name&rdquo;
+knife[:openstack_ssh_key_id] = &ldquo;my sshkey id&rdquo;
+<code>
+Great! So run that great command `knife openstack flavor list` to see if everything works....
+</code>bash
+[~] % knife openstack server list
+ERROR: knife encountered an unexpected error
+This may be a bug in the &lsquo;openstack server list&rsquo; knife command or plugin
+Please collect the output of this command with the <code>-VV</code> option before filing a bug report.
+Exception: NoMethodError: undefined method `[]&lsquo; for nil:NilClass
+```
+Crap..</p>
+
+<p>Ok, lets try out with <code>-VV</code></p>
+
+<p><code>``ruby
+DEBUG: openstack_username Im_awsome_admin
+DEBUG: openstack_auth_url http://10.219.0.254:5000/v2.0/
+DEBUG: openstack_tenant MyCompanyName
+DEBUG: openstack_insecure
+/Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:51:in</code>rescue in run': undefined method `[]&lsquo; for nil:NilClass (NoMethodError)</p>
+
+<pre><code>from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:41:in `run'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:485:in `run_with_pretty_exceptions'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:174:in `run'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/application/knife.rb:133:in `run'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/bin/knife:25:in `&lt;top (required)&gt;'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `load'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `&lt;main&gt;'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `eval'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `&lt;main&gt;'
+</code></pre>
+
+<p>```</p>
+
+<p>Well that&rsquo;s not a lot of help eh? Turns out, if you look at the ticket that Rackspace gives you and what the <code>[:openstack_auth_url]</code> requires you&rsquo;ll see that there&rsquo;s a <code>/tokens</code> at the end. Do'h!</p>
+
+<h3>Second issue</h3>
+
+<p>Ok, so you got the ability to talk to your backend? Yay! But alas, you run your create&hellip;
+```bash
+[~] % knife openstack server create -S jj-mba-key -I 349168d3-5381-4324-8636-398d012f852b -f 1 -N testbox
+Instance Name: testbox
+Instance ID: 5e0ec79c-e06a-4fdb-9887-2b30ae1e5f80</p>
+
+<p>Waiting for server&hellip;&hellip;&hellip;
+Flavor: 1
+Image: 349168d3-5381-4324-8636-398d012f852b
+SSH Keypair: jj-mba-key
+ERROR: No IP address available for bootstrapping.
+```
+What the hell does that mean? Well I&rsquo;m not going to explain it all but it seems that by default Rackspace names the &ldquo;public&rdquo; and &ldquo;private&rdquo; networks as &ldquo;Fixed&rdquo; and &ldquo;Floating.&rdquo;
+This is triggered a fog issue, where it&rsquo;s looking at the label for a network either &ldquo;public&rdquo; or &ldquo;private&rdquo; and blows up. There is a ticket in for this <a href="https://tickets.opscode.com/browse/KNIFE-231">here</a> but it looks like it&rsquo;s stalled from late summer, early fall. Lammmeeee.</p>
+
+<p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
+
+<p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[People keep asking me how to start with chef]]></title>
@@ -327,58 +422,6 @@ end
 <p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
 
 <p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[serverspec the new best way to learn and audit your infrastructure]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/"/>
-    <updated>2013-07-12T15:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure</id>
-    <content type="html"><![CDATA[<p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
-
-<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
-
-<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
-You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
-
-<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
-
-<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.
-``` ruby
-require &lsquo;spec_helper&rsquo;</p>
-
-<p>describe package(&lsquo;httpd&rsquo;) do
-  it { should be_installed }
-end</p>
-
-<p>describe service(&lsquo;httpd&rsquo;) do
-  it { should be_enabled   }
-  it { should be_running   }
-end</p>
-
-<p>describe port(80) do
-  it { should be_listening }
-end</p>
-
-<p>describe file(&lsquo;/etc/httpd/conf/httpd.conf&rsquo;) do
-  it { should be_file }
-  it { should contain &ldquo;ServerName my-server-name&rdquo; }
-end
-<code>``
-That's it, now all you have to do is</code>rake spec` and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
-
-<h2>nagios (or automated process monitoring) vs serverspec</h2>
-
-<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
-
-<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
-
-<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
-
-<h2>Conclusion</h2>
-
-<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
 ]]></content>
   </entry>
   
