@@ -10,7 +10,7 @@ So congrats you got your new "[Private Cloud](http://www.rackspace.com/cloud/pri
 I know I was; but alas with all new toys sometimes you hit a couple stags. Here are a couple things I ran into on my first few days.
 
 ### First issue
-So I'm a chef shop, as you might now by now (assuming you've read any of my other posts). I've used [knife-rackspace](https://github.com/opscode/knife-rackspace) tons of times; and hell I even have a [commit bit](https://github.com/opscode/knife-rackspace/commits?author=jjasghar). So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
+So I'm a chef shop, as you might know by now (assuming you've read any of my other posts). I've used [knife-rackspace](https://github.com/opscode/knife-rackspace) tons of times; and hell I even have a [commit bit](https://github.com/opscode/knife-rackspace/commits?author=jjasghar). So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
 You end up having to install [knife-openstack](https://github.com/opscode/knife-openstack). That in itself isn't bad at all...
 ```bash
 [~] % gem install knife-openstack
