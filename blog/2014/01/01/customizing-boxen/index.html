@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Customizing Boxen - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="My goal is to get these few apps on my vm, but first lets get a default build working:
+* iterm2
+* dropbox
+* mysql
+* 1password
+* virtualbox
+* vagrant &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Customizing Boxen</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T13:27:20-06:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>My goal is to get these few apps on my vm, but first lets get a default build working:
+* iterm2
+* dropbox
+* mysql
+* 1password
+* virtualbox
+* vagrant
+* chrome</p>
+
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
+
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
+
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[~] % git --version # click "Install" for the developer tools
+</span><span class='line'>[~] % sudo mkdir -p /opt/boxen
+</span><span class='line'>[~] % sudo chown ${USER}:staff /opt/boxen
+</span><span class='line'>[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+</span><span class='line'>[~] % cd /opt/boxen/repo
+</span><span class='line'>[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+</span><span class='line'>[/opt/boxen/repo] % cd manifests
+</span><span class='line'>[/opt/boxen/repo/manifests] % vim site.pp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
+
+<p>Ok, lets give boxen a shot!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[/opt/boxen/repo/manifests] % cd ..
+</span><span class='line'>[/opt/boxen/repo/] % script/boxen --no-fde
+</span><span class='line'>[/opt/boxen/repo/] % source /opt/boxen/env.sh
+</span><span class='line'>[/opt/boxen/repo/] % boxen</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
+
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>node
+</span><span class='line'>-bash: node: <span class="nb">command </span>not found
+</span><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>ruby --version
+</span><span class='line'>ruby 2.0.0p247 <span class="o">(</span>2013-06-27 revision 41674<span class="o">)</span> <span class="o">[</span>universal.x86_64-darwin13<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
+
+<h2>Per user manifests</h2>
+
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
+
+<p>Now:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/<span class="o">]</span> % <span class="nb">cd </span>modules/people/manifests
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout master
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout -b jjasghar_manifest
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar.pp <span class="c"># this needs to be your github account name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.</p>
+
+<figure class='code'><figcaption><span>awaxa.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">dotfiles</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">gitconfig</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">preferences</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">puppetlabs</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">caffeine</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'>  <span class="c1">#include dropbox</span>
+</span><span class='line'>  <span class="c1">#include gpgtools</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">java</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">rdio</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">tunnelblick</span><span class="p">:</span><span class="ss">:beta</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vlc</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vmware_fusion</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="o">[</span>
+</span><span class='line'>    <span class="s1">&#39;htop-osx&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;tmux&#39;</span>
+</span><span class='line'>    <span class="o">]</span><span class="p">:</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="s1">&#39;GoogleVoiceAndVideoSetup&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">source</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">provider</span> <span class="o">=&gt;</span> <span class="n">pkgdmg</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok here&rsquo;s my <code>jjasghar.pp</code> that I created:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nice! Ok, now we need to create:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % mkdir jjasghar
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar/applications.pp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where we add our apps!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">iterm2</span><span class="p">:</span><span class="ss">:stable</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">dropbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">mysql</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[--</span> <span class="n">snip</span> <span class="o">--]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Optional/custom modules. There are tons available at</span>
+</span><span class='line'><span class="c1"># https://github.com/boxen.</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;iterm2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span> <span class="ss">:repo</span> <span class="o">=&gt;</span> <span class="s2">&quot;boxen/puppet-iterm2&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;chrome&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;dropbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;mysql&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;onepassword&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;virtualbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;vagrant&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T13:27:20-06:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/31/adventures-with-boxen/" title="Previous Post: Adventures with boxen">&laquo; Adventures with boxen</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/31/adventures-with-boxen/">Adventures With Boxen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/">Running Knife-openstack on a Private Rackspace Instance</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/">Learning Git Realizing That I Know Nothing</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/">Hubot+Herkou+Campfire and How I Spent Much More Time Than I Thought I Should</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-12-24T15:52:16-06:00</updated>
+  <updated>2014-01-01T16:11:08-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,233 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Customizing Boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
+    <updated>2014-01-01T13:27:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
+    <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
+
+<ul>
+<li>iterm2</li>
+<li>dropbox</li>
+<li>mysql</li>
+<li>1password</li>
+<li>virtualbox</li>
+<li>vagrant</li>
+<li>chrome</li>
+</ul>
+
+
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
+
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
+
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):
+<code>
+[~] % git --version # click "Install" for the developer tools
+[~] % sudo mkdir -p /opt/boxen
+[~] % sudo chown ${USER}:staff /opt/boxen
+[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+[~] % cd /opt/boxen/repo
+[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+[/opt/boxen/repo] % cd manifests
+[/opt/boxen/repo/manifests] % vim site.pp
+</code>
+I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
+
+<p>Ok, lets give boxen a shot!
+<code>
+[/opt/boxen/repo/manifests] % cd ..
+[/opt/boxen/repo/] % script/boxen --no-fde
+[/opt/boxen/repo/] % source /opt/boxen/env.sh
+[/opt/boxen/repo/] % boxen
+</code>
+You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
+
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:
+<code>bash
+jjasghar-Mac:repo jjasghar$ node
+-bash: node: command not found
+jjasghar-Mac:repo jjasghar$ ruby --version
+ruby 2.0.0p247 (2013-06-27 revision 41674) [universal.x86_64-darwin13]
+</code>
+Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
+
+<h2>Per user manifests</h2>
+
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
+
+<p>Now:
+<code>bash
+[/opt/boxen/repo/] % cd modules/people/manifests
+[/opt/boxen/repo/modules/people/manifests] % git checkout master
+[/opt/boxen/repo/modules/people/manifests] % git checkout -b jjasghar_manifest
+[/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
+</code>
+Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.
+<code>[ruby] [awaxa.pp]
+class people::awaxa {
+  include people::awaxa::applications
+  include people::awaxa::dotfiles
+  include people::awaxa::gitconfig
+  include people::awaxa::preferences
+  include people::awaxa::puppetlabs
+}
+</code>
+As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.
+```[ruby] [applications.pp]
+class people::awaxa::applications {
+  include caffeine
+  include chrome
+  #include dropbox
+  #include gpgtools
+  include onepassword
+  include java
+  include rdio
+  include tunnelblick::beta
+  include vagrant
+  include virtualbox
+  include vlc
+  include vmware_fusion</p>
+
+<p>  package { [</p>
+
+<pre><code>'htop-osx',
+'tmux'
+]:
+</code></pre>
+
+<p>  }</p>
+
+<p>  package { &lsquo;GoogleVoiceAndVideoSetup&rsquo;:</p>
+
+<pre><code>source =&gt; 'http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg',
+provider =&gt; pkgdmg,
+</code></pre>
+
+<p>  }
+}
+<code>
+Ok here's the one I created:
+</code>[ruby] [jjasghar.pp]
+class people::jjasghar {
+  include people::jjasghar::applications
+}
+<code>
+Nice! Ok, now we need to create:
+</code>bash
+[/opt/boxen/repo/modules/people/manifests] % mkdir jjasghar
+[/opt/boxen/repo/modules/people/manifests] % vim jjasghar/applications.pp
+```</p>
+
+<p>This is where we add our apps!
+<code>[ruby] [applications.pp]
+class people::jjasghar::applications {
+  include iterm2::stable
+  include dropbox
+  include mysql
+  include onepassword
+  include virtualbox
+  include vagrant
+  include chrome
+}
+</code></p>
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo
+```ruby
+[&mdash; snip &mdash;]</p>
+
+<h1>Optional/custom modules. There are tons available at</h1>
+
+<h1><a href="https://github.com/boxen.">https://github.com/boxen.</a></h1>
+
+<p>github &ldquo;iterm2&rdquo;, &ldquo;1.0.0&rdquo;, :repo => &ldquo;boxen/puppet-iterm2&rdquo;
+github &ldquo;chrome&rdquo;
+github &ldquo;dropbox&rdquo;
+github &ldquo;mysql&rdquo;
+github &ldquo;onepassword&rdquo;
+github &ldquo;virtualbox&rdquo;
+github &ldquo;vagrant&rdquo;
+```</p>
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:
+<code>bash
+[/opt/boxen/repo/modules/people/manifests] % cd /opt/boxen/repo
+[/opt/boxen/repo] % boxen
+</code></p>
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adventures with boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
+    <updated>2013-12-31T15:54:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
+    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
+
+<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
+
+<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
+
+<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:
+<code>
+Boxen requires at least the Xcode Command Line Tools installed.
+Boxen will not work with an existing rvm install.
+Boxen may not play nice with a GitHub username that includes dash(-)
+Boxen may not play nice with an existing rbenv install.
+Boxen may not play nice with an existing chruby install.
+Boxen may not play nice with an existing homebrew install.
+Boxen may not play nice with an existing nvm install.
+Boxen recommends installing the full Xcode.
+</code>
+<em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
+
+<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
+
+<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
+
+<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
+
+<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
+
+<p>After you got that done boot up the vm open terminal run the following:</p>
+
+<p><code>git --version</code></p>
+
+<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
+
+<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:
+<code>bash
+[~] % sudo mkdir -p /opt/boxen
+[~] % sudo chown ${USER}:staff /opt/boxen
+[~] % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+[~] % cd /opt/boxen/repo
+[/opt/boxen/repo] % git remote rm origin
+[/opt/boxen/repo] % git remote add origin &lt;the location of my new git repository&gt;
+[/opt/boxen/repo] % git push -u origin master
+</code>
+This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
+
+<p>Ok, now try out boxen:
+<code>bash
+[/opt/boxen/repo] % ./script/boxen
+</code>
+Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):
+<code>bash
+[/opt/boxen/repo] % ./script/boxen --no-fde
+</code></p>
+
+<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
+
+<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
+
+<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
@@ -184,83 +411,6 @@ exit $stateid
 ```</p>
 
 <p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
-    <updated>2013-10-05T16:59:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
-    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
-
-<p>If you play with open source chef you might run into this.</p>
-
-<p><code>
-18:42 j^2 so i’m having trouble with chef-client
-18:42 j^2 why does it default to https://chef/blahblah?
-18:43 j^2 example:
-18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
-18:44 j^2 any advice?
-18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
-18:45 maek j^2:  I just got hit with this also
-18:45 maek i think becuase chef 11 is now fronted with nginx
-18:45 maek its doing a rewrite
-18:45 maek for the name configured in nginx
-18:45 maek in this case its hostname
-18:45 maek but i assume that box cant resolve chef
-18:46 j^2 lame
-18:46 maek j^2:  I had to end up adding a hosts entry
-18:46 maek while I wait for dns
-18:46 maek I think you could do
-18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
-18:47 maek you could reconfigure chef
-18:47 maek to use its ip
-18:47 maek instead of its hostname
-18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
-18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
-18:48 maek i dont see it htought
-18:48 j^2 oh!
-18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
-18:48 j^2 nice looking
-18:48 maek yeah
-18:48 maek there it is
-</code></p>
-
-<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
-
-<p><code>
-18:48 maek so you can do
-18:49 maek in /etc/chef-server/chef-server.rb
-18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
-18:50 j^2 yeah i dont thave that file. :(
-18:50 maek and run chef-server-ctl reconfigure
-18:50 j^2 ah cool
-18:50 maek its for overrides
-18:50 maek just make it
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
-    <updated>2013-10-05T16:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
-    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
-
-<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
-
-<p><code>bash
-root@boe:/tmp# rm /var/cache/nagios3/objects.cache
-root@boe:/tmp# service nagios restart
-Running configuration check…done.
-Stopping nagios: .done.
-Starting nagios: done.
-root@boe:/tmp# cd /var/cache/nagios3
-root@boe:/var/cache/nagios3# ls
-objects.cache  status.dat
-</code></p>
 ]]></content>
   </entry>
   

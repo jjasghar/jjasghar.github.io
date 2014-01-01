@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-12-24T15:52:16-06:00</updated>
+  <updated>2014-01-01T16:02:08-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,339 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Customizing Boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
+    <updated>2014-01-01T13:27:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
+    <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:
+* iterm2
+* dropbox
+* mysql
+* 1password
+* virtualbox
+* vagrant
+* chrome</p>
+
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
+
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
+
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[~] % git --version # click "Install" for the developer tools
+</span><span class='line'>[~] % sudo mkdir -p /opt/boxen
+</span><span class='line'>[~] % sudo chown ${USER}:staff /opt/boxen
+</span><span class='line'>[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+</span><span class='line'>[~] % cd /opt/boxen/repo
+</span><span class='line'>[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+</span><span class='line'>[/opt/boxen/repo] % cd manifests
+</span><span class='line'>[/opt/boxen/repo/manifests] % vim site.pp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
+
+<p>Ok, lets give boxen a shot!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[/opt/boxen/repo/manifests] % cd ..
+</span><span class='line'>[/opt/boxen/repo/] % script/boxen --no-fde
+</span><span class='line'>[/opt/boxen/repo/] % source /opt/boxen/env.sh
+</span><span class='line'>[/opt/boxen/repo/] % boxen</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
+
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>node
+</span><span class='line'>-bash: node: <span class="nb">command </span>not found
+</span><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>ruby --version
+</span><span class='line'>ruby 2.0.0p247 <span class="o">(</span>2013-06-27 revision 41674<span class="o">)</span> <span class="o">[</span>universal.x86_64-darwin13<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
+
+<h2>Per user manifests</h2>
+
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
+
+<p>Now:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/<span class="o">]</span> % <span class="nb">cd </span>modules/people/manifests
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout master
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout -b jjasghar_manifest
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar.pp <span class="c"># this needs to be your github account name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.</p>
+
+<figure class='code'><figcaption><span>awaxa.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">dotfiles</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">gitconfig</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">preferences</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">puppetlabs</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">caffeine</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'>  <span class="c1">#include dropbox</span>
+</span><span class='line'>  <span class="c1">#include gpgtools</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">java</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">rdio</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">tunnelblick</span><span class="p">:</span><span class="ss">:beta</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vlc</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vmware_fusion</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="o">[</span>
+</span><span class='line'>    <span class="s1">&#39;htop-osx&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;tmux&#39;</span>
+</span><span class='line'>    <span class="o">]</span><span class="p">:</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="s1">&#39;GoogleVoiceAndVideoSetup&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">source</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">provider</span> <span class="o">=&gt;</span> <span class="n">pkgdmg</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok here&rsquo;s my <code>jjasghar.pp</code> that I created:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nice! Ok, now we need to create:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % mkdir jjasghar
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar/applications.pp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where we add our apps!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">iterm2</span><span class="p">:</span><span class="ss">:stable</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">dropbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">mysql</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[--</span> <span class="n">snip</span> <span class="o">--]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Optional/custom modules. There are tons available at</span>
+</span><span class='line'><span class="c1"># https://github.com/boxen.</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;iterm2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span> <span class="ss">:repo</span> <span class="o">=&gt;</span> <span class="s2">&quot;boxen/puppet-iterm2&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;chrome&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;dropbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;mysql&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;onepassword&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;virtualbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;vagrant&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adventures with boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
+    <updated>2013-12-31T15:54:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
+    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
+
+<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
+
+<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
+
+<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Boxen requires at least the Xcode Command Line Tools installed.
+</span><span class='line'>Boxen will not work with an existing rvm install.
+</span><span class='line'>Boxen may not play nice with a GitHub username that includes dash(-)
+</span><span class='line'>Boxen may not play nice with an existing rbenv install.
+</span><span class='line'>Boxen may not play nice with an existing chruby install.
+</span><span class='line'>Boxen may not play nice with an existing homebrew install.
+</span><span class='line'>Boxen may not play nice with an existing nvm install.
+</span><span class='line'>Boxen recommends installing the full Xcode.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
+
+<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
+
+<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
+
+<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
+
+<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
+
+<p>After you got that done boot up the vm open terminal run the following:</p>
+
+<p><code>git --version</code></p>
+
+<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
+
+<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo mkdir -p /opt/boxen
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chown <span class="k">${</span><span class="nv">USER</span><span class="k">}</span>:staff /opt/boxen
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote rm origin
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote add origin &lt;the location of my new git repository&gt;
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git push -u origin master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
+
+<p>Ok, now try out boxen:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen --no-fde
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
+
+<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
+
+<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
@@ -1315,42 +1648,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
 <h2>Conclusion</h2>
 
 <p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[chef-jenkins-vagrant]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant/"/>
-    <updated>2013-06-25T11:43:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant</id>
-    <content type="html"><![CDATA[<p>To quote the top of my <a href="https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md">README.md</a>:</p>
-
-<blockquote><p>This is my &ldquo;recipe&rdquo; on how I got Chef Jenkins and Vagrant to play nice. After watching this (<a href="http://www.youtube.com/watch?v=h_IEfNklzW4">http://www.youtube.com/watch?v=h_IEfNklzW4</a>) video, I realized I could do this. I searched high and low for a tutorial on how to bulid this stack, and nothing. So I decided to create a github doc to centralize my setup and hopefully let the community suggest additions.</p></blockquote>
-
-<p>I want to thank <a href="https://github.com/bscott">Brian Scott</a>, because after his video it really opened my eyes.  I&rsquo;ve now had 3 people run through this tutorial and all come out with a working <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> set ups and learned to extend it to where I had never thought of.</p>
-
-<p>I understand and that a lot of people wonder why someone would want to build this from scratch, instead of using, for instance <a href="https://github.com/fnichol">Fletcher Nichol&rsquo;s</a> <em>ahem</em><a href="https://github.com/jamie-ci/jamie">jamie-ci</a><em>ahem</em> test-kitchen, and this is what I&rsquo;m going to write about.</p>
-
-<p>I see <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> is more for writing cookbooks and recipes for the general public.  You can easily create faux VMs, per <a href="https://github.com/sethvargo">Seth Vergo&rsquo;s</a> awesome <a href="https://github.com/customink/fauxhai">fauxhai</a> to test cookbooks across multiple setups and multiple provisioned systems to see if they work.  This is great for developing a cookbooks but I can&rsquo;t see it working in a sysadmins workflow.</p>
-
-<p>Sysadmins have a select few boxes; they have their known quantities, they know they aren&rsquo;t going to have RHEL/DEB/tar based machines.  They build infrastructures to have uniformity, they stick with one of them.  Granted, some of the sysadmnis out there are unlucky and DO have these environments, but I truly believe that&rsquo;s the minority not the majority.</p>
-
-<p>A sysadmin needs a way to provision his machines, in a safe manner before pushing changes out to production. This sounds obvious, but how many places I&rsquo;ve been where have I heard &ldquo;Oh, it&rsquo;s just an /etc/hosts file update, just push it out.&rdquo;  Just yesterday, (06/25/2013) as I was victim if that short cut and caused an outage to some our backend machines.  If you are curious, it seems, we had a hardcoded IP to DNS name in /etc/hosts (not DNS) that was required for our application to work.  If I held true to my statements earlier I would have noticed this change from my CI builds and not looked like the dumbass I was.</p>
-
-<p>I built this <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> howto so I don&rsquo;t have an excuse anymore, I have a proven way to build and implement good practices in an quick manner.  I hope you find it useful, and if you have suggestions or additions PRs are always welcome.</p>
-
-<p>Mind your <code>rm -rf *</code>,</p>
-
-<p>JJ Asghar</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[testing this out]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/25/testing-this-out/"/>
-    <updated>2013-06-25T11:28:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/25/testing-this-out</id>
-    <content type="html"><![CDATA[<p>This is a test, lets see it work</p>
 ]]></content>
   </entry>
   

@@ -9,8 +9,13 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So congrats you got your new &ldquo;Private Cloud&rdquo; from Rackspace. You are probably ecstatic to start building your new machines.
-I know I was &hellip;">
+  <meta name="description" content="My goal is to get these few apps on my vm, but first lets get a default build working:
+* iterm2
+* dropbox
+* mysql
+* 1password
+* virtualbox
+* vagrant &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +72,393 @@ I know I was &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T13:27:20-06:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My goal is to get these few apps on my vm, but first lets get a default build working:
+* iterm2
+* dropbox
+* mysql
+* 1password
+* virtualbox
+* vagrant
+* chrome</p>
+
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
+
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
+
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[~] % git --version # click "Install" for the developer tools
+</span><span class='line'>[~] % sudo mkdir -p /opt/boxen
+</span><span class='line'>[~] % sudo chown ${USER}:staff /opt/boxen
+</span><span class='line'>[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+</span><span class='line'>[~] % cd /opt/boxen/repo
+</span><span class='line'>[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+</span><span class='line'>[/opt/boxen/repo] % cd manifests
+</span><span class='line'>[/opt/boxen/repo/manifests] % vim site.pp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
+
+<p>Ok, lets give boxen a shot!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[/opt/boxen/repo/manifests] % cd ..
+</span><span class='line'>[/opt/boxen/repo/] % script/boxen --no-fde
+</span><span class='line'>[/opt/boxen/repo/] % source /opt/boxen/env.sh
+</span><span class='line'>[/opt/boxen/repo/] % boxen</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
+
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>node
+</span><span class='line'>-bash: node: <span class="nb">command </span>not found
+</span><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>ruby --version
+</span><span class='line'>ruby 2.0.0p247 <span class="o">(</span>2013-06-27 revision 41674<span class="o">)</span> <span class="o">[</span>universal.x86_64-darwin13<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
+
+<h2>Per user manifests</h2>
+
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
+
+<p>Now:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/<span class="o">]</span> % <span class="nb">cd </span>modules/people/manifests
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout master
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout -b jjasghar_manifest
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar.pp <span class="c"># this needs to be your github account name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.</p>
+
+<figure class='code'><figcaption><span>awaxa.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">dotfiles</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">gitconfig</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">preferences</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">puppetlabs</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">caffeine</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'>  <span class="c1">#include dropbox</span>
+</span><span class='line'>  <span class="c1">#include gpgtools</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">java</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">rdio</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">tunnelblick</span><span class="p">:</span><span class="ss">:beta</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vlc</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vmware_fusion</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="o">[</span>
+</span><span class='line'>    <span class="s1">&#39;htop-osx&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;tmux&#39;</span>
+</span><span class='line'>    <span class="o">]</span><span class="p">:</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="s1">&#39;GoogleVoiceAndVideoSetup&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">source</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">provider</span> <span class="o">=&gt;</span> <span class="n">pkgdmg</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok here&rsquo;s my <code>jjasghar.pp</code> that I created:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nice! Ok, now we need to create:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % mkdir jjasghar
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar/applications.pp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where we add our apps!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">iterm2</span><span class="p">:</span><span class="ss">:stable</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">dropbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">mysql</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[--</span> <span class="n">snip</span> <span class="o">--]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Optional/custom modules. There are tons available at</span>
+</span><span class='line'><span class="c1"># https://github.com/boxen.</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;iterm2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span> <span class="ss">:repo</span> <span class="o">=&gt;</span> <span class="s2">&quot;boxen/puppet-iterm2&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;chrome&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;dropbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;mysql&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;onepassword&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;virtualbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;vagrant&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/31/adventures-with-boxen/">Adventures With Boxen</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-31T15:54:00-06:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
+
+<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
+
+<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
+
+<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Boxen requires at least the Xcode Command Line Tools installed.
+</span><span class='line'>Boxen will not work with an existing rvm install.
+</span><span class='line'>Boxen may not play nice with a GitHub username that includes dash(-)
+</span><span class='line'>Boxen may not play nice with an existing rbenv install.
+</span><span class='line'>Boxen may not play nice with an existing chruby install.
+</span><span class='line'>Boxen may not play nice with an existing homebrew install.
+</span><span class='line'>Boxen may not play nice with an existing nvm install.
+</span><span class='line'>Boxen recommends installing the full Xcode.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
+
+<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
+
+<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
+
+<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
+
+<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
+
+<p>After you got that done boot up the vm open terminal run the following:</p>
+
+<p><code>git --version</code></p>
+
+<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
+
+<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo mkdir -p /opt/boxen
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chown <span class="k">${</span><span class="nv">USER</span><span class="k">}</span>:staff /opt/boxen
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote rm origin
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote add origin &lt;the location of my new git repository&gt;
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git push -u origin master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
+
+<p>Ok, now try out boxen:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen --no-fde
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
+
+<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
+
+<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -830,416 +1222,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs/">Moving From One Chef to Multiple Chefs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-04T14:00:00-05:00" pubdate data-updated="true">Oct 4<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There&rsquo;s a organic growth of a Ops team using chef goes through.  You start out with a <code>chef_repo</code> then you post it to github/some DVCS.  From there you tell people to clone it down and put PRs against it. From there you attempt to be a gate keeper, looking at the commits in the log, realizing that there is no match ups. From there you say to yourself &ldquo;Hey, ok, these guys are pretty smart, as long as I spot check, they should be able to merge things in and I can trust them right?&rdquo; NO you are lying to yourself you just don&rsquo;t realize it yet.</p>
-
-<p>Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push&hellip;and nothing happens. Oh I&rsquo;m 2x behind where I thought great, bump and push. Oh&hellip;it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded&hellip;crap. (And other situations like this can pop up.)</p>
-
-<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathen Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
-
-<h2>Installation</h2>
-
-<p>Obviously the first thing you need to do is install it. Luckily it&rsquo;s a gem so you can just do the following. If you read the docs there are a bunch of places that you <code>.yml</code> gets read from, but I chose this because I like having all my chef stuff in <code>.chef</code> so I don&rsquo;t have to think about pulling anything other than <code>.chef</code> if I want to move boxes.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>gem install knife-spork
-</span><span class='line'>touch ~/.chef/spork-config.yml
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
-
-<p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">default_environments</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">development</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">production</span>
-</span><span class='line'><span class="l-Scalar-Plain">environment_groups</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">qa_group</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">quality_assurance</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">staging</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">test_group</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">user_testing</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">acceptance_testing</span>
-</span><span class='line'><span class="l-Scalar-Plain">version_change_threshold</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2</span>
-</span><span class='line'><span class="l-Scalar-Plain">environment_path</span><span class="p-Indicator">:</span> <span class="s">&quot;/home/me/environments&quot;</span>
-</span><span class='line'><span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">campfire</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">account</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myaccount</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">a1b2c3d4...</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">hipchat</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">api_token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ABC123</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">General</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Web Operations</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">notify</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">color</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yellow</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">jabber</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURUSER</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURPASSWORD</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">nickname</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Chef Bot</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server_name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your.jabberserver.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5222</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">engineering@your.conference.com/spork</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">systems@your.conference.com/spork</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">irccat</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">irccat.mydomain.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">12345</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">gist</span><span class="p-Indicator">:</span> <span class="s">&quot;/usr/bin/gist&quot;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">channel</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;chef-annoucements&quot;</span><span class="p-Indicator">]</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">graphite</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">graphite.mydomain.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2003</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">eventinator</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://eventinator.mydomain.com/events/oneshot</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All in all this seems pretty self <a href="https://github.com/jonlives/knife-spork#default-environments">explanatory</a> but the most important things to change are <code>environment_path</code> and disabling the plugins (by removing them) here.  For my company I only used the git plugin and&hellip;well that was it. :)</p>
-
-<p>By the way there are only a few plugins, <a href="https://github.com/jonlives/knife-spork/tree/master/plugins">here</a> is a link to the different .md files on each.</p>
-
-<p>Ok, so you have everything set up, what do you do now?</p>
-
-<h2>Usage</h2>
-
-<p>The first step is to run <code>knife spork check COOKBOOK --all</code> where COOKBOOK is one of your commonly updated/tweaked cookbooks.  Spork checks against what you have locally compared to what&rsquo;s in the server, like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">knife spork check COOKBOOK --all</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here&rsquo;s an example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Checking versions <span class="k">for </span>cookbook nagios...
-</span><span class='line'>
-</span><span class='line'>Local Version:
-</span><span class='line'>  5.1.5
-</span><span class='line'>
-</span><span class='line'>Remote Versions: <span class="o">(</span>* indicates frozen<span class="o">)</span>
-</span><span class='line'>  5.1.5
-</span><span class='line'>  5.1.4
-</span><span class='line'>  5.1.3
-</span><span class='line'>  5.1.2
-</span><span class='line'>
-</span><span class='line'>ERROR: The version 5.1.5 exists on the server and is not frozen. Uploading will overwrite!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see with the error, it&rsquo;s pretty self explaintory.</p>
-
-<p>The second step is to bump the version:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>knife spork bump nagios patch
-</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
-</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
-</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
-</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
-</span><span class='line'>Successfully bumped nagios to v5.1.6!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now as you can see I have the git plugin working, and it without thinking about it, updates the metadata.rb so you don&rsquo;t have to. (I HATE that part of chef, I always forget.) Now you can go off make your changes.</p>
-
-<p>From here you&rsquo;re happy, you&rsquo;ve commited your new <code>chef_repo</code> back to the DVCS that you use.  This is where the magic happens: <code>knife spork upload COOKBOOK</code>.  This thing is great, it (to quote the <code>README.md</code>) <em>This function works mostly the same as normal knife cookbook upload COOKBOOK except that this automatically freezes cookbooks when you upload them.</em> Which is the bread and butter of spork.  The freezing is crazy important, by freezing the upload you take &ldquo;ownership&rdquo; of that version of the cookbook.  Your changes are yours, and no-one can mess with them.  So in turn you don&rsquo;t step on your coworkers toes and he doesen&rsquo;t step on yours.</p>
-
-<p>Ok, so this was the cheatsheet, we have implymented this at my company now, so hopefully this goes great. If not&hellip;well that&rsquo;s a different conversation.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2/">Adventures Migrating From 2.4.16 Redis to 2.6.16 Redis (Part 2)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-01T18:11:00-05:00" pubdate data-updated="true">Oct 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>Monitoring</h1>
-
-<p>Everyone loves monitoring. Ok, that&rsquo;s a lie, only [DevOps|Sysadmins] love monitoring. Ok, that&rsquo;s probably a lie too, hell I love monitoring, and I love nagios.  I&rsquo;ve followed used nagios in some shape or another since nagios-1.0b6. My first real paid job as an &ldquo;IT guy&rdquo; was setting up nagios for a company.  I&rsquo;ve actually gotten in the habit of walking into a new company using <a href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/">serverspec</a>, to learn what each machine does, then implementing nagios behind the serverspec scripts for a proactive monitoring on error conditions. This might seem redundant, but I don&rsquo;t think so. serverspec is great for spot checking, while nagios gives the best &ldquo;state of the union&rdquo; snapshot. Granted a lot of the time creating these checks are reactive, but sometimes like here, I wrote some proactive monitoring because I know there are certain error conditions on the slaves I&rsquo;ve spun up.</p>
-
-<p>I use nrpe to monitor my machines, and I set up my <code>nrpe.cfg</code> to something like the following. I use chef, so the <code>&lt;%= node['hostname'] %&gt;</code> is from <a href="https://github.com/opscode/ohai">ohai</a>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="na">command[check_redisserver]</span><span class="o">=</span><span class="s">/usr/lib/nagios/plugins/check_procs -c 1:1 -C redis-server</span>
-</span><span class='line'><span class="na">command[check_redis_replication]</span><span class="o">=</span><span class="s">/usr/lib/nagios/plugins/check_redis_replication -h &lt;%= node[&#39;hostname&#39;] %&gt; -w 20 -c 45</span>
-</span><span class='line'><span class="na">command[check_redis_rdb_age]</span><span class="o">=</span><span class="s">/usr/lib/nagios/plugins/check_redis_rdb_age &lt;%= node[&#39;hostname&#39;] %&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The first line is pretty self explanatory.  Obviously I&rsquo;d like to check that redis is running, and that&rsquo;s what it does.</p>
-
-<p>The second line is where I started creating the new monitoring.  I have all my monitors right now at a 3 strike out rule, I have played with the idea of tweaking it, but it seems 3 strikes then an email seems to cut down on the noise I get.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;optparse&#39;</span>
-</span><span class='line'><span class="n">options</span>  <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="n">required</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:warning</span><span class="p">,</span> <span class="ss">:critical</span><span class="p">,</span> <span class="ss">:host</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">parser</span>   <span class="o">=</span> <span class="no">OptionParser</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">opts</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">opts</span><span class="o">.</span><span class="n">banner</span> <span class="o">=</span> <span class="s2">&quot;Usage: check_redis_replication [options]&quot;</span>
-</span><span class='line'>      <span class="n">opts</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--host redishost&quot;</span><span class="p">,</span> <span class="s2">&quot;The hostname of the redis slave&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">h</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">options</span><span class="o">[</span><span class="ss">:host</span><span class="o">]</span> <span class="o">=</span> <span class="n">h</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>      <span class="n">opts</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;-w&quot;</span><span class="p">,</span> <span class="s2">&quot;--warning percentage&quot;</span><span class="p">,</span> <span class="s2">&quot;Warning threshold&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">w</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">options</span><span class="o">[</span><span class="ss">:warning</span><span class="o">]</span> <span class="o">=</span> <span class="n">w</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>      <span class="n">opts</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;--critical critical&quot;</span><span class="p">,</span> <span class="s2">&quot;Critical threshold&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">options</span><span class="o">[</span><span class="ss">:critical</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span>
-</span><span class='line'>     <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'><span class="n">parser</span><span class="o">.</span><span class="n">parse!</span>
-</span><span class='line'><span class="nb">abort</span> <span class="n">parser</span><span class="o">.</span><span class="n">to_s</span> <span class="k">if</span> <span class="o">!</span><span class="n">required</span><span class="o">.</span><span class="n">all?</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="o">|</span> <span class="n">options</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">master_last_io_seconds_ago</span> <span class="o">=</span> <span class="sb">`/opt/redis/bin/redis-cli info | grep master_last_io_seconds_ago`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">to_i</span> <span class="k">rescue</span> <span class="o">-</span><span class="mi">1</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;A-Ok!&quot;</span>
-</span><span class='line'><span class="k">if</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">&gt;=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:critical</span><span class="o">].</span><span class="n">to_i</span>
-</span><span class='line'>  <span class="n">status</span> <span class="o">=</span> <span class="ss">:critical</span>
-</span><span class='line'><span class="k">elsif</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">&gt;=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:warning</span><span class="o">].</span><span class="n">to_i</span>
-</span><span class='line'>  <span class="n">status</span> <span class="o">=</span> <span class="ss">:warning</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">status_detail</span> <span class="o">=</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">?</span> <span class="s1">&#39;ERROR&#39;</span> <span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span> <span class="n">master_last_io_seconds_ago</span><span class="o">.</span><span class="n">to_s</span> <span class="si">}</span><span class="s2">s&quot;</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">status</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">upcase</span><span class="si">}</span><span class="s2"> - replication lag: </span><span class="si">#{</span><span class="n">status_detail</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="ss">:critical</span>
-</span><span class='line'>  <span class="nb">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span class='line'><span class="k">elsif</span> <span class="n">status</span> <span class="o">==</span> <span class="ss">:warning</span>
-</span><span class='line'>  <span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I stole this monitor from <a href="http://blog.winfieldpeterson.com/2012/12/13/monitoring-redis-replication-in-nagios/">here</a> but as you can tell the <code>redis-cli</code> is edited and the default status too.  <a href="https://twitter.com/miah_">Miah</a>&rsquo;s <a href="https://github.com/miah/chef-redis">cookbook</a> is great, works like a charm, but it puts the <code>redis-cli</code> in <code>/opt/redis/bin/</code>.</p>
-
-<p>As a side note: I even put in a <a href="https://github.com/miah/chef-redis/pull/55">PR</a> to update to 2.6.16, because of this project.  I ran all the <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> tests and it passed like a charm.  I actually learned about <a href="https://github.com/sstephenson/bats">bats</a> in the process, and honestly I&rsquo;m pretty damn impressed with something so straight forward.  Because serverspec fulfills my requirements at the moment, I don&rsquo;t have to use it; but I like the idea of having it in my back pocket.  The replication between master and slave seems extremely important, so this monitor has been a god sent.  I never have seen it spike over 45 seconds, but then the next check pop back to &lt;3 seconds.</p>
-
-<p>The second monitor I wrote was this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
-</span><span class='line'><span class="nv">LAST_SYNC_HUMAN</span><span class="o">=</span><span class="sb">`</span>/opt/redis/bin/redis-cli -h <span class="nv">$1</span> info | grep rdb_last_save_time | awk -F : <span class="o">{</span><span class="s1">&#39;print $2&#39;</span><span class="o">}</span> | xargs -I <span class="o">{}</span> date -d @<span class="o">{}</span><span class="sb">`</span>
-</span><span class='line'><span class="nv">LAST_SYNC</span><span class="o">=</span><span class="sb">`</span>/opt/redis/bin/redis-cli -h <span class="nv">$1</span> info | grep rdb_last_save_time | awk -F : <span class="o">{</span><span class="s1">&#39;print $2&#39;</span><span class="o">}</span> | tr -d <span class="s1">&#39;\r&#39;</span><span class="sb">`</span>
-</span><span class='line'><span class="nv">LAST_15MIN</span><span class="o">=</span><span class="sb">`</span>date -d <span class="s1">&#39;15 minutes ago&#39;</span> +%s<span class="sb">`</span>
-</span><span class='line'><span class="nv">LAST_20MIN</span><span class="o">=</span><span class="sb">`</span>date -d <span class="s1">&#39;20 minutes ago&#39;</span> +%s<span class="sb">`</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;${LAST_15MIN}&quot;</span> -lt <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span>;
-</span><span class='line'>  <span class="k">then</span>
-</span><span class='line'><span class="k">  </span><span class="nb">echo </span>Sync has happened in the last 15 mins or less at <span class="k">${</span><span class="nv">LAST_SYNC_HUMAN</span><span class="k">}</span>
-</span><span class='line'>  <span class="nv">stateid</span><span class="o">=</span>0
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${LAST_15MIN}&quot;</span> -ge <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">&quot;${LAST_20MIN}&quot;</span> -lt <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span>;
-</span><span class='line'>  <span class="k">then</span>
-</span><span class='line'><span class="k">  </span><span class="nb">echo </span>Sync happened a little longer than we would like, the last at <span class="k">${</span><span class="nv">LAST_SYNC_HUMAN</span><span class="k">}</span>
-</span><span class='line'>  <span class="nv">stateid</span><span class="o">=</span>1
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${LAST_20MIN}&quot;</span> -ge <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span>;
-</span><span class='line'>  <span class="k">then</span>
-</span><span class='line'><span class="k">  </span><span class="nb">echo </span>Sync took over 20 mins, something might be wrong, the last sync happened at <span class="k">${</span><span class="nv">LAST_SYNC_HUMAN</span><span class="k">}</span>
-</span><span class='line'>  <span class="nv">stateid</span><span class="o">=</span>2
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This monitor I took from my typical <a href="https://github.com/jjasghar/scripts/blob/master/nagios_check_generic_template.sh">bash nagios template</a> and added the error states.  It seems like the .rdb file should always be in &ldquo;close&rdquo; proximity to the last write of to slave, and it would be nice to be alarmed about it if it went out of wack.  From what I&rsquo;ve seen it&rsquo;s never more than 1 or 2 minutes behind; so this worked out.  Writing a monitor for something and never seeing it fire till there is a real problem, that&rsquo;s a great place to be in.</p>
-
-<h2>Non-nagios monitoring</h2>
-
-<p>I started looking around for some type of dashboard to get some visual data about the redis instance.  It turns out there is a TON of these bastards, from a paid product like <a href="https://scoutapp.com/plugin_urls/271-redis-monitoring">Scout</a> to <a href="https://github.com/junegunn/redis-stat">redis-stat</a>.  I picked redis-stat because well, it&rsquo;s un-intrusive and fast.  I have it polling against my master slave on two instances of the gem running, and it&rsquo;s really nice to have a easily digestible view of the health of it.  I have noticed that it has doubled up the info because of the syncing, so be warned, you probably should run it via just the master and then maybe put all the slaves on one? (I&rsquo;m still trying to figure this one out.)</p>
-
-<p>If you do read this and have good suggestions please through them my <a href="http://jjasghar.github.io/about/">way</a>, the <code>INFO</code> command gives you a lot of data, and redis-stat doesn&rsquo;t store anything so treading over time isn&rsquo;t an option. I was thinking about putting some of this data in ganglia, (another favorite of mine) but to have something just redis focused seems like the correct move here.</p>
-
-<hr />
-
-<p>So, so far these is the monitors that I&rsquo;m using for my new master slave set up.  My next challenge is creating the VIP in front of the master slave, and have a &ldquo;hot fail over.&rdquo; This is going to require some pretty interesting engineering; it&rsquo;s fun, but man the more I think about it the more it hurts my brain.  So I haven&rsquo;t actually talked about the migration yet either.  From what I&rsquo;ve understood it seems that 2.4.16 is actually <em>inside</em> 2.6.16, so if I get this VIP in front of this master slave then fail over to the slave turning off the read-only, this should be seamless. I need to do some testing; but that seems like the best course of action. For just the migration though, the &ldquo;hot fail over&rdquo; isn&rsquo;t required, but I want it to be in the fore-front of the design because I&rsquo;d rather be additive than have to rip out everything after we get up dated.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1255,6 +1237,14 @@ node to work on my local box for local development (<a href="https://gist.github
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/31/adventures-with-boxen/">Adventures With Boxen</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/">Running Knife-openstack on a Private Rackspace Instance</a>
       </li>
     
@@ -1264,14 +1254,6 @@ node to work on my local box for local development (<a href="https://gist.github
     
       <li class="post">
         <a href="/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/">Hubot+Herkou+Campfire and How I Spent Much More Time Than I Thought I Should</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/31/hub-workflow/">Hub Workflow</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/">People Keep Asking Me How to Start With Chef</a>
       </li>
     
   </ul>
@@ -1316,7 +1298,7 @@ node to work on my local box for local development (<a href="https://gist.github
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - JJ Asghar -
+  Copyright &copy; 2014 - JJ Asghar -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
