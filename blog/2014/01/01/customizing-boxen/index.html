@@ -9,13 +9,13 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="My goal is to get these few apps on my vm, but first lets get a default build working:
-* iterm2
-* dropbox
-* mysql
-* 1password
-* virtualbox
-* vagrant &hellip;">
+  <meta name="description" content="My goal is to get these few apps on my vm, but first lets get a default build working: iterm2
+dropbox
+mysql
+1password
+virtualbox
+vagrant
+chrome With &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -98,14 +98,18 @@
   </header>
 
 
-<div class="entry-content"><p>My goal is to get these few apps on my vm, but first lets get a default build working:
-* iterm2
-* dropbox
-* mysql
-* 1password
-* virtualbox
-* vagrant
-* chrome</p>
+<div class="entry-content"><p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
+
+<ul>
+<li>iterm2</li>
+<li>dropbox</li>
+<li>mysql</li>
+<li>1password</li>
+<li>virtualbox</li>
+<li>vagrant</li>
+<li>chrome</li>
+</ul>
+
 
 <p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
 
@@ -200,7 +204,7 @@
 
 <p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -253,9 +257,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ok here&rsquo;s my <code>jjasghar.pp</code> that I created:</p>
+<p>Ok here&rsquo;s the one I created:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>jjasghar.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
@@ -275,7 +279,7 @@
 
 <p>This is where we add our apps!</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -381,6 +385,8 @@
         <a class="basic-alignment left" href="/blog/2013/12/31/adventures-with-boxen/" title="Previous Post: Adventures with boxen">&laquo; Adventures with boxen</a>
       
       
+        <a class="basic-alignment right" href="/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/" title="Next Post: Because googling failed me for yes or no bash scripting">Because googling failed me for yes or no bash scripting &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -392,6 +398,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/">Because Googling Failed Me for Yes or No Bash Scripting</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a>
@@ -407,10 +417,6 @@
     
       <li class="post">
         <a href="/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/">Learning Git Realizing That I Know Nothing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/">Hubot+Herkou+Campfire and How I Spent Much More Time Than I Thought I Should</a>
       </li>
     
   </ul>

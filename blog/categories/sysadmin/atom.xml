@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-01T16:11:08-06:00</updated>
+  <updated>2014-01-18T17:25:39-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
+    <updated>2014-01-18T14:01:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
+    <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
+
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
+
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do'h!</p>
+
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
+
+<p>I created this:
+```bash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>read -p &ldquo;yes or no: &rdquo; RESPONSE</p>
+
+<p>case &ldquo;$RESPONSE&rdquo; in
+  yes|y|Yes|Y)</p>
+
+<pre><code>echo "blah is yes"
+;;
+</code></pre>
+
+<p>  no|n|No|N)</p>
+
+<pre><code>echo "blah is no"
+;;
+</code></pre>
+
+<p>  *)</p>
+
+<pre><code>echo "You need to say yes or no, start over!"
+exit 1
+;;
+</code></pre>
+
+<p>esac
+```
+Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
+
+<p>Hopefully this post will save you some time in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Customizing Boxen]]></title>
@@ -78,7 +126,7 @@ Hell yes! We got what we expected! Ok, go ahead and commit your changes so you c
 [/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
 </code>
 Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.
-<code>[ruby] [awaxa.pp]
+<code>ruby awaxa.pp
 class people::awaxa {
   include people::awaxa::applications
   include people::awaxa::dotfiles
@@ -88,7 +136,7 @@ class people::awaxa {
 }
 </code>
 As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.
-```[ruby] [applications.pp]
+```ruby applications.pp
 class people::awaxa::applications {
   include caffeine
   include chrome
@@ -122,7 +170,7 @@ provider =&gt; pkgdmg,
 }
 <code>
 Ok here's the one I created:
-</code>[ruby] [jjasghar.pp]
+</code>ruby jjasghar.pp
 class people::jjasghar {
   include people::jjasghar::applications
 }
@@ -134,7 +182,7 @@ Nice! Ok, now we need to create:
 ```</p>
 
 <p>This is where we add our apps!
-<code>[ruby] [applications.pp]
+<code>ruby applications.pp
 class people::jjasghar::applications {
   include iterm2::stable
   include dropbox
@@ -342,7 +390,7 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
     <id>http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing</id>
     <content type="html"><![CDATA[<p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
 
-<p>{% youtube 1ffBJ4sVUb4 %}</p>
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ffBJ4sVUb4 "></iframe></div></p>
 
 <p>I strongly suggest taking the 99ish mins to watch it, it&rsquo;s a great tutorial, with great visual examples.</p>
 
@@ -371,52 +419,6 @@ alias gld="git log --graph --decorate --all"
 <p><code>rebase</code> creates a <em>new</em> line of history, not REWRITES history.</p>
 
 <p>Once you&rsquo;ve pushed, never rebase; it&rsquo;s not worth it. :(</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hubot+Herkou+Campfire and how I spent much more time than I thought I should]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/"/>
-    <updated>2013-11-27T11:41:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should</id>
-    <content type="html"><![CDATA[<p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
-with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
-node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
-
-<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:
-<code>
-ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
-</code>
-This is what the doc says&hellip;.
-<code>
-% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
-% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken
-</code>
-I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com
-</code>
-I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com
-</code>
-Damn, nope.
-<code>
-ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
-</code>
-I figured I&rsquo;d try with <code>https://</code>&hellip;..
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com
-</code>
-Damnit.
-<code>
-ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
-</code>
-Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do'h!
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=myaccountname
-</code>
-Boom, it worked.</p>
 ]]></content>
   </entry>
   

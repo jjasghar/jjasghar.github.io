@@ -4,7 +4,7 @@
   <title><![CDATA[Category: puppet | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/puppet/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-01T16:11:08-06:00</updated>
+  <updated>2014-01-18T17:25:39-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -78,7 +78,7 @@ Hell yes! We got what we expected! Ok, go ahead and commit your changes so you c
 [/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
 </code>
 Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.
-<code>[ruby] [awaxa.pp]
+<code>ruby awaxa.pp
 class people::awaxa {
   include people::awaxa::applications
   include people::awaxa::dotfiles
@@ -88,7 +88,7 @@ class people::awaxa {
 }
 </code>
 As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.
-```[ruby] [applications.pp]
+```ruby applications.pp
 class people::awaxa::applications {
   include caffeine
   include chrome
@@ -122,7 +122,7 @@ provider =&gt; pkgdmg,
 }
 <code>
 Ok here's the one I created:
-</code>[ruby] [jjasghar.pp]
+</code>ruby jjasghar.pp
 class people::jjasghar {
   include people::jjasghar::applications
 }
@@ -134,7 +134,7 @@ Nice! Ok, now we need to create:
 ```</p>
 
 <p>This is where we add our apps!
-<code>[ruby] [applications.pp]
+<code>ruby applications.pp
 class people::jjasghar::applications {
   include iterm2::stable
   include dropbox

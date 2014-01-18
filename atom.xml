@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-01T16:02:08-06:00</updated>
+  <updated>2014-01-18T17:25:39-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -14,18 +14,78 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
+    <updated>2014-01-18T14:01:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
+    <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
+
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
+
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do&#8217;h!</p>
+
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
+
+<p>I created this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">read</span> -p <span class="s2">&quot;yes or no: &quot;</span> RESPONSE
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$RESPONSE&quot;</span> in
+</span><span class='line'>  yes|y|Yes|Y<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is yes&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  no|n|No|N<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is no&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  *<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;You need to say yes or no, start over!&quot;</span>
+</span><span class='line'>    <span class="nb">exit </span>1
+</span><span class='line'>    ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
+
+<p>Hopefully this post will save you some time in the future.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Customizing Boxen]]></title>
     <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
     <updated>2014-01-01T13:27:20-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
-    <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:
-* iterm2
-* dropbox
-* mysql
-* 1password
-* virtualbox
-* vagrant
-* chrome</p>
+    <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
+
+<ul>
+<li>iterm2</li>
+<li>dropbox</li>
+<li>mysql</li>
+<li>1password</li>
+<li>virtualbox</li>
+<li>vagrant</li>
+<li>chrome</li>
+</ul>
+
 
 <p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
 
@@ -120,7 +180,7 @@
 
 <p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -173,9 +233,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Ok here&rsquo;s my <code>jjasghar.pp</code> that I created:</p>
+<p>Ok here&rsquo;s the one I created:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>jjasghar.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
@@ -195,7 +255,7 @@
 
 <p>This is where we add our apps!</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1570,84 +1630,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
 <p>So with some patience using <code>sed</code> and <code>grep</code> I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about &ldquo;You should write it as one script and then add flags or variables at the end.&rdquo; I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have <code>curl</code> installed and write the command stanza, like my suggestion in the <a href="https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md">README.md</a> you should be off to the races.</p>
 
 <p>Now something interesting I learned posting these checks.  The quote that says &ldquo;rackspace only updates the status page if enough customers complain about some problem some place&rdquo; is true.  There is no automated update to the status page, it requires human intervention to update.  When I first heard of the status page, I like most though it was programmatic way to see into rackspace infrastructure.  This makes me a sad panda; and as I have learned the best way to get anything done with rackspace is to call yell and yell more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ansible vs chef vs puppet]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet/"/>
-    <updated>2013-06-26T13:58:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet</id>
-    <content type="html"><![CDATA[<h2>Intro</h2>
-
-<p>First off, I&rsquo;m going to say I&rsquo;m a chef zealot, but I&rsquo;m attempting to put together an intelligent discussion of the battle that has popped up in sysadmin discussion groups now-a-days.  Secondly, I&rsquo;m only focusing on the three systems I have exposure to, ansible the least, puppet the second, and chef the most.  I could also probably throw salt, cfengine, and others in there, but that&rsquo;s superfluous, this is my discussion so I&rsquo;m going to keep it in my scope.</p>
-
-<p>I&rsquo;m going focus on the pluses of each, and use the &ldquo;Overall&rdquo; section to combine them.  In my conclusion my true thoughts will come out, so if you want the tl;dr I&rsquo;d skip down there.</p>
-
-<h2>ansible</h2>
-
-<p>Links:
-<a href="http://www.ansibleworks.com/">homepage</a>, a great <a href="https://github.com/leucos/ansible-tuto">tutorial</a></p>
-
-<ul>
-<li>Low overhead</li>
-<li>python based</li>
-<li>playbook based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>Ansible is an open-source software platform for configuring and managing computers. It combines multi-node software deployment, ad-hoc task execution, and configuration management. It manages nodes over SSH and does not require any additional remote software to be installed on them. Modules work over JSON and standard output and can be written in any programming language. The system uses YAML to express reusable descriptions of systems.</p></blockquote>
-
-<p>Probably the neatest thing about ansible is that it only requires ssh to work.  You do the work on a local box, and run the &ldquo;play book&rdquo; and it walks through the steps.  its designed to be something fast and quick to spin up boxes.  The disadvantage of this is that creep can happen; you can make sure the box is what you expect but you don&rsquo;t have the focused control of something like chef or puppet.  If you need just a webserver that is configured one way and is disposable then this is the way to go.  If you have to support something for long term though, it seems its out of scope of this product. I could be wrong but that&rsquo;s how I interperat it.</p>
-
-<h2>chef</h2>
-
-<p>Links:
-<a href="http://www.opscode.com/">homepage</a>, a great <a href="https://learnchef.opscode.com/">tutorial</a></p>
-
-<ul>
-<li>gem or <a href="http://www.opscode.com/blog/2012/06/29/omnibus-chef-packaging/">omnibus</a> installer</li>
-<li>server based or <a href="http://docs.opscode.com/chef_solo.html">chef-solo</a></li>
-<li>cookbook or recipe based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>chef is a configuration management tool written in Ruby and Erlang. It uses a pure-Ruby, domain-specific language (DSL) for writing system configuration &ldquo;recipes&rdquo; or &ldquo;cookbooks&rdquo;. chef was written by Opscode and is released as open source under the Apache License 2.0. chef is a DevOps tool used for configuring cloud services or to streamline the task of configuring a company&rsquo;s internal servers. chef automatically sets up and tweaks the operating systems and programs that run in massive data centers.</p></blockquote>
-
-<p>As I said in the intro, I love chef.  Hell if I could I&rsquo;d probably work for opscode.  As soon as I got my head wrapped around chef (which is chef&rsquo;s main problem), its quick and efficient, and its slick.  I&rsquo;ve only ever used chef with a chef server, never really touched chef-solo.  I also leveraged <a href="https://github.com/jkeiser/chef-zero">chef-zero</a> in my testing because I like the idea of uploading the cookbooks and pulling them down.  Having cookbooks on a centralized chef server, its a true &ldquo;system of record&rdquo; that doesn&rsquo;t rely on your laptop or workstation, if you do a <code>knife server create 'role[web]'</code> you know what you are going to get.</p>
-
-<p>Something I would like to say though, a huge disadvantage of chef is the way cookbooks are controlled.  It requires constant babying, or plugins like <a href="https://github.com/jonlives/knife-spork">knife-spork</a> to make sure people don&rsquo;t mess with each others work.  I am lucky enough to work in an environment with only 2 others that have any real use for chef, so I am able to be a good gatekeeper.  I could only imagine the cluster with larger teams.  As of 6/26/13 I know this is a conversation topic and pain point, I&rsquo;d be interested to see how the workflow matures.</p>
-
-<h2>puppet</h2>
-
-<p>Links:
-<a href="http://www.puppetlabs.com/">homepage</a>, a great <a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">cheat sheet</a></p>
-
-<ul>
-<li>an official <a href="http://info.puppetlabs.com/download-learning-puppet-VM.html">learning</a> vm</li>
-<li><a href="https://puppetlabs.com/puppet/puppet-open-source/">package</a> based</li>
-<li>server based or local puppet-apply</li>
-<li>manifest based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>puppet is a tool designed to manage the configuration of Unix-like and Microsoft Windows systems declaratively. The user describes system resources and their state, either using puppet&rsquo;s declarative language or a Ruby DSL (domain-specific language). This information is stored in files called &ldquo;puppet manifests&rdquo;. puppet discovers the system information via a utility called Facter, and compiles the puppet manifests into a system-specific catalog containing resources and resource dependency, which are applied against the target systems. Any actions taken by puppet are then reported.</p></blockquote>
-
-<p>Something I&rsquo;ve always loved about puppet is the trifecta. You can easily create a manifest to control the package/file/service in only a few lines.  (check that cheat sheet above for an example) I was able to take over an infrastructure in an extremely short period of time with just that.  I didn&rsquo;t have that long to control every facet of the groupings but the investment to the reward was mind boggling fast.</p>
-
-<h2>Overall</h2>
-
-<p>Ok, now that my little tl;dr of the pluses are done, I can start my views overall.  puppet is a very &ldquo;eins, zwei, eins, zwei,&rdquo; type application.  With marrying it with something like <a href="http://www.cobblerd.org/">cobbler</a> you can in theory rack mount a machine, hit the power button and have a machine exactly how you want it to be in &ldquo;x&rdquo; about of time.  This is great for big companies that always want machines to cookie cutter. It could be that that&rsquo;s how I saw puppet being used, but comparing them to the two other config management systems; it really fits. Speaking of cobbler, yes, I do understand you can leverage cobbler with each of these tools, but as you can <a href="https://github.com/cobbler/cobbler/wiki/Using%20cobbler%20with%20a%20configuration%20management%20system">see</a> it just seems that cobbler and puppet are a match made in heaven.  chef on the other hand seems like it&rsquo;s designed for smaller companies with smaller teams.  It looks for cooperation, nay, requires cooperation, and its to its strength and its weakness.  Unlike puppet, chef doesn&rsquo;t default to an &ldquo;active&rdquo; mode (Ok, that&rsquo;s not fully true about puppet either, but the better practice is to have puppet in active mode from the get go).  puppet runs by default every 30 mins, to make sure its what you want to be, chef on the other hand is a pull based config-management that they even suggest &ldquo;putting chef-client&rdquo; in your crontab.  This originally bothered me, coming from the puppet world, but as i learned more about chef i realized that isn&rsquo;t its bread and butter.  chef is a way to spin up boxes for an elastic environment like AWS.  You have a massive blast of traffic, chef will trigger throw your machines in the load balancer, install apache or whatever, and you have what you expect, and 2-3 hours later you blow it away.  This is different than ansible because it is not &ldquo;automated&rdquo; per se. Remember the play books site in your local machine, you have interact with the provisioning, which for a startup seems like the correct path. In a startup you have to know exactly what machines are running, not only because of OPEX but because its your baby, you want focus and tweak; you <em>probably</em> don&rsquo;t have the budget to just blow away the boxes.</p>
-
-<h2>Conclusion</h2>
-
-<p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
 ]]></content>
   </entry>
   
