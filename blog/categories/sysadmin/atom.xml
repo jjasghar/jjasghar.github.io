@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-07T10:45:15-05:00</updated>
+  <updated>2014-01-20T15:55:49-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -14,387 +14,413 @@
 
   
   <entry>
-    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
-    <updated>2013-10-05T16:59:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
-    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
-
-<p>If you play with open source chef you might run into this.</p>
-
-<p><code>
-18:42 j^2 so i’m having trouble with chef-client
-18:42 j^2 why does it default to https://chef/blahblah?
-18:43 j^2 example:
-18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
-18:44 j^2 any advice?
-18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
-18:45 maek j^2:  I just got hit with this also
-18:45 maek i think becuase chef 11 is now fronted with nginx
-18:45 maek its doing a rewrite
-18:45 maek for the name configured in nginx
-18:45 maek in this case its hostname
-18:45 maek but i assume that box cant resolve chef
-18:46 j^2 lame
-18:46 maek j^2:  I had to end up adding a hosts entry
-18:46 maek while I wait for dns
-18:46 maek I think you could do
-18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
-18:47 maek you could reconfigure chef
-18:47 maek to use its ip
-18:47 maek instead of its hostname
-18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
-18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
-18:48 maek i dont see it htought
-18:48 j^2 oh!
-18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
-18:48 j^2 nice looking
-18:48 maek yeah
-18:48 maek there it is
+    <title type="html"><![CDATA[A chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
+    <updated>2014-01-20T15:42:33-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>Ok, you may have seen this before:
+<code>ruby
+23.987.33.854   * cookbook_file[/etc/init.d/apache2] action create
+23.987.33.854 ================================================================================
+23.987.33.854 Error executing action `create` on resource 'cookbook_file[/etc/init.d/apache2]'
+23.987.33.854 ================================================================================
+23.987.33.854
+23.987.33.854
+23.987.33.854 Net::HTTPServerException
+23.987.33.854 ------------------------
+23.987.33.854 403 "Forbidden"
+23.987.33.854
+23.987.33.854
 </code></p>
 
-<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
+<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
 
-<p><code>
-18:48 maek so you can do
-18:49 maek in /etc/chef-server/chef-server.rb
-18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
-18:50 j^2 yeah i dont thave that file. :(
-18:50 maek and run chef-server-ctl reconfigure
-18:50 j^2 ah cool
-18:50 maek its for overrides
-18:50 maek just make it
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
-    <updated>2013-10-05T16:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
-    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
+<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
 
-<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
+<p>The gist of this:</p>
 
-<p><code>bash
-root@boe:/tmp# rm /var/cache/nagios3/objects.cache
-root@boe:/tmp# service nagios restart
-Running configuration check…done.
-Stopping nagios: .done.
-Starting nagios: done.
-root@boe:/tmp# cd /var/cache/nagios3
-root@boe:/var/cache/nagios3# ls
-objects.cache  status.dat
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Moving from one chef to multiple chefs]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs/"/>
-    <updated>2013-10-04T14:00:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs</id>
-    <content type="html"><![CDATA[<p>There&rsquo;s a organic growth of a Ops team using chef goes through.  You start out with a <code>chef_repo</code> then you post it to github/some DVCS.  From there you tell people to clone it down and put PRs against it. From there you attempt to be a gate keeper, looking at the commits in the log, realizing that there is no match ups. From there you say to yourself &ldquo;Hey, ok, these guys are pretty smart, as long as I spot check, they should be able to merge things in and I can trust them right?&rdquo; NO you are lying to yourself you just don&rsquo;t realize it yet.</p>
+<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl" value from 900 seconds to required time interval</p></blockquote>
 
-<p>Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push&hellip;and nothing happens. Oh I&rsquo;m 2x behind where I thought great, bump and push. Oh&hellip;it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded&hellip;crap. (And other situations like this can pop up.)</p>
-
-<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathen Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
-
-<h2>Installation</h2>
-
-<p>Obviously the first thing you need to do is install it. Luckily it&rsquo;s a gem so you can just do the following. If you read the docs there are a bunch of places that you <code>.yml</code> gets read from, but I chose this because I like having all my chef stuff in <code>.chef</code> so I don&rsquo;t have to think about pulling anything other than <code>.chef</code> if I want to move boxes.</p>
-
-<p><code>bash
-gem install knife-spork
-touch ~/.chef/spork-config.yml
-</code></p>
-
-<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
-
-<p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
-
-<p>```yaml
-default_environments:
-  &ndash; development
-  &ndash; production
-environment_groups:
-  qa_group:</p>
-
-<pre><code>- quality_assurance
-- staging
-</code></pre>
-
-<p>  test_group:</p>
-
-<pre><code>- user_testing
-- acceptance_testing
-</code></pre>
-
-<p>version_change_threshold: 2
-environment_path: &ldquo;/home/me/environments&rdquo;
-plugins:
-  campfire:</p>
-
-<pre><code>account: myaccount
-token: a1b2c3d4...
-</code></pre>
-
-<p>  hipchat:</p>
-
-<pre><code>api_token: ABC123
-rooms:
-  - General
-  - Web Operations
-notify: true
-color: yellow
-</code></pre>
-
-<p>  jabber:</p>
-
-<pre><code>username: YOURUSER
-password: YOURPASSWORD
-nickname: Chef Bot
-server_name: your.jabberserver.com
-server_port: 5222
-rooms:
-  - engineering@your.conference.com/spork
-  - systems@your.conference.com/spork
-</code></pre>
-
-<p>  git:</p>
-
-<pre><code>enabled: true
-</code></pre>
-
-<p>  irccat:</p>
-
-<pre><code>server: irccat.mydomain.com
-port: 12345
-gist: "/usr/bin/gist"
-channel: ["chef-annoucements"]
-</code></pre>
-
-<p>  graphite:</p>
-
-<pre><code>server: graphite.mydomain.com
-port: 2003
-</code></pre>
-
-<p>  eventinator:</p>
-
-<pre><code>url: http://eventinator.mydomain.com/events/oneshot
-</code></pre>
-
-<p>```</p>
-
-<p>All in all this seems pretty self <a href="https://github.com/jonlives/knife-spork#default-environments">explanatory</a> but the most important things to change are <code>environment_path</code> and disabling the plugins (by removing them) here.  For my company I only used the git plugin and&hellip;well that was it. :)</p>
-
-<p>By the way there are only a few plugins, <a href="https://github.com/jonlives/knife-spork/tree/master/plugins">here</a> is a link to the different .md files on each.</p>
-
-<p>Ok, so you have everything set up, what do you do now?</p>
-
-<h2>Usage</h2>
-
-<p>The first step is to run <code>knife spork check COOKBOOK --all</code> where COOKBOOK is one of your commonly updated/tweaked cookbooks.  Spork checks against what you have locally compared to what&rsquo;s in the server, like this:</p>
-
-<p><code>
-knife spork check COOKBOOK --all
-</code></p>
-
-<p>Here&rsquo;s an example:
+<p>So the fix is:
 ```bash
-Checking versions for cookbook nagios&hellip;</p>
+[~] % sudo vim /etc/chef-server/chef-server.rb</p>
 
-<p>Local Version:
-  5.1.5</p>
+<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
 
-<p>Remote Versions: (* indicates frozen)
-  5.1.5
-  5.1.4
-  5.1.3
-  5.1.2</p>
-
-<p>ERROR: The version 5.1.5 exists on the server and is not frozen. Uploading will overwrite!
+<p>[~] % sudo chef-server-ctl reconfigure
 ```</p>
 
-<p>As you can see with the error, it&rsquo;s pretty self explaintory.</p>
-
-<p>The second step is to bump the version:
-<code>bash
-knife spork bump nagios patch
-Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
-Pulling latest changes from git submodules (if any)
-Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
-Pulling latest changes from git submodules (if any)
-Successfully bumped nagios to v5.1.6!
-</code></p>
-
-<p>Now as you can see I have the git plugin working, and it without thinking about it, updates the metadata.rb so you don&rsquo;t have to. (I HATE that part of chef, I always forget.) Now you can go off make your changes.</p>
-
-<p>From here you&rsquo;re happy, you&rsquo;ve commited your new <code>chef_repo</code> back to the DVCS that you use.  This is where the magic happens: <code>knife spork upload COOKBOOK</code>.  This thing is great, it (to quote the <code>README.md</code>) <em>This function works mostly the same as normal knife cookbook upload COOKBOOK except that this automatically freezes cookbooks when you upload them.</em> Which is the bread and butter of spork.  The freezing is crazy important, by freezing the upload you take &ldquo;ownership&rdquo; of that version of the cookbook.  Your changes are yours, and no-one can mess with them.  So in turn you don&rsquo;t step on your coworkers toes and he doesen&rsquo;t step on yours.</p>
-
-<p>Ok, so this was the cheatsheet, we have implymented this at my company now, so hopefully this goes great. If not&hellip;well that&rsquo;s a different conversation.</p>
+<p>Boom, you should be good now. No more damn 403s.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (Part 2)]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2/"/>
-    <updated>2013-10-01T18:11:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2</id>
-    <content type="html"><![CDATA[<h1>Monitoring</h1>
+    <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
+    <updated>2014-01-18T14:01:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
+    <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
 
-<p>Everyone loves monitoring. Ok, that&rsquo;s a lie, only [DevOps|Sysadmins] love monitoring. Ok, that&rsquo;s probably a lie too, hell I love monitoring, and I love nagios.  I&rsquo;ve followed used nagios in some shape or another since nagios-1.0b6. My first real paid job as an &ldquo;IT guy&rdquo; was setting up nagios for a company.  I&rsquo;ve actually gotten in the habit of walking into a new company using <a href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/">serverspec</a>, to learn what each machine does, then implementing nagios behind the serverspec scripts for a proactive monitoring on error conditions. This might seem redundant, but I don&rsquo;t think so. serverspec is great for spot checking, while nagios gives the best &ldquo;state of the union&rdquo; snapshot. Granted a lot of the time creating these checks are reactive, but sometimes like here, I wrote some proactive monitoring because I know there are certain error conditions on the slaves I&rsquo;ve spun up.</p>
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
 
-<p>I use nrpe to monitor my machines, and I set up my <code>nrpe.cfg</code> to something like the following. I use chef, so the <code>&lt;%= node['hostname'] %&gt;</code> is from <a href="https://github.com/opscode/ohai">ohai</a>.</p>
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do'h!</p>
 
-<p><code>ini
-command[check_redisserver]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C redis-server
-command[check_redis_replication]=/usr/lib/nagios/plugins/check_redis_replication -h &lt;%= node['hostname'] %&gt; -w 20 -c 45
-command[check_redis_rdb_age]=/usr/lib/nagios/plugins/check_redis_rdb_age &lt;%= node['hostname'] %&gt;
-</code></p>
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
 
-<p>The first line is pretty self explanatory.  Obviously I&rsquo;d like to check that redis is running, and that&rsquo;s what it does.</p>
-
-<p>The second line is where I started creating the new monitoring.  I have all my monitors right now at a 3 strike out rule, I have played with the idea of tweaking it, but it seems 3 strikes then an email seems to cut down on the noise I get.</p>
-
-<p>```ruby</p>
-
-<h1>!/usr/bin/env ruby</h1>
-
-<p>require &lsquo;optparse&rsquo;
-options  = {}
-required = [:warning, :critical, :host]</p>
-
-<p>parser   = OptionParser.new do |opts|</p>
-
-<pre><code>opts.banner = "Usage: check_redis_replication [options]"
-  opts.on("-h", "--host redishost", "The hostname of the redis slave") do |h|
-    options[:host] = h
-  end
-  opts.on("-w", "--warning percentage", "Warning threshold") do |w|
-    options[:warning] = w
-  end
-  opts.on("-c", "--critical critical", "Critical threshold") do |c|
-    options[:critical] = c
- end
-</code></pre>
-
-<p>end
-parser.parse!
-abort parser.to_s if !required.all? { |k| options.has_key?(k) }</p>
-
-<p>master_last_io_seconds_ago = <code>/opt/redis/bin/redis-cli info | grep master_last_io_seconds_ago</code>.split(&lsquo;:&rsquo;).last.to_i rescue -1</p>
-
-<p>status = &ldquo;A-Ok!&rdquo;
-if master_last_io_seconds_ago &lt; 0 || master_last_io_seconds_ago >= options[:critical].to_i
-  status = :critical
-elsif master_last_io_seconds_ago >= options[:warning].to_i
-  status = :warning
-end</p>
-
-<p>status_detail = master_last_io_seconds_ago == -1 ? &lsquo;ERROR&rsquo; : &ldquo;#{ master_last_io_seconds_ago.to_s }s&rdquo;
-puts &ldquo;#{status.to_s.upcase} &ndash; replication lag: #{status_detail}&rdquo;</p>
-
-<p>if status == :critical
-  exit(2)
-elsif status == :warning
-  exit(1)
-end
-```</p>
-
-<p>I stole this monitor from <a href="http://blog.winfieldpeterson.com/2012/12/13/monitoring-redis-replication-in-nagios/">here</a> but as you can tell the <code>redis-cli</code> is edited and the default status too.  <a href="https://twitter.com/miah_">Miah</a>&rsquo;s <a href="https://github.com/miah/chef-redis">cookbook</a> is great, works like a charm, but it puts the <code>redis-cli</code> in <code>/opt/redis/bin/</code>.</p>
-
-<p>As a side note: I even put in a <a href="https://github.com/miah/chef-redis/pull/55">PR</a> to update to 2.6.16, because of this project.  I ran all the <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> tests and it passed like a charm.  I actually learned about <a href="https://github.com/sstephenson/bats">bats</a> in the process, and honestly I&rsquo;m pretty damn impressed with something so straight forward.  Because serverspec fulfills my requirements at the moment, I don&rsquo;t have to use it; but I like the idea of having it in my back pocket.  The replication between master and slave seems extremely important, so this monitor has been a god sent.  I never have seen it spike over 45 seconds, but then the next check pop back to &lt;3 seconds.</p>
-
-<p>The second monitor I wrote was this:
+<p>I created this:
 ```bash</p>
 
 <h1>!/bin/bash</h1>
 
-<p>stateid=
-LAST_SYNC_HUMAN=<code>/opt/redis/bin/redis-cli -h $1 info | grep rdb_last_save_time | awk -F : {'print $2'} | xargs -I {} date -d @{}</code>
-LAST_SYNC=<code>/opt/redis/bin/redis-cli -h $1 info | grep rdb_last_save_time | awk -F : {'print $2'} | tr -d '\r'</code>
-LAST_15MIN=<code>date -d '15 minutes ago' +%s</code>
-LAST_20MIN=<code>date -d '20 minutes ago' +%s</code></p>
+<p>read -p &ldquo;yes or no: &rdquo; RESPONSE</p>
 
-<p>if [ &ldquo;${LAST_15MIN}&rdquo; -lt &ldquo;${LAST_SYNC}&rdquo; ];
-  then
-  echo Sync has happened in the last 15 mins or less at ${LAST_SYNC_HUMAN}
-  stateid=0
-elif [ &ldquo;${LAST_15MIN}&rdquo; -ge &ldquo;${LAST_SYNC}&rdquo; ] &amp;&amp; [ &ldquo;${LAST_20MIN}&rdquo; -lt &ldquo;${LAST_SYNC}&rdquo; ];
-  then
-  echo Sync happened a little longer than we would like, the last at ${LAST_SYNC_HUMAN}
-  stateid=1
-elif [ &ldquo;${LAST_20MIN}&rdquo; -ge &ldquo;${LAST_SYNC}&rdquo; ];
-  then
-  echo Sync took over 20 mins, something might be wrong, the last sync happened at ${LAST_SYNC_HUMAN}
-  stateid=2
-fi
-exit $stateid
+<p>case &ldquo;$RESPONSE&rdquo; in
+  yes|y|Yes|Y)</p>
+
+<pre><code>echo "blah is yes"
+;;
+</code></pre>
+
+<p>  no|n|No|N)</p>
+
+<pre><code>echo "blah is no"
+;;
+</code></pre>
+
+<p>  *)</p>
+
+<pre><code>echo "You need to say yes or no, start over!"
+exit 1
+;;
+</code></pre>
+
+<p>esac
 ```
-This monitor I took from my typical <a href="https://github.com/jjasghar/scripts/blob/master/nagios_check_generic_template.sh">bash nagios template</a> and added the error states.  It seems like the .rdb file should always be in &ldquo;close&rdquo; proximity to the last write of to slave, and it would be nice to be alarmed about it if it went out of wack.  From what I&rsquo;ve seen it&rsquo;s never more than 1 or 2 minutes behind; so this worked out.  Writing a monitor for something and never seeing it fire till there is a real problem, that&rsquo;s a great place to be in.</p>
+Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
 
-<h2>Non-nagios monitoring</h2>
-
-<p>I started looking around for some type of dashboard to get some visual data about the redis instance.  It turns out there is a TON of these bastards, from a paid product like <a href="https://scoutapp.com/plugin_urls/271-redis-monitoring">Scout</a> to <a href="https://github.com/junegunn/redis-stat">redis-stat</a>.  I picked redis-stat because well, it&rsquo;s un-intrusive and fast.  I have it polling against my master slave on two instances of the gem running, and it&rsquo;s really nice to have a easily digestible view of the health of it.  I have noticed that it has doubled up the info because of the syncing, so be warned, you probably should run it via just the master and then maybe put all the slaves on one? (I&rsquo;m still trying to figure this one out.)</p>
-
-<p>If you do read this and have good suggestions please through them my <a href="http://jjasghar.github.io/about/">way</a>, the <code>INFO</code> command gives you a lot of data, and redis-stat doesn&rsquo;t store anything so treading over time isn&rsquo;t an option. I was thinking about putting some of this data in ganglia, (another favorite of mine) but to have something just redis focused seems like the correct move here.</p>
-
-<hr />
-
-<p>So, so far these is the monitors that I&rsquo;m using for my new master slave set up.  My next challenge is creating the VIP in front of the master slave, and have a &ldquo;hot fail over.&rdquo; This is going to require some pretty interesting engineering; it&rsquo;s fun, but man the more I think about it the more it hurts my brain.  So I haven&rsquo;t actually talked about the migration yet either.  From what I&rsquo;ve understood it seems that 2.4.16 is actually <em>inside</em> 2.6.16, so if I get this VIP in front of this master slave then fail over to the slave turning off the read-only, this should be seamless. I need to do some testing; but that seems like the best course of action. For just the migration though, the &ldquo;hot fail over&rdquo; isn&rsquo;t required, but I want it to be in the fore-front of the design because I&rsquo;d rather be additive than have to rip out everything after we get up dated.</p>
+<p>Hopefully this post will save you some time in the future.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (part 1)]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/09/30/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis/"/>
-    <updated>2013-09-30T20:15:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/09/30/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis</id>
-    <content type="html"><![CDATA[<p>Like most sysadmins out there, I read the blogs and posts about new technologies that are relevant to my product(s).  There has been a lot of buzz about NoSQL and the key value store type db&rsquo;s out there, yet I have never really focused directly on it.  I have paid passing attention, until I realized that we use one heavily at my company.</p>
+    <title type="html"><![CDATA[Customizing Boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
+    <updated>2014-01-01T13:27:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
+    <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
 
-<p><a href="http://redis.io">Redis</a> is a key value store that runs completely in memory. It&rsquo;s fast, REALLY fast, and after spending some time with a few tutorials like <a href="http://openmymind.net/2012/1/23/The-Little-Redis-Book/">The Little Redis Book</a> by <a href="https://twitter.com/karlseguin">Karl Seguin</a>, it makes a ton of sense, and an extremely neat backend piece of software.</p>
+<ul>
+<li>iterm2</li>
+<li>dropbox</li>
+<li>mysql</li>
+<li>1password</li>
+<li>virtualbox</li>
+<li>vagrant</li>
+<li>chrome</li>
+</ul>
 
-<p>I started to learn more about it, and I started talking to a coworker and he said that he really wanted to upgrade from 2.4 redis to 2.6 redis. I took this as a challenge, and ran with it.</p>
 
-<p>The first part of the migration is creating a slave.  We had .aof and .rdb snapshotting, but we didn&rsquo;t have a slave. This post is be going to be chronicling my adventures getting from 2.4.16 to 2.6.16.</p>
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
 
-<p>Another coworker of mine, <a href="https://github.com/lwoodson">Lance Woodson</a>, created a script called &ldquo;<a href="https://gist.github.com/jjasghar/423d040444a4f4cbea1d">bloater</a>&rdquo; to start putting trash keys in the redis db.  As you can see it&rsquo;s pretty straight forward, I do strongly suggest using <code>bloater.clear!</code> if you are playing with it.  I leveraged this to simulate creating a slave already in production, the theory being I&rsquo;ll have data inside the redis db, things talking to db, and the sync happening.  I understand that a lot of people have tested this situation, but I couldn&rsquo;t seem to find any direct examples.  Hopefully this will be useful to someone.</p>
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
 
-<p>The first step after getting my 2.4.16 redis machine running, I ran <code>bloater.bloat! 2295000000</code> to get an .rdb file that was ~2 gigs.  I configured the snapshotting at the default values so it created it without a hitch.  I copied it off called it something like <code>2gig-dump.rdb</code> or something.  Then I ran <code>bloater.bloat! 4295000000</code> to create the 4gig dump file.  I copied that off next and then I had my two dumpfiles that I could play with.  You are probably wondering why 2 and 4 gigs, and also &ldquo;Dang, that&rsquo;s a huge redis db.&rdquo; Yes, yes it is, I focused on the &ldquo;oh crap, our db is too big&rdquo; situation, so if redis handles that, then I know it&rsquo;ll deal with the 100 meg db just fine.</p>
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):
+<code>
+[~] % git --version # click "Install" for the developer tools
+[~] % sudo mkdir -p /opt/boxen
+[~] % sudo chown ${USER}:staff /opt/boxen
+[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+[~] % cd /opt/boxen/repo
+[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+[/opt/boxen/repo] % cd manifests
+[/opt/boxen/repo/manifests] % vim site.pp
+</code>
+I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
 
-<p>Secondly I did my <code>FLUSHALL</code> command, then shutdown my redis instance then copied the 2 gig db, in the <code>/var/lib/redis/</code> location.  I spun up redis, and ran the <code>INFO</code> command, like all redis admins learn to love to do.  I saw that it was 2 gigs, and yay, now I had my foundation to start my testing.</p>
+<p>Ok, lets give boxen a shot!
+<code>
+[/opt/boxen/repo/manifests] % cd ..
+[/opt/boxen/repo/] % script/boxen --no-fde
+[/opt/boxen/repo/] % source /opt/boxen/env.sh
+[/opt/boxen/repo/] % boxen
+</code>
+You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
 
-<p>I went through quite a few different iterations, but I&rsquo;ll just explain the basic trouble shooting that I did, and maybe you can leverage off it.</p>
-
-<p>So with my redis 2.4 instance with a 2 gig db, and my 2.6 blank db instance it was time to start the fun.  I ran the following commands in a tmux session on my main workstation.  I liked the idea of a 3rd party machine actually looking at all this stuff instead of running directly on one of the machines.
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:
 <code>bash
-watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "
-redis-cli -h redis-slave keys "*" | wc -l
-redis-cli -h redis-master keys "*" | wc -l
-redis-cli -h redis-master info | grep used_memory
-redis-cli -h redis-slave info | grep used_memory
-redis-cli -h redis-master --latency
-</code></p>
+jjasghar-Mac:repo jjasghar$ node
+-bash: node: command not found
+jjasghar-Mac:repo jjasghar$ ruby --version
+ruby 2.0.0p247 (2013-06-27 revision 41674) [universal.x86_64-darwin13]
+</code>
+Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
 
-<p>Most, if not all are pretty self explanatory.  The most interesting one of them all is probably the last one, the <code>--latency</code>.  It used it as a way to emulate something poking my redis instance during the inital clone. The thing we, [where|are|still] worried about is customer impact, and as long as the number didn&rsquo;t sky rocket then stay high it was an acceptable risk.</p>
+<h2>Per user manifests</h2>
 
-<p>After I got the tmux session all up and happy, i  ran these two commands to start the <code>slaveof</code>:
-```bash</p>
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
 
-<h1>on the master</h1>
+<p>Now:
+<code>bash
+[/opt/boxen/repo/] % cd modules/people/manifests
+[/opt/boxen/repo/modules/people/manifests] % git checkout master
+[/opt/boxen/repo/modules/people/manifests] % git checkout -b jjasghar_manifest
+[/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
+</code>
+Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.
+<code>ruby awaxa.pp
+class people::awaxa {
+  include people::awaxa::applications
+  include people::awaxa::dotfiles
+  include people::awaxa::gitconfig
+  include people::awaxa::preferences
+  include people::awaxa::puppetlabs
+}
+</code>
+As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.
+```ruby applications.pp
+class people::awaxa::applications {
+  include caffeine
+  include chrome
+  #include dropbox
+  #include gpgtools
+  include onepassword
+  include java
+  include rdio
+  include tunnelblick::beta
+  include vagrant
+  include virtualbox
+  include vlc
+  include vmware_fusion</p>
 
-<p>redis-master:6379> slaveof no one</p>
+<p>  package { [</p>
 
-<h1>on the slave</h1>
+<pre><code>'htop-osx',
+'tmux'
+]:
+</code></pre>
 
-<p>redis-slave:6379> slaveof redis-master 6379
+<p>  }</p>
+
+<p>  package { &lsquo;GoogleVoiceAndVideoSetup&rsquo;:</p>
+
+<pre><code>source =&gt; 'http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg',
+provider =&gt; pkgdmg,
+</code></pre>
+
+<p>  }
+}
+<code>
+Ok here's the one I created:
+</code>ruby jjasghar.pp
+class people::jjasghar {
+  include people::jjasghar::applications
+}
+<code>
+Nice! Ok, now we need to create:
+</code>bash
+[/opt/boxen/repo/modules/people/manifests] % mkdir jjasghar
+[/opt/boxen/repo/modules/people/manifests] % vim jjasghar/applications.pp
 ```</p>
 
-<p>It worked like a charm. The <code>watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "</code> started showing me the amount of data left for the transfer, and before I knew it I had a working master slave configuration.  This was a lot of cruft to basically say <code>slaveof redis-master 6379</code> but hell it&rsquo;s sometimes nice to see the thought process around it.  Oh!, the latency, did spike to 800 from .05, but I discovered that was in milliseconds and only ONE sample.  So yeah one call to the master with a spike of something still sub-second, was still in the risk params.
-Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post about my monitoring of this, it&rsquo;s not <em>that</em> exciting, but it is useful.</p>
+<p>This is where we add our apps!
+<code>ruby applications.pp
+class people::jjasghar::applications {
+  include iterm2::stable
+  include dropbox
+  include mysql
+  include onepassword
+  include virtualbox
+  include vagrant
+  include chrome
+}
+</code></p>
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo
+```ruby
+[&mdash; snip &mdash;]</p>
+
+<h1>Optional/custom modules. There are tons available at</h1>
+
+<h1><a href="https://github.com/boxen.">https://github.com/boxen.</a></h1>
+
+<p>github &ldquo;iterm2&rdquo;, &ldquo;1.0.0&rdquo;, :repo => &ldquo;boxen/puppet-iterm2&rdquo;
+github &ldquo;chrome&rdquo;
+github &ldquo;dropbox&rdquo;
+github &ldquo;mysql&rdquo;
+github &ldquo;onepassword&rdquo;
+github &ldquo;virtualbox&rdquo;
+github &ldquo;vagrant&rdquo;
+```</p>
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:
+<code>bash
+[/opt/boxen/repo/modules/people/manifests] % cd /opt/boxen/repo
+[/opt/boxen/repo] % boxen
+</code></p>
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adventures with boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
+    <updated>2013-12-31T15:54:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
+    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
+
+<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
+
+<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
+
+<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:
+<code>
+Boxen requires at least the Xcode Command Line Tools installed.
+Boxen will not work with an existing rvm install.
+Boxen may not play nice with a GitHub username that includes dash(-)
+Boxen may not play nice with an existing rbenv install.
+Boxen may not play nice with an existing chruby install.
+Boxen may not play nice with an existing homebrew install.
+Boxen may not play nice with an existing nvm install.
+Boxen recommends installing the full Xcode.
+</code>
+<em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
+
+<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
+
+<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
+
+<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
+
+<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
+
+<p>After you got that done boot up the vm open terminal run the following:</p>
+
+<p><code>git --version</code></p>
+
+<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
+
+<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:
+<code>bash
+[~] % sudo mkdir -p /opt/boxen
+[~] % sudo chown ${USER}:staff /opt/boxen
+[~] % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+[~] % cd /opt/boxen/repo
+[/opt/boxen/repo] % git remote rm origin
+[/opt/boxen/repo] % git remote add origin &lt;the location of my new git repository&gt;
+[/opt/boxen/repo] % git push -u origin master
+</code>
+This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
+
+<p>Ok, now try out boxen:
+<code>bash
+[/opt/boxen/repo] % ./script/boxen
+</code>
+Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):
+<code>bash
+[/opt/boxen/repo] % ./script/boxen --no-fde
+</code></p>
+
+<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
+
+<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
+
+<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/"/>
+    <updated>2013-12-23T10:36:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance</id>
+    <content type="html"><![CDATA[<p>So congrats you got your new &ldquo;<a href="http://www.rackspace.com/cloud/private/">Private Cloud</a>&rdquo; from Rackspace. You are probably ecstatic to start building your new machines.
+I know I was; but alas with all new toys sometimes you hit a couple stags. Here are a couple things I ran into on my first few days.</p>
+
+<h3>First issue</h3>
+
+<p>So I&rsquo;m a chef shop, as you might know by now (assuming you&rsquo;ve read any of my other posts). I&rsquo;ve used <a href="https://github.com/opscode/knife-rackspace">knife-rackspace</a> tons of times; and hell I even have a <a href="https://github.com/opscode/knife-rackspace/commits?author=jjasghar">commit bit</a>. So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
+You end up having to install <a href="https://github.com/opscode/knife-openstack">knife-openstack</a>. That in itself isn&rsquo;t bad at all&hellip;
+<code>bash
+[~] % gem install knife-openstack
+</code>
+Now you need to update your <code>knife.rb</code>
+<code>bash
+[~] % vim ~/.chef/knife.rb
+</code>
+In your handoff ticket, you probably got something that looks like this:
+<code>bash
+export OS_USERNAME=Im_awesome_admin
+export OS_PASSWORD=$omeCr@zyA$$passwD
+export OS_TENANT_NAME=MyCompanyName
+export OS_AUTH_URL=http://10.219.0.254:5000/v2.0/
+export OS_AUTH_STRATEGY=keystone:
+</code>
+Go ahead and copy them out to what they need to be, something like&hellip;
+```ruby
+knife[:openstack_username] = &ldquo;Your OpenStack Dashboard username&rdquo;
+knife[:openstack_password] = &ldquo;Your OpenStack Dashboard password&rdquo;</p>
+
+<h3>Note: If you are not proxying HTTPS to the OpenStack auth port, the scheme should be HTTP</h3>
+
+<p>knife[:openstack_auth_url] = &ldquo;<a href="http://cloud.mycompany.com:5000/v2.0/tokens">http://cloud.mycompany.com:5000/v2.0/tokens</a>&rdquo;
+knife[:openstack_tenant] = &ldquo;Your OpenStack tenant name&rdquo;
+knife[:openstack_ssh_key_id] = &ldquo;my sshkey id&rdquo;
+<code>
+Great! So run that great command `knife openstack flavor list` to see if everything works....
+</code>bash
+[~] % knife openstack server list
+ERROR: knife encountered an unexpected error
+This may be a bug in the &lsquo;openstack server list&rsquo; knife command or plugin
+Please collect the output of this command with the <code>-VV</code> option before filing a bug report.
+Exception: NoMethodError: undefined method `[]&lsquo; for nil:NilClass
+```
+Crap..</p>
+
+<p>Ok, lets try out with <code>-VV</code></p>
+
+<p><code>``ruby
+DEBUG: openstack_username Im_awsome_admin
+DEBUG: openstack_auth_url http://10.219.0.254:5000/v2.0/
+DEBUG: openstack_tenant MyCompanyName
+DEBUG: openstack_insecure
+/Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:51:in</code>rescue in run': undefined method `[]&lsquo; for nil:NilClass (NoMethodError)</p>
+
+<pre><code>from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:41:in `run'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:485:in `run_with_pretty_exceptions'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:174:in `run'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/application/knife.rb:133:in `run'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/bin/knife:25:in `&lt;top (required)&gt;'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `load'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `&lt;main&gt;'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `eval'
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `&lt;main&gt;'
+</code></pre>
+
+<p>```</p>
+
+<p>Well that&rsquo;s not a lot of help eh? Turns out, if you look at the ticket that Rackspace gives you and what the <code>[:openstack_auth_url]</code> requires you&rsquo;ll see that there&rsquo;s a <code>/tokens</code> at the end. Do'h!</p>
+
+<h3>Second issue</h3>
+
+<p>Ok, so you got the ability to talk to your backend? Yay! But alas, you run your create&hellip;
+```bash
+[~] % knife openstack server create -S jj-mba-key -I 349168d3-5381-4324-8636-398d012f852b -f 1 -N testbox
+Instance Name: testbox
+Instance ID: 5e0ec79c-e06a-4fdb-9887-2b30ae1e5f80</p>
+
+<p>Waiting for server&hellip;&hellip;&hellip;
+Flavor: 1
+Image: 349168d3-5381-4324-8636-398d012f852b
+SSH Keypair: jj-mba-key
+ERROR: No IP address available for bootstrapping.
+```
+What the hell does that mean? Well I&rsquo;m not going to explain it all but it seems that by default Rackspace names the &ldquo;public&rdquo; and &ldquo;private&rdquo; networks as &ldquo;Fixed&rdquo; and &ldquo;Floating.&rdquo;
+This is triggered a fog issue, where it&rsquo;s looking at the label for a network either &ldquo;public&rdquo; or &ldquo;private&rdquo; and blows up. There is a ticket in for this <a href="https://tickets.opscode.com/browse/KNIFE-231">here</a> but it looks like it&rsquo;s stalled from late summer, early fall. Lammmeeee.</p>
+
+<p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
+
+<p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
 ]]></content>
   </entry>
   

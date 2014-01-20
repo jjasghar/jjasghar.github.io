@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-07T10:45:15-05:00</updated>
+  <updated>2014-01-20T15:55:49-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,879 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
+    <updated>2014-01-20T15:42:33-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>Ok, you may have seen this before:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>   <span class="o">*</span> <span class="n">cookbook_file</span><span class="o">[</span><span class="sr">/etc/ini</span><span class="n">t</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">apache2</span><span class="o">]</span> <span class="n">action</span> <span class="n">create</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="no">Error</span> <span class="n">executing</span> <span class="n">action</span> <span class="sb">`create`</span> <span class="n">on</span> <span class="n">resource</span> <span class="s1">&#39;cookbook_file[/etc/init.d/apache2]&#39;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="ss">Net</span><span class="p">:</span><span class="ss">:HTTPServerException</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">------------------------</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="mi">403</span> <span class="s2">&quot;Forbidden&quot;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
+
+<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
+
+<p>The gist of this:</p>
+
+<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl&#8221; value from 900 seconds to required time interval</p></blockquote>
+
+<p>So the fix is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
+</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Boom, you should be good now. No more damn 403s.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
+    <updated>2014-01-18T14:01:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
+    <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
+
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
+
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do&#8217;h!</p>
+
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
+
+<p>I created this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">read</span> -p <span class="s2">&quot;yes or no: &quot;</span> RESPONSE
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$RESPONSE&quot;</span> in
+</span><span class='line'>  yes|y|Yes|Y<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is yes&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  no|n|No|N<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is no&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  *<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;You need to say yes or no, start over!&quot;</span>
+</span><span class='line'>    <span class="nb">exit </span>1
+</span><span class='line'>    ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
+
+<p>Hopefully this post will save you some time in the future.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Customizing Boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
+    <updated>2014-01-01T13:27:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
+    <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
+
+<ul>
+<li>iterm2</li>
+<li>dropbox</li>
+<li>mysql</li>
+<li>1password</li>
+<li>virtualbox</li>
+<li>vagrant</li>
+<li>chrome</li>
+</ul>
+
+
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
+
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
+
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[~] % git --version # click "Install" for the developer tools
+</span><span class='line'>[~] % sudo mkdir -p /opt/boxen
+</span><span class='line'>[~] % sudo chown ${USER}:staff /opt/boxen
+</span><span class='line'>[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+</span><span class='line'>[~] % cd /opt/boxen/repo
+</span><span class='line'>[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+</span><span class='line'>[/opt/boxen/repo] % cd manifests
+</span><span class='line'>[/opt/boxen/repo/manifests] % vim site.pp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
+
+<p>Ok, lets give boxen a shot!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[/opt/boxen/repo/manifests] % cd ..
+</span><span class='line'>[/opt/boxen/repo/] % script/boxen --no-fde
+</span><span class='line'>[/opt/boxen/repo/] % source /opt/boxen/env.sh
+</span><span class='line'>[/opt/boxen/repo/] % boxen</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
+
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>node
+</span><span class='line'>-bash: node: <span class="nb">command </span>not found
+</span><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>ruby --version
+</span><span class='line'>ruby 2.0.0p247 <span class="o">(</span>2013-06-27 revision 41674<span class="o">)</span> <span class="o">[</span>universal.x86_64-darwin13<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
+
+<h2>Per user manifests</h2>
+
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
+
+<p>Now:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/<span class="o">]</span> % <span class="nb">cd </span>modules/people/manifests
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout master
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout -b jjasghar_manifest
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar.pp <span class="c"># this needs to be your github account name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.</p>
+
+<figure class='code'><figcaption><span>awaxa.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">dotfiles</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">gitconfig</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">preferences</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">puppetlabs</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
+
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">caffeine</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'>  <span class="c1">#include dropbox</span>
+</span><span class='line'>  <span class="c1">#include gpgtools</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">java</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">rdio</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">tunnelblick</span><span class="p">:</span><span class="ss">:beta</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vlc</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vmware_fusion</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="o">[</span>
+</span><span class='line'>    <span class="s1">&#39;htop-osx&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;tmux&#39;</span>
+</span><span class='line'>    <span class="o">]</span><span class="p">:</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="s1">&#39;GoogleVoiceAndVideoSetup&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">source</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">provider</span> <span class="o">=&gt;</span> <span class="n">pkgdmg</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok here&rsquo;s the one I created:</p>
+
+<figure class='code'><figcaption><span>jjasghar.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nice! Ok, now we need to create:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % mkdir jjasghar
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar/applications.pp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where we add our apps!</p>
+
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">iterm2</span><span class="p">:</span><span class="ss">:stable</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">dropbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">mysql</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[--</span> <span class="n">snip</span> <span class="o">--]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Optional/custom modules. There are tons available at</span>
+</span><span class='line'><span class="c1"># https://github.com/boxen.</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;iterm2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span> <span class="ss">:repo</span> <span class="o">=&gt;</span> <span class="s2">&quot;boxen/puppet-iterm2&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;chrome&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;dropbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;mysql&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;onepassword&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;virtualbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;vagrant&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adventures with boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
+    <updated>2013-12-31T15:54:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
+    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
+
+<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
+
+<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
+
+<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Boxen requires at least the Xcode Command Line Tools installed.
+</span><span class='line'>Boxen will not work with an existing rvm install.
+</span><span class='line'>Boxen may not play nice with a GitHub username that includes dash(-)
+</span><span class='line'>Boxen may not play nice with an existing rbenv install.
+</span><span class='line'>Boxen may not play nice with an existing chruby install.
+</span><span class='line'>Boxen may not play nice with an existing homebrew install.
+</span><span class='line'>Boxen may not play nice with an existing nvm install.
+</span><span class='line'>Boxen recommends installing the full Xcode.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
+
+<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
+
+<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
+
+<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
+
+<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
+
+<p>After you got that done boot up the vm open terminal run the following:</p>
+
+<p><code>git --version</code></p>
+
+<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
+
+<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo mkdir -p /opt/boxen
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chown <span class="k">${</span><span class="nv">USER</span><span class="k">}</span>:staff /opt/boxen
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote rm origin
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote add origin &lt;the location of my new git repository&gt;
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git push -u origin master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
+
+<p>Ok, now try out boxen:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen --no-fde
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
+
+<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
+
+<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/"/>
+    <updated>2013-12-23T10:36:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance</id>
+    <content type="html"><![CDATA[<p>So congrats you got your new &ldquo;<a href="http://www.rackspace.com/cloud/private/">Private Cloud</a>&rdquo; from Rackspace. You are probably ecstatic to start building your new machines.
+I know I was; but alas with all new toys sometimes you hit a couple stags. Here are a couple things I ran into on my first few days.</p>
+
+<h3>First issue</h3>
+
+<p>So I&rsquo;m a chef shop, as you might know by now (assuming you&rsquo;ve read any of my other posts). I&rsquo;ve used <a href="https://github.com/opscode/knife-rackspace">knife-rackspace</a> tons of times; and hell I even have a <a href="https://github.com/opscode/knife-rackspace/commits?author=jjasghar">commit bit</a>. So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
+You end up having to install <a href="https://github.com/opscode/knife-openstack">knife-openstack</a>. That in itself isn&rsquo;t bad at all&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % gem install knife-openstack
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you need to update your <code>knife.rb</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % vim ~/.chef/knife.rb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In your handoff ticket, you probably got something that looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">export </span><span class="nv">OS_USERNAME</span><span class="o">=</span>Im_awesome_admin
+</span><span class='line'><span class="nb">export </span><span class="nv">OS_PASSWORD</span><span class="o">=</span><span class="nv">$omeCr</span>@zyA<span class="nv">$$</span>passwD
+</span><span class='line'><span class="nb">export </span><span class="nv">OS_TENANT_NAME</span><span class="o">=</span>MyCompanyName
+</span><span class='line'><span class="nb">export </span><span class="nv">OS_AUTH_URL</span><span class="o">=</span>http://10.219.0.254:5000/v2.0/
+</span><span class='line'><span class="nb">export </span><span class="nv">OS_AUTH_STRATEGY</span><span class="o">=</span>keystone:
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Go ahead and copy them out to what they need to be, something like&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">knife</span><span class="o">[</span><span class="ss">:openstack_username</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Your OpenStack Dashboard username&quot;</span>
+</span><span class='line'><span class="n">knife</span><span class="o">[</span><span class="ss">:openstack_password</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Your OpenStack Dashboard password&quot;</span>
+</span><span class='line'><span class="c1">### Note: If you are not proxying HTTPS to the OpenStack auth port, the scheme should be HTTP</span>
+</span><span class='line'><span class="n">knife</span><span class="o">[</span><span class="ss">:openstack_auth_url</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;http://cloud.mycompany.com:5000/v2.0/tokens&quot;</span>
+</span><span class='line'><span class="n">knife</span><span class="o">[</span><span class="ss">:openstack_tenant</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;Your OpenStack tenant name&quot;</span>
+</span><span class='line'><span class="n">knife</span><span class="o">[</span><span class="ss">:openstack_ssh_key_id</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;my sshkey id&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great! So run that great command <code>knife openstack flavor list</code> to see if everything works&hellip;.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % knife openstack server list
+</span><span class='line'>ERROR: knife encountered an unexpected error
+</span><span class='line'>This may be a bug in the <span class="s1">&#39;openstack server list&#39;</span> knife <span class="nb">command </span>or plugin
+</span><span class='line'>Please collect the output of this <span class="nb">command </span>with the <span class="sb">`</span>-VV<span class="sb">`</span> option before filing a bug report.
+</span><span class='line'>Exception: NoMethodError: undefined method <span class="sb">`</span><span class="o">[]</span><span class="err">&#39;</span> <span class="k">for </span>nil:NilClass
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Crap..</p>
+
+<p>Ok, lets try out with <code>-VV</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">DEBUG</span><span class="p">:</span> <span class="n">openstack_username</span> <span class="no">Im_awsome_admin</span>
+</span><span class='line'><span class="ss">DEBUG</span><span class="p">:</span> <span class="n">openstack_auth_url</span> <span class="ss">http</span><span class="p">:</span><span class="sr">//</span><span class="mi">10</span><span class="o">.</span><span class="mi">219</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">254</span><span class="p">:</span><span class="mi">5000</span><span class="o">/</span><span class="n">v2</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span>
+</span><span class='line'><span class="ss">DEBUG</span><span class="p">:</span> <span class="n">openstack_tenant</span> <span class="no">MyCompanyName</span>
+</span><span class='line'><span class="ss">DEBUG</span><span class="p">:</span> <span class="n">openstack_insecure</span>
+</span><span class='line'><span class="sr">/Users/</span><span class="n">jasghar</span><span class="o">/.</span><span class="n">rvm</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">ruby</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">p195</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">knife</span><span class="o">-</span><span class="n">openstack</span><span class="o">-</span><span class="mi">0</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">chef</span><span class="o">/</span><span class="n">knife</span><span class="o">/</span><span class="n">openstack_flavor_list</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">51</span><span class="ss">:in</span> <span class="sb">`rescue in run&#39;: undefined method `</span><span class="o">[]</span><span class="s1">&#39; for nil:NilClass (NoMethodError)</span>
+</span><span class='line'><span class="s1"> from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:41:in `run&#39;</span>
+</span><span class='line'>  <span class="n">from</span> <span class="sr">/Users/</span><span class="n">jasghar</span><span class="o">/.</span><span class="n">rvm</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">ruby</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">p195</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">chef</span><span class="o">-</span><span class="mi">11</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">chef</span><span class="o">/</span><span class="n">knife</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">485</span><span class="ss">:in</span> <span class="sb">`run_with_pretty_exceptions&#39;</span>
+</span><span class='line'><span class="sb"> from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:174:in `</span><span class="n">run</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1"> from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/application/knife.rb:133:in `run&#39;</span>
+</span><span class='line'>  <span class="n">from</span> <span class="sr">/Users/</span><span class="n">jasghar</span><span class="o">/.</span><span class="n">rvm</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">ruby</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">p195</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">chef</span><span class="o">-</span><span class="mi">11</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="ss">knife</span><span class="p">:</span><span class="mi">25</span><span class="ss">:in</span> <span class="sb">`&lt;top (required)&gt;&#39;</span>
+</span><span class='line'><span class="sb"> from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `</span><span class="nb">load</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1"> from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `&lt;main&gt;&#39;</span>
+</span><span class='line'>  <span class="n">from</span> <span class="sr">/Users/</span><span class="n">jasghar</span><span class="o">/.</span><span class="n">rvm</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">ruby</span><span class="o">-</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">p195</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">ruby_executable_hooks</span><span class="p">:</span><span class="mi">15</span><span class="ss">:in</span> <span class="sb">`eval&#39;</span>
+</span><span class='line'><span class="sb"> from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `</span><span class="o">&lt;</span><span class="n">main</span><span class="o">&gt;</span><span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Well that&rsquo;s not a lot of help eh? Turns out, if you look at the ticket that Rackspace gives you and what the <code>[:openstack_auth_url]</code> requires you&rsquo;ll see that there&rsquo;s a <code>/tokens</code> at the end. Do&#8217;h!</p>
+
+<h3>Second issue</h3>
+
+<p>Ok, so you got the ability to talk to your backend? Yay! But alas, you run your create&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % knife openstack server create -S jj-mba-key -I 349168d3-5381-4324-8636-398d012f852b -f 1 -N testbox
+</span><span class='line'>Instance Name: testbox
+</span><span class='line'>Instance ID: 5e0ec79c-e06a-4fdb-9887-2b30ae1e5f80
+</span><span class='line'>
+</span><span class='line'>Waiting <span class="k">for </span>server.........
+</span><span class='line'>Flavor: 1
+</span><span class='line'>Image: 349168d3-5381-4324-8636-398d012f852b
+</span><span class='line'>SSH Keypair: jj-mba-key
+</span><span class='line'>ERROR: No IP address available <span class="k">for </span>bootstrapping.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What the hell does that mean? Well I&rsquo;m not going to explain it all but it seems that by default Rackspace names the &ldquo;public&rdquo; and &ldquo;private&rdquo; networks as &ldquo;Fixed&rdquo; and &ldquo;Floating.&rdquo;
+This is triggered a fog issue, where it&rsquo;s looking at the label for a network either &ldquo;public&rdquo; or &ldquo;private&rdquo; and blows up. There is a ticket in for this <a href="https://tickets.opscode.com/browse/KNIFE-231">here</a> but it looks like it&rsquo;s stalled from late summer, early fall. Lammmeeee.</p>
+
+<p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
+
+<p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning git realizing that I know nothing]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/"/>
+    <updated>2013-12-17T13:56:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing</id>
+    <content type="html"><![CDATA[<p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ffBJ4sVUb4 "></iframe></div>
+
+
+<p>I strongly suggest taking the 99ish mins to watch it, it&rsquo;s a great tutorial, with great visual examples.</p>
+
+<p>I&rsquo;ve also stolen some aliases that he suggests!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span><span class="nv">glp</span><span class="o">=</span><span class="s2">&quot;git log --graph --pretty --all&quot;</span>
+</span><span class='line'><span class="nb">alias </span><span class="nv">gld</span><span class="o">=</span><span class="s2">&quot;git log --graph --decorate --all&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Some useful notes that this video helped clear up for me:</p>
+
+<p>Something else that finally cleared up to me <code>origin/master</code> means a label, while <code>origin master</code> means the remote origin with the label of master on it&rsquo;s remote side. This works with <code>origin/bugfix</code> and <code>origin bugfix</code> also, it&rsquo;s just unfortunate that the master is used twice is a very similar context.</p>
+
+<p><code>git merge master</code> merges master into the current branch you have checked out. <code>git merge origin/master</code> merges the upstream changes of master into your current branch. <code>git merge master bugfix</code> merges the master branch into bugfix explicitly.</p>
+
+<p><code>git push --set-upstream (or -u) origin bugfix</code> sets the upstream branch on origin to bugfix, if from your local repo.</p>
+
+<p><code>refs/head/blah</code> is a fancy way of saying <code>blah</code> is the branch.</p>
+
+<p><code>git push origin --tags</code> to push your tags on the local repo to the origin</p>
+
+<p>A detached HEAD isn&rsquo;t a bad thing; it just means there&rsquo;s no branch associated with it. It&rsquo;s good to check things out but you can always <code>git checkout -b &lt;branch_name&gt;</code> if needed.</p>
+
+<p><code>git rebase -i HEAD^^</code> go back to rebase 2 commits; rebase goes bottom up, to squash up to the top one.</p>
+
+<p><code>rebase</code> creates a <em>new</em> line of history, not REWRITES history.</p>
+
+<p>Once you&rsquo;ve pushed, never rebase; it&rsquo;s not worth it. :(</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hubot+Herkou+Campfire and how I spent much more time than I thought I should]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/"/>
+    <updated>2013-11-27T11:41:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should</id>
+    <content type="html"><![CDATA[<p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
+with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
+node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
+
+<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is what the doc says&hellip;.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
+</span><span class='line'>% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Damn, nope.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I figured I&rsquo;d try with <code>https://</code>&hellip;..</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Damnit.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do&#8217;h!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Boom, it worked.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hub workflow]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/31/hub-workflow/"/>
+    <updated>2013-10-31T11:01:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/31/hub-workflow</id>
+    <content type="html"><![CDATA[<p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
+</span><span class='line'>Error creating pull request: Unprocessable Entity <span class="o">(</span>HTTP 422<span class="o">)</span>
+</span><span class='line'>Missing field: <span class="s2">&quot;head_sha&quot;</span>
+</span><span class='line'>Missing field: <span class="s2">&quot;base_sha&quot;</span>
+</span><span class='line'>No commits between jjasghar:master and jjasghar:blah
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>WTF man? What the hell does this mean? It seems I wasn&rsquo;t the only one that had this <a href="https://github.com/github/hub/issues/189">problem</a>.  It seems that the work flow (at least in my case) was the problem. Here&rsquo;s a quick fix to be able to open up a PR off a forked branch:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git add some_file
+</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git commit -m <span class="s2">&quot;blah&quot;</span>
+</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git push -u origin blah
+</span><span class='line'>Counting objects: 7, <span class="k">done</span>.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% <span class="o">(</span>3/3<span class="o">)</span>, <span class="k">done</span>.
+</span><span class='line'>Writing objects: 100% <span class="o">(</span>4/4<span class="o">)</span>, 351 bytes | 0 bytes/s, <span class="k">done</span>.
+</span><span class='line'>Total 4 <span class="o">(</span>delta 2<span class="o">)</span>, reused 0 <span class="o">(</span>delta 0<span class="o">)</span>
+</span><span class='line'>To git@github.com:jjasghar/learning_git.git
+</span><span class='line'>   5224edf..88ad1af  blah -&gt; blah
+</span><span class='line'>Branch blah <span class="nb">set </span>up to track remote branch blah from origin.
+</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
+</span><span class='line'>https://github.com/jjasghar/learning_git/pull/1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty slick eh?</p>
+
+<p>Bonus round you can attach your PR to an issue!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request -i 3
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[People keep asking me how to start with chef]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/"/>
+    <updated>2013-10-18T10:19:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef</id>
+    <content type="html"><![CDATA[<p>So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do from the beginning. I completely acknowledge that chef can be extremely confusing to start with. If you really want to learn it you&rsquo;ll have to stick with it, and do it. Good god, nothing is better than running it on a vagrant box and seeing what you expect happen happen.</p>
+
+<h2>chef-solo is your best friend (step 1)</h2>
+
+<p>A lot of people can start here, and end here believe it or not.  chef-solo is unbelievably powerful and can full-fill 90% of all requirements for basic usage. I spent some time looking around for a good tutorial (doing all of them that I could find), and <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">this</a> on was the best &ldquo;I have no idea what the fuck I&rsquo;m doing.&rdquo; situation.  Modern chef installs are a tad bit different than this guy, so the &ldquo;install.sh&rdquo; changes I suggest are this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># This run as root on the machine</span>
+</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
+</span><span class='line'>
+</span><span class='line'><span class="c"># are we not bootstrapped?</span>
+</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
+</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
+</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>
+</span><span class='line'>chef-solo -c solo.rb -j solo.json
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see I use the omnibus installer, not the gem, and choose the ruby version you want ;), and yes if you use those lame-ass rpm-based distros, <code>apt-get</code> won&rsquo;t work for you.</p>
+
+<h2>There&rsquo;s something clever here (step 2)</h2>
+
+<p>So awesome, you walked through the suggested tutorial, you can now run your <code>install.sh</code> and get your changes in. Grats! If you think about it, hit up the <a href="http://docs.opscode.com">Opscode Docs</a> and you&rsquo;ll discover that there&rsquo;s a resource to provision every which way. As I said at the beginning this might be all you need, if it is then use it; no real need to go any farther.</p>
+
+<p>Ah, you&rsquo;re still here. So you DO want to farther, awesome. In step two I suggested going to the docs, that&rsquo;s cool, but sometimes you need more verbose help, that&rsquo;s my second point, it&rsquo;s time to start asking questions. Your first stop is <a href="http://webchat.freenode.net/?channels=chef">#chef</a>; it&rsquo;s manned basically 24x7, and <em>normally</em> extremely helpful. Don&rsquo;t be a douche, if you have to paste something use <a href="http://gist.github.com">gist</a> or something.  After that the main Opscode <a href="http://lists.opscode.com/sympa">mailing list</a> is great. It&rsquo;s slower, but you get much more in depth questions and conversations. Finally the third sub step is speak up, ask questions the only way to learn this is to be like &ldquo;I don&rsquo;t understand it, help!&rdquo;</p>
+
+<h2>The only book worth a damn as of 2013/10/18 (step 3)</h2>
+
+<p>Step three of the journey is probably the one that most people jump to initially, and this is usually where the confusion starts.  There&rsquo;s a handful of books out there on chef, this <a href="http://www.packtpub.com/chef-starter/book">one</a> is the only one worth any money.  With a strong understanding of how to provision a simple box, and where to ask questions this book will be extremely straight forward and build upon those building blocks. I&rsquo;m constantly looking for another chef bible, but most nuggets of how-to things are spread all over the internet in blog form.</p>
+
+<h2>The fun starts here (step 4)</h2>
+
+<p>Step four you need a chef server, you need to be able to provision multiple boxes, you understand/can find out what a role or environment is, and you need different <code>run_lists</code>.Good for you.  From here you should look at the open source <a href="http://www.opscode.com/chef/install/">chef server</a> and spin it up on another box. I should say you can use the <a href="https://getchef.opscode.com/signup">hosted chef</a>, you get up to 5 nodes with it for free, which is cool, but if you want to see everything work from the ground up, open source chef server is the way to go. (NOTE: if you are doing it in AWS/<code>$cloudprovider</code> you&rsquo;ll need at least a 4 gig box, and that&rsquo;s pushing it. You&rsquo;ve been warned.) Now spin up another box, a machine that can talk to the server that you want to provision. Start playing with <code>knife</code> add a knife plug-in for you <code>$cloudprovider</code> see if you can spin up another box using the <a href="http://docs.opscode.com/knife_bootstrap.html">knife bootstrap</a>.  Start using <a href="http://community.opscode.com/cookbooks/minitest-handler">minitest-handler-cookbook</a>, <a href="https://github.com/opscode/test-kitchen">test-kitchen</a>, and even <a href="https://github.com/acrmp/chefspec">chef-spec</a> if your feeling sassy. If you&rsquo;ve made it this far, you&rsquo;ve probably been exposed to a myriad of other tools, run with them. Trust me if someone built if for chef the chance of being helpful is extremely high.</p>
+
+<h2>D&#8217;oh why did I do it this way? (step 5)</h2>
+
+<p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
+
+<p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Checking CPU WAIT via nagios]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios/"/>
+    <updated>2013-10-16T11:11:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios</id>
+    <content type="html"><![CDATA[<p>So our machines swap&hellip;.swap alot. There are the  typical nagios system checks, you can have the <code>check_swap</code> call, but at my company the &lt; 20 % hits so often we needed to figure out a way to get warned about crippling proformance. We discovered that when a machine has CPU WAIT spikes, the proformance for the machine tanks, so I tried to find a check for specificly monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.</p>
+
+<p>I took a stab at creating a check myself and the following is a simple nagios check that you can run via NRPE.  The <code>PERCENTAGE</code> line is changeable, I&rsquo;d make sure your alarm reflects your error cases. We choose 10 % because that&rsquo;s when we started seeing real prefomance issues, but as all sysadmins know any CPU WAIT is bad in general.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
+</span><span class='line'><span class="nv">CPUWAIT</span><span class="o">=</span><span class="sb">`</span>top -b -n 1| grep <span class="s1">&#39;wa,&#39;</span> | awk -F <span class="s1">&#39;,&#39;</span> <span class="o">{</span><span class="s1">&#39;print $5&#39;</span><span class="o">}</span> | cut -d . -f 1 | tr -d <span class="s1">&#39; &#39;</span> <span class="sb">`</span>
+</span><span class='line'><span class="nv">PERCENTAGE</span><span class="o">=</span>10
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -le <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
+</span><span class='line'> <span class="k">then</span>
+</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is under <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span>%
+</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
+</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -ge <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
+</span><span class='line'> <span class="k">then</span>
+</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is at <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span>%, your machine aint happy
+</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
+</span><span class='line'> <span class="k">fi</span>
+</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
@@ -748,184 +1621,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
 <h2>Conclusion</h2>
 
 <p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Nagios-status-rackspace]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace/"/>
-    <updated>2013-07-09T15:05:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace</id>
-    <content type="html"><![CDATA[<p>I posted a <a href="http://redd.it/1gefnf">this</a> on <a href="http://www.reddit.com/r/sysadmin">/r/sysadmin/</a> back on 6/15/13.  I wanted to put some context around why I created the nagios checks and why the <a href="https://status.rackspace.com/index/rss">RSS</a> after all that discussion still didn&rsquo;t fulfill my requirements.</p>
-
-<p>The biggest problem I have with the RSS feed is that it is everything inside the rackspace status page.  As I said to <a href="http://www.reddit.com/user/rackerkev">/u/rackerkev</a>; as a customer in ORD I don&rsquo;t want to be paged or alerted when something in LON happens.  This seems be the default for the RSS feed, a water hose of what that status page says.</p>
-
-<p>After our account manager suggested us to check <a href="http://status.rackspace.com">http://status.rackspace.com</a> a developer on my team asked if there was an automated way to check this.  I ran a quick <code>curl http://status.rackspace.com</code> and discovered it&rsquo;s flat html.  Boom, I had a way to get the data, I just needed a way to parse it.</p>
-
-<p>I had a default nagios check template and all I had to do was put that <code>curl</code> in to parse it out.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
-</span><span class='line'><span class="nv">SOMECMD</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="s2">&quot;something&quot;</span>
-</span><span class='line'><span class="nv">SOMETHING</span><span class="o">=</span>something
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> <span class="o">==</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> is something
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
-</span><span class='line'><span class="c">#elif [  &quot;${SOMECMD}&quot; == ${SOMETHING} ];</span>
-</span><span class='line'><span class="c">#  then</span>
-</span><span class='line'><span class="c">#  echo This is a Warning</span>
-</span><span class='line'><span class="c">#  stateid=1</span>
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> !<span class="o">=</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Something is broken!
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
-</span><span class='line'> <span class="k">fi</span>
-</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I don&rsquo;t think this actually works, but hell you get the point.</p>
-
-<p>So with some patience using <code>sed</code> and <code>grep</code> I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about &ldquo;You should write it as one script and then add flags or variables at the end.&rdquo; I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have <code>curl</code> installed and write the command stanza, like my suggestion in the <a href="https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md">README.md</a> you should be off to the races.</p>
-
-<p>Now something interesting I learned posting these checks.  The quote that says &ldquo;rackspace only updates the status page if enough customers complain about some problem some place&rdquo; is true.  There is no automated update to the status page, it requires human intervention to update.  When I first heard of the status page, I like most though it was programmatic way to see into rackspace infrastructure.  This makes me a sad panda; and as I have learned the best way to get anything done with rackspace is to call yell and yell more.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ansible vs chef vs puppet]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet/"/>
-    <updated>2013-06-26T13:58:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet</id>
-    <content type="html"><![CDATA[<h2>Intro</h2>
-
-<p>First off, I&rsquo;m going to say I&rsquo;m a chef zealot, but I&rsquo;m attempting to put together an intelligent discussion of the battle that has popped up in sysadmin discussion groups now-a-days.  Secondly, I&rsquo;m only focusing on the three systems I have exposure to, ansible the least, puppet the second, and chef the most.  I could also probably throw salt, cfengine, and others in there, but that&rsquo;s superfluous, this is my discussion so I&rsquo;m going to keep it in my scope.</p>
-
-<p>I&rsquo;m going focus on the pluses of each, and use the &ldquo;Overall&rdquo; section to combine them.  In my conclusion my true thoughts will come out, so if you want the tl;dr I&rsquo;d skip down there.</p>
-
-<h2>ansible</h2>
-
-<p>Links:
-<a href="http://www.ansibleworks.com/">homepage</a>, a great <a href="https://github.com/leucos/ansible-tuto">tutorial</a></p>
-
-<ul>
-<li>Low overhead</li>
-<li>python based</li>
-<li>playbook based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>Ansible is an open-source software platform for configuring and managing computers. It combines multi-node software deployment, ad-hoc task execution, and configuration management. It manages nodes over SSH and does not require any additional remote software to be installed on them. Modules work over JSON and standard output and can be written in any programming language. The system uses YAML to express reusable descriptions of systems.</p></blockquote>
-
-<p>Probably the neatest thing about ansible is that it only requires ssh to work.  You do the work on a local box, and run the &ldquo;play book&rdquo; and it walks through the steps.  its designed to be something fast and quick to spin up boxes.  The disadvantage of this is that creep can happen; you can make sure the box is what you expect but you don&rsquo;t have the focused control of something like chef or puppet.  If you need just a webserver that is configured one way and is disposable then this is the way to go.  If you have to support something for long term though, it seems its out of scope of this product. I could be wrong but that&rsquo;s how I interperat it.</p>
-
-<h2>chef</h2>
-
-<p>Links:
-<a href="http://www.opscode.com/">homepage</a>, a great <a href="https://learnchef.opscode.com/">tutorial</a></p>
-
-<ul>
-<li>gem or <a href="http://www.opscode.com/blog/2012/06/29/omnibus-chef-packaging/">omnibus</a> installer</li>
-<li>server based or <a href="http://docs.opscode.com/chef_solo.html">chef-solo</a></li>
-<li>cookbook or recipe based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>chef is a configuration management tool written in Ruby and Erlang. It uses a pure-Ruby, domain-specific language (DSL) for writing system configuration &ldquo;recipes&rdquo; or &ldquo;cookbooks&rdquo;. chef was written by Opscode and is released as open source under the Apache License 2.0. chef is a DevOps tool used for configuring cloud services or to streamline the task of configuring a company&rsquo;s internal servers. chef automatically sets up and tweaks the operating systems and programs that run in massive data centers.</p></blockquote>
-
-<p>As I said in the intro, I love chef.  Hell if I could I&rsquo;d probably work for opscode.  As soon as I got my head wrapped around chef (which is chef&rsquo;s main problem), its quick and efficient, and its slick.  I&rsquo;ve only ever used chef with a chef server, never really touched chef-solo.  I also leveraged <a href="https://github.com/jkeiser/chef-zero">chef-zero</a> in my testing because I like the idea of uploading the cookbooks and pulling them down.  Having cookbooks on a centralized chef server, its a true &ldquo;system of record&rdquo; that doesn&rsquo;t rely on your laptop or workstation, if you do a <code>knife server create 'role[web]'</code> you know what you are going to get.</p>
-
-<p>Something I would like to say though, a huge disadvantage of chef is the way cookbooks are controlled.  It requires constant babying, or plugins like <a href="https://github.com/jonlives/knife-spork">knife-spork</a> to make sure people don&rsquo;t mess with each others work.  I am lucky enough to work in an environment with only 2 others that have any real use for chef, so I am able to be a good gatekeeper.  I could only imagine the cluster with larger teams.  As of 6/26/13 I know this is a conversation topic and pain point, I&rsquo;d be interested to see how the workflow matures.</p>
-
-<h2>puppet</h2>
-
-<p>Links:
-<a href="http://www.puppetlabs.com/">homepage</a>, a great <a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">cheat sheet</a></p>
-
-<ul>
-<li>an official <a href="http://info.puppetlabs.com/download-learning-puppet-VM.html">learning</a> vm</li>
-<li><a href="https://puppetlabs.com/puppet/puppet-open-source/">package</a> based</li>
-<li>server based or local puppet-apply</li>
-<li>manifest based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>puppet is a tool designed to manage the configuration of Unix-like and Microsoft Windows systems declaratively. The user describes system resources and their state, either using puppet&rsquo;s declarative language or a Ruby DSL (domain-specific language). This information is stored in files called &ldquo;puppet manifests&rdquo;. puppet discovers the system information via a utility called Facter, and compiles the puppet manifests into a system-specific catalog containing resources and resource dependency, which are applied against the target systems. Any actions taken by puppet are then reported.</p></blockquote>
-
-<p>Something I&rsquo;ve always loved about puppet is the trifecta. You can easily create a manifest to control the package/file/service in only a few lines.  (check that cheat sheet above for an example) I was able to take over an infrastructure in an extremely short period of time with just that.  I didn&rsquo;t have that long to control every facet of the groupings but the investment to the reward was mind boggling fast.</p>
-
-<h2>Overall</h2>
-
-<p>Ok, now that my little tl;dr of the pluses are done, I can start my views overall.  puppet is a very &ldquo;eins, zwei, eins, zwei,&rdquo; type application.  With marrying it with something like <a href="http://www.cobblerd.org/">cobbler</a> you can in theory rack mount a machine, hit the power button and have a machine exactly how you want it to be in &ldquo;x&rdquo; about of time.  This is great for big companies that always want machines to cookie cutter. It could be that that&rsquo;s how I saw puppet being used, but comparing them to the two other config management systems; it really fits. Speaking of cobbler, yes, I do understand you can leverage cobbler with each of these tools, but as you can <a href="https://github.com/cobbler/cobbler/wiki/Using%20cobbler%20with%20a%20configuration%20management%20system">see</a> it just seems that cobbler and puppet are a match made in heaven.  chef on the other hand seems like it&rsquo;s designed for smaller companies with smaller teams.  It looks for cooperation, nay, requires cooperation, and its to its strength and its weakness.  Unlike puppet, chef doesn&rsquo;t default to an &ldquo;active&rdquo; mode (Ok, that&rsquo;s not fully true about puppet either, but the better practice is to have puppet in active mode from the get go).  puppet runs by default every 30 mins, to make sure its what you want to be, chef on the other hand is a pull based config-management that they even suggest &ldquo;putting chef-client&rdquo; in your crontab.  This originally bothered me, coming from the puppet world, but as i learned more about chef i realized that isn&rsquo;t its bread and butter.  chef is a way to spin up boxes for an elastic environment like AWS.  You have a massive blast of traffic, chef will trigger throw your machines in the load balancer, install apache or whatever, and you have what you expect, and 2-3 hours later you blow it away.  This is different than ansible because it is not &ldquo;automated&rdquo; per se. Remember the play books site in your local machine, you have interact with the provisioning, which for a startup seems like the correct path. In a startup you have to know exactly what machines are running, not only because of OPEX but because its your baby, you want focus and tweak; you <em>probably</em> don&rsquo;t have the budget to just blow away the boxes.</p>
-
-<h2>Conclusion</h2>
-
-<p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[chef-jenkins-vagrant]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant/"/>
-    <updated>2013-06-25T11:43:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant</id>
-    <content type="html"><![CDATA[<p>To quote the top of my <a href="https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md">README.md</a>:</p>
-
-<blockquote><p>This is my &ldquo;recipe&rdquo; on how I got Chef Jenkins and Vagrant to play nice. After watching this (<a href="http://www.youtube.com/watch?v=h_IEfNklzW4">http://www.youtube.com/watch?v=h_IEfNklzW4</a>) video, I realized I could do this. I searched high and low for a tutorial on how to bulid this stack, and nothing. So I decided to create a github doc to centralize my setup and hopefully let the community suggest additions.</p></blockquote>
-
-<p>I want to thank <a href="https://github.com/bscott">Brian Scott</a>, because after his video it really opened my eyes.  I&rsquo;ve now had 3 people run through this tutorial and all come out with a working <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> set ups and learned to extend it to where I had never thought of.</p>
-
-<p>I understand and that a lot of people wonder why someone would want to build this from scratch, instead of using, for instance <a href="https://github.com/fnichol">Fletcher Nichol&rsquo;s</a> <em>ahem</em><a href="https://github.com/jamie-ci/jamie">jamie-ci</a><em>ahem</em> test-kitchen, and this is what I&rsquo;m going to write about.</p>
-
-<p>I see <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> is more for writing cookbooks and recipes for the general public.  You can easily create faux VMs, per <a href="https://github.com/sethvargo">Seth Vergo&rsquo;s</a> awesome <a href="https://github.com/customink/fauxhai">fauxhai</a> to test cookbooks across multiple setups and multiple provisioned systems to see if they work.  This is great for developing a cookbooks but I can&rsquo;t see it working in a sysadmins workflow.</p>
-
-<p>Sysadmins have a select few boxes; they have their known quantities, they know they aren&rsquo;t going to have RHEL/DEB/tar based machines.  They build infrastructures to have uniformity, they stick with one of them.  Granted, some of the sysadmnis out there are unlucky and DO have these environments, but I truly believe that&rsquo;s the minority not the majority.</p>
-
-<p>A sysadmin needs a way to provision his machines, in a safe manner before pushing changes out to production. This sounds obvious, but how many places I&rsquo;ve been where have I heard &ldquo;Oh, it&rsquo;s just an /etc/hosts file update, just push it out.&rdquo;  Just yesterday, (06/25/2013) as I was victim if that short cut and caused an outage to some our backend machines.  If you are curious, it seems, we had a hardcoded IP to DNS name in /etc/hosts (not DNS) that was required for our application to work.  If I held true to my statements earlier I would have noticed this change from my CI builds and not looked like the dumbass I was.</p>
-
-<p>I built this <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> howto so I don&rsquo;t have an excuse anymore, I have a proven way to build and implement good practices in an quick manner.  I hope you find it useful, and if you have suggestions or additions PRs are always welcome.</p>
-
-<p>Mind your <code>rm -rf *</code>,</p>
-
-<p>JJ Asghar</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[testing this out]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/06/25/testing-this-out/"/>
-    <updated>2013-06-25T11:28:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/06/25/testing-this-out</id>
-    <content type="html"><![CDATA[<p>This is a test, lets see it work</p>
 ]]></content>
   </entry>
   

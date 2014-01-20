@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-01-20T15:55:49-06:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Learning git realizing that I know nothing]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/"/>
+    <updated>2013-12-17T13:56:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing</id>
+    <content type="html"><![CDATA[<p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ffBJ4sVUb4 "></iframe></div></p>
+
+<p>I strongly suggest taking the 99ish mins to watch it, it&rsquo;s a great tutorial, with great visual examples.</p>
+
+<p>I&rsquo;ve also stolen some aliases that he suggests!
+<code>bash
+alias glp="git log --graph --pretty --all"
+alias gld="git log --graph --decorate --all"
+</code></p>
+
+<p>Some useful notes that this video helped clear up for me:</p>
+
+<p>Something else that finally cleared up to me <code>origin/master</code> means a label, while <code>origin master</code> means the remote origin with the label of master on it&rsquo;s remote side. This works with <code>origin/bugfix</code> and <code>origin bugfix</code> also, it&rsquo;s just unfortunate that the master is used twice is a very similar context.</p>
+
+<p><code>git merge master</code> merges master into the current branch you have checked out. <code>git merge origin/master</code> merges the upstream changes of master into your current branch. <code>git merge master bugfix</code> merges the master branch into bugfix explicitly.</p>
+
+<p><code>git push --set-upstream (or -u) origin bugfix</code> sets the upstream branch on origin to bugfix, if from your local repo.</p>
+
+<p><code>refs/head/blah</code> is a fancy way of saying <code>blah</code> is the branch.</p>
+
+<p><code>git push origin --tags</code> to push your tags on the local repo to the origin</p>
+
+<p>A detached HEAD isn&rsquo;t a bad thing; it just means there&rsquo;s no branch associated with it. It&rsquo;s good to check things out but you can always <code>git checkout -b &lt;branch_name&gt;</code> if needed.</p>
+
+<p><code>git rebase -i HEAD^^</code> go back to rebase 2 commits; rebase goes bottom up, to squash up to the top one.</p>
+
+<p><code>rebase</code> creates a <em>new</em> line of history, not REWRITES history.</p>
+
+<p>Once you&rsquo;ve pushed, never rebase; it&rsquo;s not worth it. :(</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hub workflow]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/10/31/hub-workflow/"/>
+    <updated>2013-10-31T11:01:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/10/31/hub-workflow</id>
+    <content type="html"><![CDATA[<p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:
+<code>bash
+[~/repo/learning_git/fakedir1] % hub pull-request
+Error creating pull request: Unprocessable Entity (HTTP 422)
+Missing field: "head_sha"
+Missing field: "base_sha"
+No commits between jjasghar:master and jjasghar:blah
+</code>
+WTF man? What the hell does this mean? It seems I wasn&rsquo;t the only one that had this <a href="https://github.com/github/hub/issues/189">problem</a>.  It seems that the work flow (at least in my case) was the problem. Here&rsquo;s a quick fix to be able to open up a PR off a forked branch:
+<code>bash
+[~/repo/learning_git/fakedir1] % git add some_file
+[~/repo/learning_git/fakedir1] % git commit -m "blah"
+[~/repo/learning_git/fakedir1] % git push -u origin blah
+Counting objects: 7, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 351 bytes | 0 bytes/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+To git@github.com:jjasghar/learning_git.git
+   5224edf..88ad1af  blah -&gt; blah
+Branch blah set up to track remote branch blah from origin.
+[~/repo/learning_git/fakedir1] % hub pull-request
+https://github.com/jjasghar/learning_git/pull/1
+</code>
+Pretty slick eh?</p>
+
+<p>Bonus round you can attach your PR to an issue!
+<code>bash
+[~/repo/learning_git/fakedir1] % hub pull-request -i 3
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

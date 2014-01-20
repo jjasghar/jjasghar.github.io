@@ -4,7 +4,7 @@
   <title><![CDATA[Category: bash | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/bash/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2013-10-07T10:45:15-05:00</updated>
+  <updated>2014-01-20T15:55:49-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
+    <updated>2014-01-18T14:01:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
+    <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
+
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
+
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do'h!</p>
+
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
+
+<p>I created this:
+```bash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>read -p &ldquo;yes or no: &rdquo; RESPONSE</p>
+
+<p>case &ldquo;$RESPONSE&rdquo; in
+  yes|y|Yes|Y)</p>
+
+<pre><code>echo "blah is yes"
+;;
+</code></pre>
+
+<p>  no|n|No|N)</p>
+
+<pre><code>echo "blah is no"
+;;
+</code></pre>
+
+<p>  *)</p>
+
+<pre><code>echo "You need to say yes or no, start over!"
+exit 1
+;;
+</code></pre>
+
+<p>esac
+```
+Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
+
+<p>Hopefully this post will save you some time in the future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[a bash numbering trick I just learned today]]></title>
