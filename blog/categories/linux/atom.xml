@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-18T17:25:39-06:00</updated>
+  <updated>2014-01-20T15:55:49-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
+    <updated>2014-01-20T15:42:33-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>Ok, you may have seen this before:
+<code>ruby
+23.987.33.854   * cookbook_file[/etc/init.d/apache2] action create
+23.987.33.854 ================================================================================
+23.987.33.854 Error executing action `create` on resource 'cookbook_file[/etc/init.d/apache2]'
+23.987.33.854 ================================================================================
+23.987.33.854
+23.987.33.854
+23.987.33.854 Net::HTTPServerException
+23.987.33.854 ------------------------
+23.987.33.854 403 "Forbidden"
+23.987.33.854
+23.987.33.854
+</code></p>
+
+<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
+
+<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
+
+<p>The gist of this:</p>
+
+<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl" value from 900 seconds to required time interval</p></blockquote>
+
+<p>So the fix is:
+```bash
+[~] % sudo vim /etc/chef-server/chef-server.rb</p>
+
+<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
+
+<p>[~] % sudo chef-server-ctl reconfigure
+```</p>
+
+<p>Boom, you should be good now. No more damn 403s.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
@@ -380,52 +421,6 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
 <p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
 
 <p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hubot+Herkou+Campfire and how I spent much more time than I thought I should]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/"/>
-    <updated>2013-11-27T11:41:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should</id>
-    <content type="html"><![CDATA[<p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
-with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
-node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
-
-<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:
-<code>
-ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
-</code>
-This is what the doc says&hellip;.
-<code>
-% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
-% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken
-</code>
-I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com
-</code>
-I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com
-</code>
-Damn, nope.
-<code>
-ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
-</code>
-I figured I&rsquo;d try with <code>https://</code>&hellip;..
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com
-</code>
-Damnit.
-<code>
-ERROR Campfire request error: Error: getaddrinfo ENOTFOUND
-</code>
-Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do'h!
-<code>
-HUBOT_CAMPFIRE_ACCOUNT=myaccountname
-</code>
-Boom, it worked.</p>
 ]]></content>
   </entry>
   

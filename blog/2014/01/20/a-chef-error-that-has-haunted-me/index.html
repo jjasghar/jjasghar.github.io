@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A chef error that has haunted me - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="Ok, you may have seen this before: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+23.987.33.854 * cookbook_file[/etc/init.d/apache2] action create
+23.987.33.854 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Chef Error That Has Haunted Me</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-20T15:42:33-06:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Ok, you may have seen this before:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>   <span class="o">*</span> <span class="n">cookbook_file</span><span class="o">[</span><span class="sr">/etc/ini</span><span class="n">t</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">apache2</span><span class="o">]</span> <span class="n">action</span> <span class="n">create</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="no">Error</span> <span class="n">executing</span> <span class="n">action</span> <span class="sb">`create`</span> <span class="n">on</span> <span class="n">resource</span> <span class="s1">&#39;cookbook_file[/etc/init.d/apache2]&#39;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="ss">Net</span><span class="p">:</span><span class="ss">:HTTPServerException</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">------------------------</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="mi">403</span> <span class="s2">&quot;Forbidden&quot;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
+
+<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
+
+<p>The gist of this:</p>
+
+<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl&#8221; value from 900 seconds to required time interval</p></blockquote>
+
+<p>So the fix is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
+</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Boom, you should be good now. No more damn 403s.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-20T15:42:33-06:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/" title="Previous Post: Because googling failed me for yes or no bash scripting">&laquo; Because googling failed me for yes or no bash scripting</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/20/a-chef-error-that-has-haunted-me/">A Chef Error That Has Haunted Me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/">Because Googling Failed Me for Yes or No Bash Scripting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/31/adventures-with-boxen/">Adventures With Boxen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/">Running Knife-openstack on a Private Rackspace Instance</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

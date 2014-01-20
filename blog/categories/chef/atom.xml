@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-18T17:25:39-06:00</updated>
+  <updated>2014-01-20T15:55:49-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
+    <updated>2014-01-20T15:42:33-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>Ok, you may have seen this before:
+<code>ruby
+23.987.33.854   * cookbook_file[/etc/init.d/apache2] action create
+23.987.33.854 ================================================================================
+23.987.33.854 Error executing action `create` on resource 'cookbook_file[/etc/init.d/apache2]'
+23.987.33.854 ================================================================================
+23.987.33.854
+23.987.33.854
+23.987.33.854 Net::HTTPServerException
+23.987.33.854 ------------------------
+23.987.33.854 403 "Forbidden"
+23.987.33.854
+23.987.33.854
+</code></p>
+
+<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
+
+<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
+
+<p>The gist of this:</p>
+
+<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl" value from 900 seconds to required time interval</p></blockquote>
+
+<p>So the fix is:
+```bash
+[~] % sudo vim /etc/chef-server/chef-server.rb</p>
+
+<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
+
+<p>[~] % sudo chef-server-ctl reconfigure
+```</p>
+
+<p>Boom, you should be good now. No more damn 403s.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
@@ -362,66 +403,6 @@ Successfully bumped nagios to v5.1.6!
 <p>From here you&rsquo;re happy, you&rsquo;ve commited your new <code>chef_repo</code> back to the DVCS that you use.  This is where the magic happens: <code>knife spork upload COOKBOOK</code>.  This thing is great, it (to quote the <code>README.md</code>) <em>This function works mostly the same as normal knife cookbook upload COOKBOOK except that this automatically freezes cookbooks when you upload them.</em> Which is the bread and butter of spork.  The freezing is crazy important, by freezing the upload you take &ldquo;ownership&rdquo; of that version of the cookbook.  Your changes are yours, and no-one can mess with them.  So in turn you don&rsquo;t step on your coworkers toes and he doesen&rsquo;t step on yours.</p>
 
 <p>Ok, so this was the cheatsheet, we have implymented this at my company now, so hopefully this goes great. If not&hellip;well that&rsquo;s a different conversation.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Adventures with chef-solo]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/"/>
-    <updated>2013-08-02T14:36:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo</id>
-    <content type="html"><![CDATA[<p>I started my chef career with inheriting a chef infrastructure with an opensource chef server.  I read all of the blog posts, and the tutorials, tried to wrap my head around what a cookbook, recipe, or data bag was.  I know now, this was the <em>wrong</em> way to learn chef.  chef with chef-client/server adds a level of complexity that just is unfounded.  I decided to spend a copy hours to master chef-solo, and damn I wish I had started there.</p>
-
-<h2>My hands on learning project</h2>
-
-<p>I had a requirement of setting up a unicorn nginx instance on a VPS.  I thought hell, there&rsquo;s gotta be a way to do this with chef. (I normally use passenger+apache, so I had to learn nginx and unicorn too, but that&rsquo;s a different post&hellip;well kinda) So I looked around for a nice <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">tutorial</a> and came across that guy.  I started reading it, realized holy crap, this is awesome.  I stole the <code>solo.json</code> and the <code>solo.rb</code> and <code>install.sh</code> because I was lazy.<br/>
-I changed the <code>install.sh</code> around a little bit:
-```bash</p>
-
-<h1>!/bin/bash</h1>
-
-<h1>This run as root on the machine</h1>
-
-<p>chef_binary=/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo</p>
-
-<h1>are we not bootstrapped?</h1>
-
-<p>if ! test -f &ldquo;$chef_binary&rdquo;; then
-  export DEBIAN_FRONTEND=noniteractive
-  apt-get update &amp;&amp;
-  apt-get dist-upgrade -y &amp;&amp;
-  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y &amp;&amp;
-  curl -L <a href="https://www.opscode.com/chef/install.sh">https://www.opscode.com/chef/install.sh</a> | sudo bash
-fi &amp;&amp;</p>
-
-<p>chef-solo -c solo.rb -j solo.json
-<code>``
-As you can tell, its ubuntu focused, but basically if I want to provision a box after making a change to one of the cookbooks I just had to run</code>./install.sh`.  Interestingly, I had heard bad things about the 1.9.1 ruby binaries for ubuntu, but so far, it is a ton better than doing that compile from src. ;)</p>
-
-<p>So, basically with those three files, running that curl in the script, and creating a <code>cookbooks/</code> directory, I had my framework to make this project happen.</p>
-
-<p>Now I made a mistake here.  I started off with a simple &ldquo;generic&rdquo; cookbook, with a simple <code>default.rb</code> file that called a <code>packages.rb</code> file to add some pkgs I love and run on a daily basis.</p>
-
-<p>```ruby
-%w{build-essential git-core libgdbm-dev libreadline-dev libssl-dev libyaml-dev s3cmd tmux tk-dev vim wget zlib1g-dev zsh}.each do |pkg|
-  package pkg do</p>
-
-<pre><code>action [:install]
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>Now to an passive onlooker there seems nothing wrong with this, and 3 weeks ago JJ would agree with you.  JJ now says, &ldquo;Stop that, start with the webserver and the deps for that instead of the convince of something easy like package management.&rdquo;  LEARN <a href="http://berkshelf.com/">berkshelf</a> and don&rsquo;t make excuses. (at this writing, 8/2/13, I still actually haven&rsquo;t learned it, the best analogy is this, dling cookbooks is like building from source, and berkshelf is like using apt-get) Anyway I digress.</p>
-
-<p>Back to the original story.</p>
-
-<p>I made the <code>cookbooks/</code> directory, and when to github to pull down the newest <a href="https://github.com/opscode-cookbooks/nginx">nginx</a> cookbook.  <code>git clone https://github.com/opscode-cookbooks/nginx.git</code> in the directory and then because  I hate submodules, I ran <code>rm -rf .git/</code>. I <code>cd ~/chef-solo</code> then ran <code>install.sh</code>. Crossed my fingers and no, didn&rsquo;t work. Turns out I needed a bunch of dependences (hence the berkself statement). I resolved them all, and then ran the beautiful <code>./install.sh</code>. BOOM, it worked.  I took a moment, realized what I had just done.  I created a git repo off this work, created a branch &ldquo;nginx&rdquo; and committed my changes. Now whenever I need to spin up an nginx box, all I have to do is clone my chef-solo repo and checkout nginx and run <code>install.sh</code>.</p>
-
-<p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
-
-<p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
 ]]></content>
   </entry>
   

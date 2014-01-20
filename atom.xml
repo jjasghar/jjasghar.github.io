@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-18T17:25:39-06:00</updated>
+  <updated>2014-01-20T15:55:49-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
+    <updated>2014-01-20T15:42:33-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>Ok, you may have seen this before:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>   <span class="o">*</span> <span class="n">cookbook_file</span><span class="o">[</span><span class="sr">/etc/ini</span><span class="n">t</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">apache2</span><span class="o">]</span> <span class="n">action</span> <span class="n">create</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="no">Error</span> <span class="n">executing</span> <span class="n">action</span> <span class="sb">`create`</span> <span class="n">on</span> <span class="n">resource</span> <span class="s1">&#39;cookbook_file[/etc/init.d/apache2]&#39;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="ss">Net</span><span class="p">:</span><span class="ss">:HTTPServerException</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">------------------------</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="mi">403</span> <span class="s2">&quot;Forbidden&quot;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
+
+<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
+
+<p>The gist of this:</p>
+
+<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl&#8221; value from 900 seconds to required time interval</p></blockquote>
+
+<p>So the fix is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
+</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Boom, you should be good now. No more damn 403s.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
@@ -1566,70 +1621,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
 <h2>Conclusion</h2>
 
 <p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Nagios-status-rackspace]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace/"/>
-    <updated>2013-07-09T15:05:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace</id>
-    <content type="html"><![CDATA[<p>I posted a <a href="http://redd.it/1gefnf">this</a> on <a href="http://www.reddit.com/r/sysadmin">/r/sysadmin/</a> back on 6/15/13.  I wanted to put some context around why I created the nagios checks and why the <a href="https://status.rackspace.com/index/rss">RSS</a> after all that discussion still didn&rsquo;t fulfill my requirements.</p>
-
-<p>The biggest problem I have with the RSS feed is that it is everything inside the rackspace status page.  As I said to <a href="http://www.reddit.com/user/rackerkev">/u/rackerkev</a>; as a customer in ORD I don&rsquo;t want to be paged or alerted when something in LON happens.  This seems be the default for the RSS feed, a water hose of what that status page says.</p>
-
-<p>After our account manager suggested us to check <a href="http://status.rackspace.com">http://status.rackspace.com</a> a developer on my team asked if there was an automated way to check this.  I ran a quick <code>curl http://status.rackspace.com</code> and discovered it&rsquo;s flat html.  Boom, I had a way to get the data, I just needed a way to parse it.</p>
-
-<p>I had a default nagios check template and all I had to do was put that <code>curl</code> in to parse it out.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
-</span><span class='line'><span class="nv">SOMECMD</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="s2">&quot;something&quot;</span>
-</span><span class='line'><span class="nv">SOMETHING</span><span class="o">=</span>something
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> <span class="o">==</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> is something
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
-</span><span class='line'><span class="c">#elif [  &quot;${SOMECMD}&quot; == ${SOMETHING} ];</span>
-</span><span class='line'><span class="c">#  then</span>
-</span><span class='line'><span class="c">#  echo This is a Warning</span>
-</span><span class='line'><span class="c">#  stateid=1</span>
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> !<span class="o">=</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Something is broken!
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
-</span><span class='line'> <span class="k">fi</span>
-</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I don&rsquo;t think this actually works, but hell you get the point.</p>
-
-<p>So with some patience using <code>sed</code> and <code>grep</code> I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about &ldquo;You should write it as one script and then add flags or variables at the end.&rdquo; I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have <code>curl</code> installed and write the command stanza, like my suggestion in the <a href="https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md">README.md</a> you should be off to the races.</p>
-
-<p>Now something interesting I learned posting these checks.  The quote that says &ldquo;rackspace only updates the status page if enough customers complain about some problem some place&rdquo; is true.  There is no automated update to the status page, it requires human intervention to update.  When I first heard of the status page, I like most though it was programmatic way to see into rackspace infrastructure.  This makes me a sad panda; and as I have learned the best way to get anything done with rackspace is to call yell and yell more.</p>
 ]]></content>
   </entry>
   
