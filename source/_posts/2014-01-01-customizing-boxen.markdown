@@ -63,7 +63,7 @@ Now:
 [/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
 ```
 Here's a template from [Greg](https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp), if you want to see what he's done.
-```[ruby] [awaxa.pp]
+```ruby awaxa.pp
 class people::awaxa {
   include people::awaxa::applications
   include people::awaxa::dotfiles
@@ -73,7 +73,7 @@ class people::awaxa {
 }
 ```
 As you can see he references other files located in that same directory, though in a sub directory as `awaxa/`. Lets use that `include people::awaxa::applications` initially.
-```[ruby] [applications.pp]
+```ruby applications.pp
 class people::awaxa::applications {
   include caffeine
   include chrome
@@ -101,7 +101,7 @@ class people::awaxa::applications {
 }
 ```
 Ok here's the one I created:
-```[ruby] [jjasghar.pp]
+```ruby jjasghar.pp
 class people::jjasghar {
   include people::jjasghar::applications
 }
@@ -113,7 +113,7 @@ Nice! Ok, now we need to create:
 ```
 
 This is where we add our apps!
-```[ruby] [applications.pp]
+```ruby applications.pp
 class people::jjasghar::applications {
   include iterm2::stable
   include dropbox
