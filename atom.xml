@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-25T19:26:38-06:00</updated>
+  <updated>2014-02-04T14:52:56-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,48 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ResourceNotFound and splunk> fun&#8230;gotta love that error]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/"/>
+    <updated>2014-02-03T16:18:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk>-fun-dot-dot-dot-gotta-love-that-error</id>
+    <content type="html"><![CDATA[<p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
+
+<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>500 Internal Server Error
+</span><span class='line'>
+</span><span class='line'>Return to Splunk home page
+</span><span class='line'>
+</span><span class='line'>ResourceNotFound: [HTTP 404] https://127.0.0.1:8089/services/data/user-prefs; [{'type': 'ERROR', 'text': 'Application does not exist: user-prefs', 'code': None}]
+</span><span class='line'>
+</span><span class='line'>This page was linked to from http://&lt;mycompanyname&gt;:8000/en-US/account/login?return_to=%2Fen-US%2F.
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>You are using &lt;mycompanyname&gt;:8000, which is connected to splunkd @182037 at https://127.0.0.1:8089 on Mon Feb 3 16:17:37 2014.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow, what the hell does that mean?</p>
+
+<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
+oversight.</p>
+
+<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
@@ -1625,19 +1667,6 @@ I changed the <code>install.sh</code> around a little bit:</p>
 <p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
 
 <p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[semver or how I learned that versioning everywhere where I've worked is stupid and semver is the way to go]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/07/25/semver-or-how-i-learned-that-versioning-everywhere-where-ive-worked-is-stupid-and-semver-is-the-way-to-go/"/>
-    <updated>2013-07-25T16:37:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/07/25/semver-or-how-i-learned-that-versioning-everywhere-where-ive-worked-is-stupid-and-semver-is-the-way-to-go</id>
-    <content type="html"><![CDATA[<p>In the chef world the way that cookbooks are named versioned is something called semver.  Before i watched Jamie Winsor&rsquo;s <a href="https://www.youtube.com/watch?v=hYt0E84kYUI">Berkself Way</a> I didn&rsquo;t know understand how the versioning worked.  I quickly discovered <a href="http://www.semver.org">http://www.semver.org</a> and fell in love.</p>
-
-<p>TODO.</p>
-
-<p>Seriously, though it really is awesome.</p>
 ]]></content>
   </entry>
   

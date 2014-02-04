@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-25T19:26:38-06:00</updated>
+  <updated>2014-02-04T14:52:56-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ResourceNotFound and splunk> fun...gotta love that error]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/"/>
+    <updated>2014-02-03T16:18:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk>-fun-dot-dot-dot-gotta-love-that-error</id>
+    <content type="html"><![CDATA[<p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
+
+<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:
+```
+500 Internal Server Error</p>
+
+<p>Return to Splunk home page</p>
+
+<p>ResourceNotFound: [HTTP 404] <a href="https://127.0.0.1:8089/services/data/user-prefs;">https://127.0.0.1:8089/services/data/user-prefs;</a> [{&lsquo;type&rsquo;: &lsquo;ERROR&rsquo;, &lsquo;text&rsquo;: &lsquo;Application does not exist: user-prefs&rsquo;, &lsquo;code&rsquo;: None}]</p>
+
+<p>This page was linked to from <a href="http://">http://</a><mycompanyname>:8000/en-US/account/login?return_to=%2Fen-US%2F.</p>
+
+<p>You are using <mycompanyname>:8000, which is connected to splunkd @182037 at <a href="https://127.0.0.1:8089">https://127.0.0.1:8089</a> on Mon Feb 3 16:17:37 2014.
+```</p>
+
+<p>Wow, what the hell does that mean?</p>
+
+<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
+oversight.</p>
+
+<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
@@ -326,73 +355,6 @@ github &ldquo;vagrant&rdquo;
 </code></p>
 
 <p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Adventures with boxen]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
-    <updated>2013-12-31T15:54:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
-    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
-
-<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
-
-<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
-
-<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:
-<code>
-Boxen requires at least the Xcode Command Line Tools installed.
-Boxen will not work with an existing rvm install.
-Boxen may not play nice with a GitHub username that includes dash(-)
-Boxen may not play nice with an existing rbenv install.
-Boxen may not play nice with an existing chruby install.
-Boxen may not play nice with an existing homebrew install.
-Boxen may not play nice with an existing nvm install.
-Boxen recommends installing the full Xcode.
-</code>
-<em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
-
-<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
-
-<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
-
-<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
-
-<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
-
-<p>After you got that done boot up the vm open terminal run the following:</p>
-
-<p><code>git --version</code></p>
-
-<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
-
-<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:
-<code>bash
-[~] % sudo mkdir -p /opt/boxen
-[~] % sudo chown ${USER}:staff /opt/boxen
-[~] % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
-[~] % cd /opt/boxen/repo
-[/opt/boxen/repo] % git remote rm origin
-[/opt/boxen/repo] % git remote add origin &lt;the location of my new git repository&gt;
-[/opt/boxen/repo] % git push -u origin master
-</code>
-This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
-
-<p>Ok, now try out boxen:
-<code>bash
-[/opt/boxen/repo] % ./script/boxen
-</code>
-Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):
-<code>bash
-[/opt/boxen/repo] % ./script/boxen --no-fde
-</code></p>
-
-<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
-
-<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
-
-<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
 ]]></content>
   </entry>
   
