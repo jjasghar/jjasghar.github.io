@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: splunk | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/splunk/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-02-04T14:52:56-06:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ResourceNotFound and splunk> fun...gotta love that error]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/"/>
+    <updated>2014-02-03T16:18:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk>-fun-dot-dot-dot-gotta-love-that-error</id>
+    <content type="html"><![CDATA[<p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
+
+<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:
+```
+500 Internal Server Error</p>
+
+<p>Return to Splunk home page</p>
+
+<p>ResourceNotFound: [HTTP 404] <a href="https://127.0.0.1:8089/services/data/user-prefs;">https://127.0.0.1:8089/services/data/user-prefs;</a> [{&lsquo;type&rsquo;: &lsquo;ERROR&rsquo;, &lsquo;text&rsquo;: &lsquo;Application does not exist: user-prefs&rsquo;, &lsquo;code&rsquo;: None}]</p>
+
+<p>This page was linked to from <a href="http://">http://</a><mycompanyname>:8000/en-US/account/login?return_to=%2Fen-US%2F.</p>
+
+<p>You are using <mycompanyname>:8000, which is connected to splunkd @182037 at <a href="https://127.0.0.1:8089">https://127.0.0.1:8089</a> on Mon Feb 3 16:17:37 2014.
+```</p>
+
+<p>Wow, what the hell does that mean?</p>
+
+<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
+oversight.</p>
+
+<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
+]]></content>
+  </entry>
+  
+</feed>

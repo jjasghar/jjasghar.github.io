@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-01-20T15:55:49-06:00</updated>
+  <updated>2014-02-04T14:52:56-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ResourceNotFound and splunk> fun...gotta love that error]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/"/>
+    <updated>2014-02-03T16:18:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk>-fun-dot-dot-dot-gotta-love-that-error</id>
+    <content type="html"><![CDATA[<p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
+
+<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:
+```
+500 Internal Server Error</p>
+
+<p>Return to Splunk home page</p>
+
+<p>ResourceNotFound: [HTTP 404] <a href="https://127.0.0.1:8089/services/data/user-prefs;">https://127.0.0.1:8089/services/data/user-prefs;</a> [{&lsquo;type&rsquo;: &lsquo;ERROR&rsquo;, &lsquo;text&rsquo;: &lsquo;Application does not exist: user-prefs&rsquo;, &lsquo;code&rsquo;: None}]</p>
+
+<p>This page was linked to from <a href="http://">http://</a><mycompanyname>:8000/en-US/account/login?return_to=%2Fen-US%2F.</p>
+
+<p>You are using <mycompanyname>:8000, which is connected to splunkd @182037 at <a href="https://127.0.0.1:8089">https://127.0.0.1:8089</a> on Mon Feb 3 16:17:37 2014.
+```</p>
+
+<p>Wow, what the hell does that mean?</p>
+
+<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
+oversight.</p>
+
+<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
+    <updated>2014-01-25T00:24:28-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
+    <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
+
+<p>So, yeah, you can tell I was pretty impressed with it right?</p>
+
+<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
+
+<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
+
+<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
+
+<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:
+```ruby
+&lt;%
+  socket = [</p>
+
+<pre><code>ENV["BOXEN_MYSQL_SOCKET"],
+"/var/run/mysql5/mysqld.sock",
+"/tmp/mysql.sock"
+</code></pre>
+
+<p>  ].detect { |f| f &amp;&amp; File.exist?(f) }</p>
+
+<p>  port = ENV[&ldquo;BOXEN_MYSQL_PORT&rdquo;] || &ldquo;3306&rdquo;
+%></p>
+
+<p>development: &amp;development
+  adapter: mysql
+  database: yourapp_development
+  username: root
+&lt;% if socket %>
+  host: localhost
+  socket: &lt;%= socket %>
+&lt;% else %>
+  host: 127.0.0.1
+  port: &lt;%= port %>
+&lt;% end %></p>
+
+<h1>Warning: The database defined as &ldquo;test&rdquo; will be erased and</h1>
+
+<h1>re-generated from your development database when you run &ldquo;rake&rdquo;.</h1>
+
+<h1>Do not set this db to the same as development or production.</h1>
+
+<p>test:
+  &lt;&lt;: *development
+  database: yourapp_test
+```</p>
+
+<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
+
+<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
+
+<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
+
+<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
+
+<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
+
+<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A chef error that has haunted me]]></title>
@@ -259,168 +355,6 @@ github &ldquo;vagrant&rdquo;
 </code></p>
 
 <p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Adventures with boxen]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
-    <updated>2013-12-31T15:54:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
-    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
-
-<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
-
-<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
-
-<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:
-<code>
-Boxen requires at least the Xcode Command Line Tools installed.
-Boxen will not work with an existing rvm install.
-Boxen may not play nice with a GitHub username that includes dash(-)
-Boxen may not play nice with an existing rbenv install.
-Boxen may not play nice with an existing chruby install.
-Boxen may not play nice with an existing homebrew install.
-Boxen may not play nice with an existing nvm install.
-Boxen recommends installing the full Xcode.
-</code>
-<em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
-
-<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
-
-<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
-
-<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
-
-<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
-
-<p>After you got that done boot up the vm open terminal run the following:</p>
-
-<p><code>git --version</code></p>
-
-<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
-
-<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:
-<code>bash
-[~] % sudo mkdir -p /opt/boxen
-[~] % sudo chown ${USER}:staff /opt/boxen
-[~] % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
-[~] % cd /opt/boxen/repo
-[/opt/boxen/repo] % git remote rm origin
-[/opt/boxen/repo] % git remote add origin &lt;the location of my new git repository&gt;
-[/opt/boxen/repo] % git push -u origin master
-</code>
-This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
-
-<p>Ok, now try out boxen:
-<code>bash
-[/opt/boxen/repo] % ./script/boxen
-</code>
-Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):
-<code>bash
-[/opt/boxen/repo] % ./script/boxen --no-fde
-</code></p>
-
-<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
-
-<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
-
-<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/"/>
-    <updated>2013-12-23T10:36:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance</id>
-    <content type="html"><![CDATA[<p>So congrats you got your new &ldquo;<a href="http://www.rackspace.com/cloud/private/">Private Cloud</a>&rdquo; from Rackspace. You are probably ecstatic to start building your new machines.
-I know I was; but alas with all new toys sometimes you hit a couple stags. Here are a couple things I ran into on my first few days.</p>
-
-<h3>First issue</h3>
-
-<p>So I&rsquo;m a chef shop, as you might know by now (assuming you&rsquo;ve read any of my other posts). I&rsquo;ve used <a href="https://github.com/opscode/knife-rackspace">knife-rackspace</a> tons of times; and hell I even have a <a href="https://github.com/opscode/knife-rackspace/commits?author=jjasghar">commit bit</a>. So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
-You end up having to install <a href="https://github.com/opscode/knife-openstack">knife-openstack</a>. That in itself isn&rsquo;t bad at all&hellip;
-<code>bash
-[~] % gem install knife-openstack
-</code>
-Now you need to update your <code>knife.rb</code>
-<code>bash
-[~] % vim ~/.chef/knife.rb
-</code>
-In your handoff ticket, you probably got something that looks like this:
-<code>bash
-export OS_USERNAME=Im_awesome_admin
-export OS_PASSWORD=$omeCr@zyA$$passwD
-export OS_TENANT_NAME=MyCompanyName
-export OS_AUTH_URL=http://10.219.0.254:5000/v2.0/
-export OS_AUTH_STRATEGY=keystone:
-</code>
-Go ahead and copy them out to what they need to be, something like&hellip;
-```ruby
-knife[:openstack_username] = &ldquo;Your OpenStack Dashboard username&rdquo;
-knife[:openstack_password] = &ldquo;Your OpenStack Dashboard password&rdquo;</p>
-
-<h3>Note: If you are not proxying HTTPS to the OpenStack auth port, the scheme should be HTTP</h3>
-
-<p>knife[:openstack_auth_url] = &ldquo;<a href="http://cloud.mycompany.com:5000/v2.0/tokens">http://cloud.mycompany.com:5000/v2.0/tokens</a>&rdquo;
-knife[:openstack_tenant] = &ldquo;Your OpenStack tenant name&rdquo;
-knife[:openstack_ssh_key_id] = &ldquo;my sshkey id&rdquo;
-<code>
-Great! So run that great command `knife openstack flavor list` to see if everything works....
-</code>bash
-[~] % knife openstack server list
-ERROR: knife encountered an unexpected error
-This may be a bug in the &lsquo;openstack server list&rsquo; knife command or plugin
-Please collect the output of this command with the <code>-VV</code> option before filing a bug report.
-Exception: NoMethodError: undefined method `[]&lsquo; for nil:NilClass
-```
-Crap..</p>
-
-<p>Ok, lets try out with <code>-VV</code></p>
-
-<p><code>``ruby
-DEBUG: openstack_username Im_awsome_admin
-DEBUG: openstack_auth_url http://10.219.0.254:5000/v2.0/
-DEBUG: openstack_tenant MyCompanyName
-DEBUG: openstack_insecure
-/Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:51:in</code>rescue in run': undefined method `[]&lsquo; for nil:NilClass (NoMethodError)</p>
-
-<pre><code>from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:41:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:485:in `run_with_pretty_exceptions'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:174:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/application/knife.rb:133:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/bin/knife:25:in `&lt;top (required)&gt;'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `load'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `&lt;main&gt;'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `eval'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `&lt;main&gt;'
-</code></pre>
-
-<p>```</p>
-
-<p>Well that&rsquo;s not a lot of help eh? Turns out, if you look at the ticket that Rackspace gives you and what the <code>[:openstack_auth_url]</code> requires you&rsquo;ll see that there&rsquo;s a <code>/tokens</code> at the end. Do'h!</p>
-
-<h3>Second issue</h3>
-
-<p>Ok, so you got the ability to talk to your backend? Yay! But alas, you run your create&hellip;
-```bash
-[~] % knife openstack server create -S jj-mba-key -I 349168d3-5381-4324-8636-398d012f852b -f 1 -N testbox
-Instance Name: testbox
-Instance ID: 5e0ec79c-e06a-4fdb-9887-2b30ae1e5f80</p>
-
-<p>Waiting for server&hellip;&hellip;&hellip;
-Flavor: 1
-Image: 349168d3-5381-4324-8636-398d012f852b
-SSH Keypair: jj-mba-key
-ERROR: No IP address available for bootstrapping.
-```
-What the hell does that mean? Well I&rsquo;m not going to explain it all but it seems that by default Rackspace names the &ldquo;public&rdquo; and &ldquo;private&rdquo; networks as &ldquo;Fixed&rdquo; and &ldquo;Floating.&rdquo;
-This is triggered a fog issue, where it&rsquo;s looking at the label for a network either &ldquo;public&rdquo; or &ldquo;private&rdquo; and blows up. There is a ticket in for this <a href="https://tickets.opscode.com/browse/KNIFE-231">here</a> but it looks like it&rsquo;s stalled from late summer, early fall. Lammmeeee.</p>
-
-<p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
-
-<p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I went to #chef on freenode and maek helped me out. Here’s a run down of how to fix it. Alas the gists are gone; sorry. :( If you play with open &hellip;">
+  <meta name="description" content="So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -31,6 +31,19 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -66,6 +79,174 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/">People Keep Asking Me How to Start With Chef</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-18T10:19:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do from the beginning. I completely acknowledge that chef can be extremely confusing to start with. If you really want to learn it you&rsquo;ll have to stick with it, and do it. Good god, nothing is better than running it on a vagrant box and seeing what you expect happen happen.</p>
+
+<h2>chef-solo is your best friend (step 1)</h2>
+
+<p>A lot of people can start here, and end here believe it or not.  chef-solo is unbelievably powerful and can full-fill 90% of all requirements for basic usage. I spent some time looking around for a good tutorial (doing all of them that I could find), and <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">this</a> on was the best &ldquo;I have no idea what the fuck I&rsquo;m doing.&rdquo; situation.  Modern chef installs are a tad bit different than this guy, so the &ldquo;install.sh&rdquo; changes I suggest are this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># This run as root on the machine</span>
+</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
+</span><span class='line'>
+</span><span class='line'><span class="c"># are we not bootstrapped?</span>
+</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
+</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
+</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>
+</span><span class='line'>chef-solo -c solo.rb -j solo.json
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see I use the omnibus installer, not the gem, and choose the ruby version you want ;), and yes if you use those lame-ass rpm-based distros, <code>apt-get</code> won&rsquo;t work for you.</p>
+
+<h2>There&rsquo;s something clever here (step 2)</h2>
+
+<p>So awesome, you walked through the suggested tutorial, you can now run your <code>install.sh</code> and get your changes in. Grats! If you think about it, hit up the <a href="http://docs.opscode.com">Opscode Docs</a> and you&rsquo;ll discover that there&rsquo;s a resource to provision every which way. As I said at the beginning this might be all you need, if it is then use it; no real need to go any farther.</p>
+
+<p>Ah, you&rsquo;re still here. So you DO want to farther, awesome. In step two I suggested going to the docs, that&rsquo;s cool, but sometimes you need more verbose help, that&rsquo;s my second point, it&rsquo;s time to start asking questions. Your first stop is <a href="http://webchat.freenode.net/?channels=chef">#chef</a>; it&rsquo;s manned basically 24x7, and <em>normally</em> extremely helpful. Don&rsquo;t be a douche, if you have to paste something use <a href="http://gist.github.com">gist</a> or something.  After that the main Opscode <a href="http://lists.opscode.com/sympa">mailing list</a> is great. It&rsquo;s slower, but you get much more in depth questions and conversations. Finally the third sub step is speak up, ask questions the only way to learn this is to be like &ldquo;I don&rsquo;t understand it, help!&rdquo;</p>
+
+<h2>The only book worth a damn as of 2013/10/18 (step 3)</h2>
+
+<p>Step three of the journey is probably the one that most people jump to initially, and this is usually where the confusion starts.  There&rsquo;s a handful of books out there on chef, this <a href="http://www.packtpub.com/chef-starter/book">one</a> is the only one worth any money.  With a strong understanding of how to provision a simple box, and where to ask questions this book will be extremely straight forward and build upon those building blocks. I&rsquo;m constantly looking for another chef bible, but most nuggets of how-to things are spread all over the internet in blog form.</p>
+
+<h2>The fun starts here (step 4)</h2>
+
+<p>Step four you need a chef server, you need to be able to provision multiple boxes, you understand/can find out what a role or environment is, and you need different <code>run_lists</code>.Good for you.  From here you should look at the open source <a href="http://www.opscode.com/chef/install/">chef server</a> and spin it up on another box. I should say you can use the <a href="https://getchef.opscode.com/signup">hosted chef</a>, you get up to 5 nodes with it for free, which is cool, but if you want to see everything work from the ground up, open source chef server is the way to go. (NOTE: if you are doing it in AWS/<code>$cloudprovider</code> you&rsquo;ll need at least a 4 gig box, and that&rsquo;s pushing it. You&rsquo;ve been warned.) Now spin up another box, a machine that can talk to the server that you want to provision. Start playing with <code>knife</code> add a knife plug-in for you <code>$cloudprovider</code> see if you can spin up another box using the <a href="http://docs.opscode.com/knife_bootstrap.html">knife bootstrap</a>.  Start using <a href="http://community.opscode.com/cookbooks/minitest-handler">minitest-handler-cookbook</a>, <a href="https://github.com/opscode/test-kitchen">test-kitchen</a>, and even <a href="https://github.com/acrmp/chefspec">chef-spec</a> if your feeling sassy. If you&rsquo;ve made it this far, you&rsquo;ve probably been exposed to a myriad of other tools, run with them. Trust me if someone built if for chef the chance of being helpful is extremely high.</p>
+
+<h2>D&#8217;oh why did I do it this way? (step 5)</h2>
+
+<p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
+
+<p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/16/checking-cpu-wait-via-nagios/">Checking CPU WAIT via Nagios</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-16T11:11:00-05:00" pubdate data-updated="true">Oct 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So our machines swap&hellip;.swap alot. There are the  typical nagios system checks, you can have the <code>check_swap</code> call, but at my company the &lt; 20 % hits so often we needed to figure out a way to get warned about crippling proformance. We discovered that when a machine has CPU WAIT spikes, the proformance for the machine tanks, so I tried to find a check for specificly monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.</p>
+
+<p>I took a stab at creating a check myself and the following is a simple nagios check that you can run via NRPE.  The <code>PERCENTAGE</code> line is changeable, I&rsquo;d make sure your alarm reflects your error cases. We choose 10 % because that&rsquo;s when we started seeing real prefomance issues, but as all sysadmins know any CPU WAIT is bad in general.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
+</span><span class='line'><span class="nv">CPUWAIT</span><span class="o">=</span><span class="sb">`</span>top -b -n 1| grep <span class="s1">&#39;wa,&#39;</span> | awk -F <span class="s1">&#39;,&#39;</span> <span class="o">{</span><span class="s1">&#39;print $5&#39;</span><span class="o">}</span> | cut -d . -f 1 | tr -d <span class="s1">&#39; &#39;</span> <span class="sb">`</span>
+</span><span class='line'><span class="nv">PERCENTAGE</span><span class="o">=</span>10
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -le <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
+</span><span class='line'> <span class="k">then</span>
+</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is under <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span>%
+</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
+</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -ge <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
+</span><span class='line'> <span class="k">then</span>
+</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is at <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span>%, your machine aint happy
+</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
+</span><span class='line'> <span class="k">fi</span>
+</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -935,146 +1116,6 @@ I changed the <code>install.sh</code> around a little bit:</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/25/semver-or-how-i-learned-that-versioning-everywhere-where-ive-worked-is-stupid-and-semver-is-the-way-to-go/">Semver or How I Learned That Versioning Everywhere Where I&#8217;ve Worked Is Stupid and Semver Is the Way to Go</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-25T16:37:00-05:00" pubdate data-updated="true">Jul 25<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In the chef world the way that cookbooks are named versioned is something called semver.  Before i watched Jamie Winsor&rsquo;s <a href="https://www.youtube.com/watch?v=hYt0E84kYUI">Berkself Way</a> I didn&rsquo;t know understand how the versioning worked.  I quickly discovered <a href="http://www.semver.org">http://www.semver.org</a> and fell in love.</p>
-
-<p>TODO.</p>
-
-<p>Seriously, though it really is awesome.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/">Serverspec the New Best Way to Learn and Audit Your Infrastructure</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-12T15:06:00-05:00" pubdate data-updated="true">Jul 12<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
-
-<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
-
-<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
-You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
-
-<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
-
-<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">describe</span> <span class="n">package</span><span class="p">(</span><span class="s1">&#39;httpd&#39;</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_installed</span> <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">describe</span> <span class="n">service</span><span class="p">(</span><span class="s1">&#39;httpd&#39;</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_enabled</span>   <span class="p">}</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_running</span>   <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">describe</span> <span class="n">port</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_listening</span> <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">describe</span> <span class="n">file</span><span class="p">(</span><span class="s1">&#39;/etc/httpd/conf/httpd.conf&#39;</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_file</span> <span class="p">}</span>
-</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">contain</span> <span class="s2">&quot;ServerName my-server-name&quot;</span> <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That&rsquo;s it, now all you have to do is <code>rake spec</code> and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
-
-<h2>nagios (or automated process monitoring) vs serverspec</h2>
-
-<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
-
-<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
-
-<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
-
-<h2>Conclusion</h2>
-
-<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1092,6 +1133,14 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/">ResourceNotFound and Splunk> fun&#8230;gotta Love That Error</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/01/20/a-chef-error-that-has-haunted-me/">A Chef Error That Has Haunted Me</a>
       </li>
     
@@ -1101,14 +1150,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
     
       <li class="post">
         <a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/31/adventures-with-boxen/">Adventures With Boxen</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/">Running Knife-openstack on a Private Rackspace Instance</a>
       </li>
     
   </ul>

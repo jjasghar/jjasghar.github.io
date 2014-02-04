@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>boxen is neat but man chef-solo was so much easier - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="So over the 2013 holiday break I played around with boxen, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Boxen Is Neat but Man Chef-solo Was So Much Easier</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-25T00:24:28-06:00" pubdate data-updated="true">Jan 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
+
+<p>So, yeah, you can tell I was pretty impressed with it right?</p>
+
+<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
+
+<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
+
+<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
+
+<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;%</span>
+</span><span class='line'>  <span class="n">socket</span> <span class="o">=</span> <span class="o">[</span>
+</span><span class='line'>    <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_SOCKET&quot;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;/var/run/mysql5/mysqld.sock&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;/tmp/mysql.sock&quot;</span>
+</span><span class='line'>  <span class="o">].</span><span class="n">detect</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span> <span class="o">&amp;&amp;</span> <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">port</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_PORT&quot;</span><span class="o">]</span> <span class="o">||</span> <span class="s2">&quot;3306&quot;</span>
+</span><span class='line'><span class="sx">%&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sx">development: &amp;development</span>
+</span><span class='line'><span class="sx">  adapter: mysql</span>
+</span><span class='line'><span class="sx">  database: yourapp_development</span>
+</span><span class='line'><span class="sx">  username: root</span>
+</span><span class='line'><span class="sx">&lt;% if socket %&gt;</span>
+</span><span class='line'>  <span class="ss">host</span><span class="p">:</span> <span class="n">localhost</span>
+</span><span class='line'>  <span class="ss">socket</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= socket %&gt;</span>
+</span><span class='line'><span class="sx">&lt;% else %&gt;</span>
+</span><span class='line'><span class="sx">  host: 127.0.0.1</span>
+</span><span class='line'><span class="sx">  port: &lt;%=</span> <span class="n">port</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&lt;% end %&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Warning: The database defined as &quot;test&quot; will be erased and</span>
+</span><span class='line'><span class="c1"># re-generated from your development database when you run &quot;rake&quot;.</span>
+</span><span class='line'><span class="c1"># Do not set this db to the same as development or production.</span>
+</span><span class='line'><span class="nb">test</span><span class="p">:</span>
+</span><span class='line'>  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">development</span>
+</span><span class='line'>  <span class="ss">database</span><span class="p">:</span> <span class="n">yourapp_test</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
+
+<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
+
+<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
+
+<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
+
+<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
+
+<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-25T00:24:28-06:00" pubdate data-updated="true">Jan 25<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/01/20/a-chef-error-that-has-haunted-me/" title="Previous Post: A chef error that has haunted me">&laquo; A chef error that has haunted me</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/" title="Next Post: ResourceNotFound and splunk> fun...gotta love that error">ResourceNotFound and splunk> fun...gotta love that error &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/">ResourceNotFound and Splunk> fun...gotta Love That Error</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/20/a-chef-error-that-has-haunted-me/">A Chef Error That Has Haunted Me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/">Because Googling Failed Me for Yes or No Bash Scripting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
