@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-04T14:52:56-06:00</updated>
+  <updated>2014-02-07T16:34:40-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[chef handler why did it take a year for me to use you]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/"/>
+    <updated>2014-02-07T15:24:54-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you</id>
+    <content type="html"><![CDATA[<p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
+
+<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
+
+<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
+
+<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
+
+<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
+and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
+there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
+in a good state.</p>
+
+<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
+
+<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
+
+<p>```ruby
+chef_gem &ldquo;chef-handler-mail&rdquo;
+gem &ldquo;chef-handler-mail&rdquo;</p>
+
+<p>chef_handler &ldquo;MailHandler&rdquo; do
+   source &lsquo;chef/handler/mail&rsquo;
+   arguments :to_address => &ldquo;root&rdquo;
+   action :nothing
+end.run_action(:enable)
+```
+As you can see it&rsquo;s pretty straight forward.</p>
+
+<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
+first main internal recipe:</p>
+
+<p>```ruby
+include_recipe &lsquo;chef_handler&rsquo;</p>
+
+<p>chef_gem &ldquo;chef-handler-campfire&rdquo; do
+  action :install
+end</p>
+
+<p>chef_handler &lsquo;Chef::Handler::Campfire&rsquo; do
+  action :enable
+  arguments [ &lsquo;SUBDOMAIN&rsquo;, &lsquo;TOKEN&rsquo; , &lsquo;ROOM&rsquo; ]
+  source File.join(Gem.all_load_paths.grep(/chef-handler-campfire/).first,</p>
+
+<pre><code>               'chef', 'handler', 'campfire.rb')
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
+
+<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
@@ -267,61 +328,6 @@ As you can see I use the omnibus installer, not the gem, and choose the ruby ver
 <p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
 
 <p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to fix https://chef defaulting running chef client on open source chef server]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/"/>
-    <updated>2013-10-05T16:59:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server</id>
-    <content type="html"><![CDATA[<p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
-
-<p>If you play with open source chef you might run into this.</p>
-
-<p><code>
-18:42 j^2 so i’m having trouble with chef-client
-18:42 j^2 why does it default to https://chef/blahblah?
-18:43 j^2 example:
-18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
-18:44 j^2 any advice?
-18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
-18:45 maek j^2:  I just got hit with this also
-18:45 maek i think becuase chef 11 is now fronted with nginx
-18:45 maek its doing a rewrite
-18:45 maek for the name configured in nginx
-18:45 maek in this case its hostname
-18:45 maek but i assume that box cant resolve chef
-18:46 j^2 lame
-18:46 maek j^2:  I had to end up adding a hosts entry
-18:46 maek while I wait for dns
-18:46 maek I think you could do
-18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
-18:47 maek you could reconfigure chef
-18:47 maek to use its ip
-18:47 maek instead of its hostname
-18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
-18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
-18:48 maek i dont see it htought
-18:48 j^2 oh!
-18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
-18:48 j^2 nice looking
-18:48 maek yeah
-18:48 maek there it is
-</code></p>
-
-<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
-
-<p><code>
-18:48 maek so you can do
-18:49 maek in /etc/chef-server/chef-server.rb
-18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
-18:50 j^2 yeah i dont thave that file. :(
-18:50 maek and run chef-server-ctl reconfigure
-18:50 j^2 ah cool
-18:50 maek its for overrides
-18:50 maek just make it
-</code></p>
 ]]></content>
   </entry>
   
