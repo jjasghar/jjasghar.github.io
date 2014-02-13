@@ -1,4 +1,4 @@
-require "rubygems"
+## Pushing generated require "rubygems"
 require "bundler/setup"
 require "stringex"
 
