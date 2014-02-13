@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-04T14:52:56-06:00</updated>
+  <updated>2014-02-13T14:53:53-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[docker packer VM oh my]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my/"/>
+    <updated>2014-02-13T12:17:09-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my</id>
+    <content type="html"><![CDATA[<p>So I&rsquo;ve been caught up in the <a href="http://docker.io">docker</a>, <a href="http://packer.io">packer</a>, and VM discussion a handful of times. I&rsquo;ve been defending and discussing<em>cough</em>attacking<em>cough</em> different
+versions and use cases. Then something happened, something I thought docker is wasn&rsquo;t what it was, and something I thought packer was isn&rsquo;t what it is. Welp, there&rsquo;s some egg on my face eh?
+So here&rsquo;s a cheatsheet type post about the difference and <strong>POSSIBLE</strong> use cases.</p>
+
+<h3>docker</h3>
+
+<p>As the docker says in their <a href="http://www.slideshare.net/dotCloud/docker-intro-november">intro slide deck</a>, it&rsquo;s designed to &ldquo;ship code.&rdquo; This is important distinction between this and what a VM does.
+docker is a souped–up version of <a href="http://linuxcontainers.org/">lxc</a> or to a lesser extent <a href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/jails.html">freebsd jails</a>. It allows you to
+run an application in it&rsquo;s own little bubble, but has a <em>shared</em> underlying OS/kernel. (in this case linux) It allows for a quick provisioning of an application disposable and transient applications
+which is great for development work. You can spin up a &ldquo;base&rdquo; build extremely quickly and hack away and it and rollback to a know good spot, without having to reimage/build the machine. In the new <a href="http://en.wikipedia.org/wiki/Test-driven_development">TDD</a>
+world this is great for iterations. I guess a good simile is like you have a pad of paper with a base story printed on each page, you tack on the writing you want at the bottom, and if you don&rsquo;t like it just tear it
+away and start again.</p>
+
+<h3>VM</h3>
+
+<p>So docker is designed for an application? Isn&rsquo;t that what a VM is designed for? Not exactly. docker shares the kernel and base os, while a VM is it&rsquo;s own entity. VMs also require a hypervisor of some type
+that sits on another os; so if you can imagine it, VM = os ontop of hypervisor (that controls the VMs) on top of another os. This has it&rsquo;s merits, but at the same time it can be cumbersome, for development. It seems
+VMs use case, compared to something like docker, is more for production deployments, more static content that updates through a deployment system.  This can bring in security uses and the like, keep that in mind.</p>
+
+<h3>packer</h3>
+
+<p>packer in a couple words is this: a way to create base or gold VM images. It&rsquo;s designed to create a typical/transferable VM image that works with multiple platforms and hypervisors. An example, you have a beloved mail server, you create
+an image of this box, but you&rsquo;re boss now says you&rsquo;re moving cloud providers and  have to get it working on <a href="http://digitalocean.com/">digital ocean</a>. packer makes that conversion &ldquo;simple,&rdquo; which packs up the image to be portable and transferable.
+I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have watched a few youtube tutorials on it.</p>
+
+<p>This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of groking them, rediscovering packer.</p>
+
+<p>So in a nutshell: docker is a wrapper for lxc/jails for linux running an app sharing a common kernel, VMs are separate entities and kernels that more production focused, and packer is a way to create transferable VMs between hypervisors.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[chef handler why did it take a year for me to use you]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/"/>
+    <updated>2014-02-07T15:24:54-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you</id>
+    <content type="html"><![CDATA[<p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
+
+<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
+
+<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
+
+<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
+
+<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
+and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
+there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
+in a good state.</p>
+
+<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
+
+<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_handler</span> <span class="s2">&quot;MailHandler&quot;</span> <span class="k">do</span>
+</span><span class='line'>   <span class="n">source</span> <span class="s1">&#39;chef/handler/mail&#39;</span>
+</span><span class='line'>   <span class="n">arguments</span> <span class="ss">:to_address</span> <span class="o">=&gt;</span> <span class="s2">&quot;root&quot;</span>
+</span><span class='line'>   <span class="n">action</span> <span class="ss">:nothing</span>
+</span><span class='line'><span class="k">end</span><span class="o">.</span><span class="n">run_action</span><span class="p">(</span><span class="ss">:enable</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see it&rsquo;s pretty straight forward.</p>
+
+<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
+first main internal recipe:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">include_recipe</span> <span class="s1">&#39;chef_handler&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-campfire&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">action</span> <span class="ss">:install</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_handler</span> <span class="s1">&#39;Chef::Handler::Campfire&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">action</span> <span class="ss">:enable</span>
+</span><span class='line'>  <span class="n">arguments</span> <span class="o">[</span> <span class="s1">&#39;SUBDOMAIN&#39;</span><span class="p">,</span> <span class="s1">&#39;TOKEN&#39;</span> <span class="p">,</span> <span class="s1">&#39;ROOM&#39;</span> <span class="o">]</span>
+</span><span class='line'>  <span class="n">source</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Gem</span><span class="o">.</span><span class="n">all_load_paths</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/chef-handler-campfire/</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s1">&#39;chef&#39;</span><span class="p">,</span> <span class="s1">&#39;handler&#39;</span><span class="p">,</span> <span class="s1">&#39;campfire.rb&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
+
+<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ResourceNotFound and splunk> fun&#8230;gotta love that error]]></title>
@@ -1565,108 +1680,6 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
 <p>One issue that I had with the book, it doesn&rsquo;t you how to write tests against the app you create.  Due to new programming practices, this seems like a nasty gap.  I&rsquo;ve decided before I figure out how to get my json input output working, I&rsquo;m going to figure out how to write tests against the app I created.</p>
 
 <p>If you are curious on the app that is built from this book, I have posted it <a href="https://github.com/jjasghar/sinatra_song_app">here</a>, but as time progresses I&rsquo;ll probably add things to it. Fair warning there.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[a bash numbering trick I just learned today]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/"/>
-    <updated>2013-09-11T13:05:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been using bash for&hellip;a really really long time.  I&rsquo;ve always done <code>seq 1 10</code> in my for loops to get <code>1 2 3 4 5 6 7 8 9 10</code>.  Today I learned these three ways do the exact same thing. (Note: bash v4 above) I&rsquo;m writing this out, mainly because I want to remind myself of this again one day.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span>1; i&lt;<span class="o">=</span>10; i++<span class="o">))</span>; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>seq 1 10<span class="sb">`</span> ; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for </span>i in <span class="o">{</span>1..10<span class="o">}</span> ; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Dang you really do learn something new every day.</p>
-
-<p>Note: A good friend of mine <a href="https://github.com/awaxa/">awaxa</a> pointed out that {1..10} is the fastest in this case because it&rsquo;s a built into bash.  Thanks awaxa!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Adventures with chef-solo]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/"/>
-    <updated>2013-08-02T14:36:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo</id>
-    <content type="html"><![CDATA[<p>I started my chef career with inheriting a chef infrastructure with an opensource chef server.  I read all of the blog posts, and the tutorials, tried to wrap my head around what a cookbook, recipe, or data bag was.  I know now, this was the <em>wrong</em> way to learn chef.  chef with chef-client/server adds a level of complexity that just is unfounded.  I decided to spend a copy hours to master chef-solo, and damn I wish I had started there.</p>
-
-<h2>My hands on learning project</h2>
-
-<p>I had a requirement of setting up a unicorn nginx instance on a VPS.  I thought hell, there&rsquo;s gotta be a way to do this with chef. (I normally use passenger+apache, so I had to learn nginx and unicorn too, but that&rsquo;s a different post&hellip;well kinda) So I looked around for a nice <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">tutorial</a> and came across that guy.  I started reading it, realized holy crap, this is awesome.  I stole the <code>solo.json</code> and the <code>solo.rb</code> and <code>install.sh</code> because I was lazy.<br/>
-I changed the <code>install.sh</code> around a little bit:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># This run as root on the machine</span>
-</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
-</span><span class='line'>
-</span><span class='line'><span class="c"># are we not bootstrapped?</span>
-</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
-</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
-</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>
-</span><span class='line'>chef-solo -c solo.rb -j solo.json
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can tell, its ubuntu focused, but basically if I want to provision a box after making a change to one of the cookbooks I just had to run <code>./install.sh</code>.  Interestingly, I had heard bad things about the 1.9.1 ruby binaries for ubuntu, but so far, it is a ton better than doing that compile from src. ;)</p>
-
-<p>So, basically with those three files, running that curl in the script, and creating a <code>cookbooks/</code> directory, I had my framework to make this project happen.</p>
-
-<p>Now I made a mistake here.  I started off with a simple &ldquo;generic&rdquo; cookbook, with a simple <code>default.rb</code> file that called a <code>packages.rb</code> file to add some pkgs I love and run on a daily basis.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%w{build-essential git-core libgdbm-dev libreadline-dev libssl-dev libyaml-dev s3cmd tmux tk-dev vim wget zlib1g-dev zsh}</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">pkg</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">package</span> <span class="n">pkg</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">action</span> <span class="o">[</span><span class="ss">:install</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now to an passive onlooker there seems nothing wrong with this, and 3 weeks ago JJ would agree with you.  JJ now says, &ldquo;Stop that, start with the webserver and the deps for that instead of the convince of something easy like package management.&rdquo;  LEARN <a href="http://berkshelf.com/">berkshelf</a> and don&rsquo;t make excuses. (at this writing, 8/2/13, I still actually haven&rsquo;t learned it, the best analogy is this, dling cookbooks is like building from source, and berkshelf is like using apt-get) Anyway I digress.</p>
-
-<p>Back to the original story.</p>
-
-<p>I made the <code>cookbooks/</code> directory, and when to github to pull down the newest <a href="https://github.com/opscode-cookbooks/nginx">nginx</a> cookbook.  <code>git clone https://github.com/opscode-cookbooks/nginx.git</code> in the directory and then because  I hate submodules, I ran <code>rm -rf .git/</code>. I <code>cd ~/chef-solo</code> then ran <code>install.sh</code>. Crossed my fingers and no, didn&rsquo;t work. Turns out I needed a bunch of dependences (hence the berkself statement). I resolved them all, and then ran the beautiful <code>./install.sh</code>. BOOM, it worked.  I took a moment, realized what I had just done.  I created a git repo off this work, created a branch &ldquo;nginx&rdquo; and committed my changes. Now whenever I need to spin up an nginx box, all I have to do is clone my chef-solo repo and checkout nginx and run <code>install.sh</code>.</p>
-
-<p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
-
-<p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
 ]]></content>
   </entry>
   
