@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: test-kitchen | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/test-kitchen/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-02-17T16:57:52-06:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
+    <updated>2014-02-17T15:32:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
+    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol' <a href="https://twitter.com/fnichol">Fletcher</a>
+made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
+cookbooks, and I wanted to start leveraging what I just paid for.</p>
+
+<p>So take this <code>.kitchen.yml</code> for instance:</p>
+
+<h2>```</h2>
+
+<p>driver:
+  name: vagrant</p>
+
+<p>provisioner:
+  name: chef_solo</p>
+
+<p>platforms:
+  &ndash; name: ubuntu-12.04</p>
+
+<p>suites:
+  &ndash; name: default</p>
+
+<pre><code>run_list:
+  - recipe[hubot-solo::default]
+attributes:
+</code></pre>
+
+<p>```</p>
+
+<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
+
+<h2>```</h2>
+
+<p>driver:
+  name: vagrant
+  provider: vmware_fusion</p>
+
+<p>provisioner:
+  name: chef_solo</p>
+
+<p>platforms:
+  &ndash; name: ubuntu-12.04</p>
+
+<p>suites:
+  &ndash; name: default</p>
+
+<pre><code>run_list:
+  - recipe[hubot-solo::default]
+attributes:
+</code></pre>
+
+<p>```</p>
+
+<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
+
+<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
+
+<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
+the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
+
+<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
+but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
+
+<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
+]]></content>
+  </entry>
+  
+</feed>

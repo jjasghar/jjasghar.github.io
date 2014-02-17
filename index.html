@@ -9,7 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So I&rsquo;ve been caught up in the docker, packer, and VM discussion a handful of times. I&rsquo;ve been defending and discussingcoughattackingcough &hellip;">
+  <meta name="description" content="I recently bought the vagrant vmware fusion plugin to start testing out test-kitchen for mac. Good ol&#8217; Fletcher
+made it ridiculously easy to do &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,126 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/">.kitchen.local.yml and When You Want to Use It</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-17T15:32:20-06:00" pubdate data-updated="true">Feb 17<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol&#8217; <a href="https://twitter.com/fnichol">Fletcher</a>
+made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
+cookbooks, and I wanted to start leveraging what I just paid for.</p>
+
+<p>So take this <code>.kitchen.yml</code> for instance:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>driver:
+</span><span class='line'>  name: vagrant
+</span><span class='line'>
+</span><span class='line'>provisioner:
+</span><span class='line'>  name: chef_solo
+</span><span class='line'>
+</span><span class='line'>platforms:
+</span><span class='line'>  - name: ubuntu-12.04
+</span><span class='line'>
+</span><span class='line'>suites:
+</span><span class='line'>  - name: default
+</span><span class='line'>    run_list:
+</span><span class='line'>      - recipe[hubot-solo::default]
+</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>driver:
+</span><span class='line'>  name: vagrant
+</span><span class='line'>  provider: vmware_fusion
+</span><span class='line'>
+</span><span class='line'>provisioner:
+</span><span class='line'>  name: chef_solo
+</span><span class='line'>
+</span><span class='line'>platforms:
+</span><span class='line'>  - name: ubuntu-12.04
+</span><span class='line'>
+</span><span class='line'>suites:
+</span><span class='line'>  - name: default
+</span><span class='line'>    run_list:
+</span><span class='line'>      - recipe[hubot-solo::default]
+</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
+
+<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
+
+<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
+the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
+
+<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
+but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
+
+<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1161,76 +1282,6 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/">Learning Git Realizing That I Know Nothing</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-17T13:56:00-06:00" pubdate data-updated="true">Dec 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
-
-<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ffBJ4sVUb4 "></iframe></div>
-
-
-<p>I strongly suggest taking the 99ish mins to watch it, it&rsquo;s a great tutorial, with great visual examples.</p>
-
-<p>I&rsquo;ve also stolen some aliases that he suggests!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span><span class="nv">glp</span><span class="o">=</span><span class="s2">&quot;git log --graph --pretty --all&quot;</span>
-</span><span class='line'><span class="nb">alias </span><span class="nv">gld</span><span class="o">=</span><span class="s2">&quot;git log --graph --decorate --all&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Some useful notes that this video helped clear up for me:</p>
-
-<p>Something else that finally cleared up to me <code>origin/master</code> means a label, while <code>origin master</code> means the remote origin with the label of master on it&rsquo;s remote side. This works with <code>origin/bugfix</code> and <code>origin bugfix</code> also, it&rsquo;s just unfortunate that the master is used twice is a very similar context.</p>
-
-<p><code>git merge master</code> merges master into the current branch you have checked out. <code>git merge origin/master</code> merges the upstream changes of master into your current branch. <code>git merge master bugfix</code> merges the master branch into bugfix explicitly.</p>
-
-<p><code>git push --set-upstream (or -u) origin bugfix</code> sets the upstream branch on origin to bugfix, if from your local repo.</p>
-
-<p><code>refs/head/blah</code> is a fancy way of saying <code>blah</code> is the branch.</p>
-
-<p><code>git push origin --tags</code> to push your tags on the local repo to the origin</p>
-
-<p>A detached HEAD isn&rsquo;t a bad thing; it just means there&rsquo;s no branch associated with it. It&rsquo;s good to check things out but you can always <code>git checkout -b &lt;branch_name&gt;</code> if needed.</p>
-
-<p><code>git rebase -i HEAD^^</code> go back to rebase 2 commits; rebase goes bottom up, to squash up to the top one.</p>
-
-<p><code>rebase</code> creates a <em>new</em> line of history, not REWRITES history.</p>
-
-<p>Once you&rsquo;ve pushed, never rebase; it&rsquo;s not worth it. :(</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1246,6 +1297,10 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/">.kitchen.local.yml and When You Want to Use It</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/13/docker-packer-vm-oh-my/">Docker Packer VM Oh My</a>
       </li>
     
@@ -1259,10 +1314,6 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
     
       <li class="post">
         <a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/20/a-chef-error-that-has-haunted-me/">A Chef Error That Has Haunted Me</a>
       </li>
     
   </ul>

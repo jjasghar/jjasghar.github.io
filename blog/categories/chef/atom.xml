@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-13T14:53:53-06:00</updated>
+  <updated>2014-02-17T16:57:52-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,76 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
+    <updated>2014-02-17T15:32:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
+    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol' <a href="https://twitter.com/fnichol">Fletcher</a>
+made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
+cookbooks, and I wanted to start leveraging what I just paid for.</p>
+
+<p>So take this <code>.kitchen.yml</code> for instance:</p>
+
+<h2>```</h2>
+
+<p>driver:
+  name: vagrant</p>
+
+<p>provisioner:
+  name: chef_solo</p>
+
+<p>platforms:
+  &ndash; name: ubuntu-12.04</p>
+
+<p>suites:
+  &ndash; name: default</p>
+
+<pre><code>run_list:
+  - recipe[hubot-solo::default]
+attributes:
+</code></pre>
+
+<p>```</p>
+
+<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
+
+<h2>```</h2>
+
+<p>driver:
+  name: vagrant
+  provider: vmware_fusion</p>
+
+<p>provisioner:
+  name: chef_solo</p>
+
+<p>platforms:
+  &ndash; name: ubuntu-12.04</p>
+
+<p>suites:
+  &ndash; name: default</p>
+
+<pre><code>run_list:
+  - recipe[hubot-solo::default]
+attributes:
+</code></pre>
+
+<p>```</p>
+
+<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
+
+<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
+
+<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
+the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
+
+<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
+but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
+
+<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[chef handler why did it take a year for me to use you]]></title>
@@ -274,60 +344,6 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
 <p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
 
 <p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[People keep asking me how to start with chef]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/"/>
-    <updated>2013-10-18T10:19:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef</id>
-    <content type="html"><![CDATA[<p>So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do from the beginning. I completely acknowledge that chef can be extremely confusing to start with. If you really want to learn it you&rsquo;ll have to stick with it, and do it. Good god, nothing is better than running it on a vagrant box and seeing what you expect happen happen.</p>
-
-<h2>chef-solo is your best friend (step 1)</h2>
-
-<p>A lot of people can start here, and end here believe it or not.  chef-solo is unbelievably powerful and can full-fill 90% of all requirements for basic usage. I spent some time looking around for a good tutorial (doing all of them that I could find), and <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">this</a> on was the best &ldquo;I have no idea what the fuck I&rsquo;m doing.&rdquo; situation.  Modern chef installs are a tad bit different than this guy, so the &ldquo;install.sh&rdquo; changes I suggest are this:
-```bash</p>
-
-<h1>!/bin/bash</h1>
-
-<h1>This run as root on the machine</h1>
-
-<p>chef_binary=/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo</p>
-
-<h1>are we not bootstrapped?</h1>
-
-<p>if ! test -f &ldquo;$chef_binary&rdquo;; then
-  export DEBIAN_FRONTEND=noniteractive
-  apt-get update &amp;&amp;
-  apt-get dist-upgrade -y &amp;&amp;
-  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y &amp;&amp;
-  curl -L <a href="https://www.opscode.com/chef/install.sh">https://www.opscode.com/chef/install.sh</a> | sudo bash
-fi &amp;&amp;</p>
-
-<p>chef-solo -c solo.rb -j solo.json
-<code>``
-As you can see I use the omnibus installer, not the gem, and choose the ruby version you want ;), and yes if you use those lame-ass rpm-based distros,</code>apt-get` won&rsquo;t work for you.</p>
-
-<h2>There&rsquo;s something clever here (step 2)</h2>
-
-<p>So awesome, you walked through the suggested tutorial, you can now run your <code>install.sh</code> and get your changes in. Grats! If you think about it, hit up the <a href="http://docs.opscode.com">Opscode Docs</a> and you&rsquo;ll discover that there&rsquo;s a resource to provision every which way. As I said at the beginning this might be all you need, if it is then use it; no real need to go any farther.</p>
-
-<p>Ah, you&rsquo;re still here. So you DO want to farther, awesome. In step two I suggested going to the docs, that&rsquo;s cool, but sometimes you need more verbose help, that&rsquo;s my second point, it&rsquo;s time to start asking questions. Your first stop is <a href="http://webchat.freenode.net/?channels=chef">#chef</a>; it&rsquo;s manned basically 24x7, and <em>normally</em> extremely helpful. Don&rsquo;t be a douche, if you have to paste something use <a href="http://gist.github.com">gist</a> or something.  After that the main Opscode <a href="http://lists.opscode.com/sympa">mailing list</a> is great. It&rsquo;s slower, but you get much more in depth questions and conversations. Finally the third sub step is speak up, ask questions the only way to learn this is to be like &ldquo;I don&rsquo;t understand it, help!&rdquo;</p>
-
-<h2>The only book worth a damn as of 2013/10/18 (step 3)</h2>
-
-<p>Step three of the journey is probably the one that most people jump to initially, and this is usually where the confusion starts.  There&rsquo;s a handful of books out there on chef, this <a href="http://www.packtpub.com/chef-starter/book">one</a> is the only one worth any money.  With a strong understanding of how to provision a simple box, and where to ask questions this book will be extremely straight forward and build upon those building blocks. I&rsquo;m constantly looking for another chef bible, but most nuggets of how-to things are spread all over the internet in blog form.</p>
-
-<h2>The fun starts here (step 4)</h2>
-
-<p>Step four you need a chef server, you need to be able to provision multiple boxes, you understand/can find out what a role or environment is, and you need different <code>run_lists</code>.Good for you.  From here you should look at the open source <a href="http://www.opscode.com/chef/install/">chef server</a> and spin it up on another box. I should say you can use the <a href="https://getchef.opscode.com/signup">hosted chef</a>, you get up to 5 nodes with it for free, which is cool, but if you want to see everything work from the ground up, open source chef server is the way to go. (NOTE: if you are doing it in AWS/<code>$cloudprovider</code> you&rsquo;ll need at least a 4 gig box, and that&rsquo;s pushing it. You&rsquo;ve been warned.) Now spin up another box, a machine that can talk to the server that you want to provision. Start playing with <code>knife</code> add a knife plug-in for you <code>$cloudprovider</code> see if you can spin up another box using the <a href="http://docs.opscode.com/knife_bootstrap.html">knife bootstrap</a>.  Start using <a href="http://community.opscode.com/cookbooks/minitest-handler">minitest-handler-cookbook</a>, <a href="https://github.com/opscode/test-kitchen">test-kitchen</a>, and even <a href="https://github.com/acrmp/chefspec">chef-spec</a> if your feeling sassy. If you&rsquo;ve made it this far, you&rsquo;ve probably been exposed to a myriad of other tools, run with them. Trust me if someone built if for chef the chance of being helpful is extremely high.</p>
-
-<h2>D'oh why did I do it this way? (step 5)</h2>
-
-<p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
-
-<p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
 ]]></content>
   </entry>
   

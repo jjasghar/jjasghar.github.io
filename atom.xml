@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-13T14:53:53-06:00</updated>
+  <updated>2014-02-17T16:57:52-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
+    <updated>2014-02-17T15:32:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
+    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol&#8217; <a href="https://twitter.com/fnichol">Fletcher</a>
+made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
+cookbooks, and I wanted to start leveraging what I just paid for.</p>
+
+<p>So take this <code>.kitchen.yml</code> for instance:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>driver:
+</span><span class='line'>  name: vagrant
+</span><span class='line'>
+</span><span class='line'>provisioner:
+</span><span class='line'>  name: chef_solo
+</span><span class='line'>
+</span><span class='line'>platforms:
+</span><span class='line'>  - name: ubuntu-12.04
+</span><span class='line'>
+</span><span class='line'>suites:
+</span><span class='line'>  - name: default
+</span><span class='line'>    run_list:
+</span><span class='line'>      - recipe[hubot-solo::default]
+</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>driver:
+</span><span class='line'>  name: vagrant
+</span><span class='line'>  provider: vmware_fusion
+</span><span class='line'>
+</span><span class='line'>provisioner:
+</span><span class='line'>  name: chef_solo
+</span><span class='line'>
+</span><span class='line'>platforms:
+</span><span class='line'>  - name: ubuntu-12.04
+</span><span class='line'>
+</span><span class='line'>suites:
+</span><span class='line'>  - name: default
+</span><span class='line'>    run_list:
+</span><span class='line'>      - recipe[hubot-solo::default]
+</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
+
+<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
+
+<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
+the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
+
+<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
+but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
+
+<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[docker packer VM oh my]]></title>
@@ -1665,21 +1758,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
 <p>It worked like a charm. The <code>watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "</code> started showing me the amount of data left for the transfer, and before I knew it I had a working master slave configuration.  This was a lot of cruft to basically say <code>slaveof redis-master 6379</code> but hell it&rsquo;s sometimes nice to see the thought process around it.  Oh!, the latency, did spike to 800 from .05, but I discovered that was in milliseconds and only ONE sample.  So yeah one call to the master with a spike of something still sub-second, was still in the risk params.
 Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post about my monitoring of this, it&rsquo;s not <em>that</em> exciting, but it is useful.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Learning sinatra and where I'm going from here]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here/"/>
-    <updated>2013-09-13T15:29:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here</id>
-    <content type="html"><![CDATA[<p>I&rsquo;d like to start off by thanking Darren Jones, for writing the book <a href="http://sitepoint.com/jumpstart-sinatra">Jump Start Sinatra</a>.  This book is amazing, it&rsquo;s extremely well written, straight forward and hands on. Darren was able to break down and explain how sinatra works, runs and what you can do with it in a rapid fire primer.</p>
-
-<p>Darren has you create a simple &ldquo;sinatra song web site&rdquo; with a database backed, css, javascript (via coffeescript), and even gets you to post to heroku.  The book is only about 166 pages long, and fast, but gives you the primer to understand what you need to get done to make a functional app with little trouble and overhead. With in the first couple chapters Darren spurred me to wonder how a json object with curl POST was able to be put the data into a db, and with the this tutorial Darren has opened the avenue for me to be able to figure it out.</p>
-
-<p>One issue that I had with the book, it doesn&rsquo;t you how to write tests against the app you create.  Due to new programming practices, this seems like a nasty gap.  I&rsquo;ve decided before I figure out how to get my json input output working, I&rsquo;m going to figure out how to write tests against the app I created.</p>
-
-<p>If you are curious on the app that is built from this book, I have posted it <a href="https://github.com/jjasghar/sinatra_song_app">here</a>, but as time progresses I&rsquo;ll probably add things to it. Fair warning there.</p>
 ]]></content>
   </entry>
   
