@@ -9,8 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So I recently watched ChatOps and got sold on Hubot. We had him at my company for a while, but
-with a migration we lost him; so I took it upon myself &hellip;">
+  <meta name="description" content="So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [Source Control Management] system on a daily if not hourly basis. I&rsquo;ve been &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,76 @@ with a migration we lost him; so I took it upon myself &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/">Learning Git Realizing That I Know Nothing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-17T13:56:00-06:00" pubdate data-updated="true">Dec 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
+
+<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ffBJ4sVUb4 "></iframe></div>
+
+
+<p>I strongly suggest taking the 99ish mins to watch it, it&rsquo;s a great tutorial, with great visual examples.</p>
+
+<p>I&rsquo;ve also stolen some aliases that he suggests!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span><span class="nv">glp</span><span class="o">=</span><span class="s2">&quot;git log --graph --pretty --all&quot;</span>
+</span><span class='line'><span class="nb">alias </span><span class="nv">gld</span><span class="o">=</span><span class="s2">&quot;git log --graph --decorate --all&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Some useful notes that this video helped clear up for me:</p>
+
+<p>Something else that finally cleared up to me <code>origin/master</code> means a label, while <code>origin master</code> means the remote origin with the label of master on it&rsquo;s remote side. This works with <code>origin/bugfix</code> and <code>origin bugfix</code> also, it&rsquo;s just unfortunate that the master is used twice is a very similar context.</p>
+
+<p><code>git merge master</code> merges master into the current branch you have checked out. <code>git merge origin/master</code> merges the upstream changes of master into your current branch. <code>git merge master bugfix</code> merges the master branch into bugfix explicitly.</p>
+
+<p><code>git push --set-upstream (or -u) origin bugfix</code> sets the upstream branch on origin to bugfix, if from your local repo.</p>
+
+<p><code>refs/head/blah</code> is a fancy way of saying <code>blah</code> is the branch.</p>
+
+<p><code>git push origin --tags</code> to push your tags on the local repo to the origin</p>
+
+<p>A detached HEAD isn&rsquo;t a bad thing; it just means there&rsquo;s no branch associated with it. It&rsquo;s good to check things out but you can always <code>git checkout -b &lt;branch_name&gt;</code> if needed.</p>
+
+<p><code>git rebase -i HEAD^^</code> go back to rebase 2 commits; rebase goes bottom up, to squash up to the top one.</p>
+
+<p><code>rebase</code> creates a <em>new</em> line of history, not REWRITES history.</p>
+
+<p>Once you&rsquo;ve pushed, never rebase; it&rsquo;s not worth it. :(</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1098,48 +1167,6 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here/">Learning Sinatra and Where I&#8217;m Going From Here</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-13T15:29:00-05:00" pubdate data-updated="true">Sep 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;d like to start off by thanking Darren Jones, for writing the book <a href="http://sitepoint.com/jumpstart-sinatra">Jump Start Sinatra</a>.  This book is amazing, it&rsquo;s extremely well written, straight forward and hands on. Darren was able to break down and explain how sinatra works, runs and what you can do with it in a rapid fire primer.</p>
-
-<p>Darren has you create a simple &ldquo;sinatra song web site&rdquo; with a database backed, css, javascript (via coffeescript), and even gets you to post to heroku.  The book is only about 166 pages long, and fast, but gives you the primer to understand what you need to get done to make a functional app with little trouble and overhead. With in the first couple chapters Darren spurred me to wonder how a json object with curl POST was able to be put the data into a db, and with the this tutorial Darren has opened the avenue for me to be able to figure it out.</p>
-
-<p>One issue that I had with the book, it doesn&rsquo;t you how to write tests against the app you create.  Due to new programming practices, this seems like a nasty gap.  I&rsquo;ve decided before I figure out how to get my json input output working, I&rsquo;m going to figure out how to write tests against the app I created.</p>
-
-<p>If you are curious on the app that is built from this book, I have posted it <a href="https://github.com/jjasghar/sinatra_song_app">here</a>, but as time progresses I&rsquo;ll probably add things to it. Fair warning there.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1157,6 +1184,10 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/">.kitchen.local.yml and When You Want to Use It</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/13/docker-packer-vm-oh-my/">Docker Packer VM Oh My</a>
       </li>
     
@@ -1170,10 +1201,6 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
     
       <li class="post">
         <a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/20/a-chef-error-that-has-haunted-me/">A Chef Error That Has Haunted Me</a>
       </li>
     
   </ul>
