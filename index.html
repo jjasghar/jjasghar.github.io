@@ -124,7 +124,7 @@ see if he now thinks you&rsquo;re and admin.</p>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
 </span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-</span><span class='line'>Hubot&gt; </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
@@ -143,7 +143,7 @@ as the example, so lets give our user the first role:</p>
 </span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
 </span><span class='line'>Hubot&gt; Hubot what role does shell have
 </span><span class='line'>Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
-</span><span class='line'>Hubot&gt; </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
@@ -210,16 +210,16 @@ can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/
 </span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
 </span><span class='line'>Hubot&gt; hubot PING
 </span><span class='line'>Hubot&gt; PONG
-</span><span class='line'>Hubot&gt; </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
 
 
 <p>PERFECT!</p>
 
-<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portian of this; in order to enforce the commands you&rsquo;ll need
+<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
 to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
 your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
 
-<p>This will probably get annoying as the scripts get updated and new features are added, but untill i figure out a better way i think we&rsquo;re stuck here.</p>
+<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
 </div>
   
   
