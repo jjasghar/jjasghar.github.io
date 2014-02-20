@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-17T16:58:53-06:00</updated>
+  <updated>2014-02-20T17:46:50-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,106 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Getting authentication with hubot using auth.coffee]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
+    <updated>2014-02-19T11:07:03-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
+    <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
+First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
+that means you need to figure out &ldquo;HUBOT_AUTH_ADMIN&rdquo;. Assuming you have hubot already connecting to a site, run <code>hubot show users</code>
+and he should come back with all the people he knows about. Grab the id number for the person/people you want to have admin rights.</p>
+
+<p>Add <code>HUBOT_AUTH_ADMIN="&lt;number&gt;,&lt;nextnumber&gt;"</code> to the <code>bin/hubot</code> or however you add variables to him, go ahead and restart hubot to
+see if he now thinks you&rsquo;re and admin.</p>
+
+<p>If all goes well, you should see something like this:
+<code>
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+Hubot&gt;
+</code></p>
+
+<p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
+as the example, so lets give our user the first role:</p>
+
+<p><code>
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+Hubot&gt; Hubot shell has ping role
+Hubot&gt; Shell: Ok, shell has the 'ping' role.
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
+Hubot&gt;
+</code></p>
+
+<p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
+can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>, to fail for us.</p>
+
+<p><code>
+Hubot&gt; Hubot shell doesn't have ping role
+Hubot&gt; Shell: Ok, shell doesn't have the 'ping' role.
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+Hubot&gt;
+</code></p>
+
+<p>Go ahead into your <code>scripts/</code> directory, and open up your ping.coffee. Take a look at the following snippet:</p>
+
+<p>```
+module.exports = (robot) &ndash;>
+  robot.respond /PING$/i, (msg) &ndash;></p>
+
+<pre><code>msg.send "PONG"
+</code></pre>
+
+<p>```</p>
+
+<p>Pretty straight forward eh? Go ahead and tack on this:</p>
+
+<p>```coffee
+module.exports = (robot) &ndash;>
+  robot.respond /PING$/i, (msg) &ndash;></p>
+
+<pre><code>if robot.auth.hasRole(msg.envelope.user, "ping")
+  msg.send "PONG"
+else
+ msg.send "Sorry you can't ask me to PONG"
+</code></pre>
+
+<p>```</p>
+
+<p>Note: a quick explanation, if hubot responds to &ldquo;ping&rdquo; case insensitive, it&rsquo;ll respond with the &ldquo;PONG&rdquo; only if you have the role of ping.</p>
+
+<p>Go and ahead and restart hubot, and say PING. :)</p>
+
+<p><code>
+Hubot&gt; hubot PING
+Hubot&gt; Sorry you can't ask me to PONG
+</code></p>
+
+<p>Sweet!</p>
+
+<p>Ok, next step, lets give ourselves access to make this happen:</p>
+
+<p><code>
+Hubot&gt; Hubot shell has ping role
+Hubot&gt; Shell: Ok, shell has the 'ping' role.
+Hubot&gt; hubot PING
+Hubot&gt; PONG
+Hubot&gt;
+</code></p>
+
+<p>PERFECT!</p>
+
+<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
+to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
+your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
+
+<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
@@ -206,73 +306,6 @@ end</p>
 oversight.</p>
 
 <p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
-    <updated>2014-01-25T00:24:28-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
-    <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
-
-<p>So, yeah, you can tell I was pretty impressed with it right?</p>
-
-<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
-
-<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
-
-<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
-
-<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:
-```ruby
-&lt;%
-  socket = [</p>
-
-<pre><code>ENV["BOXEN_MYSQL_SOCKET"],
-"/var/run/mysql5/mysqld.sock",
-"/tmp/mysql.sock"
-</code></pre>
-
-<p>  ].detect { |f| f &amp;&amp; File.exist?(f) }</p>
-
-<p>  port = ENV[&ldquo;BOXEN_MYSQL_PORT&rdquo;] || &ldquo;3306&rdquo;
-%></p>
-
-<p>development: &amp;development
-  adapter: mysql
-  database: yourapp_development
-  username: root
-&lt;% if socket %>
-  host: localhost
-  socket: &lt;%= socket %>
-&lt;% else %>
-  host: 127.0.0.1
-  port: &lt;%= port %>
-&lt;% end %></p>
-
-<h1>Warning: The database defined as &ldquo;test&rdquo; will be erased and</h1>
-
-<h1>re-generated from your development database when you run &ldquo;rake&rdquo;.</h1>
-
-<h1>Do not set this db to the same as development or production.</h1>
-
-<p>test:
-  &lt;&lt;: *development
-  database: yourapp_test
-```</p>
-
-<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
-
-<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
-
-<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
-
-<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
-
-<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
-
-<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
 ]]></content>
   </entry>
   
