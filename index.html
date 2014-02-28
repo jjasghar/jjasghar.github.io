@@ -9,8 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
-First thing first, set up auth. &hellip;">
+  <meta name="description" content="On February 25th 2014 I did a lighting talk on my chef-book at Austin on Rails. It was about
+five minutes long, and got a video of it here. It&rsquo; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,45 @@ First thing first, set up auth. &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-28T10:52:08-06:00" pubdate data-updated="true">Feb 28<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
+five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
+
+<p>PS, I apologize for the quality.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1141,123 +1180,6 @@ oversight.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/31/adventures-with-boxen/">Adventures With Boxen</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-31T15:54:00-06:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
-
-<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
-
-<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
-
-<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Boxen requires at least the Xcode Command Line Tools installed.
-</span><span class='line'>Boxen will not work with an existing rvm install.
-</span><span class='line'>Boxen may not play nice with a GitHub username that includes dash(-)
-</span><span class='line'>Boxen may not play nice with an existing rbenv install.
-</span><span class='line'>Boxen may not play nice with an existing chruby install.
-</span><span class='line'>Boxen may not play nice with an existing homebrew install.
-</span><span class='line'>Boxen may not play nice with an existing nvm install.
-</span><span class='line'>Boxen recommends installing the full Xcode.</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
-
-<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
-
-<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
-
-<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
-
-<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
-
-<p>After you got that done boot up the vm open terminal run the following:</p>
-
-<p><code>git --version</code></p>
-
-<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
-
-<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo mkdir -p /opt/boxen
-</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chown <span class="k">${</span><span class="nv">USER</span><span class="k">}</span>:staff /opt/boxen
-</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
-</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote rm origin
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git remote add origin &lt;the location of my new git repository&gt;
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % git push -u origin master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
-
-<p>Ok, now try out boxen:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % ./script/boxen --no-fde
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
-
-<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
-
-<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1273,6 +1195,10 @@ oversight.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/">Getting Authentication With Hubot Using auth.coffee</a>
       </li>
     
@@ -1286,10 +1212,6 @@ oversight.</p>
     
       <li class="post">
         <a href="/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/">Chef Handler Why Did It Take a Year for Me to Use You</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/">ResourceNotFound and Splunk> fun&#8230;gotta Love That Error</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-20T17:47:59-06:00</updated>
+  <updated>2014-02-28T10:55:54-06:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[chef-book lighting talk]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
+    <updated>2014-02-28T10:52:08-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
+    <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
+five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
+
+<p>PS, I apologize for the quality.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Getting authentication with hubot using auth.coffee]]></title>
@@ -277,35 +289,6 @@ end</p>
 <p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
 
 <p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ResourceNotFound and splunk> fun...gotta love that error]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/"/>
-    <updated>2014-02-03T16:18:51-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk>-fun-dot-dot-dot-gotta-love-that-error</id>
-    <content type="html"><![CDATA[<p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
-
-<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:
-```
-500 Internal Server Error</p>
-
-<p>Return to Splunk home page</p>
-
-<p>ResourceNotFound: [HTTP 404] <a href="https://127.0.0.1:8089/services/data/user-prefs;">https://127.0.0.1:8089/services/data/user-prefs;</a> [{&lsquo;type&rsquo;: &lsquo;ERROR&rsquo;, &lsquo;text&rsquo;: &lsquo;Application does not exist: user-prefs&rsquo;, &lsquo;code&rsquo;: None}]</p>
-
-<p>This page was linked to from <a href="http://">http://</a><mycompanyname>:8000/en-US/account/login?return_to=%2Fen-US%2F.</p>
-
-<p>You are using <mycompanyname>:8000, which is connected to splunkd @182037 at <a href="https://127.0.0.1:8089">https://127.0.0.1:8089</a> on Mon Feb 3 16:17:37 2014.
-```</p>
-
-<p>Wow, what the hell does that mean?</p>
-
-<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
-oversight.</p>
-
-<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
 ]]></content>
   </entry>
   
