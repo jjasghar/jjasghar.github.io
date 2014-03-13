@@ -9,8 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="On February 25th 2014 I did a lighting talk on my chef-book at Austin on Rails. It was about
-five minutes long, and got a video of it here. It&rsquo; &hellip;">
+  <meta name="description" content="I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap. Thanks! Ok, anyway, when you get your new toy &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,112 @@ five minutes long, and got a video of it here. It&rsquo; &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-13T14:45:02-05:00" pubdate data-updated="true">Mar 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
+
+<p>Thanks! Ok, anyway, when you get your new toy you want to start leveraging some of the cool things it can do.  My company uses campfire as our main daily communication,
+and luckily there&rsquo;s a <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb">campfire handler</a> for sensu! Naturally we should leverage it right? Well, it seems with 0.12 sensu, it&rsquo;s not exactly a cup o&#8217; tea.</p>
+
+<p>Go ahead and add you campfire handler and you&rsquo;ll notice quickly:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `block in connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/timeout.rb:51:in `timeout'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:861:in `do_start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:850:in `start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1366:in `request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1125:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:73:in `perform_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:38:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/response_middleware.rb:30:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/request/encode_json.rb:23:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:247:in `run_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:100:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/connection.rb:76:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:34:in `rooms'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:48:in `find_room_by_name'
+</span><span class='line'>        from campfire_test.rb:7:in `&lt;main&gt;'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: I&rsquo;d like to thank <a href="https://github.com/skymob">Bethany Erskine</a> for all the advice and the <a href="https://gist.github.com/skymob/6161155">gist</a> I just stole to explain this.</p>
+
+<p>Ok, honestly it&rsquo;ll be locked up in the <code>sensu-client.log</code> but if you break up the json it&rsquo;ll look like the above. Anyway&hellip;.</p>
+
+<p>So as you can see it fails with the <code>SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)</code> trying to verify the certs,
+I spent some time trying to updated the pkg version of the ssl certs, reading more than I ever wanted to know about SSL, finally I pinged Bethany asked her after finding that gist.</p>
+
+<p>She responded back with something that just seemed so obious, if you look at the <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb#L30">handler</a> it defaults to true.</p>
+
+<p>Change that to it to something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Tinder</span><span class="p">:</span><span class="ss">:Campfire</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;mydomain&#39;</span><span class="p">,</span> <span class="ss">:ssl_verify</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:token</span> <span class="o">=&gt;</span> <span class="s1">&#39;7505e9c7ed5c30a77dTHIS_IS_FAKE93029a494eb7c3d20&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And&hellip;all the sudden you&rsquo;ve got messages in your campfire channel.</p>
+
+<p>Yes, yes, you should verify ssl, but honestly, for what you get out of sensu for this, it&rsquo;s gravey for now. Plus I think after I ping <a href="https://github.com/portertech/">Sean Porter</a> about this issue in a passive/aggressive manner
+he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -906,280 +1011,6 @@ oversight.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-01T13:27:20-06:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
-
-<ul>
-<li>iterm2</li>
-<li>dropbox</li>
-<li>mysql</li>
-<li>1password</li>
-<li>virtualbox</li>
-<li>vagrant</li>
-<li>chrome</li>
-</ul>
-
-
-<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
-
-<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
-
-<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[~] % git --version # click "Install" for the developer tools
-</span><span class='line'>[~] % sudo mkdir -p /opt/boxen
-</span><span class='line'>[~] % sudo chown ${USER}:staff /opt/boxen
-</span><span class='line'>[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
-</span><span class='line'>[~] % cd /opt/boxen/repo
-</span><span class='line'>[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
-</span><span class='line'>[/opt/boxen/repo] % cd manifests
-</span><span class='line'>[/opt/boxen/repo/manifests] % vim site.pp</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
-
-<p>Ok, lets give boxen a shot!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[/opt/boxen/repo/manifests] % cd ..
-</span><span class='line'>[/opt/boxen/repo/] % script/boxen --no-fde
-</span><span class='line'>[/opt/boxen/repo/] % source /opt/boxen/env.sh
-</span><span class='line'>[/opt/boxen/repo/] % boxen</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
-
-<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>node
-</span><span class='line'>-bash: node: <span class="nb">command </span>not found
-</span><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>ruby --version
-</span><span class='line'>ruby 2.0.0p247 <span class="o">(</span>2013-06-27 revision 41674<span class="o">)</span> <span class="o">[</span>universal.x86_64-darwin13<span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
-
-<h2>Per user manifests</h2>
-
-<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
-
-<p>Now:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/<span class="o">]</span> % <span class="nb">cd </span>modules/people/manifests
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout master
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout -b jjasghar_manifest
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar.pp <span class="c"># this needs to be your github account name</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.</p>
-
-<figure class='code'><figcaption><span>awaxa.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">dotfiles</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">gitconfig</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">preferences</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">puppetlabs</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
-
-<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">caffeine</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
-</span><span class='line'>  <span class="c1">#include dropbox</span>
-</span><span class='line'>  <span class="c1">#include gpgtools</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">java</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">rdio</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">tunnelblick</span><span class="p">:</span><span class="ss">:beta</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">vlc</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">vmware_fusion</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="o">[</span>
-</span><span class='line'>    <span class="s1">&#39;htop-osx&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;tmux&#39;</span>
-</span><span class='line'>    <span class="o">]</span><span class="p">:</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="s1">&#39;GoogleVoiceAndVideoSetup&#39;</span><span class="p">:</span>
-</span><span class='line'>    <span class="n">source</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="n">provider</span> <span class="o">=&gt;</span> <span class="n">pkgdmg</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ok here&rsquo;s the one I created:</p>
-
-<figure class='code'><figcaption><span>jjasghar.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Nice! Ok, now we need to create:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % mkdir jjasghar
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar/applications.pp
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is where we add our apps!</p>
-
-<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="ss">iterm2</span><span class="p">:</span><span class="ss">:stable</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">dropbox</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">mysql</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[--</span> <span class="n">snip</span> <span class="o">--]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Optional/custom modules. There are tons available at</span>
-</span><span class='line'><span class="c1"># https://github.com/boxen.</span>
-</span><span class='line'><span class="n">github</span> <span class="s2">&quot;iterm2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span> <span class="ss">:repo</span> <span class="o">=&gt;</span> <span class="s2">&quot;boxen/puppet-iterm2&quot;</span>
-</span><span class='line'><span class="n">github</span> <span class="s2">&quot;chrome&quot;</span>
-</span><span class='line'><span class="n">github</span> <span class="s2">&quot;dropbox&quot;</span>
-</span><span class='line'><span class="n">github</span> <span class="s2">&quot;mysql&quot;</span>
-</span><span class='line'><span class="n">github</span> <span class="s2">&quot;onepassword&quot;</span>
-</span><span class='line'><span class="n">github</span> <span class="s2">&quot;virtualbox&quot;</span>
-</span><span class='line'><span class="n">github</span> <span class="s2">&quot;vagrant&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
-</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % boxen
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1195,6 +1026,10 @@ oversight.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
       </li>
     
@@ -1208,10 +1043,6 @@ oversight.</p>
     
       <li class="post">
         <a href="/blog/2014/02/13/docker-packer-vm-oh-my/">Docker Packer VM Oh My</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/">Chef Handler Why Did It Take a Year for Me to Use You</a>
       </li>
     
   </ul>

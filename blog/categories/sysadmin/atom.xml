@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-28T10:55:54-06:00</updated>
+  <updated>2014-03-13T15:05:22-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,65 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Campfire + Sensu and some issues]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/"/>
+    <updated>2014-03-13T14:45:02-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
+
+<p>Thanks! Ok, anyway, when you get your new toy you want to start leveraging some of the cool things it can do.  My company uses campfire as our main daily communication,
+and luckily there&rsquo;s a <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb">campfire handler</a> for sensu! Naturally we should leverage it right? Well, it seems with 0.12 sensu, it&rsquo;s not exactly a cup o' tea.</p>
+
+<p>Go ahead and add you campfire handler and you&rsquo;ll notice quickly:
+<code>``
+/opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in</code>connect': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)</p>
+
+<pre><code>    from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `block in connect'
+    from /opt/sensu/embedded/lib/ruby/2.0.0/timeout.rb:51:in `timeout'
+    from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect'
+    from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:861:in `do_start'
+    from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:850:in `start'
+    from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1366:in `request'
+    from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1125:in `get'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:73:in `perform_request'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:38:in `call'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/response_middleware.rb:30:in `call'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/request/encode_json.rb:23:in `call'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:247:in `run_request'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:100:in `get'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/connection.rb:76:in `get'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:34:in `rooms'
+    from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:48:in `find_room_by_name'
+    from campfire_test.rb:7:in `&lt;main&gt;'
+</code></pre>
+
+<p>```</p>
+
+<p>Note: I&rsquo;d like to thank <a href="https://github.com/skymob">Bethany Erskine</a> for all the advice and the <a href="https://gist.github.com/skymob/6161155">gist</a> I just stole to explain this.</p>
+
+<p>Ok, honestly it&rsquo;ll be locked up in the <code>sensu-client.log</code> but if you break up the json it&rsquo;ll look like the above. Anyway&hellip;.</p>
+
+<p>So as you can see it fails with the <code>SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)</code> trying to verify the certs,
+I spent some time trying to updated the pkg version of the ssl certs, reading more than I ever wanted to know about SSL, finally I pinged Bethany asked her after finding that gist.</p>
+
+<p>She responded back with something that just seemed so obious, if you look at the <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb#L30">handler</a> it defaults to true.</p>
+
+<p>Change that to it to something like:
+<code>ruby
+Tinder::Campfire.new('mydomain', :ssl_verify =&gt; false, :token =&gt; '7505e9c7ed5c30a77dTHIS_IS_FAKE93029a494eb7c3d20')
+</code></p>
+
+<p>And&hellip;all the sudden you&rsquo;ve got messages in your campfire channel.</p>
+
+<p>Yes, yes, you should verify ssl, but honestly, for what you get out of sensu for this, it&rsquo;s gravey for now. Plus I think after I ping <a href="https://github.com/portertech/">Sean Porter</a> about this issue in a passive/aggressive manner
+he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[chef-book lighting talk]]></title>
@@ -228,67 +287,6 @@ I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have wa
 <p>This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of groking them, rediscovering packer.</p>
 
 <p>So in a nutshell: docker is a wrapper for lxc/jails for linux running an app sharing a common kernel, VMs are separate entities and kernels that more production focused, and packer is a way to create transferable VMs between hypervisors.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[chef handler why did it take a year for me to use you]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/"/>
-    <updated>2014-02-07T15:24:54-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you</id>
-    <content type="html"><![CDATA[<p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
-
-<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
-
-<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
-
-<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
-
-<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
-and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
-there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
-in a good state.</p>
-
-<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
-
-<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
-
-<p>```ruby
-chef_gem &ldquo;chef-handler-mail&rdquo;
-gem &ldquo;chef-handler-mail&rdquo;</p>
-
-<p>chef_handler &ldquo;MailHandler&rdquo; do
-   source &lsquo;chef/handler/mail&rsquo;
-   arguments :to_address => &ldquo;root&rdquo;
-   action :nothing
-end.run_action(:enable)
-```
-As you can see it&rsquo;s pretty straight forward.</p>
-
-<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
-first main internal recipe:</p>
-
-<p>```ruby
-include_recipe &lsquo;chef_handler&rsquo;</p>
-
-<p>chef_gem &ldquo;chef-handler-campfire&rdquo; do
-  action :install
-end</p>
-
-<p>chef_handler &lsquo;Chef::Handler::Campfire&rsquo; do
-  action :enable
-  arguments [ &lsquo;SUBDOMAIN&rsquo;, &lsquo;TOKEN&rsquo; , &lsquo;ROOM&rsquo; ]
-  source File.join(Gem.all_load_paths.grep(/chef-handler-campfire/).first,</p>
-
-<pre><code>               'chef', 'handler', 'campfire.rb')
-</code></pre>
-
-<p>end
-```</p>
-
-<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
-
-<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,13 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="Note: Thanks to Greg Kitson as my sounding board and inspiration here to get this done. So I started watching a couple videos on boxen both are done &hellip;">
+  <meta name="description" content="My goal is to get these few apps on my vm, but first lets get a default build working: iterm2
+dropbox
+mysql
+1password
+virtualbox
+vagrant
+chrome With &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +85,280 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/01/customizing-boxen/">Customizing Boxen</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T13:27:20-06:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
+
+<ul>
+<li>iterm2</li>
+<li>dropbox</li>
+<li>mysql</li>
+<li>1password</li>
+<li>virtualbox</li>
+<li>vagrant</li>
+<li>chrome</li>
+</ul>
+
+
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
+
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
+
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[~] % git --version # click "Install" for the developer tools
+</span><span class='line'>[~] % sudo mkdir -p /opt/boxen
+</span><span class='line'>[~] % sudo chown ${USER}:staff /opt/boxen
+</span><span class='line'>[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+</span><span class='line'>[~] % cd /opt/boxen/repo
+</span><span class='line'>[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+</span><span class='line'>[/opt/boxen/repo] % cd manifests
+</span><span class='line'>[/opt/boxen/repo/manifests] % vim site.pp</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
+
+<p>Ok, lets give boxen a shot!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[/opt/boxen/repo/manifests] % cd ..
+</span><span class='line'>[/opt/boxen/repo/] % script/boxen --no-fde
+</span><span class='line'>[/opt/boxen/repo/] % source /opt/boxen/env.sh
+</span><span class='line'>[/opt/boxen/repo/] % boxen</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
+
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>node
+</span><span class='line'>-bash: node: <span class="nb">command </span>not found
+</span><span class='line'>jjasghar-Mac:repo jjasghar<span class="nv">$ </span>ruby --version
+</span><span class='line'>ruby 2.0.0p247 <span class="o">(</span>2013-06-27 revision 41674<span class="o">)</span> <span class="o">[</span>universal.x86_64-darwin13<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
+
+<h2>Per user manifests</h2>
+
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
+
+<p>Now:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/<span class="o">]</span> % <span class="nb">cd </span>modules/people/manifests
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout master
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % git checkout -b jjasghar_manifest
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar.pp <span class="c"># this needs to be your github account name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.</p>
+
+<figure class='code'><figcaption><span>awaxa.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">dotfiles</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">gitconfig</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">preferences</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">puppetlabs</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.</p>
+
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:awaxa</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">caffeine</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'>  <span class="c1">#include dropbox</span>
+</span><span class='line'>  <span class="c1">#include gpgtools</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">java</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">rdio</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">tunnelblick</span><span class="p">:</span><span class="ss">:beta</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vlc</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vmware_fusion</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="o">[</span>
+</span><span class='line'>    <span class="s1">&#39;htop-osx&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s1">&#39;tmux&#39;</span>
+</span><span class='line'>    <span class="o">]</span><span class="p">:</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">package</span> <span class="p">{</span> <span class="s1">&#39;GoogleVoiceAndVideoSetup&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">source</span> <span class="o">=&gt;</span> <span class="s1">&#39;http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">provider</span> <span class="o">=&gt;</span> <span class="n">pkgdmg</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok here&rsquo;s the one I created:</p>
+
+<figure class='code'><figcaption><span>jjasghar.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Nice! Ok, now we need to create:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % mkdir jjasghar
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % vim jjasghar/applications.pp
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where we add our apps!</p>
+
+<figure class='code'><figcaption><span>applications.pp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="ss">people</span><span class="p">:</span><span class="ss">:jjasghar</span><span class="o">::</span><span class="n">applications</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="ss">iterm2</span><span class="p">:</span><span class="ss">:stable</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">dropbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">mysql</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">onepassword</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">virtualbox</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">vagrant</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="n">chrome</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[--</span> <span class="n">snip</span> <span class="o">--]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Optional/custom modules. There are tons available at</span>
+</span><span class='line'><span class="c1"># https://github.com/boxen.</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;iterm2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span> <span class="ss">:repo</span> <span class="o">=&gt;</span> <span class="s2">&quot;boxen/puppet-iterm2&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;chrome&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;dropbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;mysql&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;onepassword&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;virtualbox&quot;</span>
+</span><span class='line'><span class="n">github</span> <span class="s2">&quot;vagrant&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>/opt/boxen/repo/modules/people/manifests<span class="o">]</span> % <span class="nb">cd</span> /opt/boxen/repo
+</span><span class='line'><span class="o">[</span>/opt/boxen/repo<span class="o">]</span> % boxen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -959,221 +1239,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs/">Moving From One Chef to Multiple Chefs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-04T14:00:00-05:00" pubdate data-updated="true">Oct 4<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There&rsquo;s a organic growth of a Ops team using chef goes through.  You start out with a <code>chef_repo</code> then you post it to github/some DVCS.  From there you tell people to clone it down and put PRs against it. From there you attempt to be a gate keeper, looking at the commits in the log, realizing that there is no match ups. From there you say to yourself &ldquo;Hey, ok, these guys are pretty smart, as long as I spot check, they should be able to merge things in and I can trust them right?&rdquo; NO you are lying to yourself you just don&rsquo;t realize it yet.</p>
-
-<p>Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push&hellip;and nothing happens. Oh I&rsquo;m 2x behind where I thought great, bump and push. Oh&hellip;it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded&hellip;crap. (And other situations like this can pop up.)</p>
-
-<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathen Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
-
-<h2>Installation</h2>
-
-<p>Obviously the first thing you need to do is install it. Luckily it&rsquo;s a gem so you can just do the following. If you read the docs there are a bunch of places that you <code>.yml</code> gets read from, but I chose this because I like having all my chef stuff in <code>.chef</code> so I don&rsquo;t have to think about pulling anything other than <code>.chef</code> if I want to move boxes.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>gem install knife-spork
-</span><span class='line'>touch ~/.chef/spork-config.yml
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
-
-<p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">default_environments</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">development</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">production</span>
-</span><span class='line'><span class="l-Scalar-Plain">environment_groups</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">qa_group</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">quality_assurance</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">staging</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">test_group</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">user_testing</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">acceptance_testing</span>
-</span><span class='line'><span class="l-Scalar-Plain">version_change_threshold</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2</span>
-</span><span class='line'><span class="l-Scalar-Plain">environment_path</span><span class="p-Indicator">:</span> <span class="s">&quot;/home/me/environments&quot;</span>
-</span><span class='line'><span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">campfire</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">account</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myaccount</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">a1b2c3d4...</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">hipchat</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">api_token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ABC123</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">General</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Web Operations</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">notify</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">color</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yellow</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">jabber</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURUSER</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURPASSWORD</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">nickname</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Chef Bot</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server_name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your.jabberserver.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5222</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">engineering@your.conference.com/spork</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">systems@your.conference.com/spork</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">irccat</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">irccat.mydomain.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">12345</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">gist</span><span class="p-Indicator">:</span> <span class="s">&quot;/usr/bin/gist&quot;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">channel</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;chef-annoucements&quot;</span><span class="p-Indicator">]</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">graphite</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">graphite.mydomain.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2003</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">eventinator</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://eventinator.mydomain.com/events/oneshot</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All in all this seems pretty self <a href="https://github.com/jonlives/knife-spork#default-environments">explanatory</a> but the most important things to change are <code>environment_path</code> and disabling the plugins (by removing them) here.  For my company I only used the git plugin and&hellip;well that was it. :)</p>
-
-<p>By the way there are only a few plugins, <a href="https://github.com/jonlives/knife-spork/tree/master/plugins">here</a> is a link to the different .md files on each.</p>
-
-<p>Ok, so you have everything set up, what do you do now?</p>
-
-<h2>Usage</h2>
-
-<p>The first step is to run <code>knife spork check COOKBOOK --all</code> where COOKBOOK is one of your commonly updated/tweaked cookbooks.  Spork checks against what you have locally compared to what&rsquo;s in the server, like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">knife spork check COOKBOOK --all</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here&rsquo;s an example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Checking versions <span class="k">for </span>cookbook nagios...
-</span><span class='line'>
-</span><span class='line'>Local Version:
-</span><span class='line'>  5.1.5
-</span><span class='line'>
-</span><span class='line'>Remote Versions: <span class="o">(</span>* indicates frozen<span class="o">)</span>
-</span><span class='line'>  5.1.5
-</span><span class='line'>  5.1.4
-</span><span class='line'>  5.1.3
-</span><span class='line'>  5.1.2
-</span><span class='line'>
-</span><span class='line'>ERROR: The version 5.1.5 exists on the server and is not frozen. Uploading will overwrite!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see with the error, it&rsquo;s pretty self explaintory.</p>
-
-<p>The second step is to bump the version:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>knife spork bump nagios patch
-</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
-</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
-</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
-</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
-</span><span class='line'>Successfully bumped nagios to v5.1.6!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now as you can see I have the git plugin working, and it without thinking about it, updates the metadata.rb so you don&rsquo;t have to. (I HATE that part of chef, I always forget.) Now you can go off make your changes.</p>
-
-<p>From here you&rsquo;re happy, you&rsquo;ve commited your new <code>chef_repo</code> back to the DVCS that you use.  This is where the magic happens: <code>knife spork upload COOKBOOK</code>.  This thing is great, it (to quote the <code>README.md</code>) <em>This function works mostly the same as normal knife cookbook upload COOKBOOK except that this automatically freezes cookbooks when you upload them.</em> Which is the bread and butter of spork.  The freezing is crazy important, by freezing the upload you take &ldquo;ownership&rdquo; of that version of the cookbook.  Your changes are yours, and no-one can mess with them.  So in turn you don&rsquo;t step on your coworkers toes and he doesen&rsquo;t step on yours.</p>
-
-<p>Ok, so this was the cheatsheet, we have implymented this at my company now, so hopefully this goes great. If not&hellip;well that&rsquo;s a different conversation.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1191,6 +1256,10 @@ node to work on my local box for local development (<a href="https://gist.github
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
       </li>
     
@@ -1204,10 +1273,6 @@ node to work on my local box for local development (<a href="https://gist.github
     
       <li class="post">
         <a href="/blog/2014/02/13/docker-packer-vm-oh-my/">Docker Packer VM Oh My</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/">Chef Handler Why Did It Take a Year for Me to Use You</a>
       </li>
     
   </ul>

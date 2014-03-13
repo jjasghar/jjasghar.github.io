@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-28T10:55:54-06:00</updated>
+  <updated>2014-03-13T15:05:22-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,85 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Campfire + Sensu and some issues]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/"/>
+    <updated>2014-03-13T14:45:02-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
+
+<p>Thanks! Ok, anyway, when you get your new toy you want to start leveraging some of the cool things it can do.  My company uses campfire as our main daily communication,
+and luckily there&rsquo;s a <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb">campfire handler</a> for sensu! Naturally we should leverage it right? Well, it seems with 0.12 sensu, it&rsquo;s not exactly a cup o&#8217; tea.</p>
+
+<p>Go ahead and add you campfire handler and you&rsquo;ll notice quickly:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `block in connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/timeout.rb:51:in `timeout'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:861:in `do_start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:850:in `start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1366:in `request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1125:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:73:in `perform_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:38:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/response_middleware.rb:30:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/request/encode_json.rb:23:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:247:in `run_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:100:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/connection.rb:76:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:34:in `rooms'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:48:in `find_room_by_name'
+</span><span class='line'>        from campfire_test.rb:7:in `&lt;main&gt;'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: I&rsquo;d like to thank <a href="https://github.com/skymob">Bethany Erskine</a> for all the advice and the <a href="https://gist.github.com/skymob/6161155">gist</a> I just stole to explain this.</p>
+
+<p>Ok, honestly it&rsquo;ll be locked up in the <code>sensu-client.log</code> but if you break up the json it&rsquo;ll look like the above. Anyway&hellip;.</p>
+
+<p>So as you can see it fails with the <code>SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)</code> trying to verify the certs,
+I spent some time trying to updated the pkg version of the ssl certs, reading more than I ever wanted to know about SSL, finally I pinged Bethany asked her after finding that gist.</p>
+
+<p>She responded back with something that just seemed so obious, if you look at the <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb#L30">handler</a> it defaults to true.</p>
+
+<p>Change that to it to something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Tinder</span><span class="p">:</span><span class="ss">:Campfire</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;mydomain&#39;</span><span class="p">,</span> <span class="ss">:ssl_verify</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:token</span> <span class="o">=&gt;</span> <span class="s1">&#39;7505e9c7ed5c30a77dTHIS_IS_FAKE93029a494eb7c3d20&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And&hellip;all the sudden you&rsquo;ve got messages in your campfire channel.</p>
+
+<p>Yes, yes, you should verify ssl, but honestly, for what you get out of sensu for this, it&rsquo;s gravey for now. Plus I think after I ping <a href="https://github.com/portertech/">Sean Porter</a> about this issue in a passive/aggressive manner
+he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[chef-book lighting talk]]></title>
@@ -1475,194 +1554,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Moving from one chef to multiple chefs]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs/"/>
-    <updated>2013-10-04T14:00:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs</id>
-    <content type="html"><![CDATA[<p>There&rsquo;s a organic growth of a Ops team using chef goes through.  You start out with a <code>chef_repo</code> then you post it to github/some DVCS.  From there you tell people to clone it down and put PRs against it. From there you attempt to be a gate keeper, looking at the commits in the log, realizing that there is no match ups. From there you say to yourself &ldquo;Hey, ok, these guys are pretty smart, as long as I spot check, they should be able to merge things in and I can trust them right?&rdquo; NO you are lying to yourself you just don&rsquo;t realize it yet.</p>
-
-<p>Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push&hellip;and nothing happens. Oh I&rsquo;m 2x behind where I thought great, bump and push. Oh&hellip;it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded&hellip;crap. (And other situations like this can pop up.)</p>
-
-<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathen Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
-
-<h2>Installation</h2>
-
-<p>Obviously the first thing you need to do is install it. Luckily it&rsquo;s a gem so you can just do the following. If you read the docs there are a bunch of places that you <code>.yml</code> gets read from, but I chose this because I like having all my chef stuff in <code>.chef</code> so I don&rsquo;t have to think about pulling anything other than <code>.chef</code> if I want to move boxes.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>gem install knife-spork
-</span><span class='line'>touch ~/.chef/spork-config.yml
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
-
-<p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">default_environments</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">development</span>
-</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">production</span>
-</span><span class='line'><span class="l-Scalar-Plain">environment_groups</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">qa_group</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">quality_assurance</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">staging</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">test_group</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">user_testing</span>
-</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">acceptance_testing</span>
-</span><span class='line'><span class="l-Scalar-Plain">version_change_threshold</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2</span>
-</span><span class='line'><span class="l-Scalar-Plain">environment_path</span><span class="p-Indicator">:</span> <span class="s">&quot;/home/me/environments&quot;</span>
-</span><span class='line'><span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">campfire</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">account</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myaccount</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">a1b2c3d4...</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">hipchat</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">api_token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ABC123</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">General</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Web Operations</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">notify</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">color</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yellow</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">jabber</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURUSER</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURPASSWORD</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">nickname</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Chef Bot</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server_name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your.jabberserver.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5222</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">engineering@your.conference.com/spork</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">systems@your.conference.com/spork</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">irccat</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">irccat.mydomain.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">12345</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">gist</span><span class="p-Indicator">:</span> <span class="s">&quot;/usr/bin/gist&quot;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">channel</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;chef-annoucements&quot;</span><span class="p-Indicator">]</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">graphite</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">graphite.mydomain.com</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2003</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">eventinator</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://eventinator.mydomain.com/events/oneshot</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All in all this seems pretty self <a href="https://github.com/jonlives/knife-spork#default-environments">explanatory</a> but the most important things to change are <code>environment_path</code> and disabling the plugins (by removing them) here.  For my company I only used the git plugin and&hellip;well that was it. :)</p>
-
-<p>By the way there are only a few plugins, <a href="https://github.com/jonlives/knife-spork/tree/master/plugins">here</a> is a link to the different .md files on each.</p>
-
-<p>Ok, so you have everything set up, what do you do now?</p>
-
-<h2>Usage</h2>
-
-<p>The first step is to run <code>knife spork check COOKBOOK --all</code> where COOKBOOK is one of your commonly updated/tweaked cookbooks.  Spork checks against what you have locally compared to what&rsquo;s in the server, like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">knife spork check COOKBOOK --all</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here&rsquo;s an example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Checking versions <span class="k">for </span>cookbook nagios...
-</span><span class='line'>
-</span><span class='line'>Local Version:
-</span><span class='line'>  5.1.5
-</span><span class='line'>
-</span><span class='line'>Remote Versions: <span class="o">(</span>* indicates frozen<span class="o">)</span>
-</span><span class='line'>  5.1.5
-</span><span class='line'>  5.1.4
-</span><span class='line'>  5.1.3
-</span><span class='line'>  5.1.2
-</span><span class='line'>
-</span><span class='line'>ERROR: The version 5.1.5 exists on the server and is not frozen. Uploading will overwrite!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see with the error, it&rsquo;s pretty self explaintory.</p>
-
-<p>The second step is to bump the version:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>knife spork bump nagios patch
-</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
-</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
-</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
-</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
-</span><span class='line'>Successfully bumped nagios to v5.1.6!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now as you can see I have the git plugin working, and it without thinking about it, updates the metadata.rb so you don&rsquo;t have to. (I HATE that part of chef, I always forget.) Now you can go off make your changes.</p>
-
-<p>From here you&rsquo;re happy, you&rsquo;ve commited your new <code>chef_repo</code> back to the DVCS that you use.  This is where the magic happens: <code>knife spork upload COOKBOOK</code>.  This thing is great, it (to quote the <code>README.md</code>) <em>This function works mostly the same as normal knife cookbook upload COOKBOOK except that this automatically freezes cookbooks when you upload them.</em> Which is the bread and butter of spork.  The freezing is crazy important, by freezing the upload you take &ldquo;ownership&rdquo; of that version of the cookbook.  Your changes are yours, and no-one can mess with them.  So in turn you don&rsquo;t step on your coworkers toes and he doesen&rsquo;t step on yours.</p>
-
-<p>Ok, so this was the cheatsheet, we have implymented this at my company now, so hopefully this goes great. If not&hellip;well that&rsquo;s a different conversation.</p>
 ]]></content>
   </entry>
   
