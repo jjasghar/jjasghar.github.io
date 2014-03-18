@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-03-13T15:05:22-05:00</updated>
+  <updated>2014-03-18T17:08:52-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,72 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Help! I lost my vaildation.pem]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
+    <updated>2014-03-18T16:39:04-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
+    <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
+chef 11 server.</p>
+
+<p>(OK, fine I broke them, but this post is how to recreate either with <code>knife</code> on your workstation incase <strong>cough</strong>like me<strong>cough</strong> you have lost your chef-webui.)</p>
+
+<p>It turns out there is a great simple command to re-create your validation.pem.</p>
+
+<p>Note: This can also work as <code>validator.pem</code> also, but my code checks for <code>validation.pem</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % knife client reregister chef-validator
+</span><span class='line'><span class="c"># or if you want to name it and save it....</span>
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % knife client reregister chef-validator -f validaton.pem
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first one will spit out the new <code>.pem</code> you&rsquo;ll need to copy it to a file otherwise you&rsquo;ll just have to do run the command again. This/these commands are the equivalent of the <code>https://&lt;chefserver&gt;/clients/chef-validator/edit</code> and clicking that
+&ldquo;Regenerate Private Key (Existing one will no longer work!).&rdquo;</p>
+
+<p>Pretty straight forward eh?</p>
+
+<p>On the other hand, if you&rsquo;ve broken you chef-webui, and you see something like&hellip;.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>2014-03-18_21:31:54.98838 Chef::Exceptions::PrivateKeyMissing: I cannot <span class="nb">read</span> /etc/chef-server/chef-webui.pem, which you told me to use to sign requests!
+</span><span class='line'>2014-03-18_21:31:54.98840 <span class="o">{</span>:request_params<span class="o">=</span>&gt;
+</span><span class='line'>2014-03-18_21:31:54.98840   <span class="o">{</span><span class="s2">&quot;utf8&quot;</span><span class="o">=</span>&gt;<span class="s2">&quot;✓&quot;</span>,
+</span><span class='line'>2014-03-18_21:31:54.98841    <span class="s2">&quot;authenticity_token&quot;</span><span class="o">=</span>&gt;<span class="s2">&quot;uSheCVhYuGJPBAyDBHb4AIyEfkB2EqXwLD6Uolk//ig=&quot;</span>,
+</span><span class='line'>2014-03-18_21:31:54.98841    <span class="s2">&quot;name&quot;</span><span class="o">=</span>&gt;<span class="s2">&quot;admin&quot;</span>,
+</span><span class='line'>2014-03-18_21:31:54.98841    <span class="s2">&quot;commit&quot;</span><span class="o">=</span>&gt;<span class="s2">&quot;login&quot;</span>,
+</span><span class='line'>2014-03-18_21:31:54.98842    <span class="s2">&quot;password&quot;</span><span class="o">=</span>&gt;<span class="s2">&quot;p@ssw0rd1&quot;</span>,
+</span><span class='line'>2014-03-18_21:31:54.98842    <span class="s2">&quot;action&quot;</span><span class="o">=</span>&gt;<span class="s2">&quot;login_exec&quot;</span>,
+</span><span class='line'>2014-03-18_21:31:54.98842    <span class="s2">&quot;controller&quot;</span><span class="o">=</span>&gt;<span class="s2">&quot;users&quot;</span><span class="o">}}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In your <code>/var/log/chef-server/chef-server-webui/current</code> then the fix is pretty straight forward:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % knife client reregister chef-webui
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % <span class="c">#scp it up to your chef box</span>
+</span><span class='line'>chef# chown root.root /etc/chef-server/chef-webui.pem
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Campfire + Sensu and some issues]]></title>
@@ -1521,38 +1587,6 @@ node to work on my local box for local development (<a href="https://gist.github
 </span><span class='line'>18:50 j^2 ah cool
 </span><span class='line'>18:50 maek its for overrides
 </span><span class='line'>18:50 maek just make it</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
-    <updated>2013-10-05T16:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
-    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
-
-<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>root@boe:/tmp# rm /var/cache/nagios3/objects.cache
-</span><span class='line'>root@boe:/tmp# service nagios restart
-</span><span class='line'>Running configuration check…done.
-</span><span class='line'>Stopping nagios: .done.
-</span><span class='line'>Starting nagios: <span class="k">done</span>.
-</span><span class='line'>root@boe:/tmp# <span class="nb">cd</span> /var/cache/nagios3
-</span><span class='line'>root@boe:/var/cache/nagios3# ls
-</span><span class='line'>objects.cache  status.dat
-</span></code></pre></td></tr></table></div></figure>
-
-
 
 ]]></content>
   </entry>

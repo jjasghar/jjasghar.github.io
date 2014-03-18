@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-03-13T15:05:22-05:00</updated>
+  <updated>2014-03-18T17:08:52-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Help! I lost my vaildation.pem]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
+    <updated>2014-03-18T16:39:04-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
+    <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
+chef 11 server.</p>
+
+<p>(OK, fine I broke them, but this post is how to recreate either with <code>knife</code> on your workstation incase <strong>cough</strong>like me<strong>cough</strong> you have lost your chef-webui.)</p>
+
+<p>It turns out there is a great simple command to re-create your validation.pem.</p>
+
+<p>Note: This can also work as <code>validator.pem</code> also, but my code checks for <code>validation.pem</code></p>
+
+<p>```bash
+[~] % knife client reregister chef-validator</p>
+
+<h1>or if you want to name it and save it&hellip;.</h1>
+
+<p>[~] % knife client reregister chef-validator -f validaton.pem
+```</p>
+
+<p>The first one will spit out the new <code>.pem</code> you&rsquo;ll need to copy it to a file otherwise you&rsquo;ll just have to do run the command again. This/these commands are the equivalent of the <code>https://&lt;chefserver&gt;/clients/chef-validator/edit</code> and clicking that
+&ldquo;Regenerate Private Key (Existing one will no longer work!).&rdquo;</p>
+
+<p>Pretty straight forward eh?</p>
+
+<p>On the other hand, if you&rsquo;ve broken you chef-webui, and you see something like&hellip;.</p>
+
+<p><code>
+2014-03-18_21:31:54.98838 Chef::Exceptions::PrivateKeyMissing: I cannot read /etc/chef-server/chef-webui.pem, which you told me to use to sign requests!
+2014-03-18_21:31:54.98840 {:request_params=&gt;
+2014-03-18_21:31:54.98840   {"utf8"=&gt;"✓",
+2014-03-18_21:31:54.98841    "authenticity_token"=&gt;"uSheCVhYuGJPBAyDBHb4AIyEfkB2EqXwLD6Uolk//ig=",
+2014-03-18_21:31:54.98841    "name"=&gt;"admin",
+2014-03-18_21:31:54.98841    "commit"=&gt;"login",
+2014-03-18_21:31:54.98842    "password"=&gt;"p@ssw0rd1",
+2014-03-18_21:31:54.98842    "action"=&gt;"login_exec",
+2014-03-18_21:31:54.98842    "controller"=&gt;"users"}}
+</code></p>
+
+<p>In your <code>/var/log/chef-server/chef-server-webui/current</code> then the fix is pretty straight forward:</p>
+
+<p><code>bash
+[~] % knife client reregister chef-webui
+[~] % #scp it up to your chef box
+chef# chown root.root /etc/chef-server/chef-webui.pem
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[chef-book lighting talk]]></title>
@@ -220,47 +271,6 @@ end</p>
 <p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
 
 <p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A chef error that has haunted me]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
-    <updated>2014-01-20T15:42:33-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
-    <content type="html"><![CDATA[<p>Ok, you may have seen this before:
-<code>ruby
-23.987.33.854   * cookbook_file[/etc/init.d/apache2] action create
-23.987.33.854 ================================================================================
-23.987.33.854 Error executing action `create` on resource 'cookbook_file[/etc/init.d/apache2]'
-23.987.33.854 ================================================================================
-23.987.33.854
-23.987.33.854
-23.987.33.854 Net::HTTPServerException
-23.987.33.854 ------------------------
-23.987.33.854 403 "Forbidden"
-23.987.33.854
-23.987.33.854
-</code></p>
-
-<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
-
-<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
-
-<p>The gist of this:</p>
-
-<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl" value from 900 seconds to required time interval</p></blockquote>
-
-<p>So the fix is:
-```bash
-[~] % sudo vim /etc/chef-server/chef-server.rb</p>
-
-<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
-
-<p>[~] % sudo chef-server-ctl reconfigure
-```</p>
-
-<p>Boom, you should be good now. No more damn 403s.</p>
 ]]></content>
   </entry>
   
