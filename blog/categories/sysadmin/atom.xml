@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-03-18T17:08:52-05:00</updated>
+  <updated>2014-03-19T16:51:41-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Update to the chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
+    <updated>2014-03-19T16:45:03-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
+
+<p>```</p>
+
+<h2>Chef::Exceptions::ContentLengthMismatch</h2>
+
+<p>Response body length 164 does not match HTTP Content-Length header 206.
+```</p>
+
+<p>I moved chef servers and didn&rsquo;t change my <code>s3_url_ttl</code> and ran into this issue. So the annoying 403&rsquo;s are now something about <code>HTTP Content-Length</code>.</p>
+
+<p>If you&rsquo;ve forgotten the fix is:
+```bash
+[~] % sudo vim /etc/chef-server/chef-server.rb</p>
+
+<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
+
+<p>[~] % sudo chef-server-ctl reconfigure
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Help! I lost my vaildation.pem]]></title>
@@ -232,76 +259,6 @@ to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&g
 your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
 
 <p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
-    <updated>2014-02-17T15:32:20-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
-    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol' <a href="https://twitter.com/fnichol">Fletcher</a>
-made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
-cookbooks, and I wanted to start leveraging what I just paid for.</p>
-
-<p>So take this <code>.kitchen.yml</code> for instance:</p>
-
-<h2>```</h2>
-
-<p>driver:
-  name: vagrant</p>
-
-<p>provisioner:
-  name: chef_solo</p>
-
-<p>platforms:
-  &ndash; name: ubuntu-12.04</p>
-
-<p>suites:
-  &ndash; name: default</p>
-
-<pre><code>run_list:
-  - recipe[hubot-solo::default]
-attributes:
-</code></pre>
-
-<p>```</p>
-
-<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
-
-<h2>```</h2>
-
-<p>driver:
-  name: vagrant
-  provider: vmware_fusion</p>
-
-<p>provisioner:
-  name: chef_solo</p>
-
-<p>platforms:
-  &ndash; name: ubuntu-12.04</p>
-
-<p>suites:
-  &ndash; name: default</p>
-
-<pre><code>run_list:
-  - recipe[hubot-solo::default]
-attributes:
-</code></pre>
-
-<p>```</p>
-
-<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
-
-<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
-
-<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
-the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
-
-<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
-but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
-
-<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
 ]]></content>
   </entry>
   
