@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-17T16:58:53-06:00</updated>
+  <updated>2014-03-19T16:51:41-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Update to the chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
+    <updated>2014-03-19T16:45:03-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
+
+<p>```</p>
+
+<h2>Chef::Exceptions::ContentLengthMismatch</h2>
+
+<p>Response body length 164 does not match HTTP Content-Length header 206.
+```</p>
+
+<p>I moved chef servers and didn&rsquo;t change my <code>s3_url_ttl</code> and ran into this issue. So the annoying 403&rsquo;s are now something about <code>HTTP Content-Length</code>.</p>
+
+<p>If you&rsquo;ve forgotten the fix is:
+```bash
+[~] % sudo vim /etc/chef-server/chef-server.rb</p>
+
+<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
+
+<p>[~] % sudo chef-server-ctl reconfigure
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Help! I lost my vaildation.pem]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
+    <updated>2014-03-18T16:39:04-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
+    <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
+chef 11 server.</p>
+
+<p>(OK, fine I broke them, but this post is how to recreate either with <code>knife</code> on your workstation incase <strong>cough</strong>like me<strong>cough</strong> you have lost your chef-webui.)</p>
+
+<p>It turns out there is a great simple command to re-create your validation.pem.</p>
+
+<p>Note: This can also work as <code>validator.pem</code> also, but my code checks for <code>validation.pem</code></p>
+
+<p>```bash
+[~] % knife client reregister chef-validator</p>
+
+<h1>or if you want to name it and save it&hellip;.</h1>
+
+<p>[~] % knife client reregister chef-validator -f validaton.pem
+```</p>
+
+<p>The first one will spit out the new <code>.pem</code> you&rsquo;ll need to copy it to a file otherwise you&rsquo;ll just have to do run the command again. This/these commands are the equivalent of the <code>https://&lt;chefserver&gt;/clients/chef-validator/edit</code> and clicking that
+&ldquo;Regenerate Private Key (Existing one will no longer work!).&rdquo;</p>
+
+<p>Pretty straight forward eh?</p>
+
+<p>On the other hand, if you&rsquo;ve broken you chef-webui, and you see something like&hellip;.</p>
+
+<p><code>
+2014-03-18_21:31:54.98838 Chef::Exceptions::PrivateKeyMissing: I cannot read /etc/chef-server/chef-webui.pem, which you told me to use to sign requests!
+2014-03-18_21:31:54.98840 {:request_params=&gt;
+2014-03-18_21:31:54.98840   {"utf8"=&gt;"✓",
+2014-03-18_21:31:54.98841    "authenticity_token"=&gt;"uSheCVhYuGJPBAyDBHb4AIyEfkB2EqXwLD6Uolk//ig=",
+2014-03-18_21:31:54.98841    "name"=&gt;"admin",
+2014-03-18_21:31:54.98841    "commit"=&gt;"login",
+2014-03-18_21:31:54.98842    "password"=&gt;"p@ssw0rd1",
+2014-03-18_21:31:54.98842    "action"=&gt;"login_exec",
+2014-03-18_21:31:54.98842    "controller"=&gt;"users"}}
+</code></p>
+
+<p>In your <code>/var/log/chef-server/chef-server-webui/current</code> then the fix is pretty straight forward:</p>
+
+<p><code>bash
+[~] % knife client reregister chef-webui
+[~] % #scp it up to your chef box
+chef# chown root.root /etc/chef-server/chef-webui.pem
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[chef-book lighting talk]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
+    <updated>2014-02-28T10:52:08-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
+    <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
+five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
+
+<p>PS, I apologize for the quality.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
@@ -141,209 +231,6 @@ end</p>
 <p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
 
 <p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
-    <updated>2014-01-25T00:24:28-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
-    <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
-
-<p>So, yeah, you can tell I was pretty impressed with it right?</p>
-
-<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
-
-<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
-
-<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
-
-<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:
-```ruby
-&lt;%
-  socket = [</p>
-
-<pre><code>ENV["BOXEN_MYSQL_SOCKET"],
-"/var/run/mysql5/mysqld.sock",
-"/tmp/mysql.sock"
-</code></pre>
-
-<p>  ].detect { |f| f &amp;&amp; File.exist?(f) }</p>
-
-<p>  port = ENV[&ldquo;BOXEN_MYSQL_PORT&rdquo;] || &ldquo;3306&rdquo;
-%></p>
-
-<p>development: &amp;development
-  adapter: mysql
-  database: yourapp_development
-  username: root
-&lt;% if socket %>
-  host: localhost
-  socket: &lt;%= socket %>
-&lt;% else %>
-  host: 127.0.0.1
-  port: &lt;%= port %>
-&lt;% end %></p>
-
-<h1>Warning: The database defined as &ldquo;test&rdquo; will be erased and</h1>
-
-<h1>re-generated from your development database when you run &ldquo;rake&rdquo;.</h1>
-
-<h1>Do not set this db to the same as development or production.</h1>
-
-<p>test:
-  &lt;&lt;: *development
-  database: yourapp_test
-```</p>
-
-<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
-
-<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
-
-<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
-
-<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
-
-<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
-
-<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A chef error that has haunted me]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
-    <updated>2014-01-20T15:42:33-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
-    <content type="html"><![CDATA[<p>Ok, you may have seen this before:
-<code>ruby
-23.987.33.854   * cookbook_file[/etc/init.d/apache2] action create
-23.987.33.854 ================================================================================
-23.987.33.854 Error executing action `create` on resource 'cookbook_file[/etc/init.d/apache2]'
-23.987.33.854 ================================================================================
-23.987.33.854
-23.987.33.854
-23.987.33.854 Net::HTTPServerException
-23.987.33.854 ------------------------
-23.987.33.854 403 "Forbidden"
-23.987.33.854
-23.987.33.854
-</code></p>
-
-<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
-
-<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
-
-<p>The gist of this:</p>
-
-<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl" value from 900 seconds to required time interval</p></blockquote>
-
-<p>So the fix is:
-```bash
-[~] % sudo vim /etc/chef-server/chef-server.rb</p>
-
-<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
-
-<p>[~] % sudo chef-server-ctl reconfigure
-```</p>
-
-<p>Boom, you should be good now. No more damn 403s.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/"/>
-    <updated>2013-12-23T10:36:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance</id>
-    <content type="html"><![CDATA[<p>So congrats you got your new &ldquo;<a href="http://www.rackspace.com/cloud/private/">Private Cloud</a>&rdquo; from Rackspace. You are probably ecstatic to start building your new machines.
-I know I was; but alas with all new toys sometimes you hit a couple stags. Here are a couple things I ran into on my first few days.</p>
-
-<h3>First issue</h3>
-
-<p>So I&rsquo;m a chef shop, as you might know by now (assuming you&rsquo;ve read any of my other posts). I&rsquo;ve used <a href="https://github.com/opscode/knife-rackspace">knife-rackspace</a> tons of times; and hell I even have a <a href="https://github.com/opscode/knife-rackspace/commits?author=jjasghar">commit bit</a>. So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
-You end up having to install <a href="https://github.com/opscode/knife-openstack">knife-openstack</a>. That in itself isn&rsquo;t bad at all&hellip;
-<code>bash
-[~] % gem install knife-openstack
-</code>
-Now you need to update your <code>knife.rb</code>
-<code>bash
-[~] % vim ~/.chef/knife.rb
-</code>
-In your handoff ticket, you probably got something that looks like this:
-<code>bash
-export OS_USERNAME=Im_awesome_admin
-export OS_PASSWORD=$omeCr@zyA$$passwD
-export OS_TENANT_NAME=MyCompanyName
-export OS_AUTH_URL=http://10.219.0.254:5000/v2.0/
-export OS_AUTH_STRATEGY=keystone:
-</code>
-Go ahead and copy them out to what they need to be, something like&hellip;
-```ruby
-knife[:openstack_username] = &ldquo;Your OpenStack Dashboard username&rdquo;
-knife[:openstack_password] = &ldquo;Your OpenStack Dashboard password&rdquo;</p>
-
-<h3>Note: If you are not proxying HTTPS to the OpenStack auth port, the scheme should be HTTP</h3>
-
-<p>knife[:openstack_auth_url] = &ldquo;<a href="http://cloud.mycompany.com:5000/v2.0/tokens">http://cloud.mycompany.com:5000/v2.0/tokens</a>&rdquo;
-knife[:openstack_tenant] = &ldquo;Your OpenStack tenant name&rdquo;
-knife[:openstack_ssh_key_id] = &ldquo;my sshkey id&rdquo;
-<code>
-Great! So run that great command `knife openstack flavor list` to see if everything works....
-</code>bash
-[~] % knife openstack server list
-ERROR: knife encountered an unexpected error
-This may be a bug in the &lsquo;openstack server list&rsquo; knife command or plugin
-Please collect the output of this command with the <code>-VV</code> option before filing a bug report.
-Exception: NoMethodError: undefined method `[]&lsquo; for nil:NilClass
-```
-Crap..</p>
-
-<p>Ok, lets try out with <code>-VV</code></p>
-
-<p><code>``ruby
-DEBUG: openstack_username Im_awsome_admin
-DEBUG: openstack_auth_url http://10.219.0.254:5000/v2.0/
-DEBUG: openstack_tenant MyCompanyName
-DEBUG: openstack_insecure
-/Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:51:in</code>rescue in run': undefined method `[]&lsquo; for nil:NilClass (NoMethodError)</p>
-
-<pre><code>from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:41:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:485:in `run_with_pretty_exceptions'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:174:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/application/knife.rb:133:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/bin/knife:25:in `&lt;top (required)&gt;'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `load'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `&lt;main&gt;'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `eval'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `&lt;main&gt;'
-</code></pre>
-
-<p>```</p>
-
-<p>Well that&rsquo;s not a lot of help eh? Turns out, if you look at the ticket that Rackspace gives you and what the <code>[:openstack_auth_url]</code> requires you&rsquo;ll see that there&rsquo;s a <code>/tokens</code> at the end. Do'h!</p>
-
-<h3>Second issue</h3>
-
-<p>Ok, so you got the ability to talk to your backend? Yay! But alas, you run your create&hellip;
-```bash
-[~] % knife openstack server create -S jj-mba-key -I 349168d3-5381-4324-8636-398d012f852b -f 1 -N testbox
-Instance Name: testbox
-Instance ID: 5e0ec79c-e06a-4fdb-9887-2b30ae1e5f80</p>
-
-<p>Waiting for server&hellip;&hellip;&hellip;
-Flavor: 1
-Image: 349168d3-5381-4324-8636-398d012f852b
-SSH Keypair: jj-mba-key
-ERROR: No IP address available for bootstrapping.
-```
-What the hell does that mean? Well I&rsquo;m not going to explain it all but it seems that by default Rackspace names the &ldquo;public&rdquo; and &ldquo;private&rdquo; networks as &ldquo;Fixed&rdquo; and &ldquo;Floating.&rdquo;
-This is triggered a fog issue, where it&rsquo;s looking at the label for a network either &ldquo;public&rdquo; or &ldquo;private&rdquo; and blows up. There is a ticket in for this <a href="https://tickets.opscode.com/browse/KNIFE-231">here</a> but it looks like it&rsquo;s stalled from late summer, early fall. Lammmeeee.</p>
-
-<p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
-
-<p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I&rsquo;d like to start off by thanking Darren Jones, for writing the book Jump Start Sinatra. This book is amazing, it&rsquo;s extremely well &hellip;">
+  <meta name="description" content="I went to #chef on freenode and maek helped me out. Here’s a run down of how to fix it. Alas the gists are gone; sorry. :( If you play with open &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,676 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/">How to Fix Https://chef Defaulting Running Chef Client on Open Source Chef Server</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-05T16:59:00-05:00" pubdate data-updated="true">Oct 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
+
+<p>If you play with open source chef you might run into this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>18:42 j^2 so i’m having trouble with chef-client
+</span><span class='line'>18:42 j^2 why does it default to https://chef/blahblah?
+</span><span class='line'>18:43 j^2 example:
+</span><span class='line'>18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
+</span><span class='line'>18:44 j^2 any advice?
+</span><span class='line'>18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
+</span><span class='line'>18:45 maek j^2:  I just got hit with this also
+</span><span class='line'>18:45 maek i think becuase chef 11 is now fronted with nginx
+</span><span class='line'>18:45 maek its doing a rewrite
+</span><span class='line'>18:45 maek for the name configured in nginx
+</span><span class='line'>18:45 maek in this case its hostname
+</span><span class='line'>18:45 maek but i assume that box cant resolve chef
+</span><span class='line'>18:46 j^2 lame
+</span><span class='line'>18:46 maek j^2:  I had to end up adding a hosts entry
+</span><span class='line'>18:46 maek while I wait for dns
+</span><span class='line'>18:46 maek I think you could do
+</span><span class='line'>18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
+</span><span class='line'>18:47 maek you could reconfigure chef
+</span><span class='line'>18:47 maek to use its ip
+</span><span class='line'>18:47 maek instead of its hostname
+</span><span class='line'>18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
+</span><span class='line'>18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
+</span><span class='line'>18:48 maek i dont see it htought
+</span><span class='line'>18:48 j^2 oh!
+</span><span class='line'>18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
+</span><span class='line'>18:48 j^2 nice looking
+</span><span class='line'>18:48 maek yeah
+</span><span class='line'>18:48 maek there it is</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>18:48 maek so you can do
+</span><span class='line'>18:49 maek in /etc/chef-server/chef-server.rb
+</span><span class='line'>18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
+</span><span class='line'>18:50 j^2 yeah i dont thave that file. :(
+</span><span class='line'>18:50 maek and run chef-server-ctl reconfigure
+</span><span class='line'>18:50 j^2 ah cool
+</span><span class='line'>18:50 maek its for overrides
+</span><span class='line'>18:50 maek just make it</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/05/how-to-delete-the-cache-in-nagios/">How to Delete the Cache in Nagios</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-05T16:06:00-05:00" pubdate data-updated="true">Oct 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
+
+<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>root@boe:/tmp# rm /var/cache/nagios3/objects.cache
+</span><span class='line'>root@boe:/tmp# service nagios restart
+</span><span class='line'>Running configuration check…done.
+</span><span class='line'>Stopping nagios: .done.
+</span><span class='line'>Starting nagios: <span class="k">done</span>.
+</span><span class='line'>root@boe:/tmp# <span class="nb">cd</span> /var/cache/nagios3
+</span><span class='line'>root@boe:/var/cache/nagios3# ls
+</span><span class='line'>objects.cache  status.dat
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/04/moving-from-one-chef-to-multiple-chefs/">Moving From One Chef to Multiple Chefs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-04T14:00:00-05:00" pubdate data-updated="true">Oct 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There&rsquo;s a organic growth of a Ops team using chef goes through.  You start out with a <code>chef_repo</code> then you post it to github/some DVCS.  From there you tell people to clone it down and put PRs against it. From there you attempt to be a gate keeper, looking at the commits in the log, realizing that there is no match ups. From there you say to yourself &ldquo;Hey, ok, these guys are pretty smart, as long as I spot check, they should be able to merge things in and I can trust them right?&rdquo; NO you are lying to yourself you just don&rsquo;t realize it yet.</p>
+
+<p>Wait for that one day that you think you have the newest cookbook and you bump the version, add your changes and you upload, and push&hellip;and nothing happens. Oh I&rsquo;m 2x behind where I thought great, bump and push. Oh&hellip;it seems there was a critical fix in that one that I didnt get for that exact cookbook I uploaded&hellip;crap. (And other situations like this can pop up.)</p>
+
+<p>So, I pinged <a href="https://twitter.com/nathenharvey">Nathen Harvey</a> at Opscode asking for some guidance, he suggested <a href="https://github.com/jonlives/knife-spork">knife-spork</a>.  So far with my initial tests it looks like it is the correct answer,  so I&rsquo;m also writing this as a HOWTO for my company so this is just a run down of how to use it. (A cheatsheet to the README.md if you will.)</p>
+
+<h2>Installation</h2>
+
+<p>Obviously the first thing you need to do is install it. Luckily it&rsquo;s a gem so you can just do the following. If you read the docs there are a bunch of places that you <code>.yml</code> gets read from, but I chose this because I like having all my chef stuff in <code>.chef</code> so I don&rsquo;t have to think about pulling anything other than <code>.chef</code> if I want to move boxes.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>gem install knife-spork
+</span><span class='line'>touch ~/.chef/spork-config.yml
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After installing the gem and touching the file, you can run <code>knife spork info</code>, it should say everything is disabled.  If so, then you are read to create the config file.</p>
+
+<p>The example <a href="https://raw.github.com/jonlives/knife-spork/master/README.md">config</a> is on the main site, but I copied the demo one here too.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">default_environments</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">development</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">production</span>
+</span><span class='line'><span class="l-Scalar-Plain">environment_groups</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">qa_group</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">quality_assurance</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">staging</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">test_group</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">user_testing</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">acceptance_testing</span>
+</span><span class='line'><span class="l-Scalar-Plain">version_change_threshold</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2</span>
+</span><span class='line'><span class="l-Scalar-Plain">environment_path</span><span class="p-Indicator">:</span> <span class="s">&quot;/home/me/environments&quot;</span>
+</span><span class='line'><span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">campfire</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">account</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myaccount</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">a1b2c3d4...</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">hipchat</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">api_token</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ABC123</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">General</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Web Operations</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">notify</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">color</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yellow</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">jabber</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURUSER</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">YOURPASSWORD</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">nickname</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Chef Bot</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server_name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your.jabberserver.com</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server_port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5222</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">rooms</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">engineering@your.conference.com/spork</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">systems@your.conference.com/spork</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">true</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">irccat</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">irccat.mydomain.com</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">12345</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">gist</span><span class="p-Indicator">:</span> <span class="s">&quot;/usr/bin/gist&quot;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">channel</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;chef-annoucements&quot;</span><span class="p-Indicator">]</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">graphite</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">server</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">graphite.mydomain.com</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2003</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">eventinator</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://eventinator.mydomain.com/events/oneshot</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All in all this seems pretty self <a href="https://github.com/jonlives/knife-spork#default-environments">explanatory</a> but the most important things to change are <code>environment_path</code> and disabling the plugins (by removing them) here.  For my company I only used the git plugin and&hellip;well that was it. :)</p>
+
+<p>By the way there are only a few plugins, <a href="https://github.com/jonlives/knife-spork/tree/master/plugins">here</a> is a link to the different .md files on each.</p>
+
+<p>Ok, so you have everything set up, what do you do now?</p>
+
+<h2>Usage</h2>
+
+<p>The first step is to run <code>knife spork check COOKBOOK --all</code> where COOKBOOK is one of your commonly updated/tweaked cookbooks.  Spork checks against what you have locally compared to what&rsquo;s in the server, like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">knife spork check COOKBOOK --all</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Checking versions <span class="k">for </span>cookbook nagios...
+</span><span class='line'>
+</span><span class='line'>Local Version:
+</span><span class='line'>  5.1.5
+</span><span class='line'>
+</span><span class='line'>Remote Versions: <span class="o">(</span>* indicates frozen<span class="o">)</span>
+</span><span class='line'>  5.1.5
+</span><span class='line'>  5.1.4
+</span><span class='line'>  5.1.3
+</span><span class='line'>  5.1.2
+</span><span class='line'>
+</span><span class='line'>ERROR: The version 5.1.5 exists on the server and is not frozen. Uploading will overwrite!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see with the error, it&rsquo;s pretty self explaintory.</p>
+
+<p>The second step is to bump the version:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>knife spork bump nagios patch
+</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments
+</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
+</span><span class='line'>Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/cookbooks/nagios
+</span><span class='line'>Pulling latest changes from git submodules <span class="o">(</span><span class="k">if </span>any<span class="o">)</span>
+</span><span class='line'>Successfully bumped nagios to v5.1.6!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now as you can see I have the git plugin working, and it without thinking about it, updates the metadata.rb so you don&rsquo;t have to. (I HATE that part of chef, I always forget.) Now you can go off make your changes.</p>
+
+<p>From here you&rsquo;re happy, you&rsquo;ve commited your new <code>chef_repo</code> back to the DVCS that you use.  This is where the magic happens: <code>knife spork upload COOKBOOK</code>.  This thing is great, it (to quote the <code>README.md</code>) <em>This function works mostly the same as normal knife cookbook upload COOKBOOK except that this automatically freezes cookbooks when you upload them.</em> Which is the bread and butter of spork.  The freezing is crazy important, by freezing the upload you take &ldquo;ownership&rdquo; of that version of the cookbook.  Your changes are yours, and no-one can mess with them.  So in turn you don&rsquo;t step on your coworkers toes and he doesen&rsquo;t step on yours.</p>
+
+<p>Ok, so this was the cheatsheet, we have implymented this at my company now, so hopefully this goes great. If not&hellip;well that&rsquo;s a different conversation.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2/">Adventures Migrating From 2.4.16 Redis to 2.6.16 Redis (Part 2)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-01T18:11:00-05:00" pubdate data-updated="true">Oct 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Monitoring</h1>
+
+<p>Everyone loves monitoring. Ok, that&rsquo;s a lie, only [DevOps|Sysadmins] love monitoring. Ok, that&rsquo;s probably a lie too, hell I love monitoring, and I love nagios.  I&rsquo;ve followed used nagios in some shape or another since nagios-1.0b6. My first real paid job as an &ldquo;IT guy&rdquo; was setting up nagios for a company.  I&rsquo;ve actually gotten in the habit of walking into a new company using <a href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/">serverspec</a>, to learn what each machine does, then implementing nagios behind the serverspec scripts for a proactive monitoring on error conditions. This might seem redundant, but I don&rsquo;t think so. serverspec is great for spot checking, while nagios gives the best &ldquo;state of the union&rdquo; snapshot. Granted a lot of the time creating these checks are reactive, but sometimes like here, I wrote some proactive monitoring because I know there are certain error conditions on the slaves I&rsquo;ve spun up.</p>
+
+<p>I use nrpe to monitor my machines, and I set up my <code>nrpe.cfg</code> to something like the following. I use chef, so the <code>&lt;%= node['hostname'] %&gt;</code> is from <a href="https://github.com/opscode/ohai">ohai</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="na">command[check_redisserver]</span><span class="o">=</span><span class="s">/usr/lib/nagios/plugins/check_procs -c 1:1 -C redis-server</span>
+</span><span class='line'><span class="na">command[check_redis_replication]</span><span class="o">=</span><span class="s">/usr/lib/nagios/plugins/check_redis_replication -h &lt;%= node[&#39;hostname&#39;] %&gt; -w 20 -c 45</span>
+</span><span class='line'><span class="na">command[check_redis_rdb_age]</span><span class="o">=</span><span class="s">/usr/lib/nagios/plugins/check_redis_rdb_age &lt;%= node[&#39;hostname&#39;] %&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first line is pretty self explanatory.  Obviously I&rsquo;d like to check that redis is running, and that&rsquo;s what it does.</p>
+
+<p>The second line is where I started creating the new monitoring.  I have all my monitors right now at a 3 strike out rule, I have played with the idea of tweaking it, but it seems 3 strikes then an email seems to cut down on the noise I get.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;optparse&#39;</span>
+</span><span class='line'><span class="n">options</span>  <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="n">required</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:warning</span><span class="p">,</span> <span class="ss">:critical</span><span class="p">,</span> <span class="ss">:host</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">parser</span>   <span class="o">=</span> <span class="no">OptionParser</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">opts</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">opts</span><span class="o">.</span><span class="n">banner</span> <span class="o">=</span> <span class="s2">&quot;Usage: check_redis_replication [options]&quot;</span>
+</span><span class='line'>      <span class="n">opts</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--host redishost&quot;</span><span class="p">,</span> <span class="s2">&quot;The hostname of the redis slave&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">h</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">options</span><span class="o">[</span><span class="ss">:host</span><span class="o">]</span> <span class="o">=</span> <span class="n">h</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">opts</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;-w&quot;</span><span class="p">,</span> <span class="s2">&quot;--warning percentage&quot;</span><span class="p">,</span> <span class="s2">&quot;Warning threshold&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">w</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">options</span><span class="o">[</span><span class="ss">:warning</span><span class="o">]</span> <span class="o">=</span> <span class="n">w</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">opts</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;--critical critical&quot;</span><span class="p">,</span> <span class="s2">&quot;Critical threshold&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">options</span><span class="o">[</span><span class="ss">:critical</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span>
+</span><span class='line'>     <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">parser</span><span class="o">.</span><span class="n">parse!</span>
+</span><span class='line'><span class="nb">abort</span> <span class="n">parser</span><span class="o">.</span><span class="n">to_s</span> <span class="k">if</span> <span class="o">!</span><span class="n">required</span><span class="o">.</span><span class="n">all?</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="o">|</span> <span class="n">options</span><span class="o">.</span><span class="n">has_key?</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">master_last_io_seconds_ago</span> <span class="o">=</span> <span class="sb">`/opt/redis/bin/redis-cli info | grep master_last_io_seconds_ago`</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">to_i</span> <span class="k">rescue</span> <span class="o">-</span><span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;A-Ok!&quot;</span>
+</span><span class='line'><span class="k">if</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">&gt;=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:critical</span><span class="o">].</span><span class="n">to_i</span>
+</span><span class='line'>  <span class="n">status</span> <span class="o">=</span> <span class="ss">:critical</span>
+</span><span class='line'><span class="k">elsif</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">&gt;=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:warning</span><span class="o">].</span><span class="n">to_i</span>
+</span><span class='line'>  <span class="n">status</span> <span class="o">=</span> <span class="ss">:warning</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">status_detail</span> <span class="o">=</span> <span class="n">master_last_io_seconds_ago</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">?</span> <span class="s1">&#39;ERROR&#39;</span> <span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span> <span class="n">master_last_io_seconds_ago</span><span class="o">.</span><span class="n">to_s</span> <span class="si">}</span><span class="s2">s&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">status</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">upcase</span><span class="si">}</span><span class="s2"> - replication lag: </span><span class="si">#{</span><span class="n">status_detail</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="ss">:critical</span>
+</span><span class='line'>  <span class="nb">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'><span class="k">elsif</span> <span class="n">status</span> <span class="o">==</span> <span class="ss">:warning</span>
+</span><span class='line'>  <span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I stole this monitor from <a href="http://blog.winfieldpeterson.com/2012/12/13/monitoring-redis-replication-in-nagios/">here</a> but as you can tell the <code>redis-cli</code> is edited and the default status too.  <a href="https://twitter.com/miah_">Miah</a>&rsquo;s <a href="https://github.com/miah/chef-redis">cookbook</a> is great, works like a charm, but it puts the <code>redis-cli</code> in <code>/opt/redis/bin/</code>.</p>
+
+<p>As a side note: I even put in a <a href="https://github.com/miah/chef-redis/pull/55">PR</a> to update to 2.6.16, because of this project.  I ran all the <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> tests and it passed like a charm.  I actually learned about <a href="https://github.com/sstephenson/bats">bats</a> in the process, and honestly I&rsquo;m pretty damn impressed with something so straight forward.  Because serverspec fulfills my requirements at the moment, I don&rsquo;t have to use it; but I like the idea of having it in my back pocket.  The replication between master and slave seems extremely important, so this monitor has been a god sent.  I never have seen it spike over 45 seconds, but then the next check pop back to &lt;3 seconds.</p>
+
+<p>The second monitor I wrote was this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
+</span><span class='line'><span class="nv">LAST_SYNC_HUMAN</span><span class="o">=</span><span class="sb">`</span>/opt/redis/bin/redis-cli -h <span class="nv">$1</span> info | grep rdb_last_save_time | awk -F : <span class="o">{</span><span class="s1">&#39;print $2&#39;</span><span class="o">}</span> | xargs -I <span class="o">{}</span> date -d @<span class="o">{}</span><span class="sb">`</span>
+</span><span class='line'><span class="nv">LAST_SYNC</span><span class="o">=</span><span class="sb">`</span>/opt/redis/bin/redis-cli -h <span class="nv">$1</span> info | grep rdb_last_save_time | awk -F : <span class="o">{</span><span class="s1">&#39;print $2&#39;</span><span class="o">}</span> | tr -d <span class="s1">&#39;\r&#39;</span><span class="sb">`</span>
+</span><span class='line'><span class="nv">LAST_15MIN</span><span class="o">=</span><span class="sb">`</span>date -d <span class="s1">&#39;15 minutes ago&#39;</span> +%s<span class="sb">`</span>
+</span><span class='line'><span class="nv">LAST_20MIN</span><span class="o">=</span><span class="sb">`</span>date -d <span class="s1">&#39;20 minutes ago&#39;</span> +%s<span class="sb">`</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;${LAST_15MIN}&quot;</span> -lt <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span>;
+</span><span class='line'>  <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo </span>Sync has happened in the last 15 mins or less at <span class="k">${</span><span class="nv">LAST_SYNC_HUMAN</span><span class="k">}</span>
+</span><span class='line'>  <span class="nv">stateid</span><span class="o">=</span>0
+</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${LAST_15MIN}&quot;</span> -ge <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">&quot;${LAST_20MIN}&quot;</span> -lt <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span>;
+</span><span class='line'>  <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo </span>Sync happened a little longer than we would like, the last at <span class="k">${</span><span class="nv">LAST_SYNC_HUMAN</span><span class="k">}</span>
+</span><span class='line'>  <span class="nv">stateid</span><span class="o">=</span>1
+</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${LAST_20MIN}&quot;</span> -ge <span class="s2">&quot;${LAST_SYNC}&quot;</span> <span class="o">]</span>;
+</span><span class='line'>  <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo </span>Sync took over 20 mins, something might be wrong, the last sync happened at <span class="k">${</span><span class="nv">LAST_SYNC_HUMAN</span><span class="k">}</span>
+</span><span class='line'>  <span class="nv">stateid</span><span class="o">=</span>2
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This monitor I took from my typical <a href="https://github.com/jjasghar/scripts/blob/master/nagios_check_generic_template.sh">bash nagios template</a> and added the error states.  It seems like the .rdb file should always be in &ldquo;close&rdquo; proximity to the last write of to slave, and it would be nice to be alarmed about it if it went out of wack.  From what I&rsquo;ve seen it&rsquo;s never more than 1 or 2 minutes behind; so this worked out.  Writing a monitor for something and never seeing it fire till there is a real problem, that&rsquo;s a great place to be in.</p>
+
+<h2>Non-nagios monitoring</h2>
+
+<p>I started looking around for some type of dashboard to get some visual data about the redis instance.  It turns out there is a TON of these bastards, from a paid product like <a href="https://scoutapp.com/plugin_urls/271-redis-monitoring">Scout</a> to <a href="https://github.com/junegunn/redis-stat">redis-stat</a>.  I picked redis-stat because well, it&rsquo;s un-intrusive and fast.  I have it polling against my master slave on two instances of the gem running, and it&rsquo;s really nice to have a easily digestible view of the health of it.  I have noticed that it has doubled up the info because of the syncing, so be warned, you probably should run it via just the master and then maybe put all the slaves on one? (I&rsquo;m still trying to figure this one out.)</p>
+
+<p>If you do read this and have good suggestions please through them my <a href="http://jjasghar.github.io/about/">way</a>, the <code>INFO</code> command gives you a lot of data, and redis-stat doesn&rsquo;t store anything so treading over time isn&rsquo;t an option. I was thinking about putting some of this data in ganglia, (another favorite of mine) but to have something just redis focused seems like the correct move here.</p>
+
+<hr />
+
+<p>So, so far these is the monitors that I&rsquo;m using for my new master slave set up.  My next challenge is creating the VIP in front of the master slave, and have a &ldquo;hot fail over.&rdquo; This is going to require some pretty interesting engineering; it&rsquo;s fun, but man the more I think about it the more it hurts my brain.  So I haven&rsquo;t actually talked about the migration yet either.  From what I&rsquo;ve understood it seems that 2.4.16 is actually <em>inside</em> 2.6.16, so if I get this VIP in front of this master slave then fail over to the slave turning off the read-only, this should be seamless. I need to do some testing; but that seems like the best course of action. For just the migration though, the &ldquo;hot fail over&rdquo; isn&rsquo;t required, but I want it to be in the fore-front of the design because I&rsquo;d rather be additive than have to rip out everything after we get up dated.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/30/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis/">Adventures Migrating From 2.4.16 Redis to 2.6.16 Redis (Part 1)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-30T20:15:00-05:00" pubdate data-updated="true">Sep 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Like most sysadmins out there, I read the blogs and posts about new technologies that are relevant to my product(s).  There has been a lot of buzz about NoSQL and the key value store type db&rsquo;s out there, yet I have never really focused directly on it.  I have paid passing attention, until I realized that we use one heavily at my company.</p>
+
+<p><a href="http://redis.io">Redis</a> is a key value store that runs completely in memory. It&rsquo;s fast, REALLY fast, and after spending some time with a few tutorials like <a href="http://openmymind.net/2012/1/23/The-Little-Redis-Book/">The Little Redis Book</a> by <a href="https://twitter.com/karlseguin">Karl Seguin</a>, it makes a ton of sense, and an extremely neat backend piece of software.</p>
+
+<p>I started to learn more about it, and I started talking to a coworker and he said that he really wanted to upgrade from 2.4 redis to 2.6 redis. I took this as a challenge, and ran with it.</p>
+
+<p>The first part of the migration is creating a slave.  We had .aof and .rdb snapshotting, but we didn&rsquo;t have a slave. This post is be going to be chronicling my adventures getting from 2.4.16 to 2.6.16.</p>
+
+<p>Another coworker of mine, <a href="https://github.com/lwoodson">Lance Woodson</a>, created a script called &ldquo;<a href="https://gist.github.com/jjasghar/423d040444a4f4cbea1d">bloater</a>&rdquo; to start putting trash keys in the redis db.  As you can see it&rsquo;s pretty straight forward, I do strongly suggest using <code>bloater.clear!</code> if you are playing with it.  I leveraged this to simulate creating a slave already in production, the theory being I&rsquo;ll have data inside the redis db, things talking to db, and the sync happening.  I understand that a lot of people have tested this situation, but I couldn&rsquo;t seem to find any direct examples.  Hopefully this will be useful to someone.</p>
+
+<p>The first step after getting my 2.4.16 redis machine running, I ran <code>bloater.bloat! 2295000000</code> to get an .rdb file that was ~2 gigs.  I configured the snapshotting at the default values so it created it without a hitch.  I copied it off called it something like <code>2gig-dump.rdb</code> or something.  Then I ran <code>bloater.bloat! 4295000000</code> to create the 4gig dump file.  I copied that off next and then I had my two dumpfiles that I could play with.  You are probably wondering why 2 and 4 gigs, and also &ldquo;Dang, that&rsquo;s a huge redis db.&rdquo; Yes, yes it is, I focused on the &ldquo;oh crap, our db is too big&rdquo; situation, so if redis handles that, then I know it&rsquo;ll deal with the 100 meg db just fine.</p>
+
+<p>Secondly I did my <code>FLUSHALL</code> command, then shutdown my redis instance then copied the 2 gig db, in the <code>/var/lib/redis/</code> location.  I spun up redis, and ran the <code>INFO</code> command, like all redis admins learn to love to do.  I saw that it was 2 gigs, and yay, now I had my foundation to start my testing.</p>
+
+<p>I went through quite a few different iterations, but I&rsquo;ll just explain the basic trouble shooting that I did, and maybe you can leverage off it.</p>
+
+<p>So with my redis 2.4 instance with a 2 gig db, and my 2.6 blank db instance it was time to start the fun.  I ran the following commands in a tmux session on my main workstation.  I liked the idea of a 3rd party machine actually looking at all this stuff instead of running directly on one of the machines.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>watch <span class="s2">&quot;redis-cli -h redis-slave info | grep master_sync_left_bytes &quot;</span>
+</span><span class='line'>redis-cli -h redis-slave keys <span class="s2">&quot;*&quot;</span> | wc -l
+</span><span class='line'>redis-cli -h redis-master keys <span class="s2">&quot;*&quot;</span> | wc -l
+</span><span class='line'>redis-cli -h redis-master info | grep used_memory
+</span><span class='line'>redis-cli -h redis-slave info | grep used_memory
+</span><span class='line'>redis-cli -h redis-master --latency
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Most, if not all are pretty self explanatory.  The most interesting one of them all is probably the last one, the <code>--latency</code>.  It used it as a way to emulate something poking my redis instance during the inital clone. The thing we, [where|are|still] worried about is customer impact, and as long as the number didn&rsquo;t sky rocket then stay high it was an acceptable risk.</p>
+
+<p>After I got the tmux session all up and happy, i  ran these two commands to start the <code>slaveof</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># on the master</span>
+</span><span class='line'>redis-master:6379&gt; slaveof no one
+</span><span class='line'><span class="c"># on the slave</span>
+</span><span class='line'>redis-slave:6379&gt; slaveof redis-master 6379
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It worked like a charm. The <code>watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "</code> started showing me the amount of data left for the transfer, and before I knew it I had a working master slave configuration.  This was a lot of cruft to basically say <code>slaveof redis-master 6379</code> but hell it&rsquo;s sometimes nice to see the thought process around it.  Oh!, the latency, did spike to 800 from .05, but I discovered that was in milliseconds and only ONE sample.  So yeah one call to the master with a spike of something still sub-second, was still in the risk params.
+Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post about my monitoring of this, it&rsquo;s not <em>that</em> exciting, but it is useful.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -418,293 +1088,9 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/09/nagios-status-rackspace/">Nagios-status-rackspace</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-09T15:05:00-05:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I posted a <a href="http://redd.it/1gefnf">this</a> on <a href="http://www.reddit.com/r/sysadmin">/r/sysadmin/</a> back on 6/15/13.  I wanted to put some context around why I created the nagios checks and why the <a href="https://status.rackspace.com/index/rss">RSS</a> after all that discussion still didn&rsquo;t fulfill my requirements.</p>
-
-<p>The biggest problem I have with the RSS feed is that it is everything inside the rackspace status page.  As I said to <a href="http://www.reddit.com/user/rackerkev">/u/rackerkev</a>; as a customer in ORD I don&rsquo;t want to be paged or alerted when something in LON happens.  This seems be the default for the RSS feed, a water hose of what that status page says.</p>
-
-<p>After our account manager suggested us to check <a href="http://status.rackspace.com">http://status.rackspace.com</a> a developer on my team asked if there was an automated way to check this.  I ran a quick <code>curl http://status.rackspace.com</code> and discovered it&rsquo;s flat html.  Boom, I had a way to get the data, I just needed a way to parse it.</p>
-
-<p>I had a default nagios check template and all I had to do was put that <code>curl</code> in to parse it out.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
-</span><span class='line'><span class="nv">SOMECMD</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="s2">&quot;something&quot;</span>
-</span><span class='line'><span class="nv">SOMETHING</span><span class="o">=</span>something
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> <span class="o">==</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> is something
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
-</span><span class='line'><span class="c">#elif [  &quot;${SOMECMD}&quot; == ${SOMETHING} ];</span>
-</span><span class='line'><span class="c">#  then</span>
-</span><span class='line'><span class="c">#  echo This is a Warning</span>
-</span><span class='line'><span class="c">#  stateid=1</span>
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> !<span class="o">=</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Something is broken!
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
-</span><span class='line'> <span class="k">fi</span>
-</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I don&rsquo;t think this actually works, but hell you get the point.</p>
-
-<p>So with some patience using <code>sed</code> and <code>grep</code> I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about &ldquo;You should write it as one script and then add flags or variables at the end.&rdquo; I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have <code>curl</code> installed and write the command stanza, like my suggestion in the <a href="https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md">README.md</a> you should be off to the races.</p>
-
-<p>Now something interesting I learned posting these checks.  The quote that says &ldquo;rackspace only updates the status page if enough customers complain about some problem some place&rdquo; is true.  There is no automated update to the status page, it requires human intervention to update.  When I first heard of the status page, I like most though it was programmatic way to see into rackspace infrastructure.  This makes me a sad panda; and as I have learned the best way to get anything done with rackspace is to call yell and yell more.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/26/ansible-vs-chef-vs-puppet/">Ansible vs Chef vs Puppet</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-26T13:58:00-05:00" pubdate data-updated="true">Jun 26<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Intro</h2>
-
-<p>First off, I&rsquo;m going to say I&rsquo;m a chef zealot, but I&rsquo;m attempting to put together an intelligent discussion of the battle that has popped up in sysadmin discussion groups now-a-days.  Secondly, I&rsquo;m only focusing on the three systems I have exposure to, ansible the least, puppet the second, and chef the most.  I could also probably throw salt, cfengine, and others in there, but that&rsquo;s superfluous, this is my discussion so I&rsquo;m going to keep it in my scope.</p>
-
-<p>I&rsquo;m going focus on the pluses of each, and use the &ldquo;Overall&rdquo; section to combine them.  In my conclusion my true thoughts will come out, so if you want the tl;dr I&rsquo;d skip down there.</p>
-
-<h2>ansible</h2>
-
-<p>Links:
-<a href="http://www.ansibleworks.com/">homepage</a>, a great <a href="https://github.com/leucos/ansible-tuto">tutorial</a></p>
-
-<ul>
-<li>Low overhead</li>
-<li>python based</li>
-<li>playbook based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>Ansible is an open-source software platform for configuring and managing computers. It combines multi-node software deployment, ad-hoc task execution, and configuration management. It manages nodes over SSH and does not require any additional remote software to be installed on them. Modules work over JSON and standard output and can be written in any programming language. The system uses YAML to express reusable descriptions of systems.</p></blockquote>
-
-<p>Probably the neatest thing about ansible is that it only requires ssh to work.  You do the work on a local box, and run the &ldquo;play book&rdquo; and it walks through the steps.  its designed to be something fast and quick to spin up boxes.  The disadvantage of this is that creep can happen; you can make sure the box is what you expect but you don&rsquo;t have the focused control of something like chef or puppet.  If you need just a webserver that is configured one way and is disposable then this is the way to go.  If you have to support something for long term though, it seems its out of scope of this product. I could be wrong but that&rsquo;s how I interperat it.</p>
-
-<h2>chef</h2>
-
-<p>Links:
-<a href="http://www.opscode.com/">homepage</a>, a great <a href="https://learnchef.opscode.com/">tutorial</a></p>
-
-<ul>
-<li>gem or <a href="http://www.opscode.com/blog/2012/06/29/omnibus-chef-packaging/">omnibus</a> installer</li>
-<li>server based or <a href="http://docs.opscode.com/chef_solo.html">chef-solo</a></li>
-<li>cookbook or recipe based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>chef is a configuration management tool written in Ruby and Erlang. It uses a pure-Ruby, domain-specific language (DSL) for writing system configuration &ldquo;recipes&rdquo; or &ldquo;cookbooks&rdquo;. chef was written by Opscode and is released as open source under the Apache License 2.0. chef is a DevOps tool used for configuring cloud services or to streamline the task of configuring a company&rsquo;s internal servers. chef automatically sets up and tweaks the operating systems and programs that run in massive data centers.</p></blockquote>
-
-<p>As I said in the intro, I love chef.  Hell if I could I&rsquo;d probably work for opscode.  As soon as I got my head wrapped around chef (which is chef&rsquo;s main problem), its quick and efficient, and its slick.  I&rsquo;ve only ever used chef with a chef server, never really touched chef-solo.  I also leveraged <a href="https://github.com/jkeiser/chef-zero">chef-zero</a> in my testing because I like the idea of uploading the cookbooks and pulling them down.  Having cookbooks on a centralized chef server, its a true &ldquo;system of record&rdquo; that doesn&rsquo;t rely on your laptop or workstation, if you do a <code>knife server create 'role[web]'</code> you know what you are going to get.</p>
-
-<p>Something I would like to say though, a huge disadvantage of chef is the way cookbooks are controlled.  It requires constant babying, or plugins like <a href="https://github.com/jonlives/knife-spork">knife-spork</a> to make sure people don&rsquo;t mess with each others work.  I am lucky enough to work in an environment with only 2 others that have any real use for chef, so I am able to be a good gatekeeper.  I could only imagine the cluster with larger teams.  As of 6/26/13 I know this is a conversation topic and pain point, I&rsquo;d be interested to see how the workflow matures.</p>
-
-<h2>puppet</h2>
-
-<p>Links:
-<a href="http://www.puppetlabs.com/">homepage</a>, a great <a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">cheat sheet</a></p>
-
-<ul>
-<li>an official <a href="http://info.puppetlabs.com/download-learning-puppet-VM.html">learning</a> vm</li>
-<li><a href="https://puppetlabs.com/puppet/puppet-open-source/">package</a> based</li>
-<li>server based or local puppet-apply</li>
-<li>manifest based</li>
-</ul>
-
-
-<p>To quote Wikipedia:</p>
-
-<blockquote><p>puppet is a tool designed to manage the configuration of Unix-like and Microsoft Windows systems declaratively. The user describes system resources and their state, either using puppet&rsquo;s declarative language or a Ruby DSL (domain-specific language). This information is stored in files called &ldquo;puppet manifests&rdquo;. puppet discovers the system information via a utility called Facter, and compiles the puppet manifests into a system-specific catalog containing resources and resource dependency, which are applied against the target systems. Any actions taken by puppet are then reported.</p></blockquote>
-
-<p>Something I&rsquo;ve always loved about puppet is the trifecta. You can easily create a manifest to control the package/file/service in only a few lines.  (check that cheat sheet above for an example) I was able to take over an infrastructure in an extremely short period of time with just that.  I didn&rsquo;t have that long to control every facet of the groupings but the investment to the reward was mind boggling fast.</p>
-
-<h2>Overall</h2>
-
-<p>Ok, now that my little tl;dr of the pluses are done, I can start my views overall.  puppet is a very &ldquo;eins, zwei, eins, zwei,&rdquo; type application.  With marrying it with something like <a href="http://www.cobblerd.org/">cobbler</a> you can in theory rack mount a machine, hit the power button and have a machine exactly how you want it to be in &ldquo;x&rdquo; about of time.  This is great for big companies that always want machines to cookie cutter. It could be that that&rsquo;s how I saw puppet being used, but comparing them to the two other config management systems; it really fits. Speaking of cobbler, yes, I do understand you can leverage cobbler with each of these tools, but as you can <a href="https://github.com/cobbler/cobbler/wiki/Using%20cobbler%20with%20a%20configuration%20management%20system">see</a> it just seems that cobbler and puppet are a match made in heaven.  chef on the other hand seems like it&rsquo;s designed for smaller companies with smaller teams.  It looks for cooperation, nay, requires cooperation, and its to its strength and its weakness.  Unlike puppet, chef doesn&rsquo;t default to an &ldquo;active&rdquo; mode (Ok, that&rsquo;s not fully true about puppet either, but the better practice is to have puppet in active mode from the get go).  puppet runs by default every 30 mins, to make sure its what you want to be, chef on the other hand is a pull based config-management that they even suggest &ldquo;putting chef-client&rdquo; in your crontab.  This originally bothered me, coming from the puppet world, but as i learned more about chef i realized that isn&rsquo;t its bread and butter.  chef is a way to spin up boxes for an elastic environment like AWS.  You have a massive blast of traffic, chef will trigger throw your machines in the load balancer, install apache or whatever, and you have what you expect, and 2-3 hours later you blow it away.  This is different than ansible because it is not &ldquo;automated&rdquo; per se. Remember the play books site in your local machine, you have interact with the provisioning, which for a startup seems like the correct path. In a startup you have to know exactly what machines are running, not only because of OPEX but because its your baby, you want focus and tweak; you <em>probably</em> don&rsquo;t have the budget to just blow away the boxes.</p>
-
-<h2>Conclusion</h2>
-
-<p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/25/chef-jenkins-vagrant/">Chef-jenkins-vagrant</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-25T11:43:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>To quote the top of my <a href="https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md">README.md</a>:</p>
-
-<blockquote><p>This is my &ldquo;recipe&rdquo; on how I got Chef Jenkins and Vagrant to play nice. After watching this (<a href="http://www.youtube.com/watch?v=h_IEfNklzW4">http://www.youtube.com/watch?v=h_IEfNklzW4</a>) video, I realized I could do this. I searched high and low for a tutorial on how to bulid this stack, and nothing. So I decided to create a github doc to centralize my setup and hopefully let the community suggest additions.</p></blockquote>
-
-<p>I want to thank <a href="https://github.com/bscott">Brian Scott</a>, because after his video it really opened my eyes.  I&rsquo;ve now had 3 people run through this tutorial and all come out with a working <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> set ups and learned to extend it to where I had never thought of.</p>
-
-<p>I understand and that a lot of people wonder why someone would want to build this from scratch, instead of using, for instance <a href="https://github.com/fnichol">Fletcher Nichol&rsquo;s</a> <em>ahem</em><a href="https://github.com/jamie-ci/jamie">jamie-ci</a><em>ahem</em> test-kitchen, and this is what I&rsquo;m going to write about.</p>
-
-<p>I see <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> is more for writing cookbooks and recipes for the general public.  You can easily create faux VMs, per <a href="https://github.com/sethvargo">Seth Vergo&rsquo;s</a> awesome <a href="https://github.com/customink/fauxhai">fauxhai</a> to test cookbooks across multiple setups and multiple provisioned systems to see if they work.  This is great for developing a cookbooks but I can&rsquo;t see it working in a sysadmins workflow.</p>
-
-<p>Sysadmins have a select few boxes; they have their known quantities, they know they aren&rsquo;t going to have RHEL/DEB/tar based machines.  They build infrastructures to have uniformity, they stick with one of them.  Granted, some of the sysadmnis out there are unlucky and DO have these environments, but I truly believe that&rsquo;s the minority not the majority.</p>
-
-<p>A sysadmin needs a way to provision his machines, in a safe manner before pushing changes out to production. This sounds obvious, but how many places I&rsquo;ve been where have I heard &ldquo;Oh, it&rsquo;s just an /etc/hosts file update, just push it out.&rdquo;  Just yesterday, (06/25/2013) as I was victim if that short cut and caused an outage to some our backend machines.  If you are curious, it seems, we had a hardcoded IP to DNS name in /etc/hosts (not DNS) that was required for our application to work.  If I held true to my statements earlier I would have noticed this change from my CI builds and not looked like the dumbass I was.</p>
-
-<p>I built this <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> howto so I don&rsquo;t have an excuse anymore, I have a proven way to build and implement good practices in an quick manner.  I hope you find it useful, and if you have suggestions or additions PRs are always welcome.</p>
-
-<p>Mind your <code>rm -rf *</code>,</p>
-
-<p>JJ Asghar</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/25/testing-this-out/">Testing This Out</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-25T11:28:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This is a test, lets see it work</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -719,23 +1105,23 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/">.kitchen.local.yml and When You Want to Use It</a>
+        <a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/13/docker-packer-vm-oh-my/">Docker Packer VM Oh My</a>
+        <a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/">Chef Handler Why Did It Take a Year for Me to Use You</a>
+        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/">ResourceNotFound and Splunk> fun&#8230;gotta Love That Error</a>
+        <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a>
+        <a href="/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/">Getting Authentication With Hubot Using auth.coffee</a>
       </li>
     
   </ul>

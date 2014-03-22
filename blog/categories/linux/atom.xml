@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-02-17T16:58:53-06:00</updated>
+  <updated>2014-03-19T16:51:41-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -118,6 +118,11 @@
 ```</p>
 
 <p>Boom, you should be good now. No more damn 403s.</p>
+
+<h1>Update!</h1>
+
+<p>So it seems that with release of <code>11.10</code> the 403 error has&hellip;morphed. Now it looks something like:
+```</p>
 ]]></content>
   </entry>
   

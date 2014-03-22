@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Campfire + Sensu and some issues - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap. Thanks! Ok, anyway, when you get your new toy &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Campfire + Sensu and Some Issues</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-13T14:45:02-05:00" pubdate data-updated="true">Mar 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
+
+<p>Thanks! Ok, anyway, when you get your new toy you want to start leveraging some of the cool things it can do.  My company uses campfire as our main daily communication,
+and luckily there&rsquo;s a <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb">campfire handler</a> for sensu! Naturally we should leverage it right? Well, it seems with 0.12 sensu, it&rsquo;s not exactly a cup o&#8217; tea.</p>
+
+<p>Go ahead and add you campfire handler and you&rsquo;ll notice quickly:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `block in connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/timeout.rb:51:in `timeout'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:861:in `do_start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:850:in `start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1366:in `request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1125:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:73:in `perform_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:38:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/response_middleware.rb:30:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/request/encode_json.rb:23:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:247:in `run_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:100:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/connection.rb:76:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:34:in `rooms'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:48:in `find_room_by_name'
+</span><span class='line'>        from campfire_test.rb:7:in `&lt;main&gt;'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: I&rsquo;d like to thank <a href="https://github.com/skymob">Bethany Erskine</a> for all the advice and the <a href="https://gist.github.com/skymob/6161155">gist</a> I just stole to explain this.</p>
+
+<p>Ok, honestly it&rsquo;ll be locked up in the <code>sensu-client.log</code> but if you break up the json it&rsquo;ll look like the above. Anyway&hellip;.</p>
+
+<p>So as you can see it fails with the <code>SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)</code> trying to verify the certs,
+I spent some time trying to updated the pkg version of the ssl certs, reading more than I ever wanted to know about SSL, finally I pinged Bethany asked her after finding that gist.</p>
+
+<p>She responded back with something that just seemed so obious, if you look at the <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb#L30">handler</a> it defaults to true.</p>
+
+<p>Change that to it to something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Tinder</span><span class="p">:</span><span class="ss">:Campfire</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;mydomain&#39;</span><span class="p">,</span> <span class="ss">:ssl_verify</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:token</span> <span class="o">=&gt;</span> <span class="s1">&#39;7505e9c7ed5c30a77dTHIS_IS_FAKE93029a494eb7c3d20&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And&hellip;all the sudden you&rsquo;ve got messages in your campfire channel.</p>
+
+<p>Yes, yes, you should verify ssl, but honestly, for what you get out of sensu for this, it&rsquo;s gravey for now. Plus I think after I ping <a href="https://github.com/portertech/">Sean Porter</a> about this issue in a passive/aggressive manner
+he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-13T14:45:02-05:00" pubdate data-updated="true">Mar 13<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/campfire/'>campfire</a>, <a class='category' href='/blog/categories/sensu/'>sensu</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/28/chef-book-lighting-talk/" title="Previous Post: chef-book lighting talk">&laquo; chef-book lighting talk</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/" title="Next Post: Help! I lost my vaildation.pem">Help! I lost my vaildation.pem &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/">Getting Authentication With Hubot Using auth.coffee</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: talk | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/talk/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-03-19T16:51:41-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[chef-book lighting talk]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
+    <updated>2014-02-28T10:52:08-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
+    <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
+five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
+
+<p>PS, I apologize for the quality.</p>
+]]></content>
+  </entry>
+  
+</feed>

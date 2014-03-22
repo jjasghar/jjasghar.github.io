@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Getting authentication with hubot using auth.coffee - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
+First thing first, set up auth. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Getting Authentication With Hubot Using auth.coffee</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-19T11:07:03-06:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
+First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
+that means you need to figure out &ldquo;HUBOT_AUTH_ADMIN&rdquo;. Assuming you have hubot already connecting to a site, run <code>hubot show users</code>
+and he should come back with all the people he knows about. Grab the id number for the person/people you want to have admin rights.</p>
+
+<p>Add <code>HUBOT_AUTH_ADMIN="&lt;number&gt;,&lt;nextnumber&gt;"</code> to the <code>bin/hubot</code> or however you add variables to him, go ahead and restart hubot to
+see if he now thinks you&rsquo;re and admin.</p>
+
+<p>If all goes well, you should see something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
+as the example, so lets give our user the first role:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+</span><span class='line'>Hubot&gt; Hubot shell has ping role
+</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
+</span><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
+can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>, to fail for us.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell doesn't have ping role
+</span><span class='line'>Hubot&gt; Shell: Ok, shell doesn't have the 'ping' role.
+</span><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+</span><span class='line'>Hubot&gt; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Go ahead into your <code>scripts/</code> directory, and open up your ping.coffee. Take a look at the following snippet:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
+</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
+</span><span class='line'>    msg.send "PONG"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty straight forward eh? Go ahead and tack on this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
+</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
+</span><span class='line'>    if robot.auth.hasRole(msg.envelope.user, "ping")
+</span><span class='line'>      msg.send "PONG"
+</span><span class='line'>    else
+</span><span class='line'>     msg.send "Sorry you can't ask me to PONG"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: a quick explanation, if hubot responds to &ldquo;ping&rdquo; case insensitive, it&rsquo;ll respond with the &ldquo;PONG&rdquo; only if you have the role of ping.</p>
+
+<p>Go and ahead and restart hubot, and say PING. :)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; hubot PING
+</span><span class='line'>Hubot&gt; Sorry you can't ask me to PONG</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sweet!</p>
+
+<p>Ok, next step, lets give ourselves access to make this happen:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell has ping role
+</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
+</span><span class='line'>Hubot&gt; hubot PING
+</span><span class='line'>Hubot&gt; PONG
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>PERFECT!</p>
+
+<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
+to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
+your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
+
+<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-19T11:07:03-06:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/hubot/'>hubot</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/" title="Previous Post: .kitchen.local.yml and when you want to use it">&laquo; .kitchen.local.yml and when you want to use it</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/02/28/chef-book-lighting-talk/" title="Next Post: chef-book lighting talk">chef-book lighting talk &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/">Getting Authentication With Hubot Using auth.coffee</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
