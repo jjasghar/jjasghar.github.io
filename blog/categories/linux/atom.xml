@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-03-21T19:18:15-05:00</updated>
+  <updated>2014-03-21T19:26:06-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -123,6 +123,13 @@
 
 <p>So it seems that with release of <code>11.10</code> the 403 error has&hellip;morphed. Now it looks something like:
 ```</p>
+
+<h2>Chef::Exceptions::ContentLengthMismatch</h2>
+
+<p>Response body length 164 does not match HTTP Content-Length header 206.
+```</p>
+
+<p>I have a post about it from 2014-03-19</p>
 ]]></content>
   </entry>
   
