@@ -42,4 +42,9 @@ Boom, you should be good now. No more damn 403s.
 
 So it seems that with release of `11.10` the 403 error has...morphed. Now it looks something like:
 ```
+Chef::Exceptions::ContentLengthMismatch
+---------------------------------------
+Response body length 164 does not match HTTP Content-Length header 206.
+```   
 
+I have a post about it from 2014-03-19
