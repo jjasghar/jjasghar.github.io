@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Update to the Chef Error That Has Haunted Me - jjasghar rants and ramblings</title>
+  <title>Category: Rails - jjasghar rants and ramblings</title>
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So it seems that with release of chef-client 11.10 the 403 error have&hellip;morphed. Now they look something like: 1
-2
-3
-Chef::Exceptions:: &hellip;">
+  <meta name="description" content="Category: rails">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ Chef::Exceptions:: &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me">
+  <link rel="canonical" href="http://jjasghar.github.ioblog/categories/rails">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
@@ -80,107 +77,35 @@ Chef::Exceptions:: &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Update to the Chef Error That Has Haunted Me</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-19T16:45:03-05:00" pubdate data-updated="true">Mar 19<span>th</span>, 2014</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Rails</h1>
     
   </header>
+  
+  <div id="blog-archives" class="category">
 
 
-<div class="entry-content"><p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Chef::Exceptions::ContentLengthMismatch
-</span><span class='line'>---------------------------------------
-</span><span class='line'>Response body length 164 does not match HTTP Content-Length header 206.</span></code></pre></td></tr></table></div></figure>
+  
+  <h2>2014</h2>
+
+<article>
+  
+<h1><a href="/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/">How to Add Growl Notifications to Rspec Tests</a></h1>
+<time datetime="2014-04-08T10:45:59-05:00" pubdate><span class='month'>Apr</span> <span class='day'>08</span> <span class='year'>2014</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
+</footer>
 
 
-<p>I moved chef servers and didn&rsquo;t change my <code>s3_url_ttl</code> and ran into this issue. So the annoying 403&rsquo;s are now something about <code>HTTP Content-Length</code>.</p>
-
-<p>If you&rsquo;ve forgotten the fix is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
-</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
-</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
-</span></code></pre></td></tr></table></div></figure>
+</article>
 
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-19T16:45:03-05:00" pubdate data-updated="true">Mar 19<span>th</span>, 2014</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/" title="Previous Post: Help! I lost my vaildation.pem">&laquo; Help! I lost my vaildation.pem</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/" title="Next Post: How to add growl notifications to rspec tests">How to add growl notifications to rspec tests &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>

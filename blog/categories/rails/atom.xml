@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-04-08T11:13:31-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to add growl notifications to rspec tests]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
+    <updated>2014-04-08T10:45:59-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
+    <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
+I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
+huge <a href="http://kitchen.ci">test-kitchen</a>, or <a href="https://github.com/sstephenson/bats">bats</a> or the like tester with chef
+but never got a way to automate the testing in the background. Turns out using rspec+guard+growl allows for you to
+be focused on your present screen and have the tests being run with a pop up.</p>
+
+<p>I use vim as my development platform. This is why I needed a way to run rspec in the background, hopping out of the vim buffer breaks my focus. So I used guard-rspec, it was perfect for what I wanted to do, problem was it was in another tab or terminal again breaking my focus. I figured I have growl installed, so this is how I set up this perfect rspec+guard+growl setup.</p>
+
+<p>First add these two gems to your Gemfile:
+```ruby
+group :development, :test do</p>
+
+<pre><code>gem ...
+gem 'growl'
+gem 'growl_notify'
+</code></pre>
+
+<p>end
+```</p>
+
+<p>NOTE: I suggest adding this to the development/test group, you won&rsquo;t want this in your production deploy.</p>
+
+<p>Go ahead and run <code>bundle</code>.</p>
+
+<p>After that, you need to install something called <a href="http://growl.cachefly.net/GrowlNotify-2.1.zip">GrowlNotify 2.1</a>, I&rsquo;d double check your growl version, it only works with 2.1.x.</p>
+
+<p>After installing spin up <code>guard</code>, and you should see a nice notification. :)</p>
+]]></content>
+  </entry>
+  
+</feed>

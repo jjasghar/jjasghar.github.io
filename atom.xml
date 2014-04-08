@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-03-21T19:26:06-05:00</updated>
+  <updated>2014-04-08T11:13:31-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Add Growl Notifications to Rspec Tests]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
+    <updated>2014-04-08T10:45:59-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
+    <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
+I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
+huge <a href="http://kitchen.ci">test-kitchen</a>, or <a href="https://github.com/sstephenson/bats">bats</a> or the like tester with chef
+but never got a way to automate the testing in the background. Turns out using rspec+guard+growl allows for you to
+be focused on your present screen and have the tests being run with a pop up.</p>
+
+<p>I use vim as my development platform. This is why I needed a way to run rspec in the background, hopping out of the vim buffer breaks my focus. So I used guard-rspec, it was perfect for what I wanted to do, problem was it was in another tab or terminal again breaking my focus. I figured I have growl installed, so this is how I set up this perfect rspec+guard+growl setup.</p>
+
+<p>First add these two gems to your Gemfile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl&#39;</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl_notify&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NOTE: I suggest adding this to the development/test group, you won&rsquo;t want this in your production deploy.</p>
+
+<p>Go ahead and run <code>bundle</code>.</p>
+
+<p>After that, you need to install something called <a href="http://growl.cachefly.net/GrowlNotify-2.1.zip">GrowlNotify 2.1</a>, I&rsquo;d double check your growl version, it only works with 2.1.x.</p>
+
+<p>After installing spin up <code>guard</code>, and you should see a nice notification. :)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Update to the Chef Error That Has Haunted Me]]></title>
@@ -1500,52 +1538,6 @@ node to work on my local box for local development (<a href="https://gist.github
 <p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
 
 <p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Checking CPU WAIT via Nagios]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios/"/>
-    <updated>2013-10-16T11:11:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios</id>
-    <content type="html"><![CDATA[<p>So our machines swap&hellip;.swap alot. There are the  typical nagios system checks, you can have the <code>check_swap</code> call, but at my company the &lt; 20 % hits so often we needed to figure out a way to get warned about crippling proformance. We discovered that when a machine has CPU WAIT spikes, the proformance for the machine tanks, so I tried to find a check for specificly monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.</p>
-
-<p>I took a stab at creating a check myself and the following is a simple nagios check that you can run via NRPE.  The <code>PERCENTAGE</code> line is changeable, I&rsquo;d make sure your alarm reflects your error cases. We choose 10 % because that&rsquo;s when we started seeing real prefomance issues, but as all sysadmins know any CPU WAIT is bad in general.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
-</span><span class='line'><span class="nv">CPUWAIT</span><span class="o">=</span><span class="sb">`</span>top -b -n 1| grep <span class="s1">&#39;wa,&#39;</span> | awk -F <span class="s1">&#39;,&#39;</span> <span class="o">{</span><span class="s1">&#39;print $5&#39;</span><span class="o">}</span> | cut -d . -f 1 | tr -d <span class="s1">&#39; &#39;</span> <span class="sb">`</span>
-</span><span class='line'><span class="nv">PERCENTAGE</span><span class="o">=</span>10
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -le <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is under <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span>%
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -ge <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is at <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span>%, your machine aint happy
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
-</span><span class='line'> <span class="k">fi</span>
-</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
 ]]></content>
   </entry>
   
