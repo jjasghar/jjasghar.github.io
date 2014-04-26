@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-04-26T17:02:46-05:00</updated>
+  <updated>2014-04-26T17:05:36-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -31,9 +31,9 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
 <p><code>ruby
 [8] pry(main)&gt; require 'time'
 [8] pry(main)&gt; t = Time.strptime("04/23/2014 02:00 AM","%m/%d/%Y %I:%M %p")
-=&gt; 2013-08-26 15:30:00 -0500
+=&gt; 2014-04-23 02:00:00 -0500
 [9] pry(main)&gt; t.utc
-=&gt; 2013-08-26 20:30:00 UTC
+=&gt; 2014-04-23 07:00:00 UTC
 [10] pry(main)&gt;
 </code></p>
 
