@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-04-26T16:57:33-05:00</updated>
+  <updated>2014-04-26T17:02:46-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -26,7 +26,7 @@ where the ticket for the company described 4pm UTC. Needless to say confusion st
 <p>Now this can start my rant (which up till now I haven&rsquo;t actually written) about timezones, but I wanted to make his life easier so I figured out
 a pretty straight forward way to convert any date and time of a timezone to UTC via ruby.  This is how you do it:</p>
 
-<p>Note: this requires ruby 2.0.0+</p>
+<p>Note: this requires ruby 1.9.3+</p>
 
 <p><code>ruby
 [8] pry(main)&gt; require 'time'
