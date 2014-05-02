@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-04-26T17:05:36-05:00</updated>
+  <updated>2014-05-02T11:56:34-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,63 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Updating a rails password via the rails console]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
+    <updated>2014-05-02T11:28:40-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+going through his screencasts.</p>
+
+<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+
+<p><code>ruby
+irb(main):001:0&gt; u = User.find_by_id(1)
+  User Load (3.5ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):002:0&gt; u
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):003:0&gt; u.password = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):004:0&gt; u.password_confirmation = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):005:0&gt; u.save
+   (2.0ms)  BEGIN
+  User Exists (12.2ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (15.8ms)  UPDATE "users" SET "password_digest" = '$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.', "remember_token" = 'zOZYjEVovO143qrX1yhibw', "updated_at" = '2014-04-25 23:24:39.329502' WHERE "users"."id" = 1
+   (4.6ms)  COMMIT
+=&gt; true
+irb(main):006:0&gt;
+</code></p>
+
+<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
+database via <code>u.save</code>.</p>
+
+<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
+exception telling you why it won&rsquo;t work, example:</p>
+
+<p><code>ruby
+[1] pry(main)&gt; u = User.find_by_id(1)
+  User Load (0.1ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:12:49", updated_at: "2014-04-24 20:17:57", password_digest: "$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...", remember_token: "ZiAb_plRQdp9WaKjbZ4CAA"&gt;
+[2] pry(main)&gt; u.password = "1234"
+=&gt; "1234"
+[3] pry(main)&gt; u.save
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.1ms)  rollback transaction
+=&gt; false
+[4] pry(main)&gt; u.save!
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.0ms)  rollback transaction
+ActiveRecord::RecordInvalid: Validation failed: Password is too short (minimum is 6 characters), Password confirmation can't be blank
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!'
+[5] pry(main)&gt;
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UTC and me]]></title>
@@ -192,58 +249,6 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
 <p>One issue that I had with the book, it doesn&rsquo;t you how to write tests against the app you create.  Due to new programming practices, this seems like a nasty gap.  I&rsquo;ve decided before I figure out how to get my json input output working, I&rsquo;m going to figure out how to write tests against the app I created.</p>
 
 <p>If you are curious on the app that is built from this book, I have posted it <a href="https://github.com/jjasghar/sinatra_song_app">here</a>, but as time progresses I&rsquo;ll probably add things to it. Fair warning there.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[serverspec the new best way to learn and audit your infrastructure]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/"/>
-    <updated>2013-07-12T15:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure</id>
-    <content type="html"><![CDATA[<p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
-
-<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
-
-<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
-You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
-
-<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
-
-<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.
-``` ruby
-require &lsquo;spec_helper&rsquo;</p>
-
-<p>describe package(&lsquo;httpd&rsquo;) do
-  it { should be_installed }
-end</p>
-
-<p>describe service(&lsquo;httpd&rsquo;) do
-  it { should be_enabled   }
-  it { should be_running   }
-end</p>
-
-<p>describe port(80) do
-  it { should be_listening }
-end</p>
-
-<p>describe file(&lsquo;/etc/httpd/conf/httpd.conf&rsquo;) do
-  it { should be_file }
-  it { should contain &ldquo;ServerName my-server-name&rdquo; }
-end
-<code>``
-That's it, now all you have to do is</code>rake spec` and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
-
-<h2>nagios (or automated process monitoring) vs serverspec</h2>
-
-<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
-
-<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
-
-<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
-
-<h2>Conclusion</h2>
-
-<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
 ]]></content>
   </entry>
   

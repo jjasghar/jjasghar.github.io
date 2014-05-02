@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do &hellip;">
+  <meta name="description" content="I recently discovered hub and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,95 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/31/hub-workflow/">Hub Workflow</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-31T11:01:00-05:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
+</span><span class='line'>Error creating pull request: Unprocessable Entity <span class="o">(</span>HTTP 422<span class="o">)</span>
+</span><span class='line'>Missing field: <span class="s2">&quot;head_sha&quot;</span>
+</span><span class='line'>Missing field: <span class="s2">&quot;base_sha&quot;</span>
+</span><span class='line'>No commits between jjasghar:master and jjasghar:blah
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>WTF man? What the hell does this mean? It seems I wasn&rsquo;t the only one that had this <a href="https://github.com/github/hub/issues/189">problem</a>.  It seems that the work flow (at least in my case) was the problem. Here&rsquo;s a quick fix to be able to open up a PR off a forked branch:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git add some_file
+</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git commit -m <span class="s2">&quot;blah&quot;</span>
+</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git push -u origin blah
+</span><span class='line'>Counting objects: 7, <span class="k">done</span>.
+</span><span class='line'>Delta compression using up to 4 threads.
+</span><span class='line'>Compressing objects: 100% <span class="o">(</span>3/3<span class="o">)</span>, <span class="k">done</span>.
+</span><span class='line'>Writing objects: 100% <span class="o">(</span>4/4<span class="o">)</span>, 351 bytes | 0 bytes/s, <span class="k">done</span>.
+</span><span class='line'>Total 4 <span class="o">(</span>delta 2<span class="o">)</span>, reused 0 <span class="o">(</span>delta 0<span class="o">)</span>
+</span><span class='line'>To git@github.com:jjasghar/learning_git.git
+</span><span class='line'>   5224edf..88ad1af  blah -&gt; blah
+</span><span class='line'>Branch blah <span class="nb">set </span>up to track remote branch blah from origin.
+</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
+</span><span class='line'>https://github.com/jjasghar/learning_git/pull/1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty slick eh?</p>
+
+<p>Bonus round you can attach your PR to an issue!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request -i 3
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1012,109 +1101,6 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/02/adventures-with-chef-solo/">Adventures With Chef-solo</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-02T14:36:00-05:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I started my chef career with inheriting a chef infrastructure with an opensource chef server.  I read all of the blog posts, and the tutorials, tried to wrap my head around what a cookbook, recipe, or data bag was.  I know now, this was the <em>wrong</em> way to learn chef.  chef with chef-client/server adds a level of complexity that just is unfounded.  I decided to spend a copy hours to master chef-solo, and damn I wish I had started there.</p>
-
-<h2>My hands on learning project</h2>
-
-<p>I had a requirement of setting up a unicorn nginx instance on a VPS.  I thought hell, there&rsquo;s gotta be a way to do this with chef. (I normally use passenger+apache, so I had to learn nginx and unicorn too, but that&rsquo;s a different post&hellip;well kinda) So I looked around for a nice <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">tutorial</a> and came across that guy.  I started reading it, realized holy crap, this is awesome.  I stole the <code>solo.json</code> and the <code>solo.rb</code> and <code>install.sh</code> because I was lazy.<br/>
-I changed the <code>install.sh</code> around a little bit:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># This run as root on the machine</span>
-</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
-</span><span class='line'>
-</span><span class='line'><span class="c"># are we not bootstrapped?</span>
-</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
-</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
-</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>
-</span><span class='line'>chef-solo -c solo.rb -j solo.json
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can tell, its ubuntu focused, but basically if I want to provision a box after making a change to one of the cookbooks I just had to run <code>./install.sh</code>.  Interestingly, I had heard bad things about the 1.9.1 ruby binaries for ubuntu, but so far, it is a ton better than doing that compile from src. ;)</p>
-
-<p>So, basically with those three files, running that curl in the script, and creating a <code>cookbooks/</code> directory, I had my framework to make this project happen.</p>
-
-<p>Now I made a mistake here.  I started off with a simple &ldquo;generic&rdquo; cookbook, with a simple <code>default.rb</code> file that called a <code>packages.rb</code> file to add some pkgs I love and run on a daily basis.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%w{build-essential git-core libgdbm-dev libreadline-dev libssl-dev libyaml-dev s3cmd tmux tk-dev vim wget zlib1g-dev zsh}</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">pkg</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">package</span> <span class="n">pkg</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">action</span> <span class="o">[</span><span class="ss">:install</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now to an passive onlooker there seems nothing wrong with this, and 3 weeks ago JJ would agree with you.  JJ now says, &ldquo;Stop that, start with the webserver and the deps for that instead of the convince of something easy like package management.&rdquo;  LEARN <a href="http://berkshelf.com/">berkshelf</a> and don&rsquo;t make excuses. (at this writing, 8/2/13, I still actually haven&rsquo;t learned it, the best analogy is this, dling cookbooks is like building from source, and berkshelf is like using apt-get) Anyway I digress.</p>
-
-<p>Back to the original story.</p>
-
-<p>I made the <code>cookbooks/</code> directory, and when to github to pull down the newest <a href="https://github.com/opscode-cookbooks/nginx">nginx</a> cookbook.  <code>git clone https://github.com/opscode-cookbooks/nginx.git</code> in the directory and then because  I hate submodules, I ran <code>rm -rf .git/</code>. I <code>cd ~/chef-solo</code> then ran <code>install.sh</code>. Crossed my fingers and no, didn&rsquo;t work. Turns out I needed a bunch of dependences (hence the berkself statement). I resolved them all, and then ran the beautiful <code>./install.sh</code>. BOOM, it worked.  I took a moment, realized what I had just done.  I created a git repo off this work, created a branch &ldquo;nginx&rdquo; and committed my changes. Now whenever I need to spin up an nginx box, all I have to do is clone my chef-solo repo and checkout nginx and run <code>install.sh</code>.</p>
-
-<p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
-
-<p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1132,6 +1118,10 @@ I changed the <code>install.sh</code> around a little bit:</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/">Updating a Rails Password via the Rails Console</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/26/utc-and-me/">UTC and Me</a>
       </li>
     
@@ -1145,10 +1135,6 @@ I changed the <code>install.sh</code> around a little bit:</p>
     
       <li class="post">
         <a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
       </li>
     
   </ul>

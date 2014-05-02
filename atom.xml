@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-04-26T17:05:36-05:00</updated>
+  <updated>2014-05-02T11:56:34-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Updating a Rails Password via the Rails Console]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
+    <updated>2014-05-02T11:28:40-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+going through his screencasts.</p>
+
+<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password_confirmation</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">005</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="k">BEGIN</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">12</span><span class="o">.</span><span class="mi">2</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">15</span><span class="o">.</span><span class="mi">8</span><span class="n">ms</span><span class="p">)</span>  <span class="no">UPDATE</span> <span class="s2">&quot;users&quot;</span> <span class="no">SET</span> <span class="s2">&quot;password_digest&quot;</span> <span class="o">=</span> <span class="s1">&#39;$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.&#39;</span><span class="p">,</span> <span class="s2">&quot;remember_token&quot;</span> <span class="o">=</span> <span class="s1">&#39;zOZYjEVovO143qrX1yhibw&#39;</span><span class="p">,</span> <span class="s2">&quot;updated_at&quot;</span> <span class="o">=</span> <span class="s1">&#39;2014-04-25 23:24:39.329502&#39;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">COMMIT</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">006</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
+database via <code>u.save</code>.</p>
+
+<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
+exception telling you why it won&rsquo;t work, example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:12:49&quot;, updated_at: &quot;2014-04-24 20:17:57&quot;, password_digest: &quot;$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...&quot;, remember_token: &quot;ZiAb_plRQdp9WaKjbZ4CAA&quot;&gt;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;1234&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;1234&quot;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">false</span>
+</span><span class='line'><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save!</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
+</span><span class='line'><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:RecordInvalid</span><span class="p">:</span> <span class="no">Validation</span> <span class="ss">failed</span><span class="p">:</span> <span class="no">Password</span> <span class="n">is</span> <span class="n">too</span> <span class="n">short</span> <span class="p">(</span><span class="n">minimum</span> <span class="n">is</span> <span class="mi">6</span> <span class="n">characters</span><span class="p">),</span> <span class="no">Password</span> <span class="n">confirmation</span> <span class="n">can</span><span class="s1">&#39;t be blank</span>
+</span><span class='line'><span class="s1">from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!&#39;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UTC and Me]]></title>
@@ -1455,68 +1545,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
 
 <p>Boom, it worked.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hub Workflow]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/31/hub-workflow/"/>
-    <updated>2013-10-31T11:01:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/31/hub-workflow</id>
-    <content type="html"><![CDATA[<p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
-</span><span class='line'>Error creating pull request: Unprocessable Entity <span class="o">(</span>HTTP 422<span class="o">)</span>
-</span><span class='line'>Missing field: <span class="s2">&quot;head_sha&quot;</span>
-</span><span class='line'>Missing field: <span class="s2">&quot;base_sha&quot;</span>
-</span><span class='line'>No commits between jjasghar:master and jjasghar:blah
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>WTF man? What the hell does this mean? It seems I wasn&rsquo;t the only one that had this <a href="https://github.com/github/hub/issues/189">problem</a>.  It seems that the work flow (at least in my case) was the problem. Here&rsquo;s a quick fix to be able to open up a PR off a forked branch:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git add some_file
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git commit -m <span class="s2">&quot;blah&quot;</span>
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git push -u origin blah
-</span><span class='line'>Counting objects: 7, <span class="k">done</span>.
-</span><span class='line'>Delta compression using up to 4 threads.
-</span><span class='line'>Compressing objects: 100% <span class="o">(</span>3/3<span class="o">)</span>, <span class="k">done</span>.
-</span><span class='line'>Writing objects: 100% <span class="o">(</span>4/4<span class="o">)</span>, 351 bytes | 0 bytes/s, <span class="k">done</span>.
-</span><span class='line'>Total 4 <span class="o">(</span>delta 2<span class="o">)</span>, reused 0 <span class="o">(</span>delta 0<span class="o">)</span>
-</span><span class='line'>To git@github.com:jjasghar/learning_git.git
-</span><span class='line'>   5224edf..88ad1af  blah -&gt; blah
-</span><span class='line'>Branch blah <span class="nb">set </span>up to track remote branch blah from origin.
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
-</span><span class='line'>https://github.com/jjasghar/learning_git/pull/1
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pretty slick eh?</p>
-
-<p>Bonus round you can attach your PR to an issue!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request -i 3
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

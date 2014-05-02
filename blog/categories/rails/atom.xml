@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-04-26T17:05:36-05:00</updated>
+  <updated>2014-05-02T11:56:34-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,63 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Updating a rails password via the rails console]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
+    <updated>2014-05-02T11:28:40-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+going through his screencasts.</p>
+
+<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+
+<p><code>ruby
+irb(main):001:0&gt; u = User.find_by_id(1)
+  User Load (3.5ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):002:0&gt; u
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):003:0&gt; u.password = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):004:0&gt; u.password_confirmation = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):005:0&gt; u.save
+   (2.0ms)  BEGIN
+  User Exists (12.2ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (15.8ms)  UPDATE "users" SET "password_digest" = '$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.', "remember_token" = 'zOZYjEVovO143qrX1yhibw', "updated_at" = '2014-04-25 23:24:39.329502' WHERE "users"."id" = 1
+   (4.6ms)  COMMIT
+=&gt; true
+irb(main):006:0&gt;
+</code></p>
+
+<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
+database via <code>u.save</code>.</p>
+
+<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
+exception telling you why it won&rsquo;t work, example:</p>
+
+<p><code>ruby
+[1] pry(main)&gt; u = User.find_by_id(1)
+  User Load (0.1ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:12:49", updated_at: "2014-04-24 20:17:57", password_digest: "$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...", remember_token: "ZiAb_plRQdp9WaKjbZ4CAA"&gt;
+[2] pry(main)&gt; u.password = "1234"
+=&gt; "1234"
+[3] pry(main)&gt; u.save
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.1ms)  rollback transaction
+=&gt; false
+[4] pry(main)&gt; u.save!
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.0ms)  rollback transaction
+ActiveRecord::RecordInvalid: Validation failed: Password is too short (minimum is 6 characters), Password confirmation can't be blank
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!'
+[5] pry(main)&gt;
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to add growl notifications to rspec tests]]></title>
