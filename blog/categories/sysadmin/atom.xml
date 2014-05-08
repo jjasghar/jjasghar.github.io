@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-03-21T19:18:15-05:00</updated>
+  <updated>2014-05-02T12:04:47-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Updating a rails password via the rails console]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
+    <updated>2014-05-02T11:28:40-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+going through his screencasts.</p>
+
+<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+
+<p><code>ruby
+irb(main):001:0&gt; u = User.find_by_id(1)
+  User Load (3.5ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):002:0&gt; u
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):003:0&gt; u.password = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):004:0&gt; u.password_confirmation = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):005:0&gt; u.save
+   (2.0ms)  BEGIN
+  User Exists (12.2ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (15.8ms)  UPDATE "users" SET "password_digest" = '$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.', "remember_token" = 'zOZYjEVovO143qrX1yhibw', "updated_at" = '2014-04-25 23:24:39.329502' WHERE "users"."id" = 1
+   (4.6ms)  COMMIT
+=&gt; true
+irb(main):006:0&gt;
+</code></p>
+
+<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
+database via <code>u.save</code>.</p>
+
+<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
+exception telling you why it won&rsquo;t work, example:</p>
+
+<p><code>ruby
+[1] pry(main)&gt; u = User.find_by_id(1)
+  User Load (0.1ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:12:49", updated_at: "2014-04-24 20:17:57", password_digest: "$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...", remember_token: "ZiAb_plRQdp9WaKjbZ4CAA"&gt;
+[2] pry(main)&gt; u.password = "1234"
+=&gt; "1234"
+[3] pry(main)&gt; u.save
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.1ms)  rollback transaction
+=&gt; false
+[4] pry(main)&gt; u.save!
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.0ms)  rollback transaction
+ActiveRecord::RecordInvalid: Validation failed: Password is too short (minimum is 6 characters), Password confirmation can't be blank
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!'
+[5] pry(main)&gt;
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[UTC and me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/26/utc-and-me/"/>
+    <updated>2014-04-26T16:15:54-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/26/utc-and-me</id>
+    <content type="html"><![CDATA[<p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
+listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
+UTC as their main way of describing time. So when he asked for a dump from 2 days ago, at 4pm he thought it was 2 days ago 4pm CST (my timezone)
+where the ticket for the company described 4pm UTC. Needless to say confusion started to hold.</p>
+
+<p>Now this can start my rant (which up till now I haven&rsquo;t actually written) about timezones, but I wanted to make his life easier so I figured out
+a pretty straight forward way to convert any date and time of a timezone to UTC via ruby.  This is how you do it:</p>
+
+<p>Note: this requires ruby 1.9.3+</p>
+
+<p><code>ruby
+[8] pry(main)&gt; require 'time'
+[8] pry(main)&gt; t = Time.strptime("04/23/2014 02:00 AM","%m/%d/%Y %I:%M %p")
+=&gt; 2014-04-23 02:00:00 -0500
+[9] pry(main)&gt; t.utc
+=&gt; 2014-04-23 07:00:00 UTC
+[10] pry(main)&gt;
+</code></p>
+
+<p>Wow, that&rsquo;s pretty simple eh? :)  In looking around for this answer, I came across a pretty neat trick with ruby also:</p>
+
+<p><code>ruby
+[13] pry(main)&gt; Time.now.utc
+=&gt; 2014-04-25 16:21:27 UTC
+[10] pry(main)&gt; Time.now.to_i
+=&gt; 1398443660
+</code></p>
+
+<p>That&rsquo;s time now for UTC from your machines time, and the epoch time too!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Update to the chef error that has haunted me]]></title>
@@ -147,118 +241,6 @@ Tinder::Campfire.new('mydomain', :ssl_verify =&gt; false, :token =&gt; '7505e9c7
 
 <p>Yes, yes, you should verify ssl, but honestly, for what you get out of sensu for this, it&rsquo;s gravey for now. Plus I think after I ping <a href="https://github.com/portertech/">Sean Porter</a> about this issue in a passive/aggressive manner
 he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[chef-book lighting talk]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
-    <updated>2014-02-28T10:52:08-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
-    <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
-five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
-
-<p>PS, I apologize for the quality.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Getting authentication with hubot using auth.coffee]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
-    <updated>2014-02-19T11:07:03-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
-    <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
-First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
-that means you need to figure out &ldquo;HUBOT_AUTH_ADMIN&rdquo;. Assuming you have hubot already connecting to a site, run <code>hubot show users</code>
-and he should come back with all the people he knows about. Grab the id number for the person/people you want to have admin rights.</p>
-
-<p>Add <code>HUBOT_AUTH_ADMIN="&lt;number&gt;,&lt;nextnumber&gt;"</code> to the <code>bin/hubot</code> or however you add variables to him, go ahead and restart hubot to
-see if he now thinks you&rsquo;re and admin.</p>
-
-<p>If all goes well, you should see something like this:
-<code>
-Hubot&gt; Hubot what role does shell have
-Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-Hubot&gt;
-</code></p>
-
-<p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
-as the example, so lets give our user the first role:</p>
-
-<p><code>
-Hubot&gt; Hubot what role does shell have
-Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-Hubot&gt; Hubot shell has ping role
-Hubot&gt; Shell: Ok, shell has the 'ping' role.
-Hubot&gt; Hubot what role does shell have
-Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
-Hubot&gt;
-</code></p>
-
-<p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
-can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>, to fail for us.</p>
-
-<p><code>
-Hubot&gt; Hubot shell doesn't have ping role
-Hubot&gt; Shell: Ok, shell doesn't have the 'ping' role.
-Hubot&gt; Hubot what role does shell have
-Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-Hubot&gt;
-</code></p>
-
-<p>Go ahead into your <code>scripts/</code> directory, and open up your ping.coffee. Take a look at the following snippet:</p>
-
-<p>```
-module.exports = (robot) &ndash;>
-  robot.respond /PING$/i, (msg) &ndash;></p>
-
-<pre><code>msg.send "PONG"
-</code></pre>
-
-<p>```</p>
-
-<p>Pretty straight forward eh? Go ahead and tack on this:</p>
-
-<p>```
-module.exports = (robot) &ndash;>
-  robot.respond /PING$/i, (msg) &ndash;></p>
-
-<pre><code>if robot.auth.hasRole(msg.envelope.user, "ping")
-  msg.send "PONG"
-else
- msg.send "Sorry you can't ask me to PONG"
-</code></pre>
-
-<p>```</p>
-
-<p>Note: a quick explanation, if hubot responds to &ldquo;ping&rdquo; case insensitive, it&rsquo;ll respond with the &ldquo;PONG&rdquo; only if you have the role of ping.</p>
-
-<p>Go and ahead and restart hubot, and say PING. :)</p>
-
-<p><code>
-Hubot&gt; hubot PING
-Hubot&gt; Sorry you can't ask me to PONG
-</code></p>
-
-<p>Sweet!</p>
-
-<p>Ok, next step, lets give ourselves access to make this happen:</p>
-
-<p><code>
-Hubot&gt; Hubot shell has ping role
-Hubot&gt; Shell: Ok, shell has the 'ping' role.
-Hubot&gt; hubot PING
-Hubot&gt; PONG
-Hubot&gt;
-</code></p>
-
-<p>PERFECT!</p>
-
-<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
-to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
-your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
-
-<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
 ]]></content>
   </entry>
   

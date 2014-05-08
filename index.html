@@ -9,10 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So it seems that with release of chef-client 11.10 the 403 error have&hellip;morphed. Now they look something like: 1
-2
-3
-Chef::Exceptions:: &hellip;">
+  <meta name="description" content="I&rsquo;m in the process of learning ruby on rails and it&rsquo;s going amazingly, plus Michael Hartl as a great teacher, I strongly suggest
+going &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +79,262 @@ Chef::Exceptions:: &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/">Updating a Rails Password via the Rails Console</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-02T11:28:40-05:00" pubdate data-updated="true">May 2<span>nd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+going through his screencasts.</p>
+
+<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password_confirmation</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">005</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="k">BEGIN</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">12</span><span class="o">.</span><span class="mi">2</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">15</span><span class="o">.</span><span class="mi">8</span><span class="n">ms</span><span class="p">)</span>  <span class="no">UPDATE</span> <span class="s2">&quot;users&quot;</span> <span class="no">SET</span> <span class="s2">&quot;password_digest&quot;</span> <span class="o">=</span> <span class="s1">&#39;$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.&#39;</span><span class="p">,</span> <span class="s2">&quot;remember_token&quot;</span> <span class="o">=</span> <span class="s1">&#39;zOZYjEVovO143qrX1yhibw&#39;</span><span class="p">,</span> <span class="s2">&quot;updated_at&quot;</span> <span class="o">=</span> <span class="s1">&#39;2014-04-25 23:24:39.329502&#39;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">COMMIT</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">006</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
+database via <code>u.save</code>.</p>
+
+<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
+exception telling you why it won&rsquo;t work, example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:12:49&quot;, updated_at: &quot;2014-04-24 20:17:57&quot;, password_digest: &quot;$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...&quot;, remember_token: &quot;ZiAb_plRQdp9WaKjbZ4CAA&quot;&gt;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;1234&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;1234&quot;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">false</span>
+</span><span class='line'><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save!</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
+</span><span class='line'><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:RecordInvalid</span><span class="p">:</span> <span class="no">Validation</span> <span class="ss">failed</span><span class="p">:</span> <span class="no">Password</span> <span class="n">is</span> <span class="n">too</span> <span class="n">short</span> <span class="p">(</span><span class="n">minimum</span> <span class="n">is</span> <span class="mi">6</span> <span class="n">characters</span><span class="p">),</span> <span class="no">Password</span> <span class="n">confirmation</span> <span class="n">can</span><span class="s1">&#39;t be blank</span>
+</span><span class='line'><span class="s1">from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!&#39;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/26/utc-and-me/">UTC and Me</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-26T16:15:54-05:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
+listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
+UTC as their main way of describing time. So when he asked for a dump from 2 days ago, at 4pm he thought it was 2 days ago 4pm CST (my timezone)
+where the ticket for the company described 4pm UTC. Needless to say confusion started to hold.</p>
+
+<p>Now this can start my rant (which up till now I haven&rsquo;t actually written) about timezones, but I wanted to make his life easier so I figured out
+a pretty straight forward way to convert any date and time of a timezone to UTC via ruby.  This is how you do it:</p>
+
+<p>Note: this requires ruby 1.9.3+</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;04/23/2014 02:00 AM&quot;</span><span class="p">,</span><span class="s2">&quot;%m/%d/%Y %I:%M %p&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">23</span> <span class="mo">02</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span> <span class="o">-</span><span class="mo">0500</span>
+</span><span class='line'><span class="o">[</span><span class="mi">9</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">utc</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">23</span> <span class="mo">07</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span> <span class="no">UTC</span>
+</span><span class='line'><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow, that&rsquo;s pretty simple eh? :)  In looking around for this answer, I came across a pretty neat trick with ruby also:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">13</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">utc</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">25</span> <span class="mi">16</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">27</span> <span class="no">UTC</span>
+</span><span class='line'><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">1398443660</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s time now for UTC from your machines time, and the epoch time too!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/">How to Add Growl Notifications to Rspec Tests</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-08T10:45:59-05:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
+I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
+huge <a href="http://kitchen.ci">test-kitchen</a>, or <a href="https://github.com/sstephenson/bats">bats</a> or the like tester with chef
+but never got a way to automate the testing in the background. Turns out using rspec+guard+growl allows for you to
+be focused on your present screen and have the tests being run with a pop up.</p>
+
+<p>I use vim as my development platform. This is why I needed a way to run rspec in the background, hopping out of the vim buffer breaks my focus. So I used guard-rspec, it was perfect for what I wanted to do, problem was it was in another tab or terminal again breaking my focus. I figured I have growl installed, so this is how I set up this perfect rspec+guard+growl setup.</p>
+
+<p>First add these two gems to your Gemfile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl&#39;</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl_notify&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NOTE: I suggest adding this to the development/test group, you won&rsquo;t want this in your production deploy.</p>
+
+<p>Go ahead and run <code>bundle</code>.</p>
+
+<p>After that, you need to install something called <a href="http://growl.cachefly.net/GrowlNotify-2.1.zip">GrowlNotify 2.1</a>, I&rsquo;d double check your growl version, it only works with 2.1.x.</p>
+
+<p>After installing spin up <code>guard</code>, and you should see a nice notification. :)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -706,298 +960,6 @@ I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have wa
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/">Chef Handler Why Did It Take a Year for Me to Use You</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-07T15:24:54-06:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
-
-<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
-
-<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
-
-<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
-
-<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
-and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
-there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
-in a good state.</p>
-
-<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
-
-<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">chef_handler</span> <span class="s2">&quot;MailHandler&quot;</span> <span class="k">do</span>
-</span><span class='line'>   <span class="n">source</span> <span class="s1">&#39;chef/handler/mail&#39;</span>
-</span><span class='line'>   <span class="n">arguments</span> <span class="ss">:to_address</span> <span class="o">=&gt;</span> <span class="s2">&quot;root&quot;</span>
-</span><span class='line'>   <span class="n">action</span> <span class="ss">:nothing</span>
-</span><span class='line'><span class="k">end</span><span class="o">.</span><span class="n">run_action</span><span class="p">(</span><span class="ss">:enable</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see it&rsquo;s pretty straight forward.</p>
-
-<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
-first main internal recipe:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">include_recipe</span> <span class="s1">&#39;chef_handler&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-campfire&quot;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">action</span> <span class="ss">:install</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">chef_handler</span> <span class="s1">&#39;Chef::Handler::Campfire&#39;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">action</span> <span class="ss">:enable</span>
-</span><span class='line'>  <span class="n">arguments</span> <span class="o">[</span> <span class="s1">&#39;SUBDOMAIN&#39;</span><span class="p">,</span> <span class="s1">&#39;TOKEN&#39;</span> <span class="p">,</span> <span class="s1">&#39;ROOM&#39;</span> <span class="o">]</span>
-</span><span class='line'>  <span class="n">source</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Gem</span><span class="o">.</span><span class="n">all_load_paths</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/chef-handler-campfire/</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s1">&#39;chef&#39;</span><span class="p">,</span> <span class="s1">&#39;handler&#39;</span><span class="p">,</span> <span class="s1">&#39;campfire.rb&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
-
-<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/">ResourceNotFound and Splunk> fun&#8230;gotta Love That Error</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-03T16:18:51-06:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
-
-<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>500 Internal Server Error
-</span><span class='line'>
-</span><span class='line'>Return to Splunk home page
-</span><span class='line'>
-</span><span class='line'>ResourceNotFound: [HTTP 404] https://127.0.0.1:8089/services/data/user-prefs; [{'type': 'ERROR', 'text': 'Application does not exist: user-prefs', 'code': None}]
-</span><span class='line'>
-</span><span class='line'>This page was linked to from http://&lt;mycompanyname&gt;:8000/en-US/account/login?return_to=%2Fen-US%2F.
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>You are using &lt;mycompanyname&gt;:8000, which is connected to splunkd @182037 at https://127.0.0.1:8089 on Mon Feb 3 16:17:37 2014.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow, what the hell does that mean?</p>
-
-<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
-oversight.</p>
-
-<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-25T00:24:28-06:00" pubdate data-updated="true">Jan 25<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
-
-<p>So, yeah, you can tell I was pretty impressed with it right?</p>
-
-<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
-
-<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
-
-<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
-
-<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;%</span>
-</span><span class='line'>  <span class="n">socket</span> <span class="o">=</span> <span class="o">[</span>
-</span><span class='line'>    <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_SOCKET&quot;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;/var/run/mysql5/mysqld.sock&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;/tmp/mysql.sock&quot;</span>
-</span><span class='line'>  <span class="o">].</span><span class="n">detect</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span> <span class="o">&amp;&amp;</span> <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">port</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_PORT&quot;</span><span class="o">]</span> <span class="o">||</span> <span class="s2">&quot;3306&quot;</span>
-</span><span class='line'><span class="sx">%&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sx">development: &amp;development</span>
-</span><span class='line'><span class="sx">  adapter: mysql</span>
-</span><span class='line'><span class="sx">  database: yourapp_development</span>
-</span><span class='line'><span class="sx">  username: root</span>
-</span><span class='line'><span class="sx">&lt;% if socket %&gt;</span>
-</span><span class='line'>  <span class="ss">host</span><span class="p">:</span> <span class="n">localhost</span>
-</span><span class='line'>  <span class="ss">socket</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= socket %&gt;</span>
-</span><span class='line'><span class="sx">&lt;% else %&gt;</span>
-</span><span class='line'><span class="sx">  host: 127.0.0.1</span>
-</span><span class='line'><span class="sx">  port: &lt;%=</span> <span class="n">port</span> <span class="sx">%&gt;</span>
-</span><span class='line'><span class="sx">&lt;% end %&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Warning: The database defined as &quot;test&quot; will be erased and</span>
-</span><span class='line'><span class="c1"># re-generated from your development database when you run &quot;rake&quot;.</span>
-</span><span class='line'><span class="c1"># Do not set this db to the same as development or production.</span>
-</span><span class='line'><span class="nb">test</span><span class="p">:</span>
-</span><span class='line'>  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">development</span>
-</span><span class='line'>  <span class="ss">database</span><span class="p">:</span> <span class="n">yourapp_test</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
-
-<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
-
-<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
-
-<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
-
-<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
-
-<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1013,23 +975,23 @@ oversight.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/">Updating a Rails Password via the Rails Console</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/26/utc-and-me/">UTC and Me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/">How to Add Growl Notifications to Rspec Tests</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a>
       </li>
     
       <li class="post">
         <a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/">Getting Authentication With Hubot Using auth.coffee</a>
       </li>
     
   </ul>

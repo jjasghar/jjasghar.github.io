@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-03-21T19:18:15-05:00</updated>
+  <updated>2014-05-02T12:04:47-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,181 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Updating a Rails Password via the Rails Console]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
+    <updated>2014-05-02T11:28:40-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+going through his screencasts.</p>
+
+<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password_confirmation</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">005</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="k">BEGIN</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">12</span><span class="o">.</span><span class="mi">2</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">15</span><span class="o">.</span><span class="mi">8</span><span class="n">ms</span><span class="p">)</span>  <span class="no">UPDATE</span> <span class="s2">&quot;users&quot;</span> <span class="no">SET</span> <span class="s2">&quot;password_digest&quot;</span> <span class="o">=</span> <span class="s1">&#39;$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.&#39;</span><span class="p">,</span> <span class="s2">&quot;remember_token&quot;</span> <span class="o">=</span> <span class="s1">&#39;zOZYjEVovO143qrX1yhibw&#39;</span><span class="p">,</span> <span class="s2">&quot;updated_at&quot;</span> <span class="o">=</span> <span class="s1">&#39;2014-04-25 23:24:39.329502&#39;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">COMMIT</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">006</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
+database via <code>u.save</code>.</p>
+
+<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
+exception telling you why it won&rsquo;t work, example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:12:49&quot;, updated_at: &quot;2014-04-24 20:17:57&quot;, password_digest: &quot;$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...&quot;, remember_token: &quot;ZiAb_plRQdp9WaKjbZ4CAA&quot;&gt;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;1234&quot;</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;1234&quot;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">false</span>
+</span><span class='line'><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save!</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
+</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
+</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
+</span><span class='line'><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:RecordInvalid</span><span class="p">:</span> <span class="no">Validation</span> <span class="ss">failed</span><span class="p">:</span> <span class="no">Password</span> <span class="n">is</span> <span class="n">too</span> <span class="n">short</span> <span class="p">(</span><span class="n">minimum</span> <span class="n">is</span> <span class="mi">6</span> <span class="n">characters</span><span class="p">),</span> <span class="no">Password</span> <span class="n">confirmation</span> <span class="n">can</span><span class="s1">&#39;t be blank</span>
+</span><span class='line'><span class="s1">from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!&#39;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[UTC and Me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/26/utc-and-me/"/>
+    <updated>2014-04-26T16:15:54-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/26/utc-and-me</id>
+    <content type="html"><![CDATA[<p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
+listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
+UTC as their main way of describing time. So when he asked for a dump from 2 days ago, at 4pm he thought it was 2 days ago 4pm CST (my timezone)
+where the ticket for the company described 4pm UTC. Needless to say confusion started to hold.</p>
+
+<p>Now this can start my rant (which up till now I haven&rsquo;t actually written) about timezones, but I wanted to make his life easier so I figured out
+a pretty straight forward way to convert any date and time of a timezone to UTC via ruby.  This is how you do it:</p>
+
+<p>Note: this requires ruby 1.9.3+</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
+</span><span class='line'><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;04/23/2014 02:00 AM&quot;</span><span class="p">,</span><span class="s2">&quot;%m/%d/%Y %I:%M %p&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">23</span> <span class="mo">02</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span> <span class="o">-</span><span class="mo">0500</span>
+</span><span class='line'><span class="o">[</span><span class="mi">9</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">utc</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">23</span> <span class="mo">07</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span> <span class="no">UTC</span>
+</span><span class='line'><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow, that&rsquo;s pretty simple eh? :)  In looking around for this answer, I came across a pretty neat trick with ruby also:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">13</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">utc</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">25</span> <span class="mi">16</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">27</span> <span class="no">UTC</span>
+</span><span class='line'><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="mi">1398443660</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s time now for UTC from your machines time, and the epoch time too!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to Add Growl Notifications to Rspec Tests]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
+    <updated>2014-04-08T10:45:59-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
+    <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
+I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
+huge <a href="http://kitchen.ci">test-kitchen</a>, or <a href="https://github.com/sstephenson/bats">bats</a> or the like tester with chef
+but never got a way to automate the testing in the background. Turns out using rspec+guard+growl allows for you to
+be focused on your present screen and have the tests being run with a pop up.</p>
+
+<p>I use vim as my development platform. This is why I needed a way to run rspec in the background, hopping out of the vim buffer breaks my focus. So I used guard-rspec, it was perfect for what I wanted to do, problem was it was in another tab or terminal again breaking my focus. I figured I have growl installed, so this is how I set up this perfect rspec+guard+growl setup.</p>
+
+<p>First add these two gems to your Gemfile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl&#39;</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl_notify&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>NOTE: I suggest adding this to the development/test group, you won&rsquo;t want this in your production deploy.</p>
+
+<p>Go ahead and run <code>bundle</code>.</p>
+
+<p>After that, you need to install something called <a href="http://growl.cachefly.net/GrowlNotify-2.1.zip">GrowlNotify 2.1</a>, I&rsquo;d double check your growl version, it only works with 2.1.x.</p>
+
+<p>After installing spin up <code>guard</code>, and you should see a nice notification. :)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Update to the Chef Error That Has Haunted Me]]></title>
@@ -714,8 +889,20 @@ oversight.</p>
 
 <h1>Update!</h1>
 
-<p>So it seems that with release of <code>11.10</code> the 403 error has&hellip;morphed. Now it looks something like:
-&#8220;`</p>
+<p>So it seems that with release of <code>11.10</code> the 403 error has&hellip;morphed. Now it looks something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Chef::Exceptions::ContentLengthMismatch
+</span><span class='line'>---------------------------------------
+</span><span class='line'>Response body length 164 does not match HTTP Content-Length header 206.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>I have a post about it from 2014-03-19</p>
 ]]></content>
   </entry>
   
@@ -1358,182 +1545,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
 
 <p>Boom, it worked.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hub Workflow]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/31/hub-workflow/"/>
-    <updated>2013-10-31T11:01:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/31/hub-workflow</id>
-    <content type="html"><![CDATA[<p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
-</span><span class='line'>Error creating pull request: Unprocessable Entity <span class="o">(</span>HTTP 422<span class="o">)</span>
-</span><span class='line'>Missing field: <span class="s2">&quot;head_sha&quot;</span>
-</span><span class='line'>Missing field: <span class="s2">&quot;base_sha&quot;</span>
-</span><span class='line'>No commits between jjasghar:master and jjasghar:blah
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>WTF man? What the hell does this mean? It seems I wasn&rsquo;t the only one that had this <a href="https://github.com/github/hub/issues/189">problem</a>.  It seems that the work flow (at least in my case) was the problem. Here&rsquo;s a quick fix to be able to open up a PR off a forked branch:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git add some_file
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git commit -m <span class="s2">&quot;blah&quot;</span>
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git push -u origin blah
-</span><span class='line'>Counting objects: 7, <span class="k">done</span>.
-</span><span class='line'>Delta compression using up to 4 threads.
-</span><span class='line'>Compressing objects: 100% <span class="o">(</span>3/3<span class="o">)</span>, <span class="k">done</span>.
-</span><span class='line'>Writing objects: 100% <span class="o">(</span>4/4<span class="o">)</span>, 351 bytes | 0 bytes/s, <span class="k">done</span>.
-</span><span class='line'>Total 4 <span class="o">(</span>delta 2<span class="o">)</span>, reused 0 <span class="o">(</span>delta 0<span class="o">)</span>
-</span><span class='line'>To git@github.com:jjasghar/learning_git.git
-</span><span class='line'>   5224edf..88ad1af  blah -&gt; blah
-</span><span class='line'>Branch blah <span class="nb">set </span>up to track remote branch blah from origin.
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
-</span><span class='line'>https://github.com/jjasghar/learning_git/pull/1
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pretty slick eh?</p>
-
-<p>Bonus round you can attach your PR to an issue!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request -i 3
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[People Keep Asking Me How to Start With Chef]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/"/>
-    <updated>2013-10-18T10:19:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef</id>
-    <content type="html"><![CDATA[<p>So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do from the beginning. I completely acknowledge that chef can be extremely confusing to start with. If you really want to learn it you&rsquo;ll have to stick with it, and do it. Good god, nothing is better than running it on a vagrant box and seeing what you expect happen happen.</p>
-
-<h2>chef-solo is your best friend (step 1)</h2>
-
-<p>A lot of people can start here, and end here believe it or not.  chef-solo is unbelievably powerful and can full-fill 90% of all requirements for basic usage. I spent some time looking around for a good tutorial (doing all of them that I could find), and <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">this</a> on was the best &ldquo;I have no idea what the fuck I&rsquo;m doing.&rdquo; situation.  Modern chef installs are a tad bit different than this guy, so the &ldquo;install.sh&rdquo; changes I suggest are this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># This run as root on the machine</span>
-</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
-</span><span class='line'>
-</span><span class='line'><span class="c"># are we not bootstrapped?</span>
-</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
-</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
-</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>
-</span><span class='line'>chef-solo -c solo.rb -j solo.json
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see I use the omnibus installer, not the gem, and choose the ruby version you want ;), and yes if you use those lame-ass rpm-based distros, <code>apt-get</code> won&rsquo;t work for you.</p>
-
-<h2>There&rsquo;s something clever here (step 2)</h2>
-
-<p>So awesome, you walked through the suggested tutorial, you can now run your <code>install.sh</code> and get your changes in. Grats! If you think about it, hit up the <a href="http://docs.opscode.com">Opscode Docs</a> and you&rsquo;ll discover that there&rsquo;s a resource to provision every which way. As I said at the beginning this might be all you need, if it is then use it; no real need to go any farther.</p>
-
-<p>Ah, you&rsquo;re still here. So you DO want to farther, awesome. In step two I suggested going to the docs, that&rsquo;s cool, but sometimes you need more verbose help, that&rsquo;s my second point, it&rsquo;s time to start asking questions. Your first stop is <a href="http://webchat.freenode.net/?channels=chef">#chef</a>; it&rsquo;s manned basically 24x7, and <em>normally</em> extremely helpful. Don&rsquo;t be a douche, if you have to paste something use <a href="http://gist.github.com">gist</a> or something.  After that the main Opscode <a href="http://lists.opscode.com/sympa">mailing list</a> is great. It&rsquo;s slower, but you get much more in depth questions and conversations. Finally the third sub step is speak up, ask questions the only way to learn this is to be like &ldquo;I don&rsquo;t understand it, help!&rdquo;</p>
-
-<h2>The only book worth a damn as of 2013/10/18 (step 3)</h2>
-
-<p>Step three of the journey is probably the one that most people jump to initially, and this is usually where the confusion starts.  There&rsquo;s a handful of books out there on chef, this <a href="http://www.packtpub.com/chef-starter/book">one</a> is the only one worth any money.  With a strong understanding of how to provision a simple box, and where to ask questions this book will be extremely straight forward and build upon those building blocks. I&rsquo;m constantly looking for another chef bible, but most nuggets of how-to things are spread all over the internet in blog form.</p>
-
-<h2>The fun starts here (step 4)</h2>
-
-<p>Step four you need a chef server, you need to be able to provision multiple boxes, you understand/can find out what a role or environment is, and you need different <code>run_lists</code>.Good for you.  From here you should look at the open source <a href="http://www.opscode.com/chef/install/">chef server</a> and spin it up on another box. I should say you can use the <a href="https://getchef.opscode.com/signup">hosted chef</a>, you get up to 5 nodes with it for free, which is cool, but if you want to see everything work from the ground up, open source chef server is the way to go. (NOTE: if you are doing it in AWS/<code>$cloudprovider</code> you&rsquo;ll need at least a 4 gig box, and that&rsquo;s pushing it. You&rsquo;ve been warned.) Now spin up another box, a machine that can talk to the server that you want to provision. Start playing with <code>knife</code> add a knife plug-in for you <code>$cloudprovider</code> see if you can spin up another box using the <a href="http://docs.opscode.com/knife_bootstrap.html">knife bootstrap</a>.  Start using <a href="http://community.opscode.com/cookbooks/minitest-handler">minitest-handler-cookbook</a>, <a href="https://github.com/opscode/test-kitchen">test-kitchen</a>, and even <a href="https://github.com/acrmp/chefspec">chef-spec</a> if your feeling sassy. If you&rsquo;ve made it this far, you&rsquo;ve probably been exposed to a myriad of other tools, run with them. Trust me if someone built if for chef the chance of being helpful is extremely high.</p>
-
-<h2>D&#8217;oh why did I do it this way? (step 5)</h2>
-
-<p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
-
-<p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Checking CPU WAIT via Nagios]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios/"/>
-    <updated>2013-10-16T11:11:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios</id>
-    <content type="html"><![CDATA[<p>So our machines swap&hellip;.swap alot. There are the  typical nagios system checks, you can have the <code>check_swap</code> call, but at my company the &lt; 20 % hits so often we needed to figure out a way to get warned about crippling proformance. We discovered that when a machine has CPU WAIT spikes, the proformance for the machine tanks, so I tried to find a check for specificly monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.</p>
-
-<p>I took a stab at creating a check myself and the following is a simple nagios check that you can run via NRPE.  The <code>PERCENTAGE</code> line is changeable, I&rsquo;d make sure your alarm reflects your error cases. We choose 10 % because that&rsquo;s when we started seeing real prefomance issues, but as all sysadmins know any CPU WAIT is bad in general.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
-</span><span class='line'><span class="nv">CPUWAIT</span><span class="o">=</span><span class="sb">`</span>top -b -n 1| grep <span class="s1">&#39;wa,&#39;</span> | awk -F <span class="s1">&#39;,&#39;</span> <span class="o">{</span><span class="s1">&#39;print $5&#39;</span><span class="o">}</span> | cut -d . -f 1 | tr -d <span class="s1">&#39; &#39;</span> <span class="sb">`</span>
-</span><span class='line'><span class="nv">PERCENTAGE</span><span class="o">=</span>10
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -le <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is under <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span>%
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span> -ge <span class="k">${</span><span class="nv">PERCENTAGE</span><span class="k">}</span> <span class="o">]</span>
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Your CPU WAIT is at <span class="k">${</span><span class="nv">CPUWAIT</span><span class="k">}</span>%, your machine aint happy
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
-</span><span class='line'> <span class="k">fi</span>
-</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I posted a this on /r/sysadmin/ back on 6/15/13. I wanted to put some context around why I created the nagios checks and why the RSS after all that &hellip;">
+  <meta name="description" content="I started my chef career with inheriting a chef infrastructure with an opensource chef server. I read all of the blog posts, and the tutorials, tried &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,249 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/02/adventures-with-chef-solo/">Adventures With Chef-solo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-02T14:36:00-05:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I started my chef career with inheriting a chef infrastructure with an opensource chef server.  I read all of the blog posts, and the tutorials, tried to wrap my head around what a cookbook, recipe, or data bag was.  I know now, this was the <em>wrong</em> way to learn chef.  chef with chef-client/server adds a level of complexity that just is unfounded.  I decided to spend a copy hours to master chef-solo, and damn I wish I had started there.</p>
+
+<h2>My hands on learning project</h2>
+
+<p>I had a requirement of setting up a unicorn nginx instance on a VPS.  I thought hell, there&rsquo;s gotta be a way to do this with chef. (I normally use passenger+apache, so I had to learn nginx and unicorn too, but that&rsquo;s a different post&hellip;well kinda) So I looked around for a nice <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">tutorial</a> and came across that guy.  I started reading it, realized holy crap, this is awesome.  I stole the <code>solo.json</code> and the <code>solo.rb</code> and <code>install.sh</code> because I was lazy.<br/>
+I changed the <code>install.sh</code> around a little bit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># This run as root on the machine</span>
+</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
+</span><span class='line'>
+</span><span class='line'><span class="c"># are we not bootstrapped?</span>
+</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
+</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
+</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
+</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>
+</span><span class='line'>chef-solo -c solo.rb -j solo.json
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can tell, its ubuntu focused, but basically if I want to provision a box after making a change to one of the cookbooks I just had to run <code>./install.sh</code>.  Interestingly, I had heard bad things about the 1.9.1 ruby binaries for ubuntu, but so far, it is a ton better than doing that compile from src. ;)</p>
+
+<p>So, basically with those three files, running that curl in the script, and creating a <code>cookbooks/</code> directory, I had my framework to make this project happen.</p>
+
+<p>Now I made a mistake here.  I started off with a simple &ldquo;generic&rdquo; cookbook, with a simple <code>default.rb</code> file that called a <code>packages.rb</code> file to add some pkgs I love and run on a daily basis.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%w{build-essential git-core libgdbm-dev libreadline-dev libssl-dev libyaml-dev s3cmd tmux tk-dev vim wget zlib1g-dev zsh}</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">pkg</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">package</span> <span class="n">pkg</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">action</span> <span class="o">[</span><span class="ss">:install</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now to an passive onlooker there seems nothing wrong with this, and 3 weeks ago JJ would agree with you.  JJ now says, &ldquo;Stop that, start with the webserver and the deps for that instead of the convince of something easy like package management.&rdquo;  LEARN <a href="http://berkshelf.com/">berkshelf</a> and don&rsquo;t make excuses. (at this writing, 8/2/13, I still actually haven&rsquo;t learned it, the best analogy is this, dling cookbooks is like building from source, and berkshelf is like using apt-get) Anyway I digress.</p>
+
+<p>Back to the original story.</p>
+
+<p>I made the <code>cookbooks/</code> directory, and when to github to pull down the newest <a href="https://github.com/opscode-cookbooks/nginx">nginx</a> cookbook.  <code>git clone https://github.com/opscode-cookbooks/nginx.git</code> in the directory and then because  I hate submodules, I ran <code>rm -rf .git/</code>. I <code>cd ~/chef-solo</code> then ran <code>install.sh</code>. Crossed my fingers and no, didn&rsquo;t work. Turns out I needed a bunch of dependences (hence the berkself statement). I resolved them all, and then ran the beautiful <code>./install.sh</code>. BOOM, it worked.  I took a moment, realized what I had just done.  I created a git repo off this work, created a branch &ldquo;nginx&rdquo; and committed my changes. Now whenever I need to spin up an nginx box, all I have to do is clone my chef-solo repo and checkout nginx and run <code>install.sh</code>.</p>
+
+<p>Dang, that&rsquo;s awesome. To get that to work with chef-server&hellip;is a ton of work.  You have to download each cookbook, upload each to the chef-server, change the role or add the recipe, then run chef-client.  This would be great if I had to do it over and over, but being I was just setting up a dev box, chef-server overhead just isn&rsquo;t worth it.</p>
+
+<p>Now all in all, this has only been one adventure with chef-solo, but going through this academic exercise I realized the potential of this unbelievable powerful application.  From this project, and my &ldquo;generic&rdquo; cookbook, I&rsquo;ve ran with it, so now I have a boostrap cookbook with my packages, some of my dotfiles, and other tidbits.  It&rsquo;s nice, and I strongly suggest checking it out.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/25/semver-or-how-i-learned-that-versioning-everywhere-where-ive-worked-is-stupid-and-semver-is-the-way-to-go/">Semver or How I Learned That Versioning Everywhere Where I&#8217;ve Worked Is Stupid and Semver Is the Way to Go</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-25T16:37:00-05:00" pubdate data-updated="true">Jul 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In the chef world the way that cookbooks are named versioned is something called semver.  Before i watched Jamie Winsor&rsquo;s <a href="https://www.youtube.com/watch?v=hYt0E84kYUI">Berkself Way</a> I didn&rsquo;t know understand how the versioning worked.  I quickly discovered <a href="http://www.semver.org">http://www.semver.org</a> and fell in love.</p>
+
+<p>TODO.</p>
+
+<p>Seriously, though it really is awesome.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/">Serverspec the New Best Way to Learn and Audit Your Infrastructure</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-12T15:06:00-05:00" pubdate data-updated="true">Jul 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
+
+<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
+
+<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
+You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
+
+<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
+
+<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;spec_helper&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="n">package</span><span class="p">(</span><span class="s1">&#39;httpd&#39;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_installed</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="n">service</span><span class="p">(</span><span class="s1">&#39;httpd&#39;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_enabled</span>   <span class="p">}</span>
+</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_running</span>   <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="n">port</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_listening</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="n">file</span><span class="p">(</span><span class="s1">&#39;/etc/httpd/conf/httpd.conf&#39;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">be_file</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">it</span> <span class="p">{</span> <span class="n">should</span> <span class="n">contain</span> <span class="s2">&quot;ServerName my-server-name&quot;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s it, now all you have to do is <code>rake spec</code> and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
+
+<h2>nagios (or automated process monitoring) vs serverspec</h2>
+
+<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
+
+<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
+
+<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
+
+<h2>Conclusion</h2>
+
+<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -380,23 +623,23 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/">Updating a Rails Password via the Rails Console</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/26/utc-and-me/">UTC and Me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/">How to Add Growl Notifications to Rspec Tests</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a>
       </li>
     
       <li class="post">
         <a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/13/campfire-plus-sensu-and-some-issues/">Campfire + Sensu and Some Issues</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/28/chef-book-lighting-talk/">Chef-book Lighting Talk</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/">Getting Authentication With Hubot Using auth.coffee</a>
       </li>
     
   </ul>
