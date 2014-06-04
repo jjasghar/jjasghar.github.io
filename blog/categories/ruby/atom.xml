@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: ruby | jjasghar rants and ramblings]]></title>
+  <title><![CDATA[Category: ruby, | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-05-02T12:04:47-05:00</updated>
+  <updated>2014-06-04T17:59:37-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -14,241 +14,97 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Updating a rails password via the rails console]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
-    <updated>2014-05-02T11:28:40-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
-going through his screencasts.</p>
+    <title type="html"><![CDATA[Moving to capistrano version 3 from version 2 git submodules]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
+    <updated>2014-06-04T17:13:43-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
+to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
+useful for someone else.</p>
 
-<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+<h2>git submodules</h2>
 
-<p><code>ruby
-irb(main):001:0&gt; u = User.find_by_id(1)
-  User Load (3.5ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
-=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
-irb(main):002:0&gt; u
-=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
-irb(main):003:0&gt; u.password = "a_stupid_pa$$word"
-=&gt; "_stupid_pa$$word"
-irb(main):004:0&gt; u.password_confirmation = "a_stupid_pa$$word"
-=&gt; "_stupid_pa$$word"
-irb(main):005:0&gt; u.save
-   (2.0ms)  BEGIN
-  User Exists (12.2ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
-   (15.8ms)  UPDATE "users" SET "password_digest" = '$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.', "remember_token" = 'zOZYjEVovO143qrX1yhibw', "updated_at" = '2014-04-25 23:24:39.329502' WHERE "users"."id" = 1
-   (4.6ms)  COMMIT
-=&gt; true
-irb(main):006:0&gt;
+<p>I had a requirement to get git submodules to work with one of my applications. It&rsquo;s seems
+that v3 doesn&rsquo;t have the &ldquo;clone&rdquo; version anymore, so the <code>.git</code> directory isn&rsquo;t there.
+It seems it uses the <code>git archive</code> and doesn&rsquo;t have an &ldquo;out of the box&rdquo; support for submodules.
+See <a href="http://stackoverflow.com/questions/19403138/capistrano-v3-deploy-git-repository-and-its-submodules/19573220#19573220">here</a>.
+I did some searching and found the above stack overflow and  <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">this gist</a>
+which gave me the bulk of what I needed to get done.</p>
+
+<p>There were some gotchas on this so I&rsquo;m going to do my best to document them here.
+First off, as you can see on <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L20">line 20</a>
+there is a new variable named <code>repo_path</code>.  This is due to the need now of the
+<code>git clone</code> to the file system and a place it needs to put it. So that means you need
+to add the <code>repo/</code> directory in your <code>:deploy_to</code> directory. Might I suggest the something like:</p>
+
+<p><code>bash
+ssh &lt;deployuser&gt;@&lt;remotehost&gt;://var/www/&lt;app&gt;/repo/
 </code></p>
 
-<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
-database via <code>u.save</code>.</p>
-
-<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
-exception telling you why it won&rsquo;t work, example:</p>
-
-<p><code>ruby
-[1] pry(main)&gt; u = User.find_by_id(1)
-  User Load (0.1ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
-=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:12:49", updated_at: "2014-04-24 20:17:57", password_digest: "$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...", remember_token: "ZiAb_plRQdp9WaKjbZ4CAA"&gt;
-[2] pry(main)&gt; u.password = "1234"
-=&gt; "1234"
-[3] pry(main)&gt; u.save
-   (0.1ms)  begin transaction
-  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
-   (0.1ms)  rollback transaction
-=&gt; false
-[4] pry(main)&gt; u.save!
-   (0.1ms)  begin transaction
-  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
-   (0.0ms)  rollback transaction
-ActiveRecord::RecordInvalid: Validation failed: Password is too short (minimum is 6 characters), Password confirmation can't be blank
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!'
-[5] pry(main)&gt;
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[UTC and me]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/04/26/utc-and-me/"/>
-    <updated>2014-04-26T16:15:54-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/04/26/utc-and-me</id>
-    <content type="html"><![CDATA[<p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
-listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
-UTC as their main way of describing time. So when he asked for a dump from 2 days ago, at 4pm he thought it was 2 days ago 4pm CST (my timezone)
-where the ticket for the company described 4pm UTC. Needless to say confusion started to hold.</p>
-
-<p>Now this can start my rant (which up till now I haven&rsquo;t actually written) about timezones, but I wanted to make his life easier so I figured out
-a pretty straight forward way to convert any date and time of a timezone to UTC via ruby.  This is how you do it:</p>
-
-<p>Note: this requires ruby 1.9.3+</p>
-
-<p><code>ruby
-[8] pry(main)&gt; require 'time'
-[8] pry(main)&gt; t = Time.strptime("04/23/2014 02:00 AM","%m/%d/%Y %I:%M %p")
-=&gt; 2014-04-23 02:00:00 -0500
-[9] pry(main)&gt; t.utc
-=&gt; 2014-04-23 07:00:00 UTC
-[10] pry(main)&gt;
-</code></p>
-
-<p>Wow, that&rsquo;s pretty simple eh? :)  In looking around for this answer, I came across a pretty neat trick with ruby also:</p>
-
-<p><code>ruby
-[13] pry(main)&gt; Time.now.utc
-=&gt; 2014-04-25 16:21:27 UTC
-[10] pry(main)&gt; Time.now.to_i
-=&gt; 1398443660
-</code></p>
-
-<p>That&rsquo;s time now for UTC from your machines time, and the epoch time too!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to add growl notifications to rspec tests]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
-    <updated>2014-04-08T10:45:59-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
-    <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
-I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
-huge <a href="http://kitchen.ci">test-kitchen</a>, or <a href="https://github.com/sstephenson/bats">bats</a> or the like tester with chef
-but never got a way to automate the testing in the background. Turns out using rspec+guard+growl allows for you to
-be focused on your present screen and have the tests being run with a pop up.</p>
-
-<p>I use vim as my development platform. This is why I needed a way to run rspec in the background, hopping out of the vim buffer breaks my focus. So I used guard-rspec, it was perfect for what I wanted to do, problem was it was in another tab or terminal again breaking my focus. I figured I have growl installed, so this is how I set up this perfect rspec+guard+growl setup.</p>
-
-<p>First add these two gems to your Gemfile:
+<p>Then after the fact, you might want to steal this cap rake task:
 ```ruby
-group :development, :test do</p>
+desc &ldquo;Check that we can access the repo directory&rdquo;
+task :check_repo_permissions do
+  on roles(:all) do |host|</p>
 
-<pre><code>gem ...
-gem 'growl'
-gem 'growl_notify'
+<pre><code>if test("[ -w #{fetch(:deploy_to)/repo} ]")
+  info "#{fetch(:deploy_to)/repo} is writable on #{host}"
+else
+  error "#{fetch(:deploy_to)/repo} is not writable on #{host}"
+end
 </code></pre>
 
-<p>end
+<p>  end
+end
 ```</p>
 
-<p>NOTE: I suggest adding this to the development/test group, you won&rsquo;t want this in your production deploy.</p>
-
-<p>Go ahead and run <code>bundle</code>.</p>
-
-<p>After that, you need to install something called <a href="http://growl.cachefly.net/GrowlNotify-2.1.zip">GrowlNotify 2.1</a>, I&rsquo;d double check your growl version, it only works with 2.1.x.</p>
-
-<p>After installing spin up <code>guard</code>, and you should see a nice notification. :)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[running knife-openstack on a private rackspace instance]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance/"/>
-    <updated>2013-12-23T10:36:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/12/23/running-knife-openstack-on-a-private-rackspace-instance</id>
-    <content type="html"><![CDATA[<p>So congrats you got your new &ldquo;<a href="http://www.rackspace.com/cloud/private/">Private Cloud</a>&rdquo; from Rackspace. You are probably ecstatic to start building your new machines.
-I know I was; but alas with all new toys sometimes you hit a couple stags. Here are a couple things I ran into on my first few days.</p>
-
-<h3>First issue</h3>
-
-<p>So I&rsquo;m a chef shop, as you might know by now (assuming you&rsquo;ve read any of my other posts). I&rsquo;ve used <a href="https://github.com/opscode/knife-rackspace">knife-rackspace</a> tons of times; and hell I even have a <a href="https://github.com/opscode/knife-rackspace/commits?author=jjasghar">commit bit</a>. So logically I thought I could leverage this same gem with different backend api points. Nope, I was hard core wrong.
-You end up having to install <a href="https://github.com/opscode/knife-openstack">knife-openstack</a>. That in itself isn&rsquo;t bad at all&hellip;
-<code>bash
-[~] % gem install knife-openstack
+<p>Also may I suggest you putting this at the &ldquo;top&rdquo; of your <code>deploy.rb</code> something like:
+<code>ruby
+before :deploy, :check_repo_permissions
 </code>
-Now you need to update your <code>knife.rb</code>
-<code>bash
-[~] % vim ~/.chef/knife.rb
-</code>
-In your handoff ticket, you probably got something that looks like this:
-<code>bash
-export OS_USERNAME=Im_awesome_admin
-export OS_PASSWORD=$omeCr@zyA$$passwD
-export OS_TENANT_NAME=MyCompanyName
-export OS_AUTH_URL=http://10.219.0.254:5000/v2.0/
-export OS_AUTH_STRATEGY=keystone:
-</code>
-Go ahead and copy them out to what they need to be, something like&hellip;
-```ruby
-knife[:openstack_username] = &ldquo;Your OpenStack Dashboard username&rdquo;
-knife[:openstack_password] = &ldquo;Your OpenStack Dashboard password&rdquo;</p>
+So just in case you&rsquo;re <code>cap</code> task will fail out early on of you have decided to remove, or
+do something with that repo directory.</p>
 
-<h3>Note: If you are not proxying HTTPS to the OpenStack auth port, the scheme should be HTTP</h3>
+<p>Now if you go ahead and run <code>cap staging deploy</code> (you&rsquo;re testing in STAGING right?)
+You might run into some errors. Most are pretty self explanatory, and if you take care of them
+and run <code>cap</code> again, you should be good&hellip;but I digress.</p>
 
-<p>knife[:openstack_auth_url] = &ldquo;<a href="http://cloud.mycompany.com:5000/v2.0/tokens">http://cloud.mycompany.com:5000/v2.0/tokens</a>&rdquo;
-knife[:openstack_tenant] = &ldquo;Your OpenStack tenant name&rdquo;
-knife[:openstack_ssh_key_id] = &ldquo;my sshkey id&rdquo;
+<p>After adding that repo directory, you want to add the above <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">gist</a> to <code>lib/capistrano/submodule_strategy.rb</code>
+and add the following two lines to your <code>Capfile</code>:</p>
+
+<p><code>ruby
+require 'capistrano/git'
+require './lib/capistrano/submodule_strategy'
+</code></p>
+
+<p>After that, you need to add to your <code>config/deploy.rb</code>:</p>
+
+<p><code>ruby
+set :git_strategy, SubmoduleStrategy
+</code></p>
+
+<p>This should wire everything up now.</p>
+
+<p>There is one other <em>optional</em> file, <code>.capignore</code> that needs to be created, it is a <code>.gitignore</code> for this cap deployment.
+I ended up taking the example:
 <code>
-Great! So run that great command `knife openstack flavor list` to see if everything works....
-</code>bash
-[~] % knife openstack server list
-ERROR: knife encountered an unexpected error
-This may be a bug in the &lsquo;openstack server list&rsquo; knife command or plugin
-Please collect the output of this command with the <code>-VV</code> option before filing a bug report.
-Exception: NoMethodError: undefined method `[]&lsquo; for nil:NilClass
-```
-Crap..</p>
+.capignore
+lib
+config
+.git
+</code>
+and adding it directory to the <code>(:deploy_to)/repo/.capignore</code>. I believe you can add it to your the root of your repo,
+and it should get there too, but I didnt do it that way. The only place it&rsquo;s referanced is <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L45">here</a> so if you see fit, you could probably just remove the referance.</p>
 
-<p>Ok, lets try out with <code>-VV</code></p>
+<p>You should be able to do a <code>cap staging deploy</code> now and you should notice something like:
+<code>bash
+...
+DEBUG[639d0d29] Command: cd /var/www/app/repo &amp;&amp; ( GIT_ASKPASS=/bin/echo GIT_SSH=/tmp/app/git-ssh.sh /usr/bin/env git submodule update --init )
+DEBUG[639d0d29]   Submodule 'i-hate-submodules' () registered for path 'i-hate-submodules'
+...
+</code></p>
 
-<p><code>``ruby
-DEBUG: openstack_username Im_awsome_admin
-DEBUG: openstack_auth_url http://10.219.0.254:5000/v2.0/
-DEBUG: openstack_tenant MyCompanyName
-DEBUG: openstack_insecure
-/Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:51:in</code>rescue in run': undefined method `[]&lsquo; for nil:NilClass (NoMethodError)</p>
-
-<pre><code>from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/knife-openstack-0.8.1/lib/chef/knife/openstack_flavor_list.rb:41:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:485:in `run_with_pretty_exceptions'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/knife.rb:174:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/lib/chef/application/knife.rb:133:in `run'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/chef-11.8.0/bin/knife:25:in `&lt;top (required)&gt;'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `load'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/knife:23:in `&lt;main&gt;'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `eval'
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/bin/ruby_executable_hooks:15:in `&lt;main&gt;'
-</code></pre>
-
-<p>```</p>
-
-<p>Well that&rsquo;s not a lot of help eh? Turns out, if you look at the ticket that Rackspace gives you and what the <code>[:openstack_auth_url]</code> requires you&rsquo;ll see that there&rsquo;s a <code>/tokens</code> at the end. Do'h!</p>
-
-<h3>Second issue</h3>
-
-<p>Ok, so you got the ability to talk to your backend? Yay! But alas, you run your create&hellip;
-```bash
-[~] % knife openstack server create -S jj-mba-key -I 349168d3-5381-4324-8636-398d012f852b -f 1 -N testbox
-Instance Name: testbox
-Instance ID: 5e0ec79c-e06a-4fdb-9887-2b30ae1e5f80</p>
-
-<p>Waiting for server&hellip;&hellip;&hellip;
-Flavor: 1
-Image: 349168d3-5381-4324-8636-398d012f852b
-SSH Keypair: jj-mba-key
-ERROR: No IP address available for bootstrapping.
-```
-What the hell does that mean? Well I&rsquo;m not going to explain it all but it seems that by default Rackspace names the &ldquo;public&rdquo; and &ldquo;private&rdquo; networks as &ldquo;Fixed&rdquo; and &ldquo;Floating.&rdquo;
-This is triggered a fog issue, where it&rsquo;s looking at the label for a network either &ldquo;public&rdquo; or &ldquo;private&rdquo; and blows up. There is a ticket in for this <a href="https://tickets.opscode.com/browse/KNIFE-231">here</a> but it looks like it&rsquo;s stalled from late summer, early fall. Lammmeeee.</p>
-
-<p>So you are probably saying &ldquo;Why don&rsquo;t you just rename them?&rdquo; Good for you, great idea&hellip;but no, Openstack doesn&rsquo;t support that. So at this time, it looks like you&rsquo;ll have to delete them and rebuild them with the &ldquo;public&rdquo; and &ldquo;private&rdquo; names. Hopefully you&rsquo;ve noticed this at just the begining of building out your machines, otherwise you&rsquo;ll have to nuke and pave everything you&rsquo;ve done to get the new networks in.</p>
-
-<p>Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it&rsquo;s THAT picky&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Learning sinatra and where I'm going from here]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here/"/>
-    <updated>2013-09-13T15:29:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here</id>
-    <content type="html"><![CDATA[<p>I&rsquo;d like to start off by thanking Darren Jones, for writing the book <a href="http://sitepoint.com/jumpstart-sinatra">Jump Start Sinatra</a>.  This book is amazing, it&rsquo;s extremely well written, straight forward and hands on. Darren was able to break down and explain how sinatra works, runs and what you can do with it in a rapid fire primer.</p>
-
-<p>Darren has you create a simple &ldquo;sinatra song web site&rdquo; with a database backed, css, javascript (via coffeescript), and even gets you to post to heroku.  The book is only about 166 pages long, and fast, but gives you the primer to understand what you need to get done to make a functional app with little trouble and overhead. With in the first couple chapters Darren spurred me to wonder how a json object with curl POST was able to be put the data into a db, and with the this tutorial Darren has opened the avenue for me to be able to figure it out.</p>
-
-<p>One issue that I had with the book, it doesn&rsquo;t you how to write tests against the app you create.  Due to new programming practices, this seems like a nasty gap.  I&rsquo;ve decided before I figure out how to get my json input output working, I&rsquo;m going to figure out how to write tests against the app I created.</p>
-
-<p>If you are curious on the app that is built from this book, I have posted it <a href="https://github.com/jjasghar/sinatra_song_app">here</a>, but as time progresses I&rsquo;ll probably add things to it. Fair warning there.</p>
+<p>And you should be good to go!</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-05-02T12:04:47-05:00</updated>
+  <updated>2014-06-04T17:59:37-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Moving to Capistrano Version 3 From Version 2 Git Submodules]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
+    <updated>2014-06-04T17:13:43-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
+to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
+useful for someone else.</p>
+
+<h2>git submodules</h2>
+
+<p>I had a requirement to get git submodules to work with one of my applications. It&rsquo;s seems
+that v3 doesn&rsquo;t have the &ldquo;clone&rdquo; version anymore, so the <code>.git</code> directory isn&rsquo;t there.
+It seems it uses the <code>git archive</code> and doesn&rsquo;t have an &ldquo;out of the box&rdquo; support for submodules.
+See <a href="http://stackoverflow.com/questions/19403138/capistrano-v3-deploy-git-repository-and-its-submodules/19573220#19573220">here</a>.
+I did some searching and found the above stack overflow and  <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">this gist</a>
+which gave me the bulk of what I needed to get done.</p>
+
+<p>There were some gotchas on this so I&rsquo;m going to do my best to document them here.
+First off, as you can see on <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L20">line 20</a>
+there is a new variable named <code>repo_path</code>.  This is due to the need now of the
+<code>git clone</code> to the file system and a place it needs to put it. So that means you need
+to add the <code>repo/</code> directory in your <code>:deploy_to</code> directory. Might I suggest the something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh &lt;deployuser&gt;@&lt;remotehost&gt;://var/www/&lt;app&gt;/repo/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then after the fact, you might want to steal this cap rake task:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Check that we can access the repo directory&quot;</span>
+</span><span class='line'><span class="n">task</span> <span class="ss">:check_repo_permissions</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">host</span><span class="o">|</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">test</span><span class="p">(</span><span class="s2">&quot;[ -w </span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_to</span><span class="p">)</span><span class="o">/</span><span class="n">repo</span><span class="si">}</span><span class="s2"> ]&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">info</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_to</span><span class="p">)</span><span class="o">/</span><span class="n">repo</span><span class="si">}</span><span class="s2"> is writable on </span><span class="si">#{</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">error</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_to</span><span class="p">)</span><span class="o">/</span><span class="n">repo</span><span class="si">}</span><span class="s2"> is not writable on </span><span class="si">#{</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also may I suggest you putting this at the &ldquo;top&rdquo; of your <code>deploy.rb</code> something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before</span> <span class="ss">:deploy</span><span class="p">,</span> <span class="ss">:check_repo_permissions</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So just in case you&rsquo;re <code>cap</code> task will fail out early on of you have decided to remove, or
+do something with that repo directory.</p>
+
+<p>Now if you go ahead and run <code>cap staging deploy</code> (you&rsquo;re testing in STAGING right?)
+You might run into some errors. Most are pretty self explanatory, and if you take care of them
+and run <code>cap</code> again, you should be good&hellip;but I digress.</p>
+
+<p>After adding that repo directory, you want to add the above <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">gist</a> to <code>lib/capistrano/submodule_strategy.rb</code>
+and add the following two lines to your <code>Capfile</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/git&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;./lib/capistrano/submodule_strategy&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After that, you need to add to your <code>config/deploy.rb</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:git_strategy</span><span class="p">,</span> <span class="no">SubmoduleStrategy</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This should wire everything up now.</p>
+
+<p>There is one other <em>optional</em> file, <code>.capignore</code> that needs to be created, it is a <code>.gitignore</code> for this cap deployment.
+I ended up taking the example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">.</span><span class="n">capignore</span>
+</span><span class='line'><span class="n">lib</span>
+</span><span class='line'><span class="n">config</span>
+</span><span class='line'><span class="o">.</span><span class="n">git</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and adding it directory to the <code>(:deploy_to)/repo/.capignore</code>. I believe you can add it to your the root of your repo,
+and it should get there too, but I didnt do it that way. The only place it&rsquo;s referanced is <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L45">here</a> so if you see fit, you could probably just remove the referance.</p>
+
+<p>You should be able to do a <code>cap staging deploy</code> now and you should notice something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>...
+</span><span class='line'>DEBUG<span class="o">[</span>639d0d29<span class="o">]</span> Command: <span class="nb">cd</span> /var/www/app/repo <span class="o">&amp;&amp;</span> <span class="o">(</span> <span class="nv">GIT_ASKPASS</span><span class="o">=</span>/bin/echo <span class="nv">GIT_SSH</span><span class="o">=</span>/tmp/app/git-ssh.sh /usr/bin/env git submodule update --init <span class="o">)</span>
+</span><span class='line'>DEBUG<span class="o">[</span>639d0d29<span class="o">]</span>   Submodule <span class="s1">&#39;i-hate-submodules&#39;</span> <span class="o">()</span> registered <span class="k">for </span>path <span class="s1">&#39;i-hate-submodules&#39;</span>
+</span><span class='line'>...
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And you should be good to go!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Updating a Rails Password via the Rails Console]]></title>
@@ -1482,69 +1603,6 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
 <p><code>rebase</code> creates a <em>new</em> line of history, not REWRITES history.</p>
 
 <p>Once you&rsquo;ve pushed, never rebase; it&rsquo;s not worth it. :(</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hubot+Herkou+Campfire and How I Spent Much More Time Than I Thought I Should]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/"/>
-    <updated>2013-11-27T11:41:00-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should</id>
-    <content type="html"><![CDATA[<p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
-with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
-node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
-
-<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is what the doc says&hellip;.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
-</span><span class='line'>% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Damn, nope.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I figured I&rsquo;d try with <code>https://</code>&hellip;..</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Damnit.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do&#8217;h!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Boom, it worked.</p>
 ]]></content>
   </entry>
   
