@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="Something that I never seemed to grok was chef handlers. I read that site like 50 times, got the jist, but never fully understood them. Then I &hellip;">
+  <meta name="description" content="So I&rsquo;ve been caught up in the docker, packer, and VM discussion a handful of times. I&rsquo;ve been defending and discussingcoughattackingcough &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,69 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/13/docker-packer-vm-oh-my/">Docker Packer VM Oh My</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-13T12:17:09-06:00" pubdate data-updated="true">Feb 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So I&rsquo;ve been caught up in the <a href="http://docker.io">docker</a>, <a href="http://packer.io">packer</a>, and VM discussion a handful of times. I&rsquo;ve been defending and discussing<em>cough</em>attacking<em>cough</em> different
+versions and use cases. Then something happened, something I thought docker is wasn&rsquo;t what it was, and something I thought packer was isn&rsquo;t what it is. Welp, there&rsquo;s some egg on my face eh?
+So here&rsquo;s a cheatsheet type post about the difference and <strong>POSSIBLE</strong> use cases.</p>
+
+<h3>docker</h3>
+
+<p>As the docker says in their <a href="http://www.slideshare.net/dotCloud/docker-intro-november">intro slide deck</a>, it&rsquo;s designed to &ldquo;ship code.&rdquo; This is important distinction between this and what a VM does.
+docker is a souped–up version of <a href="http://linuxcontainers.org/">lxc</a> or to a lesser extent <a href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/jails.html">freebsd jails</a>. It allows you to
+run an application in it&rsquo;s own little bubble, but has a <em>shared</em> underlying OS/kernel. (in this case linux) It allows for a quick provisioning of an application disposable and transient applications
+which is great for development work. You can spin up a &ldquo;base&rdquo; build extremely quickly and hack away and it and rollback to a know good spot, without having to reimage/build the machine. In the new <a href="http://en.wikipedia.org/wiki/Test-driven_development">TDD</a>
+world this is great for iterations. I guess a good simile is like you have a pad of paper with a base story printed on each page, you tack on the writing you want at the bottom, and if you don&rsquo;t like it just tear it
+away and start again.</p>
+
+<h3>VM</h3>
+
+<p>So docker is designed for an application? Isn&rsquo;t that what a VM is designed for? Not exactly. docker shares the kernel and base os, while a VM is it&rsquo;s own entity. VMs also require a hypervisor of some type
+that sits on another os; so if you can imagine it, VM = os ontop of hypervisor (that controls the VMs) on top of another os. This has it&rsquo;s merits, but at the same time it can be cumbersome, for development. It seems
+VMs use case, compared to something like docker, is more for production deployments, more static content that updates through a deployment system.  This can bring in security uses and the like, keep that in mind.</p>
+
+<h3>packer</h3>
+
+<p>packer in a couple words is this: a way to create base or gold VM images. It&rsquo;s designed to create a typical/transferable VM image that works with multiple platforms and hypervisors. An example, you have a beloved mail server, you create
+an image of this box, but you&rsquo;re boss now says you&rsquo;re moving cloud providers and  have to get it working on <a href="http://digitalocean.com/">digital ocean</a>. packer makes that conversion &ldquo;simple,&rdquo; which packs up the image to be portable and transferable.
+I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have watched a few youtube tutorials on it.</p>
+
+<p>This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of groking them, rediscovering packer.</p>
+
+<p>So in a nutshell: docker is a wrapper for lxc/jails for linux running an app sharing a common kernel, VMs are separate entities and kernels that more production focused, and packer is a way to create transferable VMs between hypervisors.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1184,96 +1247,6 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/">Hubot+Herkou+Campfire and How I Spent Much More Time Than I Thought I Should</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-27T11:41:00-06:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
-with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
-node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
-
-<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is what the doc says&hellip;.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
-</span><span class='line'>% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Damn, nope.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I figured I&rsquo;d try with <code>https://</code>&hellip;..</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Damnit.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do&#8217;h!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Boom, it worked.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1291,6 +1264,10 @@ node to work on my local box for local development (<a href="https://gist.github
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/">Moving to Capistrano Version 3 From Version 2 Git Submodules</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/">Updating a Rails Password via the Rails Console</a>
       </li>
     
@@ -1304,10 +1281,6 @@ node to work on my local box for local development (<a href="https://gist.github
     
       <li class="post">
         <a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a>
       </li>
     
   </ul>
