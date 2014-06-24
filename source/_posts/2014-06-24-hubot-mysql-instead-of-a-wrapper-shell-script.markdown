@@ -18,7 +18,7 @@ mysql -u$user -p$pwd -h $host -N -e "select name, id from mydatabase"
 Pretty straight forward eh? You run it on your cli and yeah you get the data you expect. You attempt to run it with hubot maybe something
 like this?
 
-```coffee
+```js
  robot.respond /database name and id$/i, (msg) ->
    msg.send "determining the name and ids"
    exec "bash /home/hubot/bash_scripts/name_id_database.sh", (err, stdout, stderr) =>
@@ -41,13 +41,13 @@ First off, you'll need to add to your `package.json` something like:
 
 At the top of your coffee script add something like this, it will open up the ability to start calling the commands.
 
-```coffee
+```js
   mysql = require 'mysql'
 ```
 
 Awesome, now lets convert that top sql to coffee, first thing you need to do is create the connection:
 
-```coffee
+```js
   connection = mysql.createConnection
     host: 'mydbhostname'
     user: 'myuser'
@@ -60,7 +60,7 @@ you don't have to have it checked into you scm/code.
 
 After this, now you'll want to do something like:
 
-```coffee
+```js
     sql = "select name, id from mydatabase"
     sql = mysql.format(sql)
     connection.query sql, (err, results) ->
