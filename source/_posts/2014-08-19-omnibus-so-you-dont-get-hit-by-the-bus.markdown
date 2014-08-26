@@ -6,15 +6,15 @@ comments: true
 categories: chef sysadmin omnibus
 ---
 
-I recently took a new job at [Chef](http://getchef.com) Inc. Needless to say I'm challanged and excited. I took a position as the
+I recently took a new job at [Chef](http://getchef.com) Inc. Needless to say I'm challenged and excited. I took a position as the
 [openstack](http://openstack.org) guy, which, again needless to say is a mountain of work. Part of my first responsibilities was to
 start building an integration framework for the [stackforge](https://github.com/stackforge/) cookbooks. Part of this was to automate
 the building and destroying of compute nodes with different hardware configurations, so we needed a ipxe/tftp setup to network
-book machines. We decided on a project from CSC called [hanlon](https://github.com/csc/Hanlon) which does a great deal of this work.
+boot machines. We decided on a project from CSC called [hanlon](https://github.com/csc/Hanlon) which does a great deal of this work.
 
 You're probably asking by now, so where's omnibus come into play with this? Well hanlon moves extremely fast and we needed a way to
-package it up. There are specific dependancies and other specific things that having a package with "blessed" versions of the other
-underlying apps would help support. If I recall correctly, [sensu](http://sensuapp.org) came to this same desition because even as small
+package it up. There are specific dependencies and other specific things that having a package with "blessed" versions of the other
+underlying apps would help support. If I recall correctly, [sensu](http://sensuapp.org) came to this same decision because even as small
 as patch numbers for ruby can cause havoc attempting to support someone.
 
 So on with the show/tutorial:
@@ -27,11 +27,12 @@ which is the the building blocks for whatever you're trying to package.
 
 The first thing that got me learning omnibus was the two files that sat inside of `project/` and `software/`. You'll notice that they
 probably are both named your package and probably wonder why it's named the same thing. The best description is this; `project/blah.rb` is the
-overarching definition of the package where as `software/blah.rb` is the build instructions. You don't want to repeat the data in each, it's
-actually probably better you don't. Keep that in mind. You might notice a `dependency` line `project/blah.rb`, I suggest commenting it out and
-putting all the dependencies in `software/blah.rb` is so it's all in one place
+overarching definition of the package where as `software/blah.rb` is the build instructions. You shouldn't repeat the data is both places,
+because it can cause issues supporting the pkg in the long run. Keep that in mind.
+You might notice a `dependency` line `project/blah.rb`, I suggest commenting it out and putting all the dependencies in `software/blah.rb`
+is so it's all in one place.
 
-So let's take a step back. How do you create a new project? Here's a snippit to do it:
+So let's take a step back. How do you create a new project? Here's a snippet to do it:
 
 ```bash
 $ gem install omnibus
@@ -82,13 +83,13 @@ host localhost
 Where the `~/.ssh/vagrant` is from [here](https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant)
 
 Then you can do something like, then ship it off to some place else. NOTE: check the port number ;)
-```shell
+```bash
 $ mkdir ~/tmp && cd ~/tmp
 $ scp -P 2201 vagrant@localhost://home/vagrant/$MY_PACKAGE_NAME/pkg/* ./
 ```
 
 And say you spin up another vagrant box to test. NOTE: check that port number ;)
-```shell
+```bash
 $ scp -P 2202 $MY_PACKAGE_NAME_0.1.0+20140819210922-1_amd64.deb vagrant@localhost://home/vagrant/
 ```
 
