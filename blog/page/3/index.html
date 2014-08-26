@@ -9,13 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="My goal is to get these few apps on my vm, but first lets get a default build working: iterm2
-dropbox
-mysql
-1password
-virtualbox
-vagrant
-chrome With &hellip;">
+  <meta name="description" content="So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script. I started with a simple &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +78,89 @@ chrome With &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/">Because Googling Failed Me for Yes or No Bash Scripting</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-18T14:01:51-06:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
+
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
+
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do&#8217;h!</p>
+
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
+
+<p>I created this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">read</span> -p <span class="s2">&quot;yes or no: &quot;</span> RESPONSE
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$RESPONSE&quot;</span> in
+</span><span class='line'>  yes|y|Yes|Y<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is yes&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  no|n|No|N<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is no&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  *<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;You need to say yes or no, start over!&quot;</span>
+</span><span class='line'>    <span class="nb">exit </span>1
+</span><span class='line'>    ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
+
+<p>Hopefully this post will save you some time in the future.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1179,65 +1256,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/05/how-to-delete-the-cache-in-nagios/">How to Delete the Cache in Nagios</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-05T16:06:00-05:00" pubdate data-updated="true">Oct 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
-
-<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>root@boe:/tmp# rm /var/cache/nagios3/objects.cache
-</span><span class='line'>root@boe:/tmp# service nagios restart
-</span><span class='line'>Running configuration check…done.
-</span><span class='line'>Stopping nagios: .done.
-</span><span class='line'>Starting nagios: <span class="k">done</span>.
-</span><span class='line'>root@boe:/tmp# <span class="nb">cd</span> /var/cache/nagios3
-</span><span class='line'>root@boe:/var/cache/nagios3# ls
-</span><span class='line'>objects.cache  status.dat
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1259,6 +1277,10 @@ node to work on my local box for local development (<a href="https://gist.github
       </li>
     
       <li class="post">
+        <a href="/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/">Omnibus So You Dont Get Hit by the Bus</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
       </li>
     
@@ -1268,10 +1290,6 @@ node to work on my local box for local development (<a href="https://gist.github
     
       <li class="post">
         <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/">Moving to Capistrano Version 3 From Version 2 Git Submodules</a>
       </li>
     
   </ul>

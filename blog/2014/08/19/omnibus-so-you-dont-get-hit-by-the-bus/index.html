@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Omnibus So You Dont Get Hit by the Bus - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="I recently took a new job at Chef Inc. Needless to say I&rsquo;m challanged and excited. I took a position as the
+openstack guy, which, again &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Omnibus So You Dont Get Hit by the Bus</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-19T13:34:45-05:00" pubdate data-updated="true">Aug 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I recently took a new job at <a href="http://getchef.com">Chef</a> Inc. Needless to say I&rsquo;m challanged and excited. I took a position as the
+<a href="http://openstack.org">openstack</a> guy, which, again needless to say is a mountain of work. Part of my first responsibilities was to
+start building an integration framework for the <a href="https://github.com/stackforge/">stackforge</a> cookbooks. Part of this was to automate
+the building and destroying of compute nodes with different hardware configurations, so we needed a ipxe/tftp setup to network
+book machines. We decided on a project from CSC called <a href="https://github.com/csc/Hanlon">hanlon</a> which does a great deal of this work.</p>
+
+<p>You&rsquo;re probably asking by now, so where&rsquo;s omnibus come into play with this? Well hanlon moves extremely fast and we needed a way to
+package it up. There are specific dependancies and other specific things that having a package with &ldquo;blessed&rdquo; versions of the other
+underlying apps would help support. If I recall correctly, <a href="http://sensuapp.org">sensu</a> came to this same desition because even as small
+as patch numbers for ruby can cause havoc attempting to support someone.</p>
+
+<p>So on with the show/tutorial:</p>
+
+<h2>Omnibus</h2>
+
+<p>The first thing you need to know is that <a href="https://github.com/opscode/omnibus">Omnibus</a> is actually in two pieces. First the framework,
+at this repo: <a href="https://github.com/opscode/omnibus">omnibus</a> and the <a href="https://github.com/opscode/omnibus-software">omnibus-software</a>
+which is the the building blocks for whatever you&rsquo;re trying to package.</p>
+
+<p>The first thing that got me learning omnibus was the two files that sat inside of <code>project/</code> and <code>software/</code>. You&rsquo;ll notice that they
+probably are both named your package and probably wonder why it&rsquo;s named the same thing. The best description is this; <code>project/blah.rb</code> is the
+overarching definition of the package where as <code>software/blah.rb</code> is the build instructions. You don&rsquo;t want to repeat the data in each, it&rsquo;s
+actually probably better you don&rsquo;t. Keep that in mind. You might notice a <code>dependency</code> line <code>project/blah.rb</code>, I suggest commenting it out and
+putting all the dependencies in <code>software/blah.rb</code> is so it&rsquo;s all in one place</p>
+
+<p>So let&rsquo;s take a step back. How do you create a new project? Here&rsquo;s a snippit to do it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>gem install omnibus
+</span><span class='line'><span class="nv">$ </span>omnibus new <span class="nv">$MY_PROJECT_NAME</span> <span class="c"># this will create a directory with omnibus-$MY_PROJECT_NAME</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>omnibus-<span class="nv">$MY_PROJECT_NAME</span>
+</span><span class='line'><span class="nv">$ </span>bundle install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Something pretty straight forward. I want to stress though the portion of <code>$MY_PROJECT_NAME</code>, that caught me a couple times. Yes, a couple times.</p>
+
+<p>So lets say you are on a Ubuntu box and you&rsquo;re trying to build the pkg for Ubuntu. You can short circuit this by just doing the following,
+you won&rsquo;t see too much go by, but it&rsquo;ll tell you when it&rsquo;s done.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>omnibus-<span class="nv">$MY_PROJECT_NAME</span>
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>omnibus build <span class="nv">$MY_PROJECT_NAME</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now if you want to see more things go by,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$MY_PROJECT_NAME</span>
+</span><span class='line'><span class="nv">$ </span>bundle install
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>omnibus build <span class="nv">$MY_PROJECT_NAME</span> --log-level<span class="o">=</span>debug
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I personally like it, I like to see my computer work ;).</p>
+
+<p>Now lets say you&rsquo;re still on that Ubuntu box but your coworker is using Centos, this is where <a href="http://kitchen.ci">test-kitchen</a> can take part making your
+life so much easier.
+You should do something like the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>kitchen list
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>kitchen converge &lt;os you want to converge to build the pkg&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will set up the box via test-kitchen, you&rsquo;ll want to <code>kitchen login</code> the box but then you can do the above commands to build the pkg.</p>
+
+<p>Something I noticed as I was attempting to leverage test-kitchen as my build box, (I&rsquo;m on a Mac trying to make Ubuntu pkgs) the following made my life
+much easier.</p>
+
+<p>I added the following to my <code>~/.ssh/config</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>host localhost
+</span><span class='line'>     User vagrant
+</span><span class='line'>     IdentityFile ~/.ssh/vagrant
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Where the <code>~/.ssh/vagrant</code> is from <a href="https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant">here</a></p>
+
+<p>Then you can do something like, then ship it off to some place else. NOTE: check the port number ;)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mkdir ~/tmp <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ~/tmp
+</span><span class='line'><span class="nv">$ </span>scp -P 2201 vagrant@localhost://home/vagrant/<span class="nv">$MY_PACKAGE_NAME</span>/pkg/* ./
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And say you spin up another vagrant box to test. NOTE: check that port number ;)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>scp -P 2202 <span class="nv">$MY_PACKAGE_NAME_0</span>.1.0+20140819210922-1_amd64.deb vagrant@localhost://home/vagrant/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I ran into an error during my adventures with Omnibus, and figured I should capture it here:</p>
+
+<p>If you see an error like the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>          <span class="o">[</span><span class="ss">NullFetcher</span><span class="p">:</span> <span class="n">libgcc</span><span class="o">]</span> <span class="n">I</span> <span class="o">|</span> <span class="no">Fetching</span> <span class="sb">`libgcc&#39; (nothing to fetch)</span>
+</span><span class='line'><span class="sb">          [NetFetcher: cacerts] I | Downloading from `</span><span class="ss">http</span><span class="p">:</span><span class="sr">//</span><span class="n">curl</span><span class="o">.</span><span class="n">haxx</span><span class="o">.</span><span class="n">se</span><span class="o">/</span><span class="n">ca</span><span class="o">/</span><span class="n">cacert</span><span class="o">.</span><span class="n">pem</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">          [NetFetcher: cacerts] I | Verifying checksum</span>
+</span><span class='line'><span class="s1">Verification for cacerts failed due to a checksum mismatch:</span>
+</span><span class='line'><span class="s1"> </span>
+</span><span class='line'><span class="s1">expected: fd48275847fa10a8007008379ee902f1</span>
+</span><span class='line'><span class="s1">actual:   c9f4f7f4d6a5ef6633e893577a09865e</span>
+</span><span class='line'><span class="s1"> </span>
+</span><span class='line'><span class="s1">This added security check is used to prevent MITM attacks when downloading the</span>
+</span><span class='line'><span class="s1">remote file. If you have updated the version or URL for the download, you will</span>
+</span><span class='line'><span class="s1">also need to update the checksum value. You can find the checksum value on the</span>
+</span><span class='line'><span class="s1">software publisher&#39;</span><span class="n">s</span> <span class="n">website</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A quick fix would be to blow away your <code>Gemfile.lock</code> and run another <code>bundle install</code>.</p>
+
+<p>So here&rsquo;s some notes on Omnibus, I&rsquo;ll probably add more as time progresses, but this is at least a start!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-19T13:34:45-05:00" pubdate data-updated="true">Aug 19<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/omnibus/'>omnibus</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/" title="Previous Post: hubot mysql cli-table tutorial">&laquo; hubot mysql cli-table tutorial</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/08/26/in-honor-of-greg/" title="Next Post: In honor of Greg">In honor of Greg &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/">Omnibus So You Dont Get Hit by the Bus</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

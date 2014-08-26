@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-08-26T11:59:07-05:00</updated>
+  <updated>2014-08-26T12:00:55-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -97,13 +97,13 @@ host localhost</p>
 Where the</code>~/.ssh/vagrant` is from <a href="https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant">here</a></p>
 
 <p>Then you can do something like, then ship it off to some place else. NOTE: check the port number ;)
-<code>shell
+<code>bash
 $ mkdir ~/tmp &amp;&amp; cd ~/tmp
 $ scp -P 2201 vagrant@localhost://home/vagrant/$MY_PACKAGE_NAME/pkg/* ./
 </code></p>
 
 <p>And say you spin up another vagrant box to test. NOTE: check that port number ;)
-<code>shell
+<code>bash
 $ scp -P 2202 $MY_PACKAGE_NAME_0.1.0+20140819210922-1_amd64.deb vagrant@localhost://home/vagrant/
 </code></p>
 
