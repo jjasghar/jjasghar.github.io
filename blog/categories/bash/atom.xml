@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: bash | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/bash/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
+    <updated>2014-01-18T14:01:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
+    <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
+
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
+
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do'h!</p>
+
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
+
+<p>I created this:
+```bash</p>
+
+<h1>!/bin/bash</h1>
+
+<p>read -p &ldquo;yes or no: &rdquo; RESPONSE</p>
+
+<p>case &ldquo;$RESPONSE&rdquo; in
+  yes|y|Yes|Y)</p>
+
+<pre><code>echo "blah is yes"
+;;
+</code></pre>
+
+<p>  no|n|No|N)</p>
+
+<pre><code>echo "blah is no"
+;;
+</code></pre>
+
+<p>  *)</p>
+
+<pre><code>echo "You need to say yes or no, start over!"
+exit 1
+;;
+</code></pre>
+
+<p>esac
+```
+Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
+
+<p>Hopefully this post will save you some time in the future.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[a bash numbering trick I just learned today]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/"/>
+    <updated>2013-09-11T13:05:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been using bash for&hellip;a really really long time.  I&rsquo;ve always done <code>seq 1 10</code> in my for loops to get <code>1 2 3 4 5 6 7 8 9 10</code>.  Today I learned these three ways do the exact same thing. (Note: bash v4 above) I&rsquo;m writing this out, mainly because I want to remind myself of this again one day.
+```bash
+for ((i=1; i&lt;=10; i++)); do echo $i; done</p>
+
+<p>for i in <code>seq 1 10</code> ; do echo $i; done</p>
+
+<p>for i in {1..10} ; do echo $i; done
+```
+Dang you really do learn something new every day.</p>
+
+<p>Note: A good friend of mine <a href="https://github.com/awaxa/">awaxa</a> pointed out that {1..10} is the fastest in this case because it&rsquo;s a built into bash.  Thanks awaxa!</p>
+]]></content>
+  </entry>
+  
+</feed>

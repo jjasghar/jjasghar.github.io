@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Managing Windows Servers With Chef - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="I was asked to do a review of Managing Windows Servers with Chef. I&rsquo;ve read
+through the complete book, and these are my thoughts. I&rsquo;ll be &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Managing Windows Servers With Chef</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-11T16:42:36-05:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
+through the complete book, and these are my thoughts. I&rsquo;ll be copying the following out to a couple places, but these are my thoughts on this
+book from <a href="http://www.packtpub.com">packtpub</a>.</p>
+
+<h2>Overview</h2>
+
+<p>First off this book is an amazing &ldquo;whistle stop tour&rdquo; of the chef ecosystem. Yes it focuses mainly on the windows world, but it hits some great
+overarching chef terminology to a unseasoned reader. It does assume you might have a small amount chef knowledge, in certain spots, but if you have none it&rsquo;s ok. It
+drops you into the chef world, walks you through some basic patterns and then starts the specific windows focus. It has a great hands on example
+leveraging both via knife bootstrap and cloud providers for windows, and even shows how to leverage winrm if you have no exposure to it. This is a great book, I strongly suggest
+getting your hands on it.</p>
+
+<h2>View as a *nix admin with chef knowlege</h2>
+
+<p>As a *nix admin by profession, this was a great overview, allowed me to leverage my chef knowledge already and started thinking of what I can do for my
+company to leverage the repeatable windows chef infurstruture. It opened my eyes to some very basic but lacking windows support.  If you look at the following snippet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">if</span> <span class="n">platform_family?</span> <span class="s1">&#39;debian&#39;</span>
+</span><span class='line'>  <span class="n">package</span> <span class="s1">&#39;apache2&#39;</span>
+</span><span class='line'><span class="k">elsif</span> <span class="n">platform_family?</span> <span class="s1">&#39;windows&#39;</span>
+</span><span class='line'>  <span class="n">windows_package</span> <span class="n">node</span><span class="o">[</span><span class="s1">&#39;apache&#39;</span><span class="o">][</span><span class="s1">&#39;windows&#39;</span><span class="o">][</span><span class="s1">&#39;service_name&#39;</span><span class="o">]</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">source</span> <span class="n">node</span><span class="o">[</span><span class="s1">&#39;apache&#39;</span><span class="o">][</span><span class="s1">&#39;windows&#39;</span><span class="o">][</span><span class="s1">&#39;msi_url&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">installer_type</span> <span class="ss">:msi</span>
+</span><span class='line'>    <span class="c1"># The last fourz options keep the service from failing</span>
+</span><span class='line'>    <span class="c1"># before the httpd.conf file is created</span>
+</span><span class='line'>    <span class="n">options</span> <span class="sx">%W[</span>
+</span><span class='line'><span class="sx">      /quiet</span>
+</span><span class='line'><span class="sx">      INSTALLDIR=&quot;</span><span class="si">#{</span><span class="n">node</span><span class="o">[</span><span class="s1">&#39;apache&#39;</span><span class="o">][</span><span class="s1">&#39;install_dir&#39;</span><span class="o">]</span><span class="si">}</span><span class="sx">&quot;</span>
+</span><span class='line'><span class="sx">      ALLUSERS=1</span>
+</span><span class='line'><span class="sx">      SERVERADMIN=</span><span class="si">#{</span><span class="n">node</span><span class="o">[</span><span class="s1">&#39;apache&#39;</span><span class="o">][</span><span class="s1">&#39;serveradmin&#39;</span><span class="o">]</span><span class="si">}</span><span class="sx"></span>
+</span><span class='line'><span class="sx">      SERVERDOMAIN=</span><span class="si">#{</span><span class="n">node</span><span class="o">[</span><span class="s1">&#39;fqdn&#39;</span><span class="o">]</span><span class="si">}</span><span class="sx"></span>
+</span><span class='line'><span class="sx">      SERVERNAME=</span><span class="si">#{</span><span class="n">node</span><span class="o">[</span><span class="s1">&#39;fqdn&#39;</span><span class="o">]</span><span class="si">}</span><span class="sx"></span>
+</span><span class='line'><span class="sx">    ]</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see chef has a way to pull down <code>apache2</code> and extract, install, and run it. Before reading this book, I knew of some of the resources that chef provided, but
+having legitimate examples in front of me made the difference. <em>I can&rsquo;t think of any more praise other than I really do think this has some of the best overarching view of
+chef for windows, walks you through a great example and then makes you want to dig into the LWRPs that it references.</em></p>
+
+<p><a href="https://twitter.com/soysamurai">John Ewart</a> without realizing has created a 100 page book that you can give to a Director or above and they&rsquo;ll get why you want to use chef and
+in this case chef for windows.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-11T16:42:36-05:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/book/'>book</a>, <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/windows/'>windows</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/" title="Previous Post: Moving to capistrano version 3 from version 2 git submodules">&laquo; Moving to capistrano version 3 from version 2 git submodules</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/" title="Next Post: hubot mysql instead of a wrapper shell script">hubot mysql instead of a wrapper shell script &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/">Moving to Capistrano Version 3 From Version 2 Git Submodules</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

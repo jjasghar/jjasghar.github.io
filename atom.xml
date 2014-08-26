@@ -1,155 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>jjasghar rants and ramblings</title>
-  <meta name="author" content="JJ Asghar">
-
-  
-  <meta name="description" content="A good friend of mine started his own blog and posted an interesting easter egg.
-Being a jealous nerd I had to find something related to chef that &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://jjasghar.github.io">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-47435051-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">jjasghar rants and ramblings</a></h1>
-  
-    <h2>background info on his projects</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:jjasghar.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">blog</a></li>
-  <li><a href="/blog/archives">archives</a></li>
-  <li><a href="/about">about</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
-
-
-<time datetime="2014-08-26T11:06:29-05:00" pubdate data-updated="true">Aug 26<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>A good friend of mine started his own <a href="http://gregkitson.com/">blog</a> and posted an interesting <a href="http://gregkitson.com/blog/2014/08/25/my-favorite-puppet-help-message/">easter egg</a>.
+  <entry>
+    <title type="html"><![CDATA[In Honor of Greg]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/08/26/in-honor-of-greg/"/>
+    <updated>2014-08-26T11:06:29-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/08/26/in-honor-of-greg</id>
+    <content type="html"><![CDATA[<p>A good friend of mine started his own <a href="http://gregkitson.com/">blog</a> and posted an interesting <a href="http://gregkitson.com/blog/2014/08/25/my-favorite-puppet-help-message/">easter egg</a>.
 Being a jealous nerd I had to find something related to chef that would do this. In my search I came up with something for <a href="http://kitchen.ci">test-kitchen</a>.</p>
 
 <p>Stupid octopress couldn&rsquo;t parse it so here&rsquo;s a link to a <a href="https://gist.github.com/jjasghar/de5e3290459db361f3dd">gist</a></p>
 
 <p>:)</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-24T13:09:23-05:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
+  <entry>
+    <title type="html"><![CDATA[Hubot Mysql Cli-table Tutorial]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
+    <updated>2014-06-24T13:09:23-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
+    <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -265,42 +148,15 @@ does.</p>
 
 
 <p>And boom, you now have a nice readable outputted chart that hubot can answer for you when you need. :)</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-24T10:40:32-05:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
+  <entry>
+    <title type="html"><![CDATA[Hubot Mysql Instead of a Wrapper Shell Script]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/"/>
+    <updated>2014-06-24T10:40:32-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script</id>
+    <content type="html"><![CDATA[<p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
 useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
 shelling out and running knife.) So you&rsquo;ve started playing with pulling data from
 mysql or the like, and you&rsquo;ve come up with something like the following.</p>
@@ -388,42 +244,15 @@ if it errors, throws the error, otherwise outputs each row and a seporate <code>
 
 <p>Yes, yes, this is dirty, gross and if you have anything more than 3-4 users you&rsquo;re gonna get annoyed really fast. Again, this is just an example, the cli-table tutorial
 will make this more enjoyable.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-11T16:42:36-05:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
+  <entry>
+    <title type="html"><![CDATA[Managing Windows Servers With Chef]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/"/>
+    <updated>2014-06-11T16:42:36-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef</id>
+    <content type="html"><![CDATA[<p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
 through the complete book, and these are my thoughts. I&rsquo;ll be copying the following out to a couple places, but these are my thoughts on this
 book from <a href="http://www.packtpub.com">packtpub</a>.</p>
 
@@ -485,42 +314,15 @@ chef for windows, walks you through a great example and then makes you want to d
 
 <p><a href="https://twitter.com/soysamurai">John Ewart</a> without realizing has created a 100 page book that you can give to a Director or above and they&rsquo;ll get why you want to use chef and
 in this case chef for windows.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/">Moving to Capistrano Version 3 From Version 2 Git Submodules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-04T17:13:43-05:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
+  <entry>
+    <title type="html"><![CDATA[Moving to Capistrano Version 3 From Version 2 Git Submodules]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
+    <updated>2014-06-04T17:13:43-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
 to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
 useful for someone else.</p>
 
@@ -633,42 +435,15 @@ and it should get there too, but I didnt do it that way. The only place it&rsquo
 
 
 <p>And you should be good to go!</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/">Updating a Rails Password via the Rails Console</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-02T11:28:40-05:00" pubdate data-updated="true">May 2<span>nd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+  <entry>
+    <title type="html"><![CDATA[Updating a Rails Password via the Rails Console]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
+    <updated>2014-05-02T11:28:40-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
 going through his screencasts.</p>
 
 <p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
@@ -750,42 +525,15 @@ exception telling you why it won&rsquo;t work, example:</p>
 </span><span class='line'><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/26/utc-and-me/">UTC and Me</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-26T16:15:54-05:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
+  <entry>
+    <title type="html"><![CDATA[UTC and Me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/26/utc-and-me/"/>
+    <updated>2014-04-26T16:15:54-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/26/utc-and-me</id>
+    <content type="html"><![CDATA[<p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
 listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
 UTC as their main way of describing time. So when he asked for a dump from 2 days ago, at 4pm he thought it was 2 days ago 4pm CST (my timezone)
 where the ticket for the company described 4pm UTC. Needless to say confusion started to hold.</p>
@@ -824,42 +572,15 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
 
 
 <p>That&rsquo;s time now for UTC from your machines time, and the epoch time too!</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/">How to Add Growl Notifications to Rspec Tests</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-08T10:45:59-05:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
+  <entry>
+    <title type="html"><![CDATA[How to Add Growl Notifications to Rspec Tests]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
+    <updated>2014-04-08T10:45:59-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
+    <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
 I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
 huge <a href="http://kitchen.ci">test-kitchen</a>, or <a href="https://github.com/sstephenson/bats">bats</a> or the like tester with chef
 but never got a way to automate the testing in the background. Turns out using rspec+guard+growl allows for you to
@@ -889,42 +610,15 @@ be focused on your present screen and have the tests being run with a pop up.</p
 <p>After that, you need to install something called <a href="http://growl.cachefly.net/GrowlNotify-2.1.zip">GrowlNotify 2.1</a>, I&rsquo;d double check your growl version, it only works with 2.1.x.</p>
 
 <p>After installing spin up <code>guard</code>, and you should see a nice notification. :)</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-19T16:45:03-05:00" pubdate data-updated="true">Mar 19<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
+  <entry>
+    <title type="html"><![CDATA[Update to the Chef Error That Has Haunted Me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
+    <updated>2014-03-19T16:45:03-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -946,42 +640,15 @@ be focused on your present screen and have the tests being run with a pop up.</p
 </span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
 </span></code></pre></td></tr></table></div></figure>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/">Help! I Lost My vaildation.pem</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-18T16:39:04-05:00" pubdate data-updated="true">Mar 18<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
+  <entry>
+    <title type="html"><![CDATA[Help! I Lost My vaildation.pem]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
+    <updated>2014-03-18T16:39:04-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
+    <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
 chef 11 server.</p>
 
 <p>(OK, fine I broke them, but this post is how to recreate either with <code>knife</code> on your workstation incase <strong>cough</strong>like me<strong>cough</strong> you have lost your chef-webui.)</p>
@@ -1039,115 +706,685 @@ chef 11 server.</p>
 
 
 
-</div>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Campfire + Sensu and Some Issues]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/"/>
+    <updated>2014-03-13T14:45:02-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
+
+<p>Thanks! Ok, anyway, when you get your new toy you want to start leveraging some of the cool things it can do.  My company uses campfire as our main daily communication,
+and luckily there&rsquo;s a <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb">campfire handler</a> for sensu! Naturally we should leverage it right? Well, it seems with 0.12 sensu, it&rsquo;s not exactly a cup o&#8217; tea.</p>
+
+<p>Go ahead and add you campfire handler and you&rsquo;ll notice quickly:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect': SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `block in connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/timeout.rb:51:in `timeout'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:917:in `connect'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:861:in `do_start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:850:in `start'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1366:in `request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/2.0.0/net/http.rb:1125:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:73:in `perform_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/adapter/net_http.rb:38:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/response_middleware.rb:30:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/response.rb:8:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday_middleware-0.9.0/lib/faraday_middleware/request/encode_json.rb:23:in `call'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:247:in `run_request'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/faraday-0.8.7/lib/faraday/connection.rb:100:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/connection.rb:76:in `get'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:34:in `rooms'
+</span><span class='line'>        from /opt/sensu/embedded/lib/ruby/gems/2.0.0/gems/tinder-1.9.1/lib/tinder/campfire.rb:48:in `find_room_by_name'
+</span><span class='line'>        from campfire_test.rb:7:in `&lt;main&gt;'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: I&rsquo;d like to thank <a href="https://github.com/skymob">Bethany Erskine</a> for all the advice and the <a href="https://gist.github.com/skymob/6161155">gist</a> I just stole to explain this.</p>
+
+<p>Ok, honestly it&rsquo;ll be locked up in the <code>sensu-client.log</code> but if you break up the json it&rsquo;ll look like the above. Anyway&hellip;.</p>
+
+<p>So as you can see it fails with the <code>SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)</code> trying to verify the certs,
+I spent some time trying to updated the pkg version of the ssl certs, reading more than I ever wanted to know about SSL, finally I pinged Bethany asked her after finding that gist.</p>
+
+<p>She responded back with something that just seemed so obious, if you look at the <a href="https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb#L30">handler</a> it defaults to true.</p>
+
+<p>Change that to it to something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Tinder</span><span class="p">:</span><span class="ss">:Campfire</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;mydomain&#39;</span><span class="p">,</span> <span class="ss">:ssl_verify</span> <span class="o">=&gt;</span> <span class="kp">false</span><span class="p">,</span> <span class="ss">:token</span> <span class="o">=&gt;</span> <span class="s1">&#39;7505e9c7ed5c30a77dTHIS_IS_FAKE93029a494eb7c3d20&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And&hellip;all the sudden you&rsquo;ve got messages in your campfire channel.</p>
+
+<p>Yes, yes, you should verify ssl, but honestly, for what you get out of sensu for this, it&rsquo;s gravey for now. Plus I think after I ping <a href="https://github.com/portertech/">Sean Porter</a> about this issue in a passive/aggressive manner
+he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Chef-book Lighting Talk]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
+    <updated>2014-02-28T10:52:08-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
+    <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
+five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
 
-
-    </article>
+<p>PS, I apologize for the quality.</p>
+]]></content>
+  </entry>
   
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
+  <entry>
+    <title type="html"><![CDATA[Getting Authentication With Hubot Using auth.coffee]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
+    <updated>2014-02-19T11:07:03-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
+    <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
+First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
+that means you need to figure out &ldquo;HUBOT_AUTH_ADMIN&rdquo;. Assuming you have hubot already connecting to a site, run <code>hubot show users</code>
+and he should come back with all the people he knows about. Grab the id number for the person/people you want to have admin rights.</p>
+
+<p>Add <code>HUBOT_AUTH_ADMIN="&lt;number&gt;,&lt;nextnumber&gt;"</code> to the <code>bin/hubot</code> or however you add variables to him, go ahead and restart hubot to
+see if he now thinks you&rsquo;re and admin.</p>
+
+<p>If all goes well, you should see something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
+as the example, so lets give our user the first role:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+</span><span class='line'>Hubot&gt; Hubot shell has ping role
+</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
+</span><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
+can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>, to fail for us.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell doesn't have ping role
+</span><span class='line'>Hubot&gt; Shell: Ok, shell doesn't have the 'ping' role.
+</span><span class='line'>Hubot&gt; Hubot what role does shell have
+</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+</span><span class='line'>Hubot&gt; </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Go ahead into your <code>scripts/</code> directory, and open up your ping.coffee. Take a look at the following snippet:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
+</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
+</span><span class='line'>    msg.send "PONG"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty straight forward eh? Go ahead and tack on this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
+</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
+</span><span class='line'>    if robot.auth.hasRole(msg.envelope.user, "ping")
+</span><span class='line'>      msg.send "PONG"
+</span><span class='line'>    else
+</span><span class='line'>     msg.send "Sorry you can't ask me to PONG"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: a quick explanation, if hubot responds to &ldquo;ping&rdquo; case insensitive, it&rsquo;ll respond with the &ldquo;PONG&rdquo; only if you have the role of ping.</p>
+
+<p>Go and ahead and restart hubot, and say PING. :)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; hubot PING
+</span><span class='line'>Hubot&gt; Sorry you can't ask me to PONG</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sweet!</p>
+
+<p>Ok, next step, lets give ourselves access to make this happen:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell has ping role
+</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
+</span><span class='line'>Hubot&gt; hubot PING
+</span><span class='line'>Hubot&gt; PONG
+</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>PERFECT!</p>
+
+<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
+to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
+your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
+
+<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
+]]></content>
+  </entry>
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/">Moving to Capistrano Version 3 From Version 2 Git Submodules</a>
-      </li>
-    
-  </ul>
-</section>
+  <entry>
+    <title type="html"><![CDATA[.kitchen.local.yml and When You Want to Use It]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
+    <updated>2014-02-17T15:32:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
+    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol&#8217; <a href="https://twitter.com/fnichol">Fletcher</a>
+made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
+cookbooks, and I wanted to start leveraging what I just paid for.</p>
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
+<p>So take this <code>.kitchen.yml</code> for instance:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>driver:
+</span><span class='line'>  name: vagrant
+</span><span class='line'>
+</span><span class='line'>provisioner:
+</span><span class='line'>  name: chef_solo
+</span><span class='line'>
+</span><span class='line'>platforms:
+</span><span class='line'>  - name: ubuntu-12.04
+</span><span class='line'>
+</span><span class='line'>suites:
+</span><span class='line'>  - name: default
+</span><span class='line'>    run_list:
+</span><span class='line'>      - recipe[hubot-solo::default]
+</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>driver:
+</span><span class='line'>  name: vagrant
+</span><span class='line'>  provider: vmware_fusion
+</span><span class='line'>
+</span><span class='line'>provisioner:
+</span><span class='line'>  name: chef_solo
+</span><span class='line'>
+</span><span class='line'>platforms:
+</span><span class='line'>  - name: ubuntu-12.04
+</span><span class='line'>
+</span><span class='line'>suites:
+</span><span class='line'>  - name: default
+</span><span class='line'>    run_list:
+</span><span class='line'>      - recipe[hubot-solo::default]
+</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
+
+<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
+
+<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
+the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
+
+<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
+but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
+
+<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
+]]></content>
+  </entry>
   
-  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  <entry>
+    <title type="html"><![CDATA[Docker Packer VM Oh My]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my/"/>
+    <updated>2014-02-13T12:17:09-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my</id>
+    <content type="html"><![CDATA[<p>So I&rsquo;ve been caught up in the <a href="http://docker.io">docker</a>, <a href="http://packer.io">packer</a>, and VM discussion a handful of times. I&rsquo;ve been defending and discussing<em>cough</em>attacking<em>cough</em> different
+versions and use cases. Then something happened, something I thought docker is wasn&rsquo;t what it was, and something I thought packer was isn&rsquo;t what it is. Welp, there&rsquo;s some egg on my face eh?
+So here&rsquo;s a cheatsheet type post about the difference and <strong>POSSIBLE</strong> use cases.</p>
+
+<h3>docker</h3>
+
+<p>As the docker says in their <a href="http://www.slideshare.net/dotCloud/docker-intro-november">intro slide deck</a>, it&rsquo;s designed to &ldquo;ship code.&rdquo; This is important distinction between this and what a VM does.
+docker is a souped–up version of <a href="http://linuxcontainers.org/">lxc</a> or to a lesser extent <a href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/jails.html">freebsd jails</a>. It allows you to
+run an application in it&rsquo;s own little bubble, but has a <em>shared</em> underlying OS/kernel. (in this case linux) It allows for a quick provisioning of an application disposable and transient applications
+which is great for development work. You can spin up a &ldquo;base&rdquo; build extremely quickly and hack away and it and rollback to a know good spot, without having to reimage/build the machine. In the new <a href="http://en.wikipedia.org/wiki/Test-driven_development">TDD</a>
+world this is great for iterations. I guess a good simile is like you have a pad of paper with a base story printed on each page, you tack on the writing you want at the bottom, and if you don&rsquo;t like it just tear it
+away and start again.</p>
+
+<h3>VM</h3>
+
+<p>So docker is designed for an application? Isn&rsquo;t that what a VM is designed for? Not exactly. docker shares the kernel and base os, while a VM is it&rsquo;s own entity. VMs also require a hypervisor of some type
+that sits on another os; so if you can imagine it, VM = os ontop of hypervisor (that controls the VMs) on top of another os. This has it&rsquo;s merits, but at the same time it can be cumbersome, for development. It seems
+VMs use case, compared to something like docker, is more for production deployments, more static content that updates through a deployment system.  This can bring in security uses and the like, keep that in mind.</p>
+
+<h3>packer</h3>
+
+<p>packer in a couple words is this: a way to create base or gold VM images. It&rsquo;s designed to create a typical/transferable VM image that works with multiple platforms and hypervisors. An example, you have a beloved mail server, you create
+an image of this box, but you&rsquo;re boss now says you&rsquo;re moving cloud providers and  have to get it working on <a href="http://digitalocean.com/">digital ocean</a>. packer makes that conversion &ldquo;simple,&rdquo; which packs up the image to be portable and transferable.
+I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have watched a few youtube tutorials on it.</p>
+
+<p>This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of groking them, rediscovering packer.</p>
+
+<p>So in a nutshell: docker is a wrapper for lxc/jails for linux running an app sharing a common kernel, VMs are separate entities and kernels that more production focused, and packer is a way to create transferable VMs between hypervisors.</p>
+]]></content>
+  </entry>
   
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
+  <entry>
+    <title type="html"><![CDATA[Chef Handler Why Did It Take a Year for Me to Use You]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/"/>
+    <updated>2014-02-07T15:24:54-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you</id>
+    <content type="html"><![CDATA[<p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
 
-        github.showRepos({
-            user: 'jjasghar',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
+<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
+
+<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
+
+<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
+
+<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
+and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
+there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
+in a good state.</p>
+
+<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
+
+<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_handler</span> <span class="s2">&quot;MailHandler&quot;</span> <span class="k">do</span>
+</span><span class='line'>   <span class="n">source</span> <span class="s1">&#39;chef/handler/mail&#39;</span>
+</span><span class='line'>   <span class="n">arguments</span> <span class="ss">:to_address</span> <span class="o">=&gt;</span> <span class="s2">&quot;root&quot;</span>
+</span><span class='line'>   <span class="n">action</span> <span class="ss">:nothing</span>
+</span><span class='line'><span class="k">end</span><span class="o">.</span><span class="n">run_action</span><span class="p">(</span><span class="ss">:enable</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>As you can see it&rsquo;s pretty straight forward.</p>
+
+<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
+first main internal recipe:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">include_recipe</span> <span class="s1">&#39;chef_handler&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-campfire&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">action</span> <span class="ss">:install</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_handler</span> <span class="s1">&#39;Chef::Handler::Campfire&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">action</span> <span class="ss">:enable</span>
+</span><span class='line'>  <span class="n">arguments</span> <span class="o">[</span> <span class="s1">&#39;SUBDOMAIN&#39;</span><span class="p">,</span> <span class="s1">&#39;TOKEN&#39;</span> <span class="p">,</span> <span class="s1">&#39;ROOM&#39;</span> <span class="o">]</span>
+</span><span class='line'>  <span class="n">source</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Gem</span><span class="o">.</span><span class="n">all_load_paths</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/chef-handler-campfire/</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s1">&#39;chef&#39;</span><span class="p">,</span> <span class="s1">&#39;handler&#39;</span><span class="p">,</span> <span class="s1">&#39;campfire.rb&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
 
+<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
+]]></content>
+  </entry>
   
-</aside>
+  <entry>
+    <title type="html"><![CDATA[ResourceNotFound and Splunk> fun&#8230;gotta Love That Error]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/"/>
+    <updated>2014-02-03T16:18:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk>-fun-dot-dot-dot-gotta-love-that-error</id>
+    <content type="html"><![CDATA[<p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - JJ Asghar -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:</p>
 
-</footer>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>500 Internal Server Error
+</span><span class='line'>
+</span><span class='line'>Return to Splunk home page
+</span><span class='line'>
+</span><span class='line'>ResourceNotFound: [HTTP 404] https://127.0.0.1:8089/services/data/user-prefs; [{'type': 'ERROR', 'text': 'Application does not exist: user-prefs', 'code': None}]
+</span><span class='line'>
+</span><span class='line'>This page was linked to from http://&lt;mycompanyname&gt;:8000/en-US/account/login?return_to=%2Fen-US%2F.
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>You are using &lt;mycompanyname&gt;:8000, which is connected to splunkd @182037 at https://127.0.0.1:8089 on Mon Feb 3 16:17:37 2014.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow, what the hell does that mean?</p>
+
+<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
+oversight.</p>
+
+<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Boxen Is Neat but Man Chef-solo Was So Much Easier]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
+    <updated>2014-01-25T00:24:28-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
+    <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
+
+<p>So, yeah, you can tell I was pretty impressed with it right?</p>
+
+<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
+
+<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
+
+<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
+
+<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;%</span>
+</span><span class='line'>  <span class="n">socket</span> <span class="o">=</span> <span class="o">[</span>
+</span><span class='line'>    <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_SOCKET&quot;</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;/var/run/mysql5/mysqld.sock&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;/tmp/mysql.sock&quot;</span>
+</span><span class='line'>  <span class="o">].</span><span class="n">detect</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span> <span class="o">&amp;&amp;</span> <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">port</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_PORT&quot;</span><span class="o">]</span> <span class="o">||</span> <span class="s2">&quot;3306&quot;</span>
+</span><span class='line'><span class="sx">%&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sx">development: &amp;development</span>
+</span><span class='line'><span class="sx">  adapter: mysql</span>
+</span><span class='line'><span class="sx">  database: yourapp_development</span>
+</span><span class='line'><span class="sx">  username: root</span>
+</span><span class='line'><span class="sx">&lt;% if socket %&gt;</span>
+</span><span class='line'>  <span class="ss">host</span><span class="p">:</span> <span class="n">localhost</span>
+</span><span class='line'>  <span class="ss">socket</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= socket %&gt;</span>
+</span><span class='line'><span class="sx">&lt;% else %&gt;</span>
+</span><span class='line'><span class="sx">  host: 127.0.0.1</span>
+</span><span class='line'><span class="sx">  port: &lt;%=</span> <span class="n">port</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&lt;% end %&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Warning: The database defined as &quot;test&quot; will be erased and</span>
+</span><span class='line'><span class="c1"># re-generated from your development database when you run &quot;rake&quot;.</span>
+</span><span class='line'><span class="c1"># Do not set this db to the same as development or production.</span>
+</span><span class='line'><span class="nb">test</span><span class="p">:</span>
+</span><span class='line'>  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">development</span>
+</span><span class='line'>  <span class="ss">database</span><span class="p">:</span> <span class="n">yourapp_test</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
+
+<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
+
+<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
+
+<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
+
+<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
+
+<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Chef Error That Has Haunted Me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
+    <updated>2014-01-20T15:42:33-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>Ok, you may have seen this before:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>   <span class="o">*</span> <span class="n">cookbook_file</span><span class="o">[</span><span class="sr">/etc/ini</span><span class="n">t</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">apache2</span><span class="o">]</span> <span class="n">action</span> <span class="n">create</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="no">Error</span> <span class="n">executing</span> <span class="n">action</span> <span class="sb">`create`</span> <span class="n">on</span> <span class="n">resource</span> <span class="s1">&#39;cookbook_file[/etc/init.d/apache2]&#39;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="ss">Net</span><span class="p">:</span><span class="ss">:HTTPServerException</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">------------------------</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="mi">403</span> <span class="s2">&quot;Forbidden&quot;</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
+
+<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
+
+<p>The gist of this:</p>
+
+<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl&#8221; value from 900 seconds to required time interval</p></blockquote>
+
+<p>So the fix is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
+</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Boom, you should be good now. No more damn 403s.</p>
 
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
+<h1>Update!</h1>
+
+<p>So it seems that with release of <code>11.10</code> the 403 error has&hellip;morphed. Now it looks something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Chef::Exceptions::ContentLengthMismatch
+</span><span class='line'>---------------------------------------
+</span><span class='line'>Response body length 164 does not match HTTP Content-Length header 206.
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p></p>
+
+<p>I have a post about it from 2014-03-19</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Because Googling Failed Me for Yes or No Bash Scripting]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
+    <updated>2014-01-18T14:01:51-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
+    <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
+
+<p>I started with a simple <code>if..then..elif..else</code> statement, then I started googling around and found multiple ways to do it.</p>
+
+<p>I ran the script a couple times, it worked like a charm, but without thinking about it I put <code>y</code> instead of the suggested <code>yes</code> and it <code>exit 1</code>ed me.  Do&#8217;h!</p>
+
+<p>I continued googling around and then remembered the <code>case</code> statement.</p>
+
+<p>I created this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">read</span> -p <span class="s2">&quot;yes or no: &quot;</span> RESPONSE
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$RESPONSE&quot;</span> in
+</span><span class='line'>  yes|y|Yes|Y<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is yes&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  no|n|No|N<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;blah is no&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  *<span class="o">)</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="s2">&quot;You need to say yes or no, start over!&quot;</span>
+</span><span class='line'>    <span class="nb">exit </span>1
+</span><span class='line'>    ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I&rsquo;ll find myself looking for this again 6+ months down the line.</p>
 
-</body>
-</html>
+<p>Hopefully this post will save you some time in the future.</p>
+]]></content>
+  </entry>
+  
+</feed>

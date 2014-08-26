@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mysql | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/mysql/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[hubot mysql cli-table tutorial]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
+    <updated>2014-06-24T13:09:23-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
+    <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
+
+<p>```js</p>
+
+<pre><code>sql = "select name, id from mydatabase"
+sql = mysql.format(sql)
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    msg.send row
+</code></pre>
+
+<p>```</p>
+
+<p>So you&rsquo;ve probably noticed that it comes out HORRIBLY. This tutorial will leverage the <a href="https://www.npmjs.org/package/cli-table">cli-table npm</a> so it <em>should</em> look
+something like:</p>
+
+<p><code>
+//╔══════╤═════╤══════╗
+//║ foo  │ bar │ baz  ║
+//╟──────┼─────┼──────╢
+//║ frob │ bar │ quuz ║
+//╚══════╧═════╧══════╝
+</code></p>
+
+<p>So lets make this happen.  First off just like the mysql plugin you&rsquo;ll need to add something like this to your <code>package.json</code>.</p>
+
+<p>```json
+&ldquo;dependencies&rdquo;: {</p>
+
+<pre><code>...
+"cli-table": "latest",
+...
+}
+</code></pre>
+
+<p>```</p>
+
+<p>After this you need to create an object like the mysql plugin&hellip;</p>
+
+<p><code>js
+Table = require "cli-table"
+</code></p>
+
+<p>Now you have <code>Table</code> available to you so you can leverage it to make the tables.  First thing you need to do is create the actual table which is this line:</p>
+
+<p>```js</p>
+
+<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
+</code></pre>
+
+<p>```</p>
+
+<p>Then at the <code>connection.query</code> line you&rsquo;ll want to push the rows into the table loop through them then in <em>one</em> message push it out, which is what the next snippet
+does.</p>
+
+<p>```js</p>
+
+<pre><code>connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    table.push [row.id, row.name]
+  msg.send table.toString()
+</code></pre>
+
+<p>```</p>
+
+<p>So the full thing would be something like the following:</p>
+
+<p>```js
+  robot.respond /database user id$/i, (msg) &ndash;></p>
+
+<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
+msg.send "Looking on your names and ids"
+
+connection = mysql.createConnection
+  host: 'mydbhostname'
+  user: 'mydbuseraccount'
+  password: process.env.DB_PASSWORD
+
+sql = "SELECT id, name, FROM mydatabase"
+
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    table.push [row.id, row.name]
+  msg.send table.toString()
+</code></pre>
+
+<p>```
+And boom, you now have a nice readable outputted chart that hubot can answer for you when you need. :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hubot mysql instead of a wrapper shell script]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/"/>
+    <updated>2014-06-24T10:40:32-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script</id>
+    <content type="html"><![CDATA[<p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
+useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
+shelling out and running knife.) So you&rsquo;ve started playing with pulling data from
+mysql or the like, and you&rsquo;ve come up with something like the following.</p>
+
+<p><code>sql
+mysql -u$user -p$pwd -h $host -N -e "select name, id from mydatabase"
+</code></p>
+
+<p>Pretty straight forward eh? You run it on your cli and yeah you get the data you expect. You attempt to run it with hubot maybe something
+like this?</p>
+
+<p>```js
+ robot.respond /database name and id$/i, (msg) &ndash;>
+   msg.send &ldquo;determining the name and ids&rdquo;
+   exec &ldquo;bash /home/hubot/bash_scripts/name_id_database.sh&rdquo;, (err, stdout, stderr) =></p>
+
+<pre><code> msg.send stdout
+</code></pre>
+
+<p>```</p>
+
+<p>It might come out all gross, yeah that&rsquo;s a different post about <a href="https://github.com/LearnBoost/cli-table">cli-table</a> which I hope i&rsquo;ll be
+doing after this post.  Anyway i digress; that&rsquo;s great, so you get the data hubot gives you the date, but man you have your password in your
+shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckly, <a href="https://twitter.com/mattdbridges">Matt Bridges</a> showed
+me how to leverage coffeescript and the <a href="https://www.npmjs.org/package/mysql">mysql npm</a> package to do just that.</p>
+
+<p>First off, you&rsquo;ll need to add to your <code>package.json</code> something like:</p>
+
+<p>```json
+ &ldquo;dependencies&rdquo;: {</p>
+
+<pre><code>      ....
+      "mysql": "&gt;= 2.0.1",
+      ....
+</code></pre>
+
+<p>```</p>
+
+<p>At the top of your coffee script add something like this, it will open up the ability to start calling the commands.</p>
+
+<p><code>js
+  mysql = require 'mysql'
+</code></p>
+
+<p>Awesome, now lets convert that top sql to coffee, first thing you need to do is create the connection:</p>
+
+<p>```js
+  connection = mysql.createConnection</p>
+
+<pre><code>host: 'mydbhostname'
+user: 'myuser'
+password: process.env.DB_PASSWORD
+</code></pre>
+
+<p>```</p>
+
+<p>As you can see it&rsquo;s pretty self explanatory. You create the object called <code>connection</code> then give it some variables. The password is interesting here
+it&rsquo;s now is a environment variable that you can just add to your hubot (however you choose, like in heroku: <code>heroku config:set DB_PASSWORD=a_really_strong_pa$$word</code>) so
+you don&rsquo;t have to have it checked into you scm/code.</p>
+
+<p>After this, now you&rsquo;ll want to do something like:</p>
+
+<p>```js</p>
+
+<pre><code>sql = "select name, id from mydatabase"
+sql = mysql.format(sql)
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    msg.send row
+</code></pre>
+
+<p>```</p>
+
+<p>This also is pretty self explanatory, you put your sql statement in as a variable, format it with mysql, open the connection via the query command, then
+if it errors, throws the error, otherwise outputs each row and a seporate <code>msg.send</code>.</p>
+
+<p>Yes, yes, this is dirty, gross and if you have anything more than 3-4 users you&rsquo;re gonna get annoyed really fast. Again, this is just an example, the cli-table tutorial
+will make this more enjoyable.</p>
+]]></content>
+  </entry>
+  
+</feed>

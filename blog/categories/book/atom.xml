@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: book | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/book/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Managing Windows Servers with Chef]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/"/>
+    <updated>2014-06-11T16:42:36-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef</id>
+    <content type="html"><![CDATA[<p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
+through the complete book, and these are my thoughts. I&rsquo;ll be copying the following out to a couple places, but these are my thoughts on this
+book from <a href="http://www.packtpub.com">packtpub</a>.</p>
+
+<h2>Overview</h2>
+
+<p>First off this book is an amazing &ldquo;whistle stop tour&rdquo; of the chef ecosystem. Yes it focuses mainly on the windows world, but it hits some great
+overarching chef terminology to a unseasoned reader. It does assume you might have a small amount chef knowledge, in certain spots, but if you have none it&rsquo;s ok. It
+drops you into the chef world, walks you through some basic patterns and then starts the specific windows focus. It has a great hands on example
+leveraging both via knife bootstrap and cloud providers for windows, and even shows how to leverage winrm if you have no exposure to it. This is a great book, I strongly suggest
+getting your hands on it.</p>
+
+<h2>View as a *nix admin with chef knowlege</h2>
+
+<p>As a *nix admin by profession, this was a great overview, allowed me to leverage my chef knowledge already and started thinking of what I can do for my
+company to leverage the repeatable windows chef infurstruture. It opened my eyes to some very basic but lacking windows support.  If you look at the following snippet:</p>
+
+<p>```ruby
+if platform_family? &lsquo;debian&rsquo;
+  package &lsquo;apache2&rsquo;
+elsif platform_family? &lsquo;windows&rsquo;
+  windows_package node[&lsquo;apache&rsquo;][&lsquo;windows&rsquo;][&lsquo;service_name&rsquo;] do</p>
+
+<pre><code>source node['apache']['windows']['msi_url']
+installer_type :msi
+# The last fourz options keep the service from failing
+# before the httpd.conf file is created
+options %W[
+  /quiet
+  INSTALLDIR="#{node['apache']['install_dir']}"
+  ALLUSERS=1
+  SERVERADMIN=#{node['apache']['serveradmin']}
+  SERVERDOMAIN=#{node['fqdn']}
+  SERVERNAME=#{node['fqdn']}
+].join(' ')
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>As you can see chef has a way to pull down <code>apache2</code> and extract, install, and run it. Before reading this book, I knew of some of the resources that chef provided, but
+having legitimate examples in front of me made the difference. <em>I can&rsquo;t think of any more praise other than I really do think this has some of the best overarching view of
+chef for windows, walks you through a great example and then makes you want to dig into the LWRPs that it references.</em></p>
+
+<p><a href="https://twitter.com/soysamurai">John Ewart</a> without realizing has created a 100 page book that you can give to a Director or above and they&rsquo;ll get why you want to use chef and
+in this case chef for windows.</p>
+]]></content>
+  </entry>
+  
+</feed>

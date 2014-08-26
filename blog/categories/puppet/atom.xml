@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: puppet | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/puppet/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
+    <updated>2014-01-25T00:24:28-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
+    <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
+
+<p>So, yeah, you can tell I was pretty impressed with it right?</p>
+
+<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
+
+<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
+
+<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
+
+<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:
+```ruby
+&lt;%
+  socket = [</p>
+
+<pre><code>ENV["BOXEN_MYSQL_SOCKET"],
+"/var/run/mysql5/mysqld.sock",
+"/tmp/mysql.sock"
+</code></pre>
+
+<p>  ].detect { |f| f &amp;&amp; File.exist?(f) }</p>
+
+<p>  port = ENV[&ldquo;BOXEN_MYSQL_PORT&rdquo;] || &ldquo;3306&rdquo;
+%></p>
+
+<p>development: &amp;development
+  adapter: mysql
+  database: yourapp_development
+  username: root
+&lt;% if socket %>
+  host: localhost
+  socket: &lt;%= socket %>
+&lt;% else %>
+  host: 127.0.0.1
+  port: &lt;%= port %>
+&lt;% end %></p>
+
+<h1>Warning: The database defined as &ldquo;test&rdquo; will be erased and</h1>
+
+<h1>re-generated from your development database when you run &ldquo;rake&rdquo;.</h1>
+
+<h1>Do not set this db to the same as development or production.</h1>
+
+<p>test:
+  &lt;&lt;: *development
+  database: yourapp_test
+```</p>
+
+<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
+
+<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
+
+<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
+
+<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
+
+<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
+
+<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Customizing Boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
+    <updated>2014-01-01T13:27:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
+    <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
+
+<ul>
+<li>iterm2</li>
+<li>dropbox</li>
+<li>mysql</li>
+<li>1password</li>
+<li>virtualbox</li>
+<li>vagrant</li>
+<li>chrome</li>
+</ul>
+
+
+<p>With my <a href="https://github.com/jjasghar/our-boxen">fork</a>&hellip;now it&rsquo;s time to start messing around with it. Go ahead and click <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">here</a> this is for personal manifests. This is something I&rsquo;ll cover in the second half of this post. As I was walking through this, it seems that &ldquo;projects&rdquo; are just a shared collection of manifests also. So if you learn how to make a personal manifest, a project on isn&rsquo;t much more!</p>
+
+<p>Where we want to start is at the default <a href="https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp">site.pp</a> this is what will be installed on all your boxes by well, default.</p>
+
+<p>Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):
+<code>
+[~] % git --version # click "Install" for the developer tools
+[~] % sudo mkdir -p /opt/boxen
+[~] % sudo chown ${USER}:staff /opt/boxen
+[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+[~] % cd /opt/boxen/repo
+[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
+[/opt/boxen/repo] % cd manifests
+[/opt/boxen/repo/manifests] % vim site.pp
+</code>
+I don&rsquo;t care for nodejs or the older versions of ruby for this example, so I&rsquo;m going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I&rsquo;ll push this up to my repo so I can track my work.</p>
+
+<p>Ok, lets give boxen a shot!
+<code>
+[/opt/boxen/repo/manifests] % cd ..
+[/opt/boxen/repo/] % script/boxen --no-fde
+[/opt/boxen/repo/] % source /opt/boxen/env.sh
+[/opt/boxen/repo/] % boxen
+</code>
+You&rsquo;ll notice a warning about auto-update, that&rsquo;s fine, you are developing manifests right?</p>
+
+<p>Go ahead and run these commands on the command line, if our changes worked as expected it should say:
+<code>bash
+jjasghar-Mac:repo jjasghar$ node
+-bash: node: command not found
+jjasghar-Mac:repo jjasghar$ ruby --version
+ruby 2.0.0p247 (2013-06-27 revision 41674) [universal.x86_64-darwin13]
+</code>
+Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.</p>
+
+<h2>Per user manifests</h2>
+
+<p>Ok, go ahead and go to that <code>modules/people</code> and read that <a href="https://github.com/jjasghar/our-boxen/tree/master/modules/people">README.md</a> so you get some background.</p>
+
+<p>Now:
+<code>bash
+[/opt/boxen/repo/] % cd modules/people/manifests
+[/opt/boxen/repo/modules/people/manifests] % git checkout master
+[/opt/boxen/repo/modules/people/manifests] % git checkout -b jjasghar_manifest
+[/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
+</code>
+Here&rsquo;s a template from <a href="https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp">Greg</a>, if you want to see what he&rsquo;s done.
+<code>ruby awaxa.pp
+class people::awaxa {
+  include people::awaxa::applications
+  include people::awaxa::dotfiles
+  include people::awaxa::gitconfig
+  include people::awaxa::preferences
+  include people::awaxa::puppetlabs
+}
+</code>
+As you can see he references other files located in that same directory, though in a sub directory as <code>awaxa/</code>. Lets use that <code>include people::awaxa::applications</code> initially.
+```ruby applications.pp
+class people::awaxa::applications {
+  include caffeine
+  include chrome
+  #include dropbox
+  #include gpgtools
+  include onepassword
+  include java
+  include rdio
+  include tunnelblick::beta
+  include vagrant
+  include virtualbox
+  include vlc
+  include vmware_fusion</p>
+
+<p>  package { [</p>
+
+<pre><code>'htop-osx',
+'tmux'
+]:
+</code></pre>
+
+<p>  }</p>
+
+<p>  package { &lsquo;GoogleVoiceAndVideoSetup&rsquo;:</p>
+
+<pre><code>source =&gt; 'http://dl.google.com/googletalk/googletalkplugin/GoogleVoiceAndVideoSetup.dmg',
+provider =&gt; pkgdmg,
+</code></pre>
+
+<p>  }
+}
+<code>
+Ok here's the one I created:
+</code>ruby jjasghar.pp
+class people::jjasghar {
+  include people::jjasghar::applications
+}
+<code>
+Nice! Ok, now we need to create:
+</code>bash
+[/opt/boxen/repo/modules/people/manifests] % mkdir jjasghar
+[/opt/boxen/repo/modules/people/manifests] % vim jjasghar/applications.pp
+```</p>
+
+<p>This is where we add our apps!
+<code>ruby applications.pp
+class people::jjasghar::applications {
+  include iterm2::stable
+  include dropbox
+  include mysql
+  include onepassword
+  include virtualbox
+  include vagrant
+  include chrome
+}
+</code></p>
+
+<p>Ok, now you need to add these to the <code>Puppetfile</code> located at the root of the boxen repo
+```ruby
+[&mdash; snip &mdash;]</p>
+
+<h1>Optional/custom modules. There are tons available at</h1>
+
+<h1><a href="https://github.com/boxen.">https://github.com/boxen.</a></h1>
+
+<p>github &ldquo;iterm2&rdquo;, &ldquo;1.0.0&rdquo;, :repo => &ldquo;boxen/puppet-iterm2&rdquo;
+github &ldquo;chrome&rdquo;
+github &ldquo;dropbox&rdquo;
+github &ldquo;mysql&rdquo;
+github &ldquo;onepassword&rdquo;
+github &ldquo;virtualbox&rdquo;
+github &ldquo;vagrant&rdquo;
+```</p>
+
+<p>After you update the <code>Puppetfile</code> go ahead and run <code>boxen</code> again:
+<code>bash
+[/opt/boxen/repo/modules/people/manifests] % cd /opt/boxen/repo
+[/opt/boxen/repo] % boxen
+</code></p>
+
+<p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adventures with boxen]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
+    <updated>2013-12-31T15:54:00-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
+    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
+
+<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
+
+<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
+
+<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:
+<code>
+Boxen requires at least the Xcode Command Line Tools installed.
+Boxen will not work with an existing rvm install.
+Boxen may not play nice with a GitHub username that includes dash(-)
+Boxen may not play nice with an existing rbenv install.
+Boxen may not play nice with an existing chruby install.
+Boxen may not play nice with an existing homebrew install.
+Boxen may not play nice with an existing nvm install.
+Boxen recommends installing the full Xcode.
+</code>
+<em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
+
+<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
+
+<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
+
+<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
+
+<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
+
+<p>After you got that done boot up the vm open terminal run the following:</p>
+
+<p><code>git --version</code></p>
+
+<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
+
+<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:
+<code>bash
+[~] % sudo mkdir -p /opt/boxen
+[~] % sudo chown ${USER}:staff /opt/boxen
+[~] % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+[~] % cd /opt/boxen/repo
+[/opt/boxen/repo] % git remote rm origin
+[/opt/boxen/repo] % git remote add origin &lt;the location of my new git repository&gt;
+[/opt/boxen/repo] % git push -u origin master
+</code>
+This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
+
+<p>Ok, now try out boxen:
+<code>bash
+[/opt/boxen/repo] % ./script/boxen
+</code>
+Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):
+<code>bash
+[/opt/boxen/repo] % ./script/boxen --no-fde
+</code></p>
+
+<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
+
+<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
+
+<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[serverspec the new best way to learn and audit your infrastructure]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/"/>
+    <updated>2013-07-12T15:06:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure</id>
+    <content type="html"><![CDATA[<p>Listening to the <a href="http://www.opscode.com">Opscode</a> comunity pod cast, the <a href="https://twitter.com/foodfightshow">foodfight</a> show, <a href="https://twitter.com/bryanwb">bryanwb</a> suggested more love for something called <a href="http://serverspec.org">serverspec</a>.  A couple days later he wrote a <a href="https://twitter.com/bryanwb/status/340155947634794496">tweet</a> and I figured I&rsquo;d give it a shot.  I&rsquo;ve been blown away by it; and I&rsquo;m going to sell/leverage it where ever I can.</p>
+
+<p>serverspec is basically <a href="http://rspec.info/">rspec</a> for sysadmins, from what I&rsquo;ve tested basic rspec (and some advanced rspec) assertions work like a charm. Here&rsquo;s a <a href="https://gist.github.com/byplayer/965857">cheat sheet</a> if you want.  You can write tests like ruby developers do, but leverage them for your infrastructure.  As I&rsquo;ve been learning more about TDD, I see the advantage, but to put that style in sysadmining, might seem initially crazy.</p>
+
+<p>As a new sysadmin, you&rsquo;ve probably had an experience something like this:
+You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s your new network.  You have web machines, databases, app servers, caching servers, configuration management and other boxes. We have process monitoring <em>ahem</em>nagios<em>ahem</em> and yes we have configuration management where you have to leverage code reviews to get anything out to production.&rdquo; As a new guy I&rsquo;m excited this is great, but here comes the kicker.  Your new trainer continues, &ldquo;Ok, lets walk through each machine.  There are 10 web servers, 9 of them are called www1 through www8, and one called paco.&rdquo; You quickly grab a piece of paper, &ldquo;Paco?&rdquo;, &ldquo;Yes the admin before you didn&rsquo;t like standard names, he wanted to give machines &lsquo;personality&rsquo;, and we had a management change after him, so we have that one off.&rdquo;</p>
+
+<p>This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.</p>
+
+<p>serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. <code>gem install serverspec</code> and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.
+``` ruby
+require &lsquo;spec_helper&rsquo;</p>
+
+<p>describe package(&lsquo;httpd&rsquo;) do
+  it { should be_installed }
+end</p>
+
+<p>describe service(&lsquo;httpd&rsquo;) do
+  it { should be_enabled   }
+  it { should be_running   }
+end</p>
+
+<p>describe port(80) do
+  it { should be_listening }
+end</p>
+
+<p>describe file(&lsquo;/etc/httpd/conf/httpd.conf&rsquo;) do
+  it { should be_file }
+  it { should contain &ldquo;ServerName my-server-name&rdquo; }
+end
+<code>``
+That's it, now all you have to do is</code>rake spec` and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!</p>
+
+<h2>nagios (or automated process monitoring) vs serverspec</h2>
+
+<p>I understand the hesitation about <em>another</em> monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren&rsquo;t erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I&rsquo;d like to state that this isn&rsquo;t designed to take place of something like nagios, but to augment it.</p>
+
+<p>The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you&rsquo;ll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that&rsquo;s a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that&rsquo;s already a great turn around to see the state of the machines.</p>
+
+<p>I&rsquo;ve also able to get serverspec working with jenkins, and run the <code>rake</code> task every 30 minutes, and if it exits on anything other than a 0, it&rsquo;ll email out the configuration or error that it finds. I&rsquo;m still experimenting with jenkins and serverspec, but so far it&rsquo;s nice to have something other than cron running this.</p>
+
+<h2>Conclusion</h2>
+
+<p>serverspec is a tool/gem that I&rsquo;ll be leveraging from now on.  I&rsquo;ve been wanting to learn rspec and this gives me an avenue to use it day to day; and get a huge benefit from it.  I even bought <a href="http://pragprog.com/book/achbd/the-rspec-book">The RSpec Book: Behaviour-Driven Development with RSpec, Cucumber, and Friends</a> by The Pragmatic Programmers, so hopefully I&rsquo;ll be able to leverage it to get to the next level. Give it a shot, and when you get all your green dots come back, you&rsquo;ll know you&rsquo;ve found a winner.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ansible vs chef vs puppet]]></title>
+    <link href="http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet/"/>
+    <updated>2013-06-26T13:58:00-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2013/06/26/ansible-vs-chef-vs-puppet</id>
+    <content type="html"><![CDATA[<h2>Intro</h2>
+
+<p>First off, I&rsquo;m going to say I&rsquo;m a chef zealot, but I&rsquo;m attempting to put together an intelligent discussion of the battle that has popped up in sysadmin discussion groups now-a-days.  Secondly, I&rsquo;m only focusing on the three systems I have exposure to, ansible the least, puppet the second, and chef the most.  I could also probably throw salt, cfengine, and others in there, but that&rsquo;s superfluous, this is my discussion so I&rsquo;m going to keep it in my scope.</p>
+
+<p>I&rsquo;m going focus on the pluses of each, and use the &ldquo;Overall&rdquo; section to combine them.  In my conclusion my true thoughts will come out, so if you want the tl;dr I&rsquo;d skip down there.</p>
+
+<h2>ansible</h2>
+
+<p>Links:
+<a href="http://www.ansibleworks.com/">homepage</a>, a great <a href="https://github.com/leucos/ansible-tuto">tutorial</a></p>
+
+<ul>
+<li>Low overhead</li>
+<li>python based</li>
+<li>playbook based</li>
+</ul>
+
+
+<p>To quote Wikipedia:</p>
+
+<blockquote><p>Ansible is an open-source software platform for configuring and managing computers. It combines multi-node software deployment, ad-hoc task execution, and configuration management. It manages nodes over SSH and does not require any additional remote software to be installed on them. Modules work over JSON and standard output and can be written in any programming language. The system uses YAML to express reusable descriptions of systems.</p></blockquote>
+
+<p>Probably the neatest thing about ansible is that it only requires ssh to work.  You do the work on a local box, and run the &ldquo;play book&rdquo; and it walks through the steps.  its designed to be something fast and quick to spin up boxes.  The disadvantage of this is that creep can happen; you can make sure the box is what you expect but you don&rsquo;t have the focused control of something like chef or puppet.  If you need just a webserver that is configured one way and is disposable then this is the way to go.  If you have to support something for long term though, it seems its out of scope of this product. I could be wrong but that&rsquo;s how I interperat it.</p>
+
+<h2>chef</h2>
+
+<p>Links:
+<a href="http://www.opscode.com/">homepage</a>, a great <a href="https://learnchef.opscode.com/">tutorial</a></p>
+
+<ul>
+<li>gem or <a href="http://www.opscode.com/blog/2012/06/29/omnibus-chef-packaging/">omnibus</a> installer</li>
+<li>server based or <a href="http://docs.opscode.com/chef_solo.html">chef-solo</a></li>
+<li>cookbook or recipe based</li>
+</ul>
+
+
+<p>To quote Wikipedia:</p>
+
+<blockquote><p>chef is a configuration management tool written in Ruby and Erlang. It uses a pure-Ruby, domain-specific language (DSL) for writing system configuration &ldquo;recipes&rdquo; or &ldquo;cookbooks&rdquo;. chef was written by Opscode and is released as open source under the Apache License 2.0. chef is a DevOps tool used for configuring cloud services or to streamline the task of configuring a company&rsquo;s internal servers. chef automatically sets up and tweaks the operating systems and programs that run in massive data centers.</p></blockquote>
+
+<p>As I said in the intro, I love chef.  Hell if I could I&rsquo;d probably work for opscode.  As soon as I got my head wrapped around chef (which is chef&rsquo;s main problem), its quick and efficient, and its slick.  I&rsquo;ve only ever used chef with a chef server, never really touched chef-solo.  I also leveraged <a href="https://github.com/jkeiser/chef-zero">chef-zero</a> in my testing because I like the idea of uploading the cookbooks and pulling them down.  Having cookbooks on a centralized chef server, its a true &ldquo;system of record&rdquo; that doesn&rsquo;t rely on your laptop or workstation, if you do a <code>knife server create 'role[web]'</code> you know what you are going to get.</p>
+
+<p>Something I would like to say though, a huge disadvantage of chef is the way cookbooks are controlled.  It requires constant babying, or plugins like <a href="https://github.com/jonlives/knife-spork">knife-spork</a> to make sure people don&rsquo;t mess with each others work.  I am lucky enough to work in an environment with only 2 others that have any real use for chef, so I am able to be a good gatekeeper.  I could only imagine the cluster with larger teams.  As of 6/26/13 I know this is a conversation topic and pain point, I&rsquo;d be interested to see how the workflow matures.</p>
+
+<h2>puppet</h2>
+
+<p>Links:
+<a href="http://www.puppetlabs.com/">homepage</a>, a great <a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">cheat sheet</a></p>
+
+<ul>
+<li>an official <a href="http://info.puppetlabs.com/download-learning-puppet-VM.html">learning</a> vm</li>
+<li><a href="https://puppetlabs.com/puppet/puppet-open-source/">package</a> based</li>
+<li>server based or local puppet-apply</li>
+<li>manifest based</li>
+</ul>
+
+
+<p>To quote Wikipedia:</p>
+
+<blockquote><p>puppet is a tool designed to manage the configuration of Unix-like and Microsoft Windows systems declaratively. The user describes system resources and their state, either using puppet&rsquo;s declarative language or a Ruby DSL (domain-specific language). This information is stored in files called &ldquo;puppet manifests&rdquo;. puppet discovers the system information via a utility called Facter, and compiles the puppet manifests into a system-specific catalog containing resources and resource dependency, which are applied against the target systems. Any actions taken by puppet are then reported.</p></blockquote>
+
+<p>Something I&rsquo;ve always loved about puppet is the trifecta. You can easily create a manifest to control the package/file/service in only a few lines.  (check that cheat sheet above for an example) I was able to take over an infrastructure in an extremely short period of time with just that.  I didn&rsquo;t have that long to control every facet of the groupings but the investment to the reward was mind boggling fast.</p>
+
+<h2>Overall</h2>
+
+<p>Ok, now that my little tl;dr of the pluses are done, I can start my views overall.  puppet is a very &ldquo;eins, zwei, eins, zwei,&rdquo; type application.  With marrying it with something like <a href="http://www.cobblerd.org/">cobbler</a> you can in theory rack mount a machine, hit the power button and have a machine exactly how you want it to be in &ldquo;x&rdquo; about of time.  This is great for big companies that always want machines to cookie cutter. It could be that that&rsquo;s how I saw puppet being used, but comparing them to the two other config management systems; it really fits. Speaking of cobbler, yes, I do understand you can leverage cobbler with each of these tools, but as you can <a href="https://github.com/cobbler/cobbler/wiki/Using%20cobbler%20with%20a%20configuration%20management%20system">see</a> it just seems that cobbler and puppet are a match made in heaven.  chef on the other hand seems like it&rsquo;s designed for smaller companies with smaller teams.  It looks for cooperation, nay, requires cooperation, and its to its strength and its weakness.  Unlike puppet, chef doesn&rsquo;t default to an &ldquo;active&rdquo; mode (Ok, that&rsquo;s not fully true about puppet either, but the better practice is to have puppet in active mode from the get go).  puppet runs by default every 30 mins, to make sure its what you want to be, chef on the other hand is a pull based config-management that they even suggest &ldquo;putting chef-client&rdquo; in your crontab.  This originally bothered me, coming from the puppet world, but as i learned more about chef i realized that isn&rsquo;t its bread and butter.  chef is a way to spin up boxes for an elastic environment like AWS.  You have a massive blast of traffic, chef will trigger throw your machines in the load balancer, install apache or whatever, and you have what you expect, and 2-3 hours later you blow it away.  This is different than ansible because it is not &ldquo;automated&rdquo; per se. Remember the play books site in your local machine, you have interact with the provisioning, which for a startup seems like the correct path. In a startup you have to know exactly what machines are running, not only because of OPEX but because its your baby, you want focus and tweak; you <em>probably</em> don&rsquo;t have the budget to just blow away the boxes.</p>
+
+<h2>Conclusion</h2>
+
+<p>So I&rsquo;ll say this because I believe this: each of these tools are for different &ldquo;size&rdquo; infrastructures.  You can argue as much as you want; saying that &ldquo;yes well you can use each in of the different sizes&rdquo;, but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.</p>
+]]></content>
+  </entry>
+  
+</feed>

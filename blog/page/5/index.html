@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="To quote the top of my README.md: This is my &ldquo;recipe&rdquo; on how I got Chef Jenkins and Vagrant to play nice. After watching this (http://www &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/page/5">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/25/chef-jenkins-vagrant/">Chef-jenkins-vagrant</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-25T11:43:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>To quote the top of my <a href="https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md">README.md</a>:</p>
+
+<blockquote><p>This is my &ldquo;recipe&rdquo; on how I got Chef Jenkins and Vagrant to play nice. After watching this (<a href="http://www.youtube.com/watch?v=h_IEfNklzW4">http://www.youtube.com/watch?v=h_IEfNklzW4</a>) video, I realized I could do this. I searched high and low for a tutorial on how to bulid this stack, and nothing. So I decided to create a github doc to centralize my setup and hopefully let the community suggest additions.</p></blockquote>
+
+<p>I want to thank <a href="https://github.com/bscott">Brian Scott</a>, because after his video it really opened my eyes.  I&rsquo;ve now had 3 people run through this tutorial and all come out with a working <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> set ups and learned to extend it to where I had never thought of.</p>
+
+<p>I understand and that a lot of people wonder why someone would want to build this from scratch, instead of using, for instance <a href="https://github.com/fnichol">Fletcher Nichol&rsquo;s</a> <em>ahem</em><a href="https://github.com/jamie-ci/jamie">jamie-ci</a><em>ahem</em> test-kitchen, and this is what I&rsquo;m going to write about.</p>
+
+<p>I see <a href="https://github.com/opscode/test-kitchen">test-kitchen</a> is more for writing cookbooks and recipes for the general public.  You can easily create faux VMs, per <a href="https://github.com/sethvargo">Seth Vergo&rsquo;s</a> awesome <a href="https://github.com/customink/fauxhai">fauxhai</a> to test cookbooks across multiple setups and multiple provisioned systems to see if they work.  This is great for developing a cookbooks but I can&rsquo;t see it working in a sysadmins workflow.</p>
+
+<p>Sysadmins have a select few boxes; they have their known quantities, they know they aren&rsquo;t going to have RHEL/DEB/tar based machines.  They build infrastructures to have uniformity, they stick with one of them.  Granted, some of the sysadmnis out there are unlucky and DO have these environments, but I truly believe that&rsquo;s the minority not the majority.</p>
+
+<p>A sysadmin needs a way to provision his machines, in a safe manner before pushing changes out to production. This sounds obvious, but how many places I&rsquo;ve been where have I heard &ldquo;Oh, it&rsquo;s just an /etc/hosts file update, just push it out.&rdquo;  Just yesterday, (06/25/2013) as I was victim if that short cut and caused an outage to some our backend machines.  If you are curious, it seems, we had a hardcoded IP to DNS name in /etc/hosts (not DNS) that was required for our application to work.  If I held true to my statements earlier I would have noticed this change from my CI builds and not looked like the dumbass I was.</p>
+
+<p>I built this <a href="https://github.com/jjasghar/chef-jenkins-vagrant">chef-jenkins-vagrant</a> howto so I don&rsquo;t have an excuse anymore, I have a proven way to build and implement good practices in an quick manner.  I hope you find it useful, and if you have suggestions or additions PRs are always welcome.</p>
+
+<p>Mind your <code>rm -rf *</code>,</p>
+
+<p>JJ Asghar</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/25/testing-this-out/">Testing This Out</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-25T11:28:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This is a test, lets see it work</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/4/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/">Moving to Capistrano Version 3 From Version 2 Git Submodules</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

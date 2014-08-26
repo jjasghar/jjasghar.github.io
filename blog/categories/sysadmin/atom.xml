@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[hubot mysql cli-table tutorial]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
+    <updated>2014-06-24T13:09:23-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
+    <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
+
+<p>```js</p>
+
+<pre><code>sql = "select name, id from mydatabase"
+sql = mysql.format(sql)
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    msg.send row
+</code></pre>
+
+<p>```</p>
+
+<p>So you&rsquo;ve probably noticed that it comes out HORRIBLY. This tutorial will leverage the <a href="https://www.npmjs.org/package/cli-table">cli-table npm</a> so it <em>should</em> look
+something like:</p>
+
+<p><code>
+//╔══════╤═════╤══════╗
+//║ foo  │ bar │ baz  ║
+//╟──────┼─────┼──────╢
+//║ frob │ bar │ quuz ║
+//╚══════╧═════╧══════╝
+</code></p>
+
+<p>So lets make this happen.  First off just like the mysql plugin you&rsquo;ll need to add something like this to your <code>package.json</code>.</p>
+
+<p>```json
+&ldquo;dependencies&rdquo;: {</p>
+
+<pre><code>...
+"cli-table": "latest",
+...
+}
+</code></pre>
+
+<p>```</p>
+
+<p>After this you need to create an object like the mysql plugin&hellip;</p>
+
+<p><code>js
+Table = require "cli-table"
+</code></p>
+
+<p>Now you have <code>Table</code> available to you so you can leverage it to make the tables.  First thing you need to do is create the actual table which is this line:</p>
+
+<p>```js</p>
+
+<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
+</code></pre>
+
+<p>```</p>
+
+<p>Then at the <code>connection.query</code> line you&rsquo;ll want to push the rows into the table loop through them then in <em>one</em> message push it out, which is what the next snippet
+does.</p>
+
+<p>```js</p>
+
+<pre><code>connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    table.push [row.id, row.name]
+  msg.send table.toString()
+</code></pre>
+
+<p>```</p>
+
+<p>So the full thing would be something like the following:</p>
+
+<p>```js
+  robot.respond /database user id$/i, (msg) &ndash;></p>
+
+<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
+msg.send "Looking on your names and ids"
+
+connection = mysql.createConnection
+  host: 'mydbhostname'
+  user: 'mydbuseraccount'
+  password: process.env.DB_PASSWORD
+
+sql = "SELECT id, name, FROM mydatabase"
+
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    table.push [row.id, row.name]
+  msg.send table.toString()
+</code></pre>
+
+<p>```
+And boom, you now have a nice readable outputted chart that hubot can answer for you when you need. :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hubot mysql instead of a wrapper shell script]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/"/>
+    <updated>2014-06-24T10:40:32-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script</id>
+    <content type="html"><![CDATA[<p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
+useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
+shelling out and running knife.) So you&rsquo;ve started playing with pulling data from
+mysql or the like, and you&rsquo;ve come up with something like the following.</p>
+
+<p><code>sql
+mysql -u$user -p$pwd -h $host -N -e "select name, id from mydatabase"
+</code></p>
+
+<p>Pretty straight forward eh? You run it on your cli and yeah you get the data you expect. You attempt to run it with hubot maybe something
+like this?</p>
+
+<p>```js
+ robot.respond /database name and id$/i, (msg) &ndash;>
+   msg.send &ldquo;determining the name and ids&rdquo;
+   exec &ldquo;bash /home/hubot/bash_scripts/name_id_database.sh&rdquo;, (err, stdout, stderr) =></p>
+
+<pre><code> msg.send stdout
+</code></pre>
+
+<p>```</p>
+
+<p>It might come out all gross, yeah that&rsquo;s a different post about <a href="https://github.com/LearnBoost/cli-table">cli-table</a> which I hope i&rsquo;ll be
+doing after this post.  Anyway i digress; that&rsquo;s great, so you get the data hubot gives you the date, but man you have your password in your
+shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckly, <a href="https://twitter.com/mattdbridges">Matt Bridges</a> showed
+me how to leverage coffeescript and the <a href="https://www.npmjs.org/package/mysql">mysql npm</a> package to do just that.</p>
+
+<p>First off, you&rsquo;ll need to add to your <code>package.json</code> something like:</p>
+
+<p>```json
+ &ldquo;dependencies&rdquo;: {</p>
+
+<pre><code>      ....
+      "mysql": "&gt;= 2.0.1",
+      ....
+</code></pre>
+
+<p>```</p>
+
+<p>At the top of your coffee script add something like this, it will open up the ability to start calling the commands.</p>
+
+<p><code>js
+  mysql = require 'mysql'
+</code></p>
+
+<p>Awesome, now lets convert that top sql to coffee, first thing you need to do is create the connection:</p>
+
+<p>```js
+  connection = mysql.createConnection</p>
+
+<pre><code>host: 'mydbhostname'
+user: 'myuser'
+password: process.env.DB_PASSWORD
+</code></pre>
+
+<p>```</p>
+
+<p>As you can see it&rsquo;s pretty self explanatory. You create the object called <code>connection</code> then give it some variables. The password is interesting here
+it&rsquo;s now is a environment variable that you can just add to your hubot (however you choose, like in heroku: <code>heroku config:set DB_PASSWORD=a_really_strong_pa$$word</code>) so
+you don&rsquo;t have to have it checked into you scm/code.</p>
+
+<p>After this, now you&rsquo;ll want to do something like:</p>
+
+<p>```js</p>
+
+<pre><code>sql = "select name, id from mydatabase"
+sql = mysql.format(sql)
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    msg.send row
+</code></pre>
+
+<p>```</p>
+
+<p>This also is pretty self explanatory, you put your sql statement in as a variable, format it with mysql, open the connection via the query command, then
+if it errors, throws the error, otherwise outputs each row and a seporate <code>msg.send</code>.</p>
+
+<p>Yes, yes, this is dirty, gross and if you have anything more than 3-4 users you&rsquo;re gonna get annoyed really fast. Again, this is just an example, the cli-table tutorial
+will make this more enjoyable.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Updating a rails password via the rails console]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
+    <updated>2014-05-02T11:28:40-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
+going through his screencasts.</p>
+
+<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
+
+<p><code>ruby
+irb(main):001:0&gt; u = User.find_by_id(1)
+  User Load (3.5ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):002:0&gt; u
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
+irb(main):003:0&gt; u.password = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):004:0&gt; u.password_confirmation = "a_stupid_pa$$word"
+=&gt; "_stupid_pa$$word"
+irb(main):005:0&gt; u.save
+   (2.0ms)  BEGIN
+  User Exists (12.2ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (15.8ms)  UPDATE "users" SET "password_digest" = '$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.', "remember_token" = 'zOZYjEVovO143qrX1yhibw', "updated_at" = '2014-04-25 23:24:39.329502' WHERE "users"."id" = 1
+   (4.6ms)  COMMIT
+=&gt; true
+irb(main):006:0&gt;
+</code></p>
+
+<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
+database via <code>u.save</code>.</p>
+
+<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
+exception telling you why it won&rsquo;t work, example:</p>
+
+<p><code>ruby
+[1] pry(main)&gt; u = User.find_by_id(1)
+  User Load (0.1ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
+=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:12:49", updated_at: "2014-04-24 20:17:57", password_digest: "$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...", remember_token: "ZiAb_plRQdp9WaKjbZ4CAA"&gt;
+[2] pry(main)&gt; u.password = "1234"
+=&gt; "1234"
+[3] pry(main)&gt; u.save
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.1ms)  rollback transaction
+=&gt; false
+[4] pry(main)&gt; u.save!
+   (0.1ms)  begin transaction
+  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
+   (0.0ms)  rollback transaction
+ActiveRecord::RecordInvalid: Validation failed: Password is too short (minimum is 6 characters), Password confirmation can't be blank
+from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!'
+[5] pry(main)&gt;
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[UTC and me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/04/26/utc-and-me/"/>
+    <updated>2014-04-26T16:15:54-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/04/26/utc-and-me</id>
+    <content type="html"><![CDATA[<p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
+listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
+UTC as their main way of describing time. So when he asked for a dump from 2 days ago, at 4pm he thought it was 2 days ago 4pm CST (my timezone)
+where the ticket for the company described 4pm UTC. Needless to say confusion started to hold.</p>
+
+<p>Now this can start my rant (which up till now I haven&rsquo;t actually written) about timezones, but I wanted to make his life easier so I figured out
+a pretty straight forward way to convert any date and time of a timezone to UTC via ruby.  This is how you do it:</p>
+
+<p>Note: this requires ruby 1.9.3+</p>
+
+<p><code>ruby
+[8] pry(main)&gt; require 'time'
+[8] pry(main)&gt; t = Time.strptime("04/23/2014 02:00 AM","%m/%d/%Y %I:%M %p")
+=&gt; 2014-04-23 02:00:00 -0500
+[9] pry(main)&gt; t.utc
+=&gt; 2014-04-23 07:00:00 UTC
+[10] pry(main)&gt;
+</code></p>
+
+<p>Wow, that&rsquo;s pretty simple eh? :)  In looking around for this answer, I came across a pretty neat trick with ruby also:</p>
+
+<p><code>ruby
+[13] pry(main)&gt; Time.now.utc
+=&gt; 2014-04-25 16:21:27 UTC
+[10] pry(main)&gt; Time.now.to_i
+=&gt; 1398443660
+</code></p>
+
+<p>That&rsquo;s time now for UTC from your machines time, and the epoch time too!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Update to the chef error that has haunted me]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
+    <updated>2014-03-19T16:45:03-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
+    <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
+
+<p>```</p>
+
+<h2>Chef::Exceptions::ContentLengthMismatch</h2>
+
+<p>Response body length 164 does not match HTTP Content-Length header 206.
+```</p>
+
+<p>I moved chef servers and didn&rsquo;t change my <code>s3_url_ttl</code> and ran into this issue. So the annoying 403&rsquo;s are now something about <code>HTTP Content-Length</code>.</p>
+
+<p>If you&rsquo;ve forgotten the fix is:
+```bash
+[~] % sudo vim /etc/chef-server/chef-server.rb</p>
+
+<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
+
+<p>[~] % sudo chef-server-ctl reconfigure
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

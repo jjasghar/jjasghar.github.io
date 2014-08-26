@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby, | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Moving to capistrano version 3 from version 2 git submodules]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
+    <updated>2014-06-04T17:13:43-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
+to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
+useful for someone else.</p>
+
+<h2>git submodules</h2>
+
+<p>I had a requirement to get git submodules to work with one of my applications. It&rsquo;s seems
+that v3 doesn&rsquo;t have the &ldquo;clone&rdquo; version anymore, so the <code>.git</code> directory isn&rsquo;t there.
+It seems it uses the <code>git archive</code> and doesn&rsquo;t have an &ldquo;out of the box&rdquo; support for submodules.
+See <a href="http://stackoverflow.com/questions/19403138/capistrano-v3-deploy-git-repository-and-its-submodules/19573220#19573220">here</a>.
+I did some searching and found the above stack overflow and  <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">this gist</a>
+which gave me the bulk of what I needed to get done.</p>
+
+<p>There were some gotchas on this so I&rsquo;m going to do my best to document them here.
+First off, as you can see on <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L20">line 20</a>
+there is a new variable named <code>repo_path</code>.  This is due to the need now of the
+<code>git clone</code> to the file system and a place it needs to put it. So that means you need
+to add the <code>repo/</code> directory in your <code>:deploy_to</code> directory. Might I suggest the something like:</p>
+
+<p><code>bash
+ssh &lt;deployuser&gt;@&lt;remotehost&gt;://var/www/&lt;app&gt;/repo/
+</code></p>
+
+<p>Then after the fact, you might want to steal this cap rake task:
+```ruby
+desc &ldquo;Check that we can access the repo directory&rdquo;
+task :check_repo_permissions do
+  on roles(:all) do |host|</p>
+
+<pre><code>if test("[ -w #{fetch(:deploy_to)/repo} ]")
+  info "#{fetch(:deploy_to)/repo} is writable on #{host}"
+else
+  error "#{fetch(:deploy_to)/repo} is not writable on #{host}"
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Also may I suggest you putting this at the &ldquo;top&rdquo; of your <code>deploy.rb</code> something like:
+<code>ruby
+before :deploy, :check_repo_permissions
+</code>
+So just in case you&rsquo;re <code>cap</code> task will fail out early on of you have decided to remove, or
+do something with that repo directory.</p>
+
+<p>Now if you go ahead and run <code>cap staging deploy</code> (you&rsquo;re testing in STAGING right?)
+You might run into some errors. Most are pretty self explanatory, and if you take care of them
+and run <code>cap</code> again, you should be good&hellip;but I digress.</p>
+
+<p>After adding that repo directory, you want to add the above <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">gist</a> to <code>lib/capistrano/submodule_strategy.rb</code>
+and add the following two lines to your <code>Capfile</code>:</p>
+
+<p><code>ruby
+require 'capistrano/git'
+require './lib/capistrano/submodule_strategy'
+</code></p>
+
+<p>After that, you need to add to your <code>config/deploy.rb</code>:</p>
+
+<p><code>ruby
+set :git_strategy, SubmoduleStrategy
+</code></p>
+
+<p>This should wire everything up now.</p>
+
+<p>There is one other <em>optional</em> file, <code>.capignore</code> that needs to be created, it is a <code>.gitignore</code> for this cap deployment.
+I ended up taking the example:
+<code>
+.capignore
+lib
+config
+.git
+</code>
+and adding it directory to the <code>(:deploy_to)/repo/.capignore</code>. I believe you can add it to your the root of your repo,
+and it should get there too, but I didnt do it that way. The only place it&rsquo;s referanced is <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L45">here</a> so if you see fit, you could probably just remove the referance.</p>
+
+<p>You should be able to do a <code>cap staging deploy</code> now and you should notice something like:
+<code>bash
+...
+DEBUG[639d0d29] Command: cd /var/www/app/repo &amp;&amp; ( GIT_ASKPASS=/bin/echo GIT_SSH=/tmp/app/git-ssh.sh /usr/bin/env git submodule update --init )
+DEBUG[639d0d29]   Submodule 'i-hate-submodules' () registered for path 'i-hate-submodules'
+...
+</code></p>
+
+<p>And you should be good to go!</p>
+]]></content>
+  </entry>
+  
+</feed>

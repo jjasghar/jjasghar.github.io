@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: hubot | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/hubot/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-08-26T11:17:00-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[hubot mysql cli-table tutorial]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
+    <updated>2014-06-24T13:09:23-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
+    <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
+
+<p>```js</p>
+
+<pre><code>sql = "select name, id from mydatabase"
+sql = mysql.format(sql)
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    msg.send row
+</code></pre>
+
+<p>```</p>
+
+<p>So you&rsquo;ve probably noticed that it comes out HORRIBLY. This tutorial will leverage the <a href="https://www.npmjs.org/package/cli-table">cli-table npm</a> so it <em>should</em> look
+something like:</p>
+
+<p><code>
+//╔══════╤═════╤══════╗
+//║ foo  │ bar │ baz  ║
+//╟──────┼─────┼──────╢
+//║ frob │ bar │ quuz ║
+//╚══════╧═════╧══════╝
+</code></p>
+
+<p>So lets make this happen.  First off just like the mysql plugin you&rsquo;ll need to add something like this to your <code>package.json</code>.</p>
+
+<p>```json
+&ldquo;dependencies&rdquo;: {</p>
+
+<pre><code>...
+"cli-table": "latest",
+...
+}
+</code></pre>
+
+<p>```</p>
+
+<p>After this you need to create an object like the mysql plugin&hellip;</p>
+
+<p><code>js
+Table = require "cli-table"
+</code></p>
+
+<p>Now you have <code>Table</code> available to you so you can leverage it to make the tables.  First thing you need to do is create the actual table which is this line:</p>
+
+<p>```js</p>
+
+<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
+</code></pre>
+
+<p>```</p>
+
+<p>Then at the <code>connection.query</code> line you&rsquo;ll want to push the rows into the table loop through them then in <em>one</em> message push it out, which is what the next snippet
+does.</p>
+
+<p>```js</p>
+
+<pre><code>connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    table.push [row.id, row.name]
+  msg.send table.toString()
+</code></pre>
+
+<p>```</p>
+
+<p>So the full thing would be something like the following:</p>
+
+<p>```js
+  robot.respond /database user id$/i, (msg) &ndash;></p>
+
+<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
+msg.send "Looking on your names and ids"
+
+connection = mysql.createConnection
+  host: 'mydbhostname'
+  user: 'mydbuseraccount'
+  password: process.env.DB_PASSWORD
+
+sql = "SELECT id, name, FROM mydatabase"
+
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    table.push [row.id, row.name]
+  msg.send table.toString()
+</code></pre>
+
+<p>```
+And boom, you now have a nice readable outputted chart that hubot can answer for you when you need. :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hubot mysql instead of a wrapper shell script]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/"/>
+    <updated>2014-06-24T10:40:32-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script</id>
+    <content type="html"><![CDATA[<p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
+useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
+shelling out and running knife.) So you&rsquo;ve started playing with pulling data from
+mysql or the like, and you&rsquo;ve come up with something like the following.</p>
+
+<p><code>sql
+mysql -u$user -p$pwd -h $host -N -e "select name, id from mydatabase"
+</code></p>
+
+<p>Pretty straight forward eh? You run it on your cli and yeah you get the data you expect. You attempt to run it with hubot maybe something
+like this?</p>
+
+<p>```js
+ robot.respond /database name and id$/i, (msg) &ndash;>
+   msg.send &ldquo;determining the name and ids&rdquo;
+   exec &ldquo;bash /home/hubot/bash_scripts/name_id_database.sh&rdquo;, (err, stdout, stderr) =></p>
+
+<pre><code> msg.send stdout
+</code></pre>
+
+<p>```</p>
+
+<p>It might come out all gross, yeah that&rsquo;s a different post about <a href="https://github.com/LearnBoost/cli-table">cli-table</a> which I hope i&rsquo;ll be
+doing after this post.  Anyway i digress; that&rsquo;s great, so you get the data hubot gives you the date, but man you have your password in your
+shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckly, <a href="https://twitter.com/mattdbridges">Matt Bridges</a> showed
+me how to leverage coffeescript and the <a href="https://www.npmjs.org/package/mysql">mysql npm</a> package to do just that.</p>
+
+<p>First off, you&rsquo;ll need to add to your <code>package.json</code> something like:</p>
+
+<p>```json
+ &ldquo;dependencies&rdquo;: {</p>
+
+<pre><code>      ....
+      "mysql": "&gt;= 2.0.1",
+      ....
+</code></pre>
+
+<p>```</p>
+
+<p>At the top of your coffee script add something like this, it will open up the ability to start calling the commands.</p>
+
+<p><code>js
+  mysql = require 'mysql'
+</code></p>
+
+<p>Awesome, now lets convert that top sql to coffee, first thing you need to do is create the connection:</p>
+
+<p>```js
+  connection = mysql.createConnection</p>
+
+<pre><code>host: 'mydbhostname'
+user: 'myuser'
+password: process.env.DB_PASSWORD
+</code></pre>
+
+<p>```</p>
+
+<p>As you can see it&rsquo;s pretty self explanatory. You create the object called <code>connection</code> then give it some variables. The password is interesting here
+it&rsquo;s now is a environment variable that you can just add to your hubot (however you choose, like in heroku: <code>heroku config:set DB_PASSWORD=a_really_strong_pa$$word</code>) so
+you don&rsquo;t have to have it checked into you scm/code.</p>
+
+<p>After this, now you&rsquo;ll want to do something like:</p>
+
+<p>```js</p>
+
+<pre><code>sql = "select name, id from mydatabase"
+sql = mysql.format(sql)
+connection.query sql, (err, results) -&gt;
+  throw err if err
+  for row in results
+    msg.send row
+</code></pre>
+
+<p>```</p>
+
+<p>This also is pretty self explanatory, you put your sql statement in as a variable, format it with mysql, open the connection via the query command, then
+if it errors, throws the error, otherwise outputs each row and a seporate <code>msg.send</code>.</p>
+
+<p>Yes, yes, this is dirty, gross and if you have anything more than 3-4 users you&rsquo;re gonna get annoyed really fast. Again, this is just an example, the cli-table tutorial
+will make this more enjoyable.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Getting authentication with hubot using auth.coffee]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
+    <updated>2014-02-19T11:07:03-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
+    <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
+First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
+that means you need to figure out &ldquo;HUBOT_AUTH_ADMIN&rdquo;. Assuming you have hubot already connecting to a site, run <code>hubot show users</code>
+and he should come back with all the people he knows about. Grab the id number for the person/people you want to have admin rights.</p>
+
+<p>Add <code>HUBOT_AUTH_ADMIN="&lt;number&gt;,&lt;nextnumber&gt;"</code> to the <code>bin/hubot</code> or however you add variables to him, go ahead and restart hubot to
+see if he now thinks you&rsquo;re and admin.</p>
+
+<p>If all goes well, you should see something like this:
+<code>
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+Hubot&gt;
+</code></p>
+
+<p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
+as the example, so lets give our user the first role:</p>
+
+<p><code>
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+Hubot&gt; Hubot shell has ping role
+Hubot&gt; Shell: Ok, shell has the 'ping' role.
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
+Hubot&gt;
+</code></p>
+
+<p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
+can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>, to fail for us.</p>
+
+<p><code>
+Hubot&gt; Hubot shell doesn't have ping role
+Hubot&gt; Shell: Ok, shell doesn't have the 'ping' role.
+Hubot&gt; Hubot what role does shell have
+Hubot&gt; Shell: shell has the following roles:  and is also an admin.
+Hubot&gt;
+</code></p>
+
+<p>Go ahead into your <code>scripts/</code> directory, and open up your ping.coffee. Take a look at the following snippet:</p>
+
+<p>```
+module.exports = (robot) &ndash;>
+  robot.respond /PING$/i, (msg) &ndash;></p>
+
+<pre><code>msg.send "PONG"
+</code></pre>
+
+<p>```</p>
+
+<p>Pretty straight forward eh? Go ahead and tack on this:</p>
+
+<p>```
+module.exports = (robot) &ndash;>
+  robot.respond /PING$/i, (msg) &ndash;></p>
+
+<pre><code>if robot.auth.hasRole(msg.envelope.user, "ping")
+  msg.send "PONG"
+else
+ msg.send "Sorry you can't ask me to PONG"
+</code></pre>
+
+<p>```</p>
+
+<p>Note: a quick explanation, if hubot responds to &ldquo;ping&rdquo; case insensitive, it&rsquo;ll respond with the &ldquo;PONG&rdquo; only if you have the role of ping.</p>
+
+<p>Go and ahead and restart hubot, and say PING. :)</p>
+
+<p><code>
+Hubot&gt; hubot PING
+Hubot&gt; Sorry you can't ask me to PONG
+</code></p>
+
+<p>Sweet!</p>
+
+<p>Ok, next step, lets give ourselves access to make this happen:</p>
+
+<p><code>
+Hubot&gt; Hubot shell has ping role
+Hubot&gt; Shell: Ok, shell has the 'ping' role.
+Hubot&gt; hubot PING
+Hubot&gt; PONG
+Hubot&gt;
+</code></p>
+
+<p>PERFECT!</p>
+
+<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
+to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
+your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
+
+<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
+]]></content>
+  </entry>
+  
+</feed>
