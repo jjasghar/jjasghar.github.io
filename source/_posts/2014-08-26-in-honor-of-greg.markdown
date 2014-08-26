@@ -9,7 +9,7 @@ categories:
 A good friend of mine started his own [blog](http://gregkitson.com/) and posted an interesting [easter egg](http://gregkitson.com/blog/2014/08/25/my-favorite-puppet-help-message/).
 Being a jealous nerd I had to find something related to chef that would do this. In my search I came up with something for [test-kitchen](http://kitchen.ci).
 
-```bash
+```
 11:05:45 ~ > kitchen sink
 
                     ___
