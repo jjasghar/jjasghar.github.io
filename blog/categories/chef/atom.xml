@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-08-26T11:17:00-05:00</updated>
+  <updated>2014-08-26T11:59:07-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Omnibus so you dont get hit by the bus]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/"/>
+    <updated>2014-08-19T13:34:45-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus</id>
+    <content type="html"><![CDATA[<p>I recently took a new job at <a href="http://getchef.com">Chef</a> Inc. Needless to say I&rsquo;m challanged and excited. I took a position as the
+<a href="http://openstack.org">openstack</a> guy, which, again needless to say is a mountain of work. Part of my first responsibilities was to
+start building an integration framework for the <a href="https://github.com/stackforge/">stackforge</a> cookbooks. Part of this was to automate
+the building and destroying of compute nodes with different hardware configurations, so we needed a ipxe/tftp setup to network
+book machines. We decided on a project from CSC called <a href="https://github.com/csc/Hanlon">hanlon</a> which does a great deal of this work.</p>
+
+<p>You&rsquo;re probably asking by now, so where&rsquo;s omnibus come into play with this? Well hanlon moves extremely fast and we needed a way to
+package it up. There are specific dependancies and other specific things that having a package with &ldquo;blessed&rdquo; versions of the other
+underlying apps would help support. If I recall correctly, <a href="http://sensuapp.org">sensu</a> came to this same desition because even as small
+as patch numbers for ruby can cause havoc attempting to support someone.</p>
+
+<p>So on with the show/tutorial:</p>
+
+<h2>Omnibus</h2>
+
+<p>The first thing you need to know is that <a href="https://github.com/opscode/omnibus">Omnibus</a> is actually in two pieces. First the framework,
+at this repo: <a href="https://github.com/opscode/omnibus">omnibus</a> and the <a href="https://github.com/opscode/omnibus-software">omnibus-software</a>
+which is the the building blocks for whatever you&rsquo;re trying to package.</p>
+
+<p>The first thing that got me learning omnibus was the two files that sat inside of <code>project/</code> and <code>software/</code>. You&rsquo;ll notice that they
+probably are both named your package and probably wonder why it&rsquo;s named the same thing. The best description is this; <code>project/blah.rb</code> is the
+overarching definition of the package where as <code>software/blah.rb</code> is the build instructions. You don&rsquo;t want to repeat the data in each, it&rsquo;s
+actually probably better you don&rsquo;t. Keep that in mind. You might notice a <code>dependency</code> line <code>project/blah.rb</code>, I suggest commenting it out and
+putting all the dependencies in <code>software/blah.rb</code> is so it&rsquo;s all in one place</p>
+
+<p>So let&rsquo;s take a step back. How do you create a new project? Here&rsquo;s a snippit to do it:</p>
+
+<p><code>bash
+$ gem install omnibus
+$ omnibus new $MY_PROJECT_NAME # this will create a directory with omnibus-$MY_PROJECT_NAME
+$ cd omnibus-$MY_PROJECT_NAME
+$ bundle install
+</code>
+Something pretty straight forward. I want to stress though the portion of <code>$MY_PROJECT_NAME</code>, that caught me a couple times. Yes, a couple times.</p>
+
+<p>So lets say you are on a Ubuntu box and you&rsquo;re trying to build the pkg for Ubuntu. You can short circuit this by just doing the following,
+you won&rsquo;t see too much go by, but it&rsquo;ll tell you when it&rsquo;s done.</p>
+
+<p><code>bash
+$ cd omnibus-$MY_PROJECT_NAME
+$ bundle exec omnibus build $MY_PROJECT_NAME
+</code></p>
+
+<p>Now if you want to see more things go by,</p>
+
+<p><code>bash
+$ cd $MY_PROJECT_NAME
+$ bundle install
+$ bundle exec omnibus build $MY_PROJECT_NAME --log-level=debug
+</code></p>
+
+<p>I personally like it, I like to see my computer work ;).</p>
+
+<p>Now lets say you&rsquo;re still on that Ubuntu box but your coworker is using Centos, this is where <a href="http://kitchen.ci">test-kitchen</a> can take part making your
+life so much easier.
+You should do something like the following:</p>
+
+<p><code>bash
+$ bundle exec kitchen list
+$ bundle exec kitchen converge &lt;os you want to converge to build the pkg&gt;
+</code></p>
+
+<p>This will set up the box via test-kitchen, you&rsquo;ll want to <code>kitchen login</code> the box but then you can do the above commands to build the pkg.</p>
+
+<p>Something I noticed as I was attempting to leverage test-kitchen as my build box, (I&rsquo;m on a Mac trying to make Ubuntu pkgs) the following made my life
+much easier.</p>
+
+<p>I added the following to my <code>~/.ssh/config</code>.
+```bash
+host localhost</p>
+
+<pre><code> User vagrant
+ IdentityFile ~/.ssh/vagrant
+</code></pre>
+
+<p><code>``
+Where the</code>~/.ssh/vagrant` is from <a href="https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant">here</a></p>
+
+<p>Then you can do something like, then ship it off to some place else. NOTE: check the port number ;)
+<code>shell
+$ mkdir ~/tmp &amp;&amp; cd ~/tmp
+$ scp -P 2201 vagrant@localhost://home/vagrant/$MY_PACKAGE_NAME/pkg/* ./
+</code></p>
+
+<p>And say you spin up another vagrant box to test. NOTE: check that port number ;)
+<code>shell
+$ scp -P 2202 $MY_PACKAGE_NAME_0.1.0+20140819210922-1_amd64.deb vagrant@localhost://home/vagrant/
+</code></p>
+
+<p>I ran into an error during my adventures with Omnibus, and figured I should capture it here:</p>
+
+<p>If you see an error like the following:
+```ruby</p>
+
+<pre><code>          [NullFetcher: libgcc] I | Fetching `libgcc' (nothing to fetch)
+          [NetFetcher: cacerts] I | Downloading from `http://curl.haxx.se/ca/cacert.pem'
+          [NetFetcher: cacerts] I | Verifying checksum
+</code></pre>
+
+<p>Verification for cacerts failed due to a checksum mismatch:</p>
+
+<pre><code>expected: fd48275847fa10a8007008379ee902f1
+actual:   c9f4f7f4d6a5ef6633e893577a09865e
+</code></pre>
+
+<p>This added security check is used to prevent MITM attacks when downloading the
+remote file. If you have updated the version or URL for the download, you will
+also need to update the checksum value. You can find the checksum value on the
+software publisher&rsquo;s website.
+<code>``
+A quick fix would be to blow away your</code>Gemfile.lock<code>and run another</code>bundle install`.</p>
+
+<p>So here&rsquo;s some notes on Omnibus, I&rsquo;ll probably add more as time progresses, but this is at least a start!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Managing Windows Servers with Chef]]></title>
@@ -155,76 +276,6 @@ chef# chown root.root /etc/chef-server/chef-webui.pem
 five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
 
 <p>PS, I apologize for the quality.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
-    <updated>2014-02-17T15:32:20-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
-    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol' <a href="https://twitter.com/fnichol">Fletcher</a>
-made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
-cookbooks, and I wanted to start leveraging what I just paid for.</p>
-
-<p>So take this <code>.kitchen.yml</code> for instance:</p>
-
-<h2>```</h2>
-
-<p>driver:
-  name: vagrant</p>
-
-<p>provisioner:
-  name: chef_solo</p>
-
-<p>platforms:
-  &ndash; name: ubuntu-12.04</p>
-
-<p>suites:
-  &ndash; name: default</p>
-
-<pre><code>run_list:
-  - recipe[hubot-solo::default]
-attributes:
-</code></pre>
-
-<p>```</p>
-
-<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
-
-<h2>```</h2>
-
-<p>driver:
-  name: vagrant
-  provider: vmware_fusion</p>
-
-<p>provisioner:
-  name: chef_solo</p>
-
-<p>platforms:
-  &ndash; name: ubuntu-12.04</p>
-
-<p>suites:
-  &ndash; name: default</p>
-
-<pre><code>run_list:
-  - recipe[hubot-solo::default]
-attributes:
-</code></pre>
-
-<p>```</p>
-
-<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
-
-<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
-
-<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
-the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
-
-<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
-but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
-
-<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
 ]]></content>
   </entry>
   
