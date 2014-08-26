@@ -149,15 +149,15 @@ Being a jealous nerd I had to find something related to chef that would do this.
   </header>
 
 
-  <div class="entry-content"><p>I recently took a new job at <a href="http://getchef.com">Chef</a> Inc. Needless to say I&rsquo;m challanged and excited. I took a position as the
+  <div class="entry-content"><p>I recently took a new job at <a href="http://getchef.com">Chef</a> Inc. Needless to say I&rsquo;m challenged and excited. I took a position as the
 <a href="http://openstack.org">openstack</a> guy, which, again needless to say is a mountain of work. Part of my first responsibilities was to
 start building an integration framework for the <a href="https://github.com/stackforge/">stackforge</a> cookbooks. Part of this was to automate
 the building and destroying of compute nodes with different hardware configurations, so we needed a ipxe/tftp setup to network
-book machines. We decided on a project from CSC called <a href="https://github.com/csc/Hanlon">hanlon</a> which does a great deal of this work.</p>
+boot machines. We decided on a project from CSC called <a href="https://github.com/csc/Hanlon">hanlon</a> which does a great deal of this work.</p>
 
 <p>You&rsquo;re probably asking by now, so where&rsquo;s omnibus come into play with this? Well hanlon moves extremely fast and we needed a way to
-package it up. There are specific dependancies and other specific things that having a package with &ldquo;blessed&rdquo; versions of the other
-underlying apps would help support. If I recall correctly, <a href="http://sensuapp.org">sensu</a> came to this same desition because even as small
+package it up. There are specific dependencies and other specific things that having a package with &ldquo;blessed&rdquo; versions of the other
+underlying apps would help support. If I recall correctly, <a href="http://sensuapp.org">sensu</a> came to this same decision because even as small
 as patch numbers for ruby can cause havoc attempting to support someone.</p>
 
 <p>So on with the show/tutorial:</p>
@@ -170,11 +170,12 @@ which is the the building blocks for whatever you&rsquo;re trying to package.</p
 
 <p>The first thing that got me learning omnibus was the two files that sat inside of <code>project/</code> and <code>software/</code>. You&rsquo;ll notice that they
 probably are both named your package and probably wonder why it&rsquo;s named the same thing. The best description is this; <code>project/blah.rb</code> is the
-overarching definition of the package where as <code>software/blah.rb</code> is the build instructions. You don&rsquo;t want to repeat the data in each, it&rsquo;s
-actually probably better you don&rsquo;t. Keep that in mind. You might notice a <code>dependency</code> line <code>project/blah.rb</code>, I suggest commenting it out and
-putting all the dependencies in <code>software/blah.rb</code> is so it&rsquo;s all in one place</p>
+overarching definition of the package where as <code>software/blah.rb</code> is the build instructions. You shouldn&rsquo;t repeat the data is both places,
+because it can cause issues supporting the pkg in the long run. Keep that in mind.
+You might notice a <code>dependency</code> line <code>project/blah.rb</code>, I suggest commenting it out and putting all the dependencies in <code>software/blah.rb</code>
+is so it&rsquo;s all in one place.</p>
 
-<p>So let&rsquo;s take a step back. How do you create a new project? Here&rsquo;s a snippit to do it:</p>
+<p>So let&rsquo;s take a step back. How do you create a new project? Here&rsquo;s a snippet to do it:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
