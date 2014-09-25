@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-08-26T12:13:44-05:00</updated>
+  <updated>2014-09-25T16:25:17-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Checking active branch in multiple repos]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
+    <updated>2014-09-25T14:35:07-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
+    <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
+Trying to figure out what branch I left checked out can be&hellip;well frustrating.
+I put all my <a href="http://www.openstack.org">openstack</a> repos in a sub directory from my standard <code>~/repo/</code> directory. I wanted to figure out a way to check all the active branches that I had  checked out; and it turns out that it was hellva a lot more challanging that expected.</p>
+
+<p>As a sysadmin, you probably say ok, <code>git branch | awk '/\*/ { print $2; }'</code> seems ok, but man that&rsquo;s a bitch to write.</p>
+
+<p>Leveraging a little bit of googling <code>git rev-parse --abbrev-ref HEAD</code> appeared which does the exact same. Odd that there
+isn&rsquo;t easier command.</p>
+
+<p>So putting it all together I come up with something like the following to tell me what the active branch is for each of
+my repos. This is a quick one liner that does the trick for me.</p>
+
+<p><code>shell
+for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Omnibus so you dont get hit by the bus]]></title>
@@ -132,105 +155,6 @@ software publisher&rsquo;s website.
 A quick fix would be to blow away your</code>Gemfile.lock<code>and run another</code>bundle install`.</p>
 
 <p>So here&rsquo;s some notes on Omnibus, I&rsquo;ll probably add more as time progresses, but this is at least a start!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[hubot mysql cli-table tutorial]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
-    <updated>2014-06-24T13:09:23-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
-    <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
-
-<p>```js</p>
-
-<pre><code>sql = "select name, id from mydatabase"
-sql = mysql.format(sql)
-connection.query sql, (err, results) -&gt;
-  throw err if err
-  for row in results
-    msg.send row
-</code></pre>
-
-<p>```</p>
-
-<p>So you&rsquo;ve probably noticed that it comes out HORRIBLY. This tutorial will leverage the <a href="https://www.npmjs.org/package/cli-table">cli-table npm</a> so it <em>should</em> look
-something like:</p>
-
-<p><code>
-//╔══════╤═════╤══════╗
-//║ foo  │ bar │ baz  ║
-//╟──────┼─────┼──────╢
-//║ frob │ bar │ quuz ║
-//╚══════╧═════╧══════╝
-</code></p>
-
-<p>So lets make this happen.  First off just like the mysql plugin you&rsquo;ll need to add something like this to your <code>package.json</code>.</p>
-
-<p>```json
-&ldquo;dependencies&rdquo;: {</p>
-
-<pre><code>...
-"cli-table": "latest",
-...
-}
-</code></pre>
-
-<p>```</p>
-
-<p>After this you need to create an object like the mysql plugin&hellip;</p>
-
-<p><code>js
-Table = require "cli-table"
-</code></p>
-
-<p>Now you have <code>Table</code> available to you so you can leverage it to make the tables.  First thing you need to do is create the actual table which is this line:</p>
-
-<p>```js</p>
-
-<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
-</code></pre>
-
-<p>```</p>
-
-<p>Then at the <code>connection.query</code> line you&rsquo;ll want to push the rows into the table loop through them then in <em>one</em> message push it out, which is what the next snippet
-does.</p>
-
-<p>```js</p>
-
-<pre><code>connection.query sql, (err, results) -&gt;
-  throw err if err
-  for row in results
-    table.push [row.id, row.name]
-  msg.send table.toString()
-</code></pre>
-
-<p>```</p>
-
-<p>So the full thing would be something like the following:</p>
-
-<p>```js
-  robot.respond /database user id$/i, (msg) &ndash;></p>
-
-<pre><code>table = new Table({head: ['id', 'name'], style: {head:[], border:[], 'padding-left':1, 'padding-right': 1 }})
-msg.send "Looking on your names and ids"
-
-connection = mysql.createConnection
-  host: 'mydbhostname'
-  user: 'mydbuseraccount'
-  password: process.env.DB_PASSWORD
-
-sql = "SELECT id, name, FROM mydatabase"
-
-connection.query sql, (err, results) -&gt;
-  throw err if err
-  for row in results
-    table.push [row.id, row.name]
-  msg.send table.toString()
-</code></pre>
-
-<p>```
-And boom, you now have a nice readable outputted chart that hubot can answer for you when you need. :)</p>
 ]]></content>
   </entry>
   

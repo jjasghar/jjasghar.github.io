@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: openstack | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/openstack/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2014-09-25T16:25:17-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Checking active branch in multiple repos]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
+    <updated>2014-09-25T14:35:07-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
+    <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
+Trying to figure out what branch I left checked out can be&hellip;well frustrating.
+I put all my <a href="http://www.openstack.org">openstack</a> repos in a sub directory from my standard <code>~/repo/</code> directory. I wanted to figure out a way to check all the active branches that I had  checked out; and it turns out that it was hellva a lot more challanging that expected.</p>
+
+<p>As a sysadmin, you probably say ok, <code>git branch | awk '/\*/ { print $2; }'</code> seems ok, but man that&rsquo;s a bitch to write.</p>
+
+<p>Leveraging a little bit of googling <code>git rev-parse --abbrev-ref HEAD</code> appeared which does the exact same. Odd that there
+isn&rsquo;t easier command.</p>
+
+<p>So putting it all together I come up with something like the following to tell me what the active branch is for each of
+my repos. This is a quick one liner that does the trick for me.</p>
+
+<p><code>shell
+for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

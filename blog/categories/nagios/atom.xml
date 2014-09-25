@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nagios | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/nagios/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-08-26T12:13:44-05:00</updated>
+  <updated>2014-09-25T16:25:17-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -43,28 +43,6 @@ exit $stateid
 ```</p>
 
 <p>You are probably wondering &ldquo;There are alot of great systems checks on <a href="http://exchange.nagios.org/">Nagios Exchange</a>,&rdquo; but the site is so hard to use and useally much more than I need, like in this case.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
-    <updated>2013-10-05T16:06:00-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
-    <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
-
-<p>Now this this is specific to  the nagios setup I have, but the <code>objects.cache</code> is what controls this.</p>
-
-<p><code>bash
-root@boe:/tmp# rm /var/cache/nagios3/objects.cache
-root@boe:/tmp# service nagios restart
-Running configuration check…done.
-Stopping nagios: .done.
-Starting nagios: done.
-root@boe:/tmp# cd /var/cache/nagios3
-root@boe:/var/cache/nagios3# ls
-objects.cache  status.dat
-</code></p>
 ]]></content>
   </entry>
   

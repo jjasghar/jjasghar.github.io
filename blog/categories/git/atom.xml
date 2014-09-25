@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-08-26T12:13:44-05:00</updated>
+  <updated>2014-09-25T16:25:17-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -14,13 +14,36 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Checking active branch in multiple repos]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
+    <updated>2014-09-25T14:35:07-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
+    <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
+Trying to figure out what branch I left checked out can be&hellip;well frustrating.
+I put all my <a href="http://www.openstack.org">openstack</a> repos in a sub directory from my standard <code>~/repo/</code> directory. I wanted to figure out a way to check all the active branches that I had  checked out; and it turns out that it was hellva a lot more challanging that expected.</p>
+
+<p>As a sysadmin, you probably say ok, <code>git branch | awk '/\*/ { print $2; }'</code> seems ok, but man that&rsquo;s a bitch to write.</p>
+
+<p>Leveraging a little bit of googling <code>git rev-parse --abbrev-ref HEAD</code> appeared which does the exact same. Odd that there
+isn&rsquo;t easier command.</p>
+
+<p>So putting it all together I come up with something like the following to tell me what the active branch is for each of
+my repos. This is a quick one liner that does the trick for me.</p>
+
+<p><code>shell
+for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Learning git realizing that I know nothing]]></title>
     <link href="http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/"/>
     <updated>2013-12-17T13:56:00-06:00</updated>
     <id>http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing</id>
     <content type="html"><![CDATA[<p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
 
-<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/1ffBJ4sVUb4 "></iframe></div></p>
+<p>{% youtube 1ffBJ4sVUb4 %}</p>
 
 <p>I strongly suggest taking the 99ish mins to watch it, it&rsquo;s a great tutorial, with great visual examples.</p>
 

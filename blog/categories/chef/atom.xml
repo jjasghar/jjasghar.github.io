@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-08-26T12:13:44-05:00</updated>
+  <updated>2014-09-25T16:25:17-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -191,84 +191,6 @@ in this case chef for windows.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Update to the chef error that has haunted me]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
-    <updated>2014-03-19T16:45:03-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
-    <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
-
-<p>```</p>
-
-<h2>Chef::Exceptions::ContentLengthMismatch</h2>
-
-<p>Response body length 164 does not match HTTP Content-Length header 206.
-```</p>
-
-<p>I moved chef servers and didn&rsquo;t change my <code>s3_url_ttl</code> and ran into this issue. So the annoying 403&rsquo;s are now something about <code>HTTP Content-Length</code>.</p>
-
-<p>If you&rsquo;ve forgotten the fix is:
-```bash
-[~] % sudo vim /etc/chef-server/chef-server.rb</p>
-
-<h1>add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger&hellip;maybe 1800?</h1>
-
-<p>[~] % sudo chef-server-ctl reconfigure
-```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Help! I lost my vaildation.pem]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
-    <updated>2014-03-18T16:39:04-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
-    <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
-chef 11 server.</p>
-
-<p>(OK, fine I broke them, but this post is how to recreate either with <code>knife</code> on your workstation incase <strong>cough</strong>like me<strong>cough</strong> you have lost your chef-webui.)</p>
-
-<p>It turns out there is a great simple command to re-create your validation.pem.</p>
-
-<p>Note: This can also work as <code>validator.pem</code> also, but my code checks for <code>validation.pem</code></p>
-
-<p>```bash
-[~] % knife client reregister chef-validator</p>
-
-<h1>or if you want to name it and save it&hellip;.</h1>
-
-<p>[~] % knife client reregister chef-validator -f validaton.pem
-```</p>
-
-<p>The first one will spit out the new <code>.pem</code> you&rsquo;ll need to copy it to a file otherwise you&rsquo;ll just have to do run the command again. This/these commands are the equivalent of the <code>https://&lt;chefserver&gt;/clients/chef-validator/edit</code> and clicking that
-&ldquo;Regenerate Private Key (Existing one will no longer work!).&rdquo;</p>
-
-<p>Pretty straight forward eh?</p>
-
-<p>On the other hand, if you&rsquo;ve broken you chef-webui, and you see something like&hellip;.</p>
-
-<p><code>
-2014-03-18_21:31:54.98838 Chef::Exceptions::PrivateKeyMissing: I cannot read /etc/chef-server/chef-webui.pem, which you told me to use to sign requests!
-2014-03-18_21:31:54.98840 {:request_params=&gt;
-2014-03-18_21:31:54.98840   {"utf8"=&gt;"✓",
-2014-03-18_21:31:54.98841    "authenticity_token"=&gt;"uSheCVhYuGJPBAyDBHb4AIyEfkB2EqXwLD6Uolk//ig=",
-2014-03-18_21:31:54.98841    "name"=&gt;"admin",
-2014-03-18_21:31:54.98841    "commit"=&gt;"login",
-2014-03-18_21:31:54.98842    "password"=&gt;"p@ssw0rd1",
-2014-03-18_21:31:54.98842    "action"=&gt;"login_exec",
-2014-03-18_21:31:54.98842    "controller"=&gt;"users"}}
-</code></p>
-
-<p>In your <code>/var/log/chef-server/chef-server-webui/current</code> then the fix is pretty straight forward:</p>
-
-<p><code>bash
-[~] % knife client reregister chef-webui
-[~] % #scp it up to your chef box
-chef# chown root.root /etc/chef-server/chef-webui.pem
-</code></p>
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[chef-book lighting talk]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
     <updated>2014-02-28T10:52:08-06:00</updated>
@@ -277,6 +199,137 @@ chef# chown root.root /etc/chef-server/chef-webui.pem
 five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
 
 <p>PS, I apologize for the quality.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[.kitchen.local.yml and when you want to use it]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
+    <updated>2014-02-17T15:32:20-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
+    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol' <a href="https://twitter.com/fnichol">Fletcher</a>
+made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
+cookbooks, and I wanted to start leveraging what I just paid for.</p>
+
+<p>So take this <code>.kitchen.yml</code> for instance:</p>
+
+<h2>```</h2>
+
+<p>driver:
+  name: vagrant</p>
+
+<p>provisioner:
+  name: chef_solo</p>
+
+<p>platforms:
+  &ndash; name: ubuntu-12.04</p>
+
+<p>suites:
+  &ndash; name: default</p>
+
+<pre><code>run_list:
+  - recipe[hubot-solo::default]
+attributes:
+</code></pre>
+
+<p>```</p>
+
+<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
+
+<h2>```</h2>
+
+<p>driver:
+  name: vagrant
+  provider: vmware_fusion</p>
+
+<p>provisioner:
+  name: chef_solo</p>
+
+<p>platforms:
+  &ndash; name: ubuntu-12.04</p>
+
+<p>suites:
+  &ndash; name: default</p>
+
+<pre><code>run_list:
+  - recipe[hubot-solo::default]
+attributes:
+</code></pre>
+
+<p>```</p>
+
+<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
+
+<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
+
+<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
+the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
+
+<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
+but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
+
+<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[chef handler why did it take a year for me to use you]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/"/>
+    <updated>2014-02-07T15:24:54-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you</id>
+    <content type="html"><![CDATA[<p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
+
+<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
+
+<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
+
+<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
+
+<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
+and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
+there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
+in a good state.</p>
+
+<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
+
+<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
+
+<p>```ruby
+chef_gem &ldquo;chef-handler-mail&rdquo;
+gem &ldquo;chef-handler-mail&rdquo;</p>
+
+<p>chef_handler &ldquo;MailHandler&rdquo; do
+   source &lsquo;chef/handler/mail&rsquo;
+   arguments :to_address => &ldquo;root&rdquo;
+   action :nothing
+end.run_action(:enable)
+```
+As you can see it&rsquo;s pretty straight forward.</p>
+
+<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
+first main internal recipe:</p>
+
+<p>```ruby
+include_recipe &lsquo;chef_handler&rsquo;</p>
+
+<p>chef_gem &ldquo;chef-handler-campfire&rdquo; do
+  action :install
+end</p>
+
+<p>chef_handler &lsquo;Chef::Handler::Campfire&rsquo; do
+  action :enable
+  arguments [ &lsquo;SUBDOMAIN&rsquo;, &lsquo;TOKEN&rsquo; , &lsquo;ROOM&rsquo; ]
+  source File.join(Gem.all_load_paths.grep(/chef-handler-campfire/).first,</p>
+
+<pre><code>               'chef', 'handler', 'campfire.rb')
+</code></pre>
+
+<p>end
+```</p>
+
+<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
+
+<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
 ]]></content>
   </entry>
   
