@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="If you use the nagios cookbook, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef &hellip;">
+  <meta name="description" content="I went to #chef on freenode and maek helped me out. Here’s a run down of how to fix it. Alas the gists are gone; sorry. :( If you play with open &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,122 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/05/how-to-fix-https-slash-slash-chef-defaulting-running-chef-client-on-open-source-chef-server/">How to Fix Https://chef Defaulting Running Chef Client on Open Source Chef Server</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-05T16:59:00-05:00" pubdate data-updated="true">Oct 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I went to #chef on freenode and maek helped me out.  Here’s a run down of how to fix it. Alas the gists are gone; sorry. :(</p>
+
+<p>If you play with open source chef you might run into this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>18:42 j^2 so i’m having trouble with chef-client
+</span><span class='line'>18:42 j^2 why does it default to https://chef/blahblah?
+</span><span class='line'>18:43 j^2 example:
+</span><span class='line'>18:43 j^2 https://gist.github.com/jjasghar/5873e421a7f8365194e3
+</span><span class='line'>18:44 j^2 any advice?
+</span><span class='line'>18:44 j^2 i guess i could add it to /etc/hosts, but i’d like it to use the chef_server_url is that the point of it?
+</span><span class='line'>18:45 maek j^2:  I just got hit with this also
+</span><span class='line'>18:45 maek i think becuase chef 11 is now fronted with nginx
+</span><span class='line'>18:45 maek its doing a rewrite
+</span><span class='line'>18:45 maek for the name configured in nginx
+</span><span class='line'>18:45 maek in this case its hostname
+</span><span class='line'>18:45 maek but i assume that box cant resolve chef
+</span><span class='line'>18:46 j^2 lame
+</span><span class='line'>18:46 maek j^2:  I had to end up adding a hosts entry
+</span><span class='line'>18:46 maek while I wait for dns
+</span><span class='line'>18:46 maek I think you could do
+</span><span class='line'>18:46 j^2 yeah that seems like the only option but it’s stuff dumb :(
+</span><span class='line'>18:47 maek you could reconfigure chef
+</span><span class='line'>18:47 maek to use its ip
+</span><span class='line'>18:47 maek instead of its hostname
+</span><span class='line'>18:47 j^2 tried the ip in chef_server_url didnt work either; wait you mean nginx?
+</span><span class='line'>18:48 @ssd7 maek: Re your question above. I believe you should be able to edit bookshelf[‘vip’] in your config and the run a reconfigure
+</span><span class='line'>18:48 maek i dont see it htought
+</span><span class='line'>18:48 j^2 oh!
+</span><span class='line'>18:48 maek default[‘chef_server’][‘bookshelf’][‘vip’] = node[‘fqdn’]
+</span><span class='line'>18:48 j^2 nice looking
+</span><span class='line'>18:48 maek yeah
+</span><span class='line'>18:48 maek there it is</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or you can do this also, I believe this is how I fixed it myself.:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>18:48 maek so you can do
+</span><span class='line'>18:49 maek in /etc/chef-server/chef-server.rb
+</span><span class='line'>18:49 maek bookshelf[‘vip’] = ‘192.168.1.1’
+</span><span class='line'>18:50 j^2 yeah i dont thave that file. :(
+</span><span class='line'>18:50 maek and run chef-server-ctl reconfigure
+</span><span class='line'>18:50 j^2 ah cool
+</span><span class='line'>18:50 maek its for overrides
+</span><span class='line'>18:50 maek just make it</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -971,97 +1087,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/09/nagios-status-rackspace/">Nagios-status-rackspace</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-09T15:05:00-05:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I posted a <a href="http://redd.it/1gefnf">this</a> on <a href="http://www.reddit.com/r/sysadmin">/r/sysadmin/</a> back on 6/15/13.  I wanted to put some context around why I created the nagios checks and why the <a href="https://status.rackspace.com/index/rss">RSS</a> after all that discussion still didn&rsquo;t fulfill my requirements.</p>
-
-<p>The biggest problem I have with the RSS feed is that it is everything inside the rackspace status page.  As I said to <a href="http://www.reddit.com/user/rackerkev">/u/rackerkev</a>; as a customer in ORD I don&rsquo;t want to be paged or alerted when something in LON happens.  This seems be the default for the RSS feed, a water hose of what that status page says.</p>
-
-<p>After our account manager suggested us to check <a href="http://status.rackspace.com">http://status.rackspace.com</a> a developer on my team asked if there was an automated way to check this.  I ran a quick <code>curl http://status.rackspace.com</code> and discovered it&rsquo;s flat html.  Boom, I had a way to get the data, I just needed a way to parse it.</p>
-
-<p>I had a default nagios check template and all I had to do was put that <code>curl</code> in to parse it out.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">stateid</span><span class="o">=</span>
-</span><span class='line'><span class="nv">SOMECMD</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="s2">&quot;something&quot;</span>
-</span><span class='line'><span class="nv">SOMETHING</span><span class="o">=</span>something
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> <span class="o">==</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> is something
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>0
-</span><span class='line'><span class="c">#elif [  &quot;${SOMECMD}&quot; == ${SOMETHING} ];</span>
-</span><span class='line'><span class="c">#  then</span>
-</span><span class='line'><span class="c">#  echo This is a Warning</span>
-</span><span class='line'><span class="c">#  stateid=1</span>
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;${SOMECMD}&quot;</span> !<span class="o">=</span> <span class="k">${</span><span class="nv">SOMETHING</span><span class="k">}</span> <span class="o">]</span>;
-</span><span class='line'> <span class="k">then</span>
-</span><span class='line'><span class="k">   </span><span class="nb">echo </span>Something is broken!
-</span><span class='line'>   <span class="nv">stateid</span><span class="o">=</span>2
-</span><span class='line'> <span class="k">fi</span>
-</span><span class='line'><span class="nb">exit</span> <span class="nv">$stateid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I don&rsquo;t think this actually works, but hell you get the point.</p>
-
-<p>So with some patience using <code>sed</code> and <code>grep</code> I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about &ldquo;You should write it as one script and then add flags or variables at the end.&rdquo; I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have <code>curl</code> installed and write the command stanza, like my suggestion in the <a href="https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md">README.md</a> you should be off to the races.</p>
-
-<p>Now something interesting I learned posting these checks.  The quote that says &ldquo;rackspace only updates the status page if enough customers complain about some problem some place&rdquo; is true.  There is no automated update to the status page, it requires human intervention to update.  When I first heard of the status page, I like most though it was programmatic way to see into rackspace infrastructure.  This makes me a sad panda; and as I have learned the best way to get anything done with rackspace is to call yell and yell more.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1079,6 +1104,10 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
       </li>
     
@@ -1092,10 +1121,6 @@ You come in at a new job, you have the initial &ldquo;Hey newguy, here&rsquo;s y
     
       <li class="post">
         <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
       </li>
     
   </ul>

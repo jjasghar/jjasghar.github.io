@@ -9,7 +9,10 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my validation.pem and my chef-webui.pem&hellip;went missing &hellip;">
+  <meta name="description" content="So it seems that with release of chef-client 11.10 the 403 error have&hellip;morphed. Now they look something like: 1
+2
+3
+Chef::Exceptions:: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +81,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-19T16:45:03-05:00" pubdate data-updated="true">Mar 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Chef::Exceptions::ContentLengthMismatch
+</span><span class='line'>---------------------------------------
+</span><span class='line'>Response body length 164 does not match HTTP Content-Length header 206.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I moved chef servers and didn&rsquo;t change my <code>s3_url_ttl</code> and ran into this issue. So the annoying 403&rsquo;s are now something about <code>HTTP Content-Length</code>.</p>
+
+<p>If you&rsquo;ve forgotten the fix is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
+</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
+</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -938,105 +998,6 @@ oversight.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/20/a-chef-error-that-has-haunted-me/">A Chef Error That Has Haunted Me</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-20T15:42:33-06:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ok, you may have seen this before:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>   <span class="o">*</span> <span class="n">cookbook_file</span><span class="o">[</span><span class="sr">/etc/ini</span><span class="n">t</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">apache2</span><span class="o">]</span> <span class="n">action</span> <span class="n">create</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="no">Error</span> <span class="n">executing</span> <span class="n">action</span> <span class="sb">`create`</span> <span class="n">on</span> <span class="n">resource</span> <span class="s1">&#39;cookbook_file[/etc/init.d/apache2]&#39;</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="ss">Net</span><span class="p">:</span><span class="ss">:HTTPServerException</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">------------------------</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="mi">403</span> <span class="s2">&quot;Forbidden&quot;</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
-
-<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
-
-<p>The gist of this:</p>
-
-<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl&#8221; value from 900 seconds to required time interval</p></blockquote>
-
-<p>So the fix is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
-</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
-</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Boom, you should be good now. No more damn 403s.</p>
-
-<h1>Update!</h1>
-
-<p>So it seems that with release of <code>11.10</code> the 403 error has&hellip;morphed. Now it looks something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Chef::Exceptions::ContentLengthMismatch
-</span><span class='line'>---------------------------------------
-</span><span class='line'>Response body length 164 does not match HTTP Content-Length header 206.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>I have a post about it from 2014-03-19</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1054,6 +1015,10 @@ oversight.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
       </li>
     
@@ -1067,10 +1032,6 @@ oversight.</p>
     
       <li class="post">
         <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
       </li>
     
   </ul>

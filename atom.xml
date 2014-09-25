@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-08-26T12:13:44-05:00</updated>
+  <updated>2014-09-25T16:37:05-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Checking Active Branch in Multiple Repos]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
+    <updated>2014-09-25T14:35:07-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
+    <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
+Trying to figure out what branch I left checked out can be&hellip;well frustrating.
+I put all my <a href="http://www.openstack.org">openstack</a> repos in a sub directory from my standard <code>~/repo/</code> directory. I wanted to figure out a way to check all the active branches that I had  checked out; and it turns out that it was hellva a lot more challanging that expected.</p>
+
+<p>As a sysadmin, you probably say ok, <code>git branch | awk '/\*/ { print $2; }'</code> seems ok, but man that&rsquo;s a bitch to write.</p>
+
+<p>Leveraging a little bit of googling <code>git rev-parse --abbrev-ref HEAD</code> appeared which does the exact same. Odd that there
+isn&rsquo;t easier command.</p>
+
+<p>So putting it all together I come up with something like the following to tell me what the active branch is for each of
+my repos. This is a quick one liner that does the trick for me.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">for </span>i in *; <span class="k">do </span><span class="nb">cd</span> <span class="nv">$i</span> ; <span class="nb">pwd</span>; git rev-parse --abbrev-ref HEAD ; <span class="nb">cd</span> ../ ; <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[In Honor of Greg]]></title>
@@ -1407,78 +1431,6 @@ oversight.</p>
 <p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
 
 <p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Chef Error That Has Haunted Me]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
-    <updated>2014-01-20T15:42:33-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
-    <content type="html"><![CDATA[<p>Ok, you may have seen this before:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>   <span class="o">*</span> <span class="n">cookbook_file</span><span class="o">[</span><span class="sr">/etc/ini</span><span class="n">t</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">apache2</span><span class="o">]</span> <span class="n">action</span> <span class="n">create</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="no">Error</span> <span class="n">executing</span> <span class="n">action</span> <span class="sb">`create`</span> <span class="n">on</span> <span class="n">resource</span> <span class="s1">&#39;cookbook_file[/etc/init.d/apache2]&#39;</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">================================================================================</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="ss">Net</span><span class="p">:</span><span class="ss">:HTTPServerException</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="o">------------------------</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span> <span class="mi">403</span> <span class="s2">&quot;Forbidden&quot;</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span><span class='line'><span class="mi">23</span><span class="o">.</span><span class="mi">987</span><span class="o">.</span><span class="mi">33</span><span class="o">.</span><span class="mi">854</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>NOTE: Yes, that is a fake ip, and yes that server Exception isn&rsquo;t tied just to apache2.</p>
-
-<p>If you have, you know my pain.  Turns out there is a <a href="https://tickets.opscode.com/browse/CHEF-4253">ticket</a> on this and also a couple <a href="http://sanketdangi.com/post/50897416859/chef-errors-and-their-solutions">blog posts</a> also.</p>
-
-<p>The gist of this:</p>
-
-<blockquote><p>This error is encountered when we have large chef recipes whose deployment time on clients is large than 15 minutes. In order to avoid this error, please increase “s3_url_ttl&#8221; value from 900 seconds to required time interval</p></blockquote>
-
-<p>So the fix is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
-</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
-</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Boom, you should be good now. No more damn 403s.</p>
-
-<h1>Update!</h1>
-
-<p>So it seems that with release of <code>11.10</code> the 403 error has&hellip;morphed. Now it looks something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>Chef::Exceptions::ContentLengthMismatch
-</span><span class='line'>---------------------------------------
-</span><span class='line'>Response body length 164 does not match HTTP Content-Length header 206.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>I have a post about it from 2014-03-19</p>
 ]]></content>
   </entry>
   

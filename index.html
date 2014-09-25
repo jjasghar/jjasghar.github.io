@@ -9,8 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="A good friend of mine started his own blog and posted an interesting easter egg.
-Being a jealous nerd I had to find something related to chef that &hellip;">
+  <meta name="description" content="I have a bunch of repos that I have to watch over and make patches against.
+Trying to figure out what branch I left checked out can be&hellip;well &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,57 @@ Being a jealous nerd I had to find something related to chef that &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-25T14:35:07-05:00" pubdate data-updated="true">Sep 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
+Trying to figure out what branch I left checked out can be&hellip;well frustrating.
+I put all my <a href="http://www.openstack.org">openstack</a> repos in a sub directory from my standard <code>~/repo/</code> directory. I wanted to figure out a way to check all the active branches that I had  checked out; and it turns out that it was hellva a lot more challanging that expected.</p>
+
+<p>As a sysadmin, you probably say ok, <code>git branch | awk '/\*/ { print $2; }'</code> seems ok, but man that&rsquo;s a bitch to write.</p>
+
+<p>Leveraging a little bit of googling <code>git rev-parse --abbrev-ref HEAD</code> appeared which does the exact same. Odd that there
+isn&rsquo;t easier command.</p>
+
+<p>So putting it all together I come up with something like the following to tell me what the active branch is for each of
+my repos. This is a quick one liner that does the trick for me.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">for </span>i in *; <span class="k">do </span><span class="nb">cd</span> <span class="nv">$i</span> ; <span class="nb">pwd</span>; git rev-parse --abbrev-ref HEAD ; <span class="nb">cd</span> ../ ; <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1074,63 +1125,6 @@ be focused on your present screen and have the tests being run with a pop up.</p
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/">Update to the Chef Error That Has Haunted Me</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-19T16:45:03-05:00" pubdate data-updated="true">Mar 19<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Chef::Exceptions::ContentLengthMismatch
-</span><span class='line'>---------------------------------------
-</span><span class='line'>Response body length 164 does not match HTTP Content-Length header 206.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I moved chef servers and didn&rsquo;t change my <code>s3_url_ttl</code> and ran into this issue. So the annoying 403&rsquo;s are now something about <code>HTTP Content-Length</code>.</p>
-
-<p>If you&rsquo;ve forgotten the fix is:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo vim /etc/chef-server/chef-server.rb
-</span><span class='line'><span class="c"># add this line: erchef[‘s3_url_ttl’] = 900 where 900 is something larger...maybe 1800?</span>
-</span><span class='line'><span class="o">[</span>~<span class="o">]</span> % sudo chef-server-ctl reconfigure
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1146,6 +1140,10 @@ be focused on your present screen and have the tests being run with a pop up.</p
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
       </li>
     
@@ -1159,10 +1157,6 @@ be focused on your present screen and have the tests being run with a pop up.</p
     
       <li class="post">
         <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/11/managing-windows-servers-with-chef/">Managing Windows Servers With Chef</a>
       </li>
     
   </ul>

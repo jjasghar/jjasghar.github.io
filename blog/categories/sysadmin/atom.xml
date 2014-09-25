@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-09-25T16:36:51-05:00</updated>
+  <updated>2014-09-25T16:37:05-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -30,7 +30,7 @@ isn&rsquo;t easier command.</p>
 <p>So putting it all together I come up with something like the following to tell me what the active branch is for each of
 my repos. This is a quick one liner that does the trick for me.</p>
 
-<p><code>shell
+<p><code>bash
 for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
 </code></p>
 ]]></content>
