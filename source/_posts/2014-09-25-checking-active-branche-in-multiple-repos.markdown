@@ -18,6 +18,6 @@ isn't easier command.
 So putting it all together I come up with something like the following to tell me what the active branch is for each of
 my repos. This is a quick one liner that does the trick for me.
 
-```shell
+```bash
 for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
 ```
