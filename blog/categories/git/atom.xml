@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-09-25T16:37:05-05:00</updated>
+  <updated>2014-10-13T16:02:36-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[git rebase and git detached head cheat sheet]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/"/>
+    <updated>2014-10-13T15:19:30-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet</id>
+    <content type="html"><![CDATA[<h2>git rebasing or fixing an auto merge conflict</h2>
+
+<p>In my adventures with openstack and gerrit reviews I sometimes see something to the effect of: <em>Patch in Merge Conflict</em></p>
+
+<p>This makes me very sad. I hate these things, and to quote Mark Vanderwiel, it&rsquo;s basically like someone snuck in a change before you.</p>
+
+<p>We had a great conversation about it <a href="http://youtu.be/wsWj_NQJKI0?t=3m50s">here</a> for about 3 mins, but if you want a tl;dw (watch) it&rsquo;s this:
+<code>bash
+$ git remote update
+$ git checkout master
+$ git pull
+$ git checkout $BRANCH_THAT_YOUR_FIXING
+$ git rebase master
+$ # Fix any conflicts that should pop up
+$ git add $ANY_CONFLICTS
+$ git rebase --continue
+$ git commit --amend
+$ git review -R
+</code>
+It looks like a lot, but all in all not bad at all. The rebasing might look scary but walk through each conflict, edit it and add it back you should be fine.</p>
+
+<h2>Detached head what the hell does that mean?</h2>
+
+<p>If you continue watching that video we start to talk about detached heads. If you have played in the openstack/gerrit world you&rsquo;ll notice a copy paste off a review by download, something like:
+<code>bash
+$ git fetch https://review.openstack.org/stackforge/cookbook-openstack-client refs/changes/65/126365/9 &amp;&amp; git checkout FETCH_HEAD
+</code>
+Needless to say this is confusing as all hell. Not to mention when you finish it is says something like:</p>
+
+<p>```bash
+You are in &lsquo;detached HEAD&rsquo; state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.</p>
+
+<p>If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:</p>
+
+<p>  git checkout -b new_branch_name</p>
+
+<p>HEAD is now at 789cb70&hellip; Initial Commit of the cookbook-openstack-client
+```</p>
+
+<p>Seriously what the hell does this mean? Luckily it&rsquo;s actually not a bad thing at all. If you watch from <a href="http://youtu.be/wsWj_NQJKI0?t=8m10s">here</a> for about 2 minutes you&rsquo;ll see us talk about it. The short of it is, you&rsquo;ve pulled down the patch, but it&rsquo;s not attached (detached) to your local master/other branch. When you do the <code>git checkout -b branch_name</code> off of master/other branch, it connects it up so it&rsquo;s no longer detached.</p>
+
+<p>After saying it out loud, or typing it out as i just did, it makes sense, but surprisingly no one ever told me such a simple concept. I hope this helps someone down the line.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Checking active branch in multiple repos]]></title>

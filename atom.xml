@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-09-25T16:37:05-05:00</updated>
+  <updated>2014-10-13T16:02:36-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,84 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Git Rebase and Git Detached Head Cheat Sheet]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/"/>
+    <updated>2014-10-13T15:19:30-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet</id>
+    <content type="html"><![CDATA[<h2>git rebasing or fixing an auto merge conflict</h2>
+
+<p>In my adventures with openstack and gerrit reviews I sometimes see something to the effect of: <em>Patch in Merge Conflict</em></p>
+
+<p>This makes me very sad. I hate these things, and to quote Mark Vanderwiel, it&rsquo;s basically like someone snuck in a change before you.</p>
+
+<p>We had a great conversation about it <a href="http://youtu.be/wsWj_NQJKI0?t=3m50s">here</a> for about 3 mins, but if you want a tl;dw (watch) it&rsquo;s this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git remote update
+</span><span class='line'><span class="nv">$ </span>git checkout master
+</span><span class='line'><span class="nv">$ </span>git pull
+</span><span class='line'><span class="nv">$ </span>git checkout <span class="nv">$BRANCH_THAT_YOUR_FIXING</span>
+</span><span class='line'><span class="nv">$ </span>git rebase master
+</span><span class='line'><span class="nv">$ </span><span class="c"># Fix any conflicts that should pop up</span>
+</span><span class='line'><span class="nv">$ </span>git add <span class="nv">$ANY_CONFLICTS</span>
+</span><span class='line'><span class="nv">$ </span>git rebase --continue
+</span><span class='line'><span class="nv">$ </span>git commit --amend
+</span><span class='line'><span class="nv">$ </span>git review -R
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It looks like a lot, but all in all not bad at all. The rebasing might look scary but walk through each conflict, edit it and add it back you should be fine.</p>
+
+<h2>Detached head what the hell does that mean?</h2>
+
+<p>If you continue watching that video we start to talk about detached heads. If you have played in the openstack/gerrit world you&rsquo;ll notice a copy paste off a review by download, something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git fetch https://review.openstack.org/stackforge/cookbook-openstack-client refs/changes/65/126365/9 <span class="o">&amp;&amp;</span> git checkout FETCH_HEAD
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Needless to say this is confusing as all hell. Not to mention when you finish it is says something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>You are in <span class="s1">&#39;detached HEAD&#39;</span> state. You can look around, make experimental
+</span><span class='line'>changes and commit them, and you can discard any commits you make in this
+</span><span class='line'>state without impacting any branches by performing another checkout.
+</span><span class='line'>
+</span><span class='line'>If you want to create a new branch to retain commits you create, you may
+</span><span class='line'><span class="k">do </span>so <span class="o">(</span>now or later<span class="o">)</span> by using -b with the checkout <span class="nb">command </span>again. Example:
+</span><span class='line'>
+</span><span class='line'>  git checkout -b new_branch_name
+</span><span class='line'>
+</span><span class='line'>HEAD is now at 789cb70... Initial Commit of the cookbook-openstack-client
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Seriously what the hell does this mean? Luckily it&rsquo;s actually not a bad thing at all. If you watch from <a href="http://youtu.be/wsWj_NQJKI0?t=8m10s">here</a> for about 2 minutes you&rsquo;ll see us talk about it. The short of it is, you&rsquo;ve pulled down the patch, but it&rsquo;s not attached (detached) to your local master/other branch. When you do the <code>git checkout -b branch_name</code> off of master/other branch, it connects it up so it&rsquo;s no longer detached.</p>
+
+<p>After saying it out loud, or typing it out as i just did, it makes sense, but surprisingly no one ever told me such a simple concept. I hope this helps someone down the line.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Checking Active Branch in Multiple Repos]]></title>
@@ -1341,96 +1419,6 @@ first main internal recipe:</p>
 oversight.</p>
 
 <p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Boxen Is Neat but Man Chef-solo Was So Much Easier]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
-    <updated>2014-01-25T00:24:28-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
-    <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
-
-<p>So, yeah, you can tell I was pretty impressed with it right?</p>
-
-<p>Well from a guy that uses <a href="http://getchef.com">chef</a> day in and day out, using it in a real life scenario it was a nightmare.</p>
-
-<p>First off, I can understand some of the choices they made; like putting everything in <code>/opt/boxen</code>. Alas the disadvantage is that well EVERYTHING is in <code>/opt/boxen</code>. My company leverages <a href="http://brew.sh/">homebrew</a> for all our base development software, and it seems that boxen installs the binary at <code>/opt/boxen/homebrew</code>. This in turn confuses the hell out of the seasoned admin AND the new person developer trying just do a simple <code>brew install &lt;someapp&gt;</code>. No joke, I spent 2-3 hours trying to figure out why boxen said homebrew was installed but I couldn&rsquo;t simplify just use <code>brew</code>. I ended up symlinking like crazy not realizing that I hand to <code>source /opt/boxen/script/env.sh</code>.  Turns out it seems I completely missed that small note in the docs/wrapper script, saying you need to source it. <em>sigh</em></p>
-
-<p>Along with that nasty turn, one of the selling points was my ability to <code>git clone</code> down my companies code from Github. Yeah that didn&rsquo;t work at all. I forgot how hard it was to make a damn directory with puppet, then to use the <a href="https://github.com/boxen/puppet-repository">puppet-repository</a> and have it fall on it&rsquo;s face only frustrated me even farther. Strike two boxen, strike two.</p>
-
-<p>The final strike came pretty simply but I didn&rsquo;t realize how much of a pain it was. The <a href="https://github.com/boxen/puppet-mysql">puppet-mysql</a> runs it&rsquo;s socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his <code>database.yml</code> and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;%</span>
-</span><span class='line'>  <span class="n">socket</span> <span class="o">=</span> <span class="o">[</span>
-</span><span class='line'>    <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_SOCKET&quot;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;/var/run/mysql5/mysqld.sock&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;/tmp/mysql.sock&quot;</span>
-</span><span class='line'>  <span class="o">].</span><span class="n">detect</span> <span class="p">{</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span> <span class="o">&amp;&amp;</span> <span class="no">File</span><span class="o">.</span><span class="n">exist?</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">port</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s2">&quot;BOXEN_MYSQL_PORT&quot;</span><span class="o">]</span> <span class="o">||</span> <span class="s2">&quot;3306&quot;</span>
-</span><span class='line'><span class="sx">%&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sx">development: &amp;development</span>
-</span><span class='line'><span class="sx">  adapter: mysql</span>
-</span><span class='line'><span class="sx">  database: yourapp_development</span>
-</span><span class='line'><span class="sx">  username: root</span>
-</span><span class='line'><span class="sx">&lt;% if socket %&gt;</span>
-</span><span class='line'>  <span class="ss">host</span><span class="p">:</span> <span class="n">localhost</span>
-</span><span class='line'>  <span class="ss">socket</span><span class="p">:</span> <span class="o">&lt;</span><span class="sx">%= socket %&gt;</span>
-</span><span class='line'><span class="sx">&lt;% else %&gt;</span>
-</span><span class='line'><span class="sx">  host: 127.0.0.1</span>
-</span><span class='line'><span class="sx">  port: &lt;%=</span> <span class="n">port</span> <span class="sx">%&gt;</span>
-</span><span class='line'><span class="sx">&lt;% end %&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Warning: The database defined as &quot;test&quot; will be erased and</span>
-</span><span class='line'><span class="c1"># re-generated from your development database when you run &quot;rake&quot;.</span>
-</span><span class='line'><span class="c1"># Do not set this db to the same as development or production.</span>
-</span><span class='line'><span class="nb">test</span><span class="p">:</span>
-</span><span class='line'>  <span class="o">&lt;&lt;</span><span class="p">:</span> <span class="o">*</span><span class="n">development</span>
-</span><span class='line'>  <span class="ss">database</span><span class="p">:</span> <span class="n">yourapp_test</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Yeah that ain&rsquo;t worth it AT ALL.  Now that I&rsquo;ve got my bitching out of the way, on to the happiness that is chef.</p>
-
-<p>I took what I learned from boxen, and took the plunge into chef-solo to fix this issue. I recalled attempting to use chef-solo on OSX when I first started and it was also complete disaster. I&rsquo;m betting I really had no idea what I was doing so that&rsquo;s probably a major factor in it. But now I feel have mastered it on &ldquo;the linuxes&rdquo;, and hell even wrote a sensu cookbook for windows, so I told myself to take the plunge.  Man, I&rsquo;m really glad I did; TL;DR: easy pezzy.</p>
-
-<p>I started around noon after deciding that boxen was dead, and by 3pm I had a working framework with a <a href="http://bit.ly/jj_mac">wrapper script</a>, <a href="https://github.com/opscode-cookbooks/homebrew">homebrew</a>, and <a href="http://jjasghar.github.io/blog/2013/08/02/adventures-with-chef-solo/">chef-solo</a>, why oh why didn&rsquo;t I do this originally.</p>
-
-<p>(I pinged Fletcher Nichol about getting test-kitchen working with OSX, he sent me a gist on how to get it working, as of writing this I haven&rsquo;t attempted it yet, but hellz yes I&rsquo;m gonna kitchen this bitch up very very soon.)</p>
-
-<p>I had some trouble with <a href="http://rvm.io">rvm</a>, automating the install was a bit tricky, but breaking it up into different <code>execute</code> and <code>bash</code> blocks allowed for solidarity. After that hooking up the <a href="https://github.com/opscode-cookbooks/dmg">dmg</a> cookbook and boom, I have my <a href="https://github.com/jjasghar/provision_mac">mac provisioning</a> system.</p>
-
-<p>Take a look, I&rsquo;m honestly curious on what people think. Oh, take out the <code>repo.rb</code> though, it&rsquo;s specific to my company.</p>
 ]]></content>
   </entry>
   

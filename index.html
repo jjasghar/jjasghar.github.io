@@ -9,8 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I have a bunch of repos that I have to watch over and make patches against.
-Trying to figure out what branch I left checked out can be&hellip;well &hellip;">
+  <meta name="description" content="git rebasing or fixing an auto merge conflict In my adventures with openstack and gerrit reviews I sometimes see something to the effect of: Patch in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,111 @@ Trying to figure out what branch I left checked out can be&hellip;well &hellip;"
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-13T15:19:30-05:00" pubdate data-updated="true">Oct 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>git rebasing or fixing an auto merge conflict</h2>
+
+<p>In my adventures with openstack and gerrit reviews I sometimes see something to the effect of: <em>Patch in Merge Conflict</em></p>
+
+<p>This makes me very sad. I hate these things, and to quote Mark Vanderwiel, it&rsquo;s basically like someone snuck in a change before you.</p>
+
+<p>We had a great conversation about it <a href="http://youtu.be/wsWj_NQJKI0?t=3m50s">here</a> for about 3 mins, but if you want a tl;dw (watch) it&rsquo;s this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git remote update
+</span><span class='line'><span class="nv">$ </span>git checkout master
+</span><span class='line'><span class="nv">$ </span>git pull
+</span><span class='line'><span class="nv">$ </span>git checkout <span class="nv">$BRANCH_THAT_YOUR_FIXING</span>
+</span><span class='line'><span class="nv">$ </span>git rebase master
+</span><span class='line'><span class="nv">$ </span><span class="c"># Fix any conflicts that should pop up</span>
+</span><span class='line'><span class="nv">$ </span>git add <span class="nv">$ANY_CONFLICTS</span>
+</span><span class='line'><span class="nv">$ </span>git rebase --continue
+</span><span class='line'><span class="nv">$ </span>git commit --amend
+</span><span class='line'><span class="nv">$ </span>git review -R
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It looks like a lot, but all in all not bad at all. The rebasing might look scary but walk through each conflict, edit it and add it back you should be fine.</p>
+
+<h2>Detached head what the hell does that mean?</h2>
+
+<p>If you continue watching that video we start to talk about detached heads. If you have played in the openstack/gerrit world you&rsquo;ll notice a copy paste off a review by download, something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git fetch https://review.openstack.org/stackforge/cookbook-openstack-client refs/changes/65/126365/9 <span class="o">&amp;&amp;</span> git checkout FETCH_HEAD
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Needless to say this is confusing as all hell. Not to mention when you finish it is says something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>You are in <span class="s1">&#39;detached HEAD&#39;</span> state. You can look around, make experimental
+</span><span class='line'>changes and commit them, and you can discard any commits you make in this
+</span><span class='line'>state without impacting any branches by performing another checkout.
+</span><span class='line'>
+</span><span class='line'>If you want to create a new branch to retain commits you create, you may
+</span><span class='line'><span class="k">do </span>so <span class="o">(</span>now or later<span class="o">)</span> by using -b with the checkout <span class="nb">command </span>again. Example:
+</span><span class='line'>
+</span><span class='line'>  git checkout -b new_branch_name
+</span><span class='line'>
+</span><span class='line'>HEAD is now at 789cb70... Initial Commit of the cookbook-openstack-client
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Seriously what the hell does this mean? Luckily it&rsquo;s actually not a bad thing at all. If you watch from <a href="http://youtu.be/wsWj_NQJKI0?t=8m10s">here</a> for about 2 minutes you&rsquo;ll see us talk about it. The short of it is, you&rsquo;ve pulled down the patch, but it&rsquo;s not attached (detached) to your local master/other branch. When you do the <code>git checkout -b branch_name</code> off of master/other branch, it connects it up so it&rsquo;s no longer detached.</p>
+
+<p>After saying it out loud, or typing it out as i just did, it makes sense, but surprisingly no one ever told me such a simple concept. I hope this helps someone down the line.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1060,71 +1164,6 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/">How to Add Growl Notifications to Rspec Tests</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-08T10:45:59-05:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
-I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
-huge <a href="http://kitchen.ci">test-kitchen</a>, or <a href="https://github.com/sstephenson/bats">bats</a> or the like tester with chef
-but never got a way to automate the testing in the background. Turns out using rspec+guard+growl allows for you to
-be focused on your present screen and have the tests being run with a pop up.</p>
-
-<p>I use vim as my development platform. This is why I needed a way to run rspec in the background, hopping out of the vim buffer breaks my focus. So I used guard-rspec, it was perfect for what I wanted to do, problem was it was in another tab or terminal again breaking my focus. I figured I have growl installed, so this is how I set up this perfect rspec+guard+growl setup.</p>
-
-<p>First add these two gems to your Gemfile:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl&#39;</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;growl_notify&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>NOTE: I suggest adding this to the development/test group, you won&rsquo;t want this in your production deploy.</p>
-
-<p>Go ahead and run <code>bundle</code>.</p>
-
-<p>After that, you need to install something called <a href="http://growl.cachefly.net/GrowlNotify-2.1.zip">GrowlNotify 2.1</a>, I&rsquo;d double check your growl version, it only works with 2.1.x.</p>
-
-<p>After installing spin up <code>guard</code>, and you should see a nice notification. :)</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1140,6 +1179,10 @@ be focused on your present screen and have the tests being run with a pop up.</p
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
       </li>
     
@@ -1153,10 +1196,6 @@ be focused on your present screen and have the tests being run with a pop up.</p
     
       <li class="post">
         <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a>
       </li>
     
   </ul>

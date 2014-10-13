@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sysadmin | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sysadmin/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-09-25T16:37:05-05:00</updated>
+  <updated>2014-10-13T16:02:36-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[git rebase and git detached head cheat sheet]]></title>
+    <link href="http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/"/>
+    <updated>2014-10-13T15:19:30-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet</id>
+    <content type="html"><![CDATA[<h2>git rebasing or fixing an auto merge conflict</h2>
+
+<p>In my adventures with openstack and gerrit reviews I sometimes see something to the effect of: <em>Patch in Merge Conflict</em></p>
+
+<p>This makes me very sad. I hate these things, and to quote Mark Vanderwiel, it&rsquo;s basically like someone snuck in a change before you.</p>
+
+<p>We had a great conversation about it <a href="http://youtu.be/wsWj_NQJKI0?t=3m50s">here</a> for about 3 mins, but if you want a tl;dw (watch) it&rsquo;s this:
+<code>bash
+$ git remote update
+$ git checkout master
+$ git pull
+$ git checkout $BRANCH_THAT_YOUR_FIXING
+$ git rebase master
+$ # Fix any conflicts that should pop up
+$ git add $ANY_CONFLICTS
+$ git rebase --continue
+$ git commit --amend
+$ git review -R
+</code>
+It looks like a lot, but all in all not bad at all. The rebasing might look scary but walk through each conflict, edit it and add it back you should be fine.</p>
+
+<h2>Detached head what the hell does that mean?</h2>
+
+<p>If you continue watching that video we start to talk about detached heads. If you have played in the openstack/gerrit world you&rsquo;ll notice a copy paste off a review by download, something like:
+<code>bash
+$ git fetch https://review.openstack.org/stackforge/cookbook-openstack-client refs/changes/65/126365/9 &amp;&amp; git checkout FETCH_HEAD
+</code>
+Needless to say this is confusing as all hell. Not to mention when you finish it is says something like:</p>
+
+<p>```bash
+You are in &lsquo;detached HEAD&rsquo; state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.</p>
+
+<p>If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:</p>
+
+<p>  git checkout -b new_branch_name</p>
+
+<p>HEAD is now at 789cb70&hellip; Initial Commit of the cookbook-openstack-client
+```</p>
+
+<p>Seriously what the hell does this mean? Luckily it&rsquo;s actually not a bad thing at all. If you watch from <a href="http://youtu.be/wsWj_NQJKI0?t=8m10s">here</a> for about 2 minutes you&rsquo;ll see us talk about it. The short of it is, you&rsquo;ve pulled down the patch, but it&rsquo;s not attached (detached) to your local master/other branch. When you do the <code>git checkout -b branch_name</code> off of master/other branch, it connects it up so it&rsquo;s no longer detached.</p>
+
+<p>After saying it out loud, or typing it out as i just did, it makes sense, but surprisingly no one ever told me such a simple concept. I hope this helps someone down the line.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Checking active branch in multiple repos]]></title>
@@ -342,63 +395,6 @@ if it errors, throws the error, otherwise outputs each row and a seporate <code>
 
 <p>Yes, yes, this is dirty, gross and if you have anything more than 3-4 users you&rsquo;re gonna get annoyed really fast. Again, this is just an example, the cli-table tutorial
 will make this more enjoyable.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Updating a rails password via the rails console]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
-    <updated>2014-05-02T11:28:40-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
-going through his screencasts.</p>
-
-<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
-
-<p><code>ruby
-irb(main):001:0&gt; u = User.find_by_id(1)
-  User Load (3.5ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
-=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
-irb(main):002:0&gt; u
-=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:46:48", updated_at: "2014-04-25 23:21:10", password_digest: "$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...", remember_token: "uUJTExCyt4mpAOpQWd4PMA"&gt;
-irb(main):003:0&gt; u.password = "a_stupid_pa$$word"
-=&gt; "_stupid_pa$$word"
-irb(main):004:0&gt; u.password_confirmation = "a_stupid_pa$$word"
-=&gt; "_stupid_pa$$word"
-irb(main):005:0&gt; u.save
-   (2.0ms)  BEGIN
-  User Exists (12.2ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
-   (15.8ms)  UPDATE "users" SET "password_digest" = '$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.', "remember_token" = 'zOZYjEVovO143qrX1yhibw', "updated_at" = '2014-04-25 23:24:39.329502' WHERE "users"."id" = 1
-   (4.6ms)  COMMIT
-=&gt; true
-irb(main):006:0&gt;
-</code></p>
-
-<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
-database via <code>u.save</code>.</p>
-
-<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
-exception telling you why it won&rsquo;t work, example:</p>
-
-<p><code>ruby
-[1] pry(main)&gt; u = User.find_by_id(1)
-  User Load (0.1ms)  SELECT "users".* FROM "users" WHERE "users"."id" = 1 LIMIT 1
-=&gt; #&lt;User id: 1, name: "JJ Asghar", email: "jjasghar@gmail.com", created_at: "2014-04-18 17:12:49", updated_at: "2014-04-24 20:17:57", password_digest: "$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...", remember_token: "ZiAb_plRQdp9WaKjbZ4CAA"&gt;
-[2] pry(main)&gt; u.password = "1234"
-=&gt; "1234"
-[3] pry(main)&gt; u.save
-   (0.1ms)  begin transaction
-  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
-   (0.1ms)  rollback transaction
-=&gt; false
-[4] pry(main)&gt; u.save!
-   (0.1ms)  begin transaction
-  User Exists (0.1ms)  SELECT 1 AS one FROM "users" WHERE (LOWER("users"."email") = LOWER('jjasghar@gmail.com') AND "users"."id" != 1) LIMIT 1
-   (0.0ms)  rollback transaction
-ActiveRecord::RecordInvalid: Validation failed: Password is too short (minimum is 6 characters), Password confirmation can't be blank
-from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!'
-[5] pry(main)&gt;
-</code></p>
 ]]></content>
   </entry>
   
