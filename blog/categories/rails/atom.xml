@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-10-13T16:02:36-05:00</updated>
+  <updated>2015-01-07T15:50:00-08:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Moving to capistrano version 3 from version 2 git submodules]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
-    <updated>2014-06-04T17:13:43-05:00</updated>
+    <updated>2014-06-04T15:13:43-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
     <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
 to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
@@ -111,7 +111,7 @@ DEBUG[639d0d29]   Submodule 'i-hate-submodules' () registered for path 'i-hate-s
   <entry>
     <title type="html"><![CDATA[Updating a rails password via the rails console]]></title>
     <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
-    <updated>2014-05-02T11:28:40-05:00</updated>
+    <updated>2014-05-02T09:28:40-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
     <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
 going through his screencasts.</p>
@@ -168,7 +168,7 @@ from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/activ
   <entry>
     <title type="html"><![CDATA[How to add growl notifications to rspec tests]]></title>
     <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
-    <updated>2014-04-08T10:45:59-05:00</updated>
+    <updated>2014-04-08T08:45:59-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
     <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
 I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a

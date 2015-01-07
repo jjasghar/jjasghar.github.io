@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-10-13T16:02:36-05:00</updated>
+  <updated>2015-01-07T15:50:00-08:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -14,9 +14,42 @@
 
   
   <entry>
+    <title type="html"><![CDATA[How Do I Create a Mac USB Boot Disk]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/"/>
+    <updated>2015-01-07T08:23:55-08:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been installing Linux from my laptop on hardware for a while now. I can
+never remember how to do it, so I keep googling for <a href="http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx">this</a>.
+Being I like distilling information down to the more important parts, here is my
+&ldquo;generic&rdquo; way of doing what is described in that link:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>wget http://some_iso_on_some_site/image.iso
+</span><span class='line'><span class="nv">$ </span>hdiutil convert -format UDRW -o ~/path/to/target.img ~/path/to/image.iso
+</span><span class='line'><span class="nv">$ </span>mv ~/path/to/target.img.dmg  ~/path/to/target.img
+</span><span class='line'><span class="nv">$ </span><span class="c"># ideally you already have your flash drive inserted</span>
+</span><span class='line'><span class="nv">$ </span>diskutil list
+</span><span class='line'><span class="nv">$ </span>diskutil unmountDisk /dev/disk&lt;the_number_of_the_disk&gt;
+</span><span class='line'><span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/path/to/target.img <span class="nv">of</span><span class="o">=</span>/dev/rdisk&lt;the_number_of_the_disk&gt; <span class="nv">bs</span><span class="o">=</span>1m
+</span><span class='line'><span class="nv">$ </span>diskutil eject /dev/disk&lt;the_number_of_the_disk&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Maybe I should script this&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Git Rebase and Git Detached Head Cheat Sheet]]></title>
     <link href="http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/"/>
-    <updated>2014-10-13T15:19:30-05:00</updated>
+    <updated>2014-10-13T13:19:30-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet</id>
     <content type="html"><![CDATA[<h2>git rebasing or fixing an auto merge conflict</h2>
 
@@ -94,7 +127,7 @@
   <entry>
     <title type="html"><![CDATA[Checking Active Branch in Multiple Repos]]></title>
     <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
-    <updated>2014-09-25T14:35:07-05:00</updated>
+    <updated>2014-09-25T12:35:07-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
     <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
 Trying to figure out what branch I left checked out can be&hellip;well frustrating.
@@ -118,7 +151,7 @@ my repos. This is a quick one liner that does the trick for me.</p>
   <entry>
     <title type="html"><![CDATA[In Honor of Greg]]></title>
     <link href="http://jjasghar.github.io/blog/2014/08/26/in-honor-of-greg/"/>
-    <updated>2014-08-26T11:06:29-05:00</updated>
+    <updated>2014-08-26T09:06:29-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/08/26/in-honor-of-greg</id>
     <content type="html"><![CDATA[<p>A good friend of mine started his own <a href="http://gregkitson.com/">blog</a> and posted an interesting <a href="http://gregkitson.com/blog/2014/08/25/my-favorite-puppet-help-message/">easter egg</a>.
 Being a jealous nerd I had to find something related to chef that would do this. In my search I came up with something for <a href="http://kitchen.ci">test-kitchen</a>.</p>
@@ -132,7 +165,7 @@ Being a jealous nerd I had to find something related to chef that would do this.
   <entry>
     <title type="html"><![CDATA[Omnibus So You Dont Get Hit by the Bus]]></title>
     <link href="http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/"/>
-    <updated>2014-08-19T13:34:45-05:00</updated>
+    <updated>2014-08-19T11:34:45-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus</id>
     <content type="html"><![CDATA[<p>I recently took a new job at <a href="http://getchef.com">Chef</a> Inc. Needless to say I&rsquo;m challenged and excited. I took a position as the
 <a href="http://openstack.org">openstack</a> guy, which, again needless to say is a mountain of work. Part of my first responsibilities was to
@@ -283,7 +316,7 @@ much easier.</p>
   <entry>
     <title type="html"><![CDATA[Hubot Mysql Cli-table Tutorial]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
-    <updated>2014-06-24T13:09:23-05:00</updated>
+    <updated>2014-06-24T11:09:23-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
     <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
 
@@ -407,7 +440,7 @@ does.</p>
   <entry>
     <title type="html"><![CDATA[Hubot Mysql Instead of a Wrapper Shell Script]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/"/>
-    <updated>2014-06-24T10:40:32-05:00</updated>
+    <updated>2014-06-24T08:40:32-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script</id>
     <content type="html"><![CDATA[<p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
 useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
@@ -503,7 +536,7 @@ will make this more enjoyable.</p>
   <entry>
     <title type="html"><![CDATA[Managing Windows Servers With Chef]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/"/>
-    <updated>2014-06-11T16:42:36-05:00</updated>
+    <updated>2014-06-11T14:42:36-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef</id>
     <content type="html"><![CDATA[<p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
 through the complete book, and these are my thoughts. I&rsquo;ll be copying the following out to a couple places, but these are my thoughts on this
@@ -573,7 +606,7 @@ in this case chef for windows.</p>
   <entry>
     <title type="html"><![CDATA[Moving to Capistrano Version 3 From Version 2 Git Submodules]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
-    <updated>2014-06-04T17:13:43-05:00</updated>
+    <updated>2014-06-04T15:13:43-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
     <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
 to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
@@ -694,7 +727,7 @@ and it should get there too, but I didnt do it that way. The only place it&rsquo
   <entry>
     <title type="html"><![CDATA[Updating a Rails Password via the Rails Console]]></title>
     <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
-    <updated>2014-05-02T11:28:40-05:00</updated>
+    <updated>2014-05-02T09:28:40-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
     <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
 going through his screencasts.</p>
@@ -784,7 +817,7 @@ exception telling you why it won&rsquo;t work, example:</p>
   <entry>
     <title type="html"><![CDATA[UTC and Me]]></title>
     <link href="http://jjasghar.github.io/blog/2014/04/26/utc-and-me/"/>
-    <updated>2014-04-26T16:15:54-05:00</updated>
+    <updated>2014-04-26T14:15:54-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/04/26/utc-and-me</id>
     <content type="html"><![CDATA[<p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
 listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
@@ -831,7 +864,7 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
   <entry>
     <title type="html"><![CDATA[How to Add Growl Notifications to Rspec Tests]]></title>
     <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
-    <updated>2014-04-08T10:45:59-05:00</updated>
+    <updated>2014-04-08T08:45:59-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
     <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
 I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
@@ -869,7 +902,7 @@ be focused on your present screen and have the tests being run with a pop up.</p
   <entry>
     <title type="html"><![CDATA[Update to the Chef Error That Has Haunted Me]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
-    <updated>2014-03-19T16:45:03-05:00</updated>
+    <updated>2014-03-19T14:45:03-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
     <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
 
@@ -899,7 +932,7 @@ be focused on your present screen and have the tests being run with a pop up.</p
   <entry>
     <title type="html"><![CDATA[Help! I Lost My vaildation.pem]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
-    <updated>2014-03-18T16:39:04-05:00</updated>
+    <updated>2014-03-18T14:39:04-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
     <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
 chef 11 server.</p>
@@ -965,7 +998,7 @@ chef 11 server.</p>
   <entry>
     <title type="html"><![CDATA[Campfire + Sensu and Some Issues]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/"/>
-    <updated>2014-03-13T14:45:02-05:00</updated>
+    <updated>2014-03-13T12:45:02-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
 
@@ -1044,7 +1077,7 @@ he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
   <entry>
     <title type="html"><![CDATA[Chef-book Lighting Talk]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
-    <updated>2014-02-28T10:52:08-06:00</updated>
+    <updated>2014-02-28T08:52:08-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
     <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
 five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
@@ -1056,7 +1089,7 @@ five minutes long, and got a video of it <a href="https://www.youtube.com/watch?
   <entry>
     <title type="html"><![CDATA[Getting Authentication With Hubot Using auth.coffee]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
-    <updated>2014-02-19T11:07:03-06:00</updated>
+    <updated>2014-02-19T09:07:03-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
     <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
 First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
@@ -1175,7 +1208,7 @@ your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.
   <entry>
     <title type="html"><![CDATA[.kitchen.local.yml and When You Want to Use It]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
-    <updated>2014-02-17T15:32:20-06:00</updated>
+    <updated>2014-02-17T13:32:20-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
     <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol&#8217; <a href="https://twitter.com/fnichol">Fletcher</a>
 made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
@@ -1268,7 +1301,7 @@ but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PR
   <entry>
     <title type="html"><![CDATA[Docker Packer VM Oh My]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my/"/>
-    <updated>2014-02-13T12:17:09-06:00</updated>
+    <updated>2014-02-13T10:17:09-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my</id>
     <content type="html"><![CDATA[<p>So I&rsquo;ve been caught up in the <a href="http://docker.io">docker</a>, <a href="http://packer.io">packer</a>, and VM discussion a handful of times. I&rsquo;ve been defending and discussing<em>cough</em>attacking<em>cough</em> different
 versions and use cases. Then something happened, something I thought docker is wasn&rsquo;t what it was, and something I thought packer was isn&rsquo;t what it is. Welp, there&rsquo;s some egg on my face eh?
@@ -1304,7 +1337,7 @@ I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have wa
   <entry>
     <title type="html"><![CDATA[Chef Handler Why Did It Take a Year for Me to Use You]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/"/>
-    <updated>2014-02-07T15:24:54-06:00</updated>
+    <updated>2014-02-07T13:24:54-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you</id>
     <content type="html"><![CDATA[<p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
 
@@ -1377,48 +1410,6 @@ first main internal recipe:</p>
 <p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
 
 <p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ResourceNotFound and Splunk> fun&#8230;gotta Love That Error]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/"/>
-    <updated>2014-02-03T16:18:51-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/03/resourcenotfound-and-splunk>-fun-dot-dot-dot-gotta-love-that-error</id>
-    <content type="html"><![CDATA[<p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
-
-<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>500 Internal Server Error
-</span><span class='line'>
-</span><span class='line'>Return to Splunk home page
-</span><span class='line'>
-</span><span class='line'>ResourceNotFound: [HTTP 404] https://127.0.0.1:8089/services/data/user-prefs; [{'type': 'ERROR', 'text': 'Application does not exist: user-prefs', 'code': None}]
-</span><span class='line'>
-</span><span class='line'>This page was linked to from http://&lt;mycompanyname&gt;:8000/en-US/account/login?return_to=%2Fen-US%2F.
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>You are using &lt;mycompanyname&gt;:8000, which is connected to splunkd @182037 at https://127.0.0.1:8089 on Mon Feb 3 16:17:37 2014.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow, what the hell does that mean?</p>
-
-<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
-oversight.</p>
-
-<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
 ]]></content>
   </entry>
   

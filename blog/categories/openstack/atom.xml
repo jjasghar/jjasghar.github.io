@@ -4,7 +4,7 @@
   <title><![CDATA[Category: openstack | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/openstack/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-10-13T16:02:36-05:00</updated>
+  <updated>2015-01-07T15:50:00-08:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Checking active branch in multiple repos]]></title>
     <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
-    <updated>2014-09-25T14:35:07-05:00</updated>
+    <updated>2014-09-25T12:35:07-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
     <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
 Trying to figure out what branch I left checked out can be&hellip;well frustrating.

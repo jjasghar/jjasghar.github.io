@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mac | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/mac/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2015-01-07T15:50:00-08:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How do I create a Mac USB boot disk]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/"/>
+    <updated>2015-01-07T08:23:55-08:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been installing Linux from my laptop on hardware for a while now. I can
+never remember how to do it, so I keep googling for <a href="http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx">this</a>.
+Being I like distilling information down to the more important parts, here is my
+&ldquo;generic&rdquo; way of doing what is described in that link:</p>
+
+<p><code>bash
+$ wget http://some_iso_on_some_site/image.iso
+$ hdiutil convert -format UDRW -o ~/path/to/target.img ~/path/to/image.iso
+$ mv ~/path/to/target.img.dmg  ~/path/to/target.img
+$ # ideally you already have your flash drive inserted
+$ diskutil list
+$ diskutil unmountDisk /dev/disk&lt;the_number_of_the_disk&gt;
+$ sudo dd if=/path/to/target.img of=/dev/rdisk&lt;the_number_of_the_disk&gt; bs=1m
+$ diskutil eject /dev/disk&lt;the_number_of_the_disk&gt;
+</code></p>
+
+<p>Maybe I should script this&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>

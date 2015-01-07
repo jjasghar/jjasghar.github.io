@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-10-13T16:02:36-05:00</updated>
+  <updated>2015-01-07T15:50:00-08:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[git rebase and git detached head cheat sheet]]></title>
     <link href="http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/"/>
-    <updated>2014-10-13T15:19:30-05:00</updated>
+    <updated>2014-10-13T13:19:30-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet</id>
     <content type="html"><![CDATA[<h2>git rebasing or fixing an auto merge conflict</h2>
 
@@ -69,7 +69,7 @@ do so (now or later) by using -b with the checkout command again. Example:</p>
   <entry>
     <title type="html"><![CDATA[Checking active branch in multiple repos]]></title>
     <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
-    <updated>2014-09-25T14:35:07-05:00</updated>
+    <updated>2014-09-25T12:35:07-07:00</updated>
     <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
     <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
 Trying to figure out what branch I left checked out can be&hellip;well frustrating.
@@ -92,7 +92,7 @@ for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
   <entry>
     <title type="html"><![CDATA[Learning git realizing that I know nothing]]></title>
     <link href="http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing/"/>
-    <updated>2013-12-17T13:56:00-06:00</updated>
+    <updated>2013-12-17T13:56:00-08:00</updated>
     <id>http://jjasghar.github.io/blog/2013/12/17/learning-git-realizing-that-i-know-nothing</id>
     <content type="html"><![CDATA[<p>So as with all modern day &ldquo;DevOps&rdquo; guys I use a SCM [<a href="http://en.wikipedia.org/wiki/Source_Control_Management">Source Control Management</a>] system on a daily if not hourly basis.  I&rsquo;ve been attempting to learn it more and more, and I came across this video from the <a href="http://reddit.com/r/git">/r/git</a> subreddit and I don&rsquo;t think I&rsquo;ve ever seen a better explanation. It&rsquo;s called <em>Git for Ages 4 and Up</em>.</p>
 
@@ -131,7 +131,7 @@ alias gld="git log --graph --decorate --all"
   <entry>
     <title type="html"><![CDATA[hub workflow]]></title>
     <link href="http://jjasghar.github.io/blog/2013/10/31/hub-workflow/"/>
-    <updated>2013-10-31T11:01:00-05:00</updated>
+    <updated>2013-10-31T11:01:00-07:00</updated>
     <id>http://jjasghar.github.io/blog/2013/10/31/hub-workflow</id>
     <content type="html"><![CDATA[<p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:
 <code>bash

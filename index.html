@@ -9,7 +9,9 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="git rebasing or fixing an auto merge conflict In my adventures with openstack and gerrit reviews I sometimes see something to the effect of: Patch in &hellip;">
+  <meta name="description" content="I&rsquo;ve been installing Linux from my laptop on hardware for a while now. I can
+never remember how to do it, so I keep googling for this.
+Being I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +86,66 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-07T08:23:55-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been installing Linux from my laptop on hardware for a while now. I can
+never remember how to do it, so I keep googling for <a href="http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx">this</a>.
+Being I like distilling information down to the more important parts, here is my
+&ldquo;generic&rdquo; way of doing what is described in that link:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>wget http://some_iso_on_some_site/image.iso
+</span><span class='line'><span class="nv">$ </span>hdiutil convert -format UDRW -o ~/path/to/target.img ~/path/to/image.iso
+</span><span class='line'><span class="nv">$ </span>mv ~/path/to/target.img.dmg  ~/path/to/target.img
+</span><span class='line'><span class="nv">$ </span><span class="c"># ideally you already have your flash drive inserted</span>
+</span><span class='line'><span class="nv">$ </span>diskutil list
+</span><span class='line'><span class="nv">$ </span>diskutil unmountDisk /dev/disk&lt;the_number_of_the_disk&gt;
+</span><span class='line'><span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/path/to/target.img <span class="nv">of</span><span class="o">=</span>/dev/rdisk&lt;the_number_of_the_disk&gt; <span class="nv">bs</span><span class="o">=</span>1m
+</span><span class='line'><span class="nv">$ </span>diskutil eject /dev/disk&lt;the_number_of_the_disk&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Maybe I should script this&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a></h1>
     
     
@@ -100,7 +162,7 @@
   
 
 
-<time datetime="2014-10-13T15:19:30-05:00" pubdate data-updated="true">Oct 13<span>th</span>, 2014</time>
+<time datetime="2014-10-13T13:19:30-07:00" pubdate data-updated="true">Oct 13<span>th</span>, 2014</time>
         
       </p>
     
@@ -205,7 +267,7 @@
   
 
 
-<time datetime="2014-09-25T14:35:07-05:00" pubdate data-updated="true">Sep 25<span>th</span>, 2014</time>
+<time datetime="2014-09-25T12:35:07-07:00" pubdate data-updated="true">Sep 25<span>th</span>, 2014</time>
         
       </p>
     
@@ -256,7 +318,7 @@ my repos. This is a quick one liner that does the trick for me.</p>
   
 
 
-<time datetime="2014-08-26T11:06:29-05:00" pubdate data-updated="true">Aug 26<span>th</span>, 2014</time>
+<time datetime="2014-08-26T09:06:29-07:00" pubdate data-updated="true">Aug 26<span>th</span>, 2014</time>
         
       </p>
     
@@ -297,7 +359,7 @@ Being a jealous nerd I had to find something related to chef that would do this.
   
 
 
-<time datetime="2014-08-19T13:34:45-05:00" pubdate data-updated="true">Aug 19<span>th</span>, 2014</time>
+<time datetime="2014-08-19T11:34:45-07:00" pubdate data-updated="true">Aug 19<span>th</span>, 2014</time>
         
       </p>
     
@@ -475,7 +537,7 @@ much easier.</p>
   
 
 
-<time datetime="2014-06-24T13:09:23-05:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
+<time datetime="2014-06-24T11:09:23-07:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
         
       </p>
     
@@ -626,7 +688,7 @@ does.</p>
   
 
 
-<time datetime="2014-06-24T10:40:32-05:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
+<time datetime="2014-06-24T08:40:32-07:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
         
       </p>
     
@@ -749,7 +811,7 @@ will make this more enjoyable.</p>
   
 
 
-<time datetime="2014-06-11T16:42:36-05:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
+<time datetime="2014-06-11T14:42:36-07:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
         
       </p>
     
@@ -846,7 +908,7 @@ in this case chef for windows.</p>
   
 
 
-<time datetime="2014-06-04T17:13:43-05:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
+<time datetime="2014-06-04T15:13:43-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
         
       </p>
     
@@ -994,7 +1056,7 @@ and it should get there too, but I didnt do it that way. The only place it&rsquo
   
 
 
-<time datetime="2014-05-02T11:28:40-05:00" pubdate data-updated="true">May 2<span>nd</span>, 2014</time>
+<time datetime="2014-05-02T09:28:40-07:00" pubdate data-updated="true">May 2<span>nd</span>, 2014</time>
         
       </p>
     
@@ -1090,80 +1152,6 @@ exception telling you why it won&rsquo;t work, example:</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/26/utc-and-me/">UTC and Me</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-26T16:15:54-05:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
-listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
-UTC as their main way of describing time. So when he asked for a dump from 2 days ago, at 4pm he thought it was 2 days ago 4pm CST (my timezone)
-where the ticket for the company described 4pm UTC. Needless to say confusion started to hold.</p>
-
-<p>Now this can start my rant (which up till now I haven&rsquo;t actually written) about timezones, but I wanted to make his life easier so I figured out
-a pretty straight forward way to convert any date and time of a timezone to UTC via ruby.  This is how you do it:</p>
-
-<p>Note: this requires ruby 1.9.3+</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
-</span><span class='line'><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;04/23/2014 02:00 AM&quot;</span><span class="p">,</span><span class="s2">&quot;%m/%d/%Y %I:%M %p&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">23</span> <span class="mo">02</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span> <span class="o">-</span><span class="mo">0500</span>
-</span><span class='line'><span class="o">[</span><span class="mi">9</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">utc</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">23</span> <span class="mo">07</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span> <span class="no">UTC</span>
-</span><span class='line'><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow, that&rsquo;s pretty simple eh? :)  In looking around for this answer, I came across a pretty neat trick with ruby also:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">13</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">utc</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="mi">2014</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">25</span> <span class="mi">16</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">27</span> <span class="no">UTC</span>
-</span><span class='line'><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="mi">1398443660</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That&rsquo;s time now for UTC from your machines time, and the epoch time too!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1179,6 +1167,10 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a>
       </li>
     
@@ -1192,10 +1184,6 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
     
       <li class="post">
         <a href="/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/">Omnibus So You Dont Get Hit by the Bus</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
       </li>
     
   </ul>
@@ -1240,7 +1228,7 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - JJ Asghar -
+  Copyright &copy; 2015 - JJ Asghar -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

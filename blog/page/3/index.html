@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="So over the 2013 holiday break I played around with boxen, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait &hellip;">
+  <meta name="description" content="My company uses splunk yes yes, I know, I should be using kibana and logstash but I got the budget for splunk> so I&rsquo;m using splunk. I attempted &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,7 +84,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/">ResourceNotFound and Splunk> fun&#8230;gotta Love That Error</a></h1>
     
     
       <p class="meta">
@@ -100,7 +100,76 @@
   
 
 
-<time datetime="2014-01-25T00:24:28-06:00" pubdate data-updated="true">Jan 25<span>th</span>, 2014</time>
+<time datetime="2014-02-03T14:18:51-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My company uses <a href="http://splunk.com">splunk</a> yes yes, I know, I should be using <a href="https://github.com/rashidkpc/Kibana">kibana</a> and <a href="http://logstash.net/">logstash</a> but I got the budget for splunk> so I&rsquo;m using splunk.</p>
+
+<p>I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>500 Internal Server Error
+</span><span class='line'>
+</span><span class='line'>Return to Splunk home page
+</span><span class='line'>
+</span><span class='line'>ResourceNotFound: [HTTP 404] https://127.0.0.1:8089/services/data/user-prefs; [{'type': 'ERROR', 'text': 'Application does not exist: user-prefs', 'code': None}]
+</span><span class='line'>
+</span><span class='line'>This page was linked to from http://&lt;mycompanyname&gt;:8000/en-US/account/login?return_to=%2Fen-US%2F.
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>You are using &lt;mycompanyname&gt;:8000, which is connected to splunkd @182037 at https://127.0.0.1:8089 on Mon Feb 3 16:17:37 2014.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow, what the hell does that mean?</p>
+
+<p>So after some investigation it seems that I had my <code>/opt/splunk/bin/splunk</code> symlinked to <code>/opt/splunkforwarder/bin/splunk</code>. After some finagling with splunk support it seems it was a complete
+oversight.</p>
+
+<p>Having both the <code>splunkforwarder</code> and <code>splunk</code> on the same box can be dangerous, if you do you&rsquo;ll have to edit the ports that they use. Keep that in mind if you decide to go down this path.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/24/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-24T22:24:28-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2014</time>
         
       </p>
     
@@ -217,7 +286,7 @@
   
 
 
-<time datetime="2014-01-20T15:42:33-06:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+<time datetime="2014-01-20T13:42:33-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
         
       </p>
     
@@ -316,7 +385,7 @@
   
 
 
-<time datetime="2014-01-18T14:01:51-06:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
+<time datetime="2014-01-18T12:01:51-08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
         
       </p>
     
@@ -399,7 +468,7 @@
   
 
 
-<time datetime="2014-01-01T13:27:20-06:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+<time datetime="2014-01-01T11:27:20-08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
         
       </p>
     
@@ -673,7 +742,7 @@
   
 
 
-<time datetime="2013-12-31T15:54:00-06:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
+<time datetime="2013-12-31T15:54:00-08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
         
       </p>
     
@@ -790,7 +859,7 @@
   
 
 
-<time datetime="2013-12-23T10:36:00-06:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
+<time datetime="2013-12-23T10:36:00-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
         
       </p>
     
@@ -960,7 +1029,7 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
   
 
 
-<time datetime="2013-12-17T13:56:00-06:00" pubdate data-updated="true">Dec 17<span>th</span>, 2013</time>
+<time datetime="2013-12-17T13:56:00-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2013</time>
         
       </p>
     
@@ -1030,7 +1099,7 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
   
 
 
-<time datetime="2013-11-27T11:41:00-06:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
+<time datetime="2013-11-27T11:41:00-08:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
         
       </p>
     
@@ -1120,7 +1189,7 @@ node to work on my local box for local development (<a href="https://gist.github
   
 
 
-<time datetime="2013-10-31T11:01:00-05:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
+<time datetime="2013-10-31T11:01:00-07:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
         
       </p>
     
@@ -1188,101 +1257,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/18/people-keep-asking-me-how-to-start-with-chef/">People Keep Asking Me How to Start With Chef</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-18T10:19:00-05:00" pubdate data-updated="true">Oct 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So as the title says, people keep asking me &ldquo;How to start with chef?&rdquo; This an outline of what, if I could go back in time, I would do from the beginning. I completely acknowledge that chef can be extremely confusing to start with. If you really want to learn it you&rsquo;ll have to stick with it, and do it. Good god, nothing is better than running it on a vagrant box and seeing what you expect happen happen.</p>
-
-<h2>chef-solo is your best friend (step 1)</h2>
-
-<p>A lot of people can start here, and end here believe it or not.  chef-solo is unbelievably powerful and can full-fill 90% of all requirements for basic usage. I spent some time looking around for a good tutorial (doing all of them that I could find), and <a href="http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/">this</a> on was the best &ldquo;I have no idea what the fuck I&rsquo;m doing.&rdquo; situation.  Modern chef installs are a tad bit different than this guy, so the &ldquo;install.sh&rdquo; changes I suggest are this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># This run as root on the machine</span>
-</span><span class='line'><span class="nv">chef_binary</span><span class="o">=</span>/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/bin/chef-solo
-</span><span class='line'>
-</span><span class='line'><span class="c"># are we not bootstrapped?</span>
-</span><span class='line'><span class="k">if</span> ! <span class="nb">test</span> -f <span class="s2">&quot;$chef_binary&quot;</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">  </span><span class="nb">export </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noniteractive
-</span><span class='line'>  apt-get update <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get dist-upgrade -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  apt-get install ruby1.9.1 ruby1.9.1-dev make curl -y <span class="o">&amp;&amp;</span>
-</span><span class='line'>  curl -L https://www.opscode.com/chef/install.sh | sudo bash
-</span><span class='line'><span class="k">fi</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>
-</span><span class='line'>chef-solo -c solo.rb -j solo.json
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see I use the omnibus installer, not the gem, and choose the ruby version you want ;), and yes if you use those lame-ass rpm-based distros, <code>apt-get</code> won&rsquo;t work for you.</p>
-
-<h2>There&rsquo;s something clever here (step 2)</h2>
-
-<p>So awesome, you walked through the suggested tutorial, you can now run your <code>install.sh</code> and get your changes in. Grats! If you think about it, hit up the <a href="http://docs.opscode.com">Opscode Docs</a> and you&rsquo;ll discover that there&rsquo;s a resource to provision every which way. As I said at the beginning this might be all you need, if it is then use it; no real need to go any farther.</p>
-
-<p>Ah, you&rsquo;re still here. So you DO want to farther, awesome. In step two I suggested going to the docs, that&rsquo;s cool, but sometimes you need more verbose help, that&rsquo;s my second point, it&rsquo;s time to start asking questions. Your first stop is <a href="http://webchat.freenode.net/?channels=chef">#chef</a>; it&rsquo;s manned basically 24x7, and <em>normally</em> extremely helpful. Don&rsquo;t be a douche, if you have to paste something use <a href="http://gist.github.com">gist</a> or something.  After that the main Opscode <a href="http://lists.opscode.com/sympa">mailing list</a> is great. It&rsquo;s slower, but you get much more in depth questions and conversations. Finally the third sub step is speak up, ask questions the only way to learn this is to be like &ldquo;I don&rsquo;t understand it, help!&rdquo;</p>
-
-<h2>The only book worth a damn as of 2013/10/18 (step 3)</h2>
-
-<p>Step three of the journey is probably the one that most people jump to initially, and this is usually where the confusion starts.  There&rsquo;s a handful of books out there on chef, this <a href="http://www.packtpub.com/chef-starter/book">one</a> is the only one worth any money.  With a strong understanding of how to provision a simple box, and where to ask questions this book will be extremely straight forward and build upon those building blocks. I&rsquo;m constantly looking for another chef bible, but most nuggets of how-to things are spread all over the internet in blog form.</p>
-
-<h2>The fun starts here (step 4)</h2>
-
-<p>Step four you need a chef server, you need to be able to provision multiple boxes, you understand/can find out what a role or environment is, and you need different <code>run_lists</code>.Good for you.  From here you should look at the open source <a href="http://www.opscode.com/chef/install/">chef server</a> and spin it up on another box. I should say you can use the <a href="https://getchef.opscode.com/signup">hosted chef</a>, you get up to 5 nodes with it for free, which is cool, but if you want to see everything work from the ground up, open source chef server is the way to go. (NOTE: if you are doing it in AWS/<code>$cloudprovider</code> you&rsquo;ll need at least a 4 gig box, and that&rsquo;s pushing it. You&rsquo;ve been warned.) Now spin up another box, a machine that can talk to the server that you want to provision. Start playing with <code>knife</code> add a knife plug-in for you <code>$cloudprovider</code> see if you can spin up another box using the <a href="http://docs.opscode.com/knife_bootstrap.html">knife bootstrap</a>.  Start using <a href="http://community.opscode.com/cookbooks/minitest-handler">minitest-handler-cookbook</a>, <a href="https://github.com/opscode/test-kitchen">test-kitchen</a>, and even <a href="https://github.com/acrmp/chefspec">chef-spec</a> if your feeling sassy. If you&rsquo;ve made it this far, you&rsquo;ve probably been exposed to a myriad of other tools, run with them. Trust me if someone built if for chef the chance of being helpful is extremely high.</p>
-
-<h2>D&#8217;oh why did I do it this way? (step 5)</h2>
-
-<p>Step five is pretty straight forward. GOTO 10. With everything you now have on your tool belt, you&rsquo;ll want to go back to your original chef-solo recipes and refactor everything. You&rsquo;ll want to add your minitests for integration testing to confirm everything is what you expect and much much more, that I&rsquo;m at a loss of listing out here. The only way to get good with chef is to do it, hack at it and wait for that converge to work. You&rsquo;ll probably love test-kitchen probably by this point.</p>
-
-<p>This has been my cycle of working with chef, it&rsquo;s hard, confusing and honestly sometimes extremely annoying; though on the other hand the community is great, it&rsquo;s constantly changing, and adding great tools to make your life easier. When you finally get that recipe that builds that box exactly how you want it, theres nothing better to know it&rsquo;s always there and you never have to think about it again.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1300,6 +1274,10 @@ node to work on my local box for local development (<a href="https://gist.github
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a>
       </li>
     
@@ -1313,10 +1291,6 @@ node to work on my local box for local development (<a href="https://gist.github
     
       <li class="post">
         <a href="/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/">Omnibus So You Dont Get Hit by the Bus</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/24/hubot-mysql-cli-table-tutorial/">Hubot Mysql Cli-table Tutorial</a>
       </li>
     
   </ul>
@@ -1361,7 +1335,7 @@ node to work on my local box for local development (<a href="https://gist.github
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - JJ Asghar -
+  Copyright &copy; 2015 - JJ Asghar -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

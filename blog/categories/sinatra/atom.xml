@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sinatra | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/sinatra/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-10-13T16:02:36-05:00</updated>
+  <updated>2015-01-07T15:50:00-08:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Learning sinatra and where I'm going from here]]></title>
     <link href="http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here/"/>
-    <updated>2013-09-13T15:29:00-05:00</updated>
+    <updated>2013-09-13T15:29:00-07:00</updated>
     <id>http://jjasghar.github.io/blog/2013/09/13/learning-sinatra-and-where-im-going-from-here</id>
     <content type="html"><![CDATA[<p>I&rsquo;d like to start off by thanking Darren Jones, for writing the book <a href="http://sitepoint.com/jumpstart-sinatra">Jump Start Sinatra</a>.  This book is amazing, it&rsquo;s extremely well written, straight forward and hands on. Darren was able to break down and explain how sinatra works, runs and what you can do with it in a rapid fire primer.</p>
 

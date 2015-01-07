@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2014-10-13T16:02:36-05:00</updated>
+  <updated>2015-01-07T15:50:00-08:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
-    <updated>2014-01-25T00:24:28-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
+    <link href="http://jjasghar.github.io/blog/2014/01/24/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
+    <updated>2014-01-24T22:24:28-08:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/24/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
     <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
 
 <p>So, yeah, you can tell I was pretty impressed with it right?</p>
@@ -83,7 +83,7 @@
   <entry>
     <title type="html"><![CDATA[A chef error that has haunted me]]></title>
     <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
-    <updated>2014-01-20T15:42:33-06:00</updated>
+    <updated>2014-01-20T13:42:33-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
     <content type="html"><![CDATA[<p>Ok, you may have seen this before:
 <code>ruby
@@ -136,7 +136,7 @@
   <entry>
     <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
     <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
-    <updated>2014-01-18T14:01:51-06:00</updated>
+    <updated>2014-01-18T12:01:51-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
     <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
 
@@ -184,7 +184,7 @@ Now you are probably wondering why I even bothered posting this. Honestly, I spe
   <entry>
     <title type="html"><![CDATA[Customizing Boxen]]></title>
     <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
-    <updated>2014-01-01T13:27:20-06:00</updated>
+    <updated>2014-01-01T11:27:20-08:00</updated>
     <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
     <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
 
@@ -344,7 +344,7 @@ github &ldquo;vagrant&rdquo;
   <entry>
     <title type="html"><![CDATA[Adventures with boxen]]></title>
     <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
-    <updated>2013-12-31T15:54:00-06:00</updated>
+    <updated>2013-12-31T15:54:00-08:00</updated>
     <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
     <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
 
