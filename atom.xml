@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-03-16T13:22:32-05:00</updated>
+  <updated>2015-03-16T13:26:21-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -110,11 +110,15 @@ right the first time please ping me: @jjasghar on twitter, I&rsquo;d love to see
 <p>Also for that matter, I couldn&rsquo;t figure out a way to do this without using the site, there&rsquo;s gotta be a CLI
 only version of this.</p>
 
-<p>Here are some links I looked at I was figuring this out:
-1) <a href="http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow">http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow</a>
-2) <a href="https://oxygene.sk/2009/10/working-with-branches-in-bazaar/">https://oxygene.sk/2009/10/working-with-branches-in-bazaar/</a>
-3) <a href="http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad">http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad</a>
-4) <a href="http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it">http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it</a></p>
+<p>Here are some links I looked at I was figuring this out:</p>
+
+<ol>
+<li><a href="http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow">http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow</a></li>
+<li><a href="https://oxygene.sk/2009/10/working-with-branches-in-bazaar/">https://oxygene.sk/2009/10/working-with-branches-in-bazaar/</a></li>
+<li><a href="http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad">http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad</a></li>
+<li><a href="http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it">http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it</a></li>
+</ol>
+
 ]]></content>
   </entry>
   
