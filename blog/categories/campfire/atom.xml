@@ -4,7 +4,7 @@
   <title><![CDATA[Category: campfire | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/campfire/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Campfire + Sensu and some issues]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/"/>
-    <updated>2014-03-13T12:45:02-07:00</updated>
+    <updated>2014-03-13T14:45:02-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
 

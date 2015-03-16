@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -14,10 +14,101 @@
 
   
   <entry>
+    <title type="html"><![CDATA[bazaar usage from a git user]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/03/16/bazaar-usage-from-a-git-user/"/>
+    <updated>2015-03-16T12:16:07-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/03/16/bazaar-usage-from-a-git-user</id>
+    <content type="html"><![CDATA[<p>I love git. Honestly, I really do, hell I even have a sticker on my laptop.
+Unfortunately <a href="http://canonical.com">Canonical</a> choose something different
+called <a href="http://bazaar.canonical.com/en/">bazaar</a>. It&rsquo;s supposed to be easier,
+the jury is still out on that for my opinion; but it really is a tad bit different.</p>
+
+<p>I&rsquo;m putting a collection of commands here, so if you decided you&rsquo;d like to put in
+a &ldquo;PR&rdquo; or in <a href="https://launchpad.net/">launchpad</a>&rsquo;s term &ldquo;Propose for merging&rdquo; merge.</p>
+
+<p>Lets say you&rsquo;ve found a typo and you&rsquo;d like to fix it; something like <a href="https://code.launchpad.net/~d-jj/ironic/ironic-conductor/+merge/253085">this</a>.</p>
+
+<p>These steps assume you have a launchpad id and account set up correctly, and all you
+want to do is push up a change to an issue you&rsquo;ve found.</p>
+
+<p>First be sure to login to launchpad:</p>
+
+<p><code>bash
+~ &gt; bzr launchpad-login &lt;username&gt;
+</code></p>
+
+<p>Then you clone down the code locally with this, NOTE: ubuntu/ironic can be anything on launchpad.</p>
+
+<p><code>bash
+~ &gt; bzr branch lp:ubuntu/ironic
+</code></p>
+
+<p>Then <code>checkout</code> the repo into a branch you can work on, NOTE: ironic-conductor will create a directory you will work in</p>
+
+<p><code>bash
+~ &gt; bzr checkout lp:ubuntu/ironic ironic-conductor
+</code></p>
+
+<p>Then you need to &lsquo;link&rsquo; the local working directory with your launchpad account, NOTE: this&rsquo;ll push up the initial branch to launchpad.</p>
+
+<p><code>bash
+~ &gt; cd ironic-conductor
+ironic-conductor &gt; bzr branch --stacked --switch lp:ubuntu/ironic lp:~d-jj/ironic/ironic-conductor
+</code></p>
+
+<p>Make your changes!</p>
+
+<p><code>bash
+ironic-conductor &gt; # I'm doing awesome changes now, rm -rf my_file and blah blah blah
+</code></p>
+
+<p>Sanity check your changes:</p>
+
+<p><code>bash
+ironic-conductor &gt; bzr diff
+</code></p>
+
+<p>Yep, looks good, lets commit:</p>
+
+<p><code>bash
+ironic-conductor &gt; bzr commit -m "I did some amazing changes and this is that commit"
+</code></p>
+
+<p>If everything goes to plan you should see something like:
+<code>
+Most recent Ubuntu version: 2015.1~b2-0ubuntu1
+Packaging branch status: CURRENT
+Committing to: bzr+ssh://bazaar.launchpad.net/~d-jj/ironic/ironic-conductor/
+modified debian/ironic-conductor.init.in
+Committed revision 14.
+</code></p>
+
+<p>Ok, so now if you go to your launchpad you should see the push, now go to the project and click that
+<code>Propose for merging</code> link.</p>
+
+<p>Under &ldquo;Target Branch&rdquo; place the active branch under development, also add a note to the &ldquo;Description of Change&rdquo;
+so you have a blurb on what it does. Click &ldquo;Propose Merge.&rdquo;</p>
+
+<p>I&rsquo;ve found that I constantly get it backwards, so be wary of that; you may have to re-propose the merge if the
+diffs look wrong. You can do this from the page after the &ldquo;Propose Merge.&rdquo; If someone figures out how to get it
+right the first time please ping me: @jjasghar on twitter, I&rsquo;d love to see the &ldquo;correct&rdquo; way to do this.</p>
+
+<p>Also for that matter, I couldn&rsquo;t figure out a way to do this without using the site, there&rsquo;s gotta be a CLI
+only version of this.</p>
+
+<p>Here are some links I looked at I was figuring this out:
+1) <a href="http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow">http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow</a>
+2) <a href="https://oxygene.sk/2009/10/working-with-branches-in-bazaar/">https://oxygene.sk/2009/10/working-with-branches-in-bazaar/</a>
+3) <a href="http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad">http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad</a>
+4) <a href="http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it">http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[boxen is neat but man chef-solo was so much easier]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/01/24/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
-    <updated>2014-01-24T22:24:28-08:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/01/24/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
+    <link href="http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/"/>
+    <updated>2014-01-25T00:24:28-06:00</updated>
+    <id>http://jjasghar.github.io/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier</id>
     <content type="html"><![CDATA[<p>So over the 2013 holiday break I played around with <a href="http://boxen.github.com/">boxen</a>, I even wrote a couple beginner posts on it. If you want go check them out, I&rsquo;ll wait&hellip;..</p>
 
 <p>So, yeah, you can tell I was pretty impressed with it right?</p>
@@ -83,7 +174,7 @@
   <entry>
     <title type="html"><![CDATA[A chef error that has haunted me]]></title>
     <link href="http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me/"/>
-    <updated>2014-01-20T13:42:33-08:00</updated>
+    <updated>2014-01-20T15:42:33-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/01/20/a-chef-error-that-has-haunted-me</id>
     <content type="html"><![CDATA[<p>Ok, you may have seen this before:
 <code>ruby
@@ -136,7 +227,7 @@
   <entry>
     <title type="html"><![CDATA[Because googling failed me for yes or no bash scripting]]></title>
     <link href="http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting/"/>
-    <updated>2014-01-18T12:01:51-08:00</updated>
+    <updated>2014-01-18T14:01:51-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/01/18/because-googling-failed-me-for-yes-or-no-bash-scripting</id>
     <content type="html"><![CDATA[<p>So I was lazy, like all good sysadmins&hellip;I wanted to put in an option to say &ldquo;yes or no&rdquo; in a bash script.</p>
 
@@ -184,7 +275,7 @@ Now you are probably wondering why I even bothered posting this. Honestly, I spe
   <entry>
     <title type="html"><![CDATA[Customizing Boxen]]></title>
     <link href="http://jjasghar.github.io/blog/2014/01/01/customizing-boxen/"/>
-    <updated>2014-01-01T11:27:20-08:00</updated>
+    <updated>2014-01-01T13:27:20-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/01/01/customizing-boxen</id>
     <content type="html"><![CDATA[<p>My goal is to get these few apps on my vm, but first lets get a default build working:</p>
 
@@ -338,73 +429,6 @@ github &ldquo;vagrant&rdquo;
 </code></p>
 
 <p>Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Adventures with boxen]]></title>
-    <link href="http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen/"/>
-    <updated>2013-12-31T15:54:00-08:00</updated>
-    <id>http://jjasghar.github.io/blog/2013/12/31/adventures-with-boxen</id>
-    <content type="html"><![CDATA[<p>Note: Thanks to <a href="https://github.com/awaxa/">Greg Kitson</a> as my sounding board and inspiration here to get this done.</p>
-
-<p>So I started watching a couple videos on <a href="http://boxen.github.com">boxen</a> both are done by <a href="https://twitter.com/wfarr">@wfarr</a> and he&rsquo;s convinced me to give it a shot. Here is the &ldquo;first&rdquo; part of me getting up a dev env to play around with it.</p>
-
-<p>I think the thing that got me was the &ldquo;one line cURL&rdquo; that you can run which is from <a href="https://github.com/boxen/boxen-web">boxen-web</a> so that&rsquo;s my ultimate goal here; ok lets start this off.</p>
-
-<p>First thing, read the <a href="https://github.com/boxen/our-boxen/blob/master/README.md">README.md</a> and something jumps out at me straight off the bat:
-<code>
-Boxen requires at least the Xcode Command Line Tools installed.
-Boxen will not work with an existing rvm install.
-Boxen may not play nice with a GitHub username that includes dash(-)
-Boxen may not play nice with an existing rbenv install.
-Boxen may not play nice with an existing chruby install.
-Boxen may not play nice with an existing homebrew install.
-Boxen may not play nice with an existing nvm install.
-Boxen recommends installing the full Xcode.
-</code>
-<em>sigh</em> So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).</p>
-
-<p>It seems there is a Mavericks network issue with <a href="https://forums.virtualbox.org/viewtopic.php?f=8&amp;t=58036">virtualbox 4.2</a> so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn&rsquo;t get farther than Manual/DHCP network setup. <em>grrr</em></p>
-
-<p>Ok, so I&rsquo;m writing this real time&hellip;yeah this blew up. So I converted to <a href="https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0">VMware Fusion 6</a> to attempt to build the box. Lets see how that goes.</p>
-
-<p>So tricky VMware Fusion, it says it&rsquo;s designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!</p>
-
-<p>Spin up a machine like it suggests and get a base image installed. Go ahead shut it down here, take a snapshot it as &ldquo;base install or something&rdquo; so you can roll back here because you&rsquo;re using a provisioning software and you need a clean box right? RIGHT? (yes yes vagrant would be perfect here, but that&rsquo;s another cost got get it working with fusion)</p>
-
-<p>After you got that done boot up the vm open terminal run the following:</p>
-
-<p><code>git --version</code></p>
-
-<p>This should prompt you to install the &ldquo;mac cli tools&rdquo; without needing to install Xcode. Badass.</p>
-
-<p>Go ahead and fork <a href="https://github.com/boxen/our-boxen">our-boxen</a> like it suggests. Now if you want this to be private, for your company..(I&rsquo;m not doing because I&rsquo;m trying to learn this), you have to go through the following:
-<code>bash
-[~] % sudo mkdir -p /opt/boxen
-[~] % sudo chown ${USER}:staff /opt/boxen
-[~] % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
-[~] % cd /opt/boxen/repo
-[/opt/boxen/repo] % git remote rm origin
-[/opt/boxen/repo] % git remote add origin &lt;the location of my new git repository&gt;
-[/opt/boxen/repo] % git push -u origin master
-</code>
-This deploys the default boxen setup like the README.md says, customizing is in a following post.</p>
-
-<p>Ok, now try out boxen:
-<code>bash
-[/opt/boxen/repo] % ./script/boxen
-</code>
-Alas this will probably bitch about no Full Disk Encryption, so you&rsquo;ll need to run (good for developing this):
-<code>bash
-[/opt/boxen/repo] % ./script/boxen --no-fde
-</code></p>
-
-<p>It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!</p>
-
-<p>NOTE: you might see it get stuck at <code>Dnsmasq</code> for a default run. If you check activity monitor it is running and talking to Greg, it seems that&rsquo;s gcc/make compiling something in the background. This might take a long time, wait it out.</p>
-
-<p>Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post&hellip;</p>
 ]]></content>
   </entry>
   

@@ -9,9 +9,9 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I&rsquo;ve been installing Linux from my laptop on hardware for a while now. I can
-never remember how to do it, so I keep googling for this.
-Being I &hellip;">
+  <meta name="description" content="I love git. Honestly, I really do, hell I even have a sticker on my laptop.
+Unfortunately Canonical choose something different
+called bazaar. It& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -86,6 +86,138 @@ Being I &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/03/16/bazaar-usage-from-a-git-user/">Bazaar Usage From a Git User</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-16T12:16:07-05:00" pubdate data-updated="true">Mar 16<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I love git. Honestly, I really do, hell I even have a sticker on my laptop.
+Unfortunately <a href="http://canonical.com">Canonical</a> choose something different
+called <a href="http://bazaar.canonical.com/en/">bazaar</a>. It&rsquo;s supposed to be easier,
+the jury is still out on that for my opinion; but it really is a tad bit different.</p>
+
+<p>I&rsquo;m putting a collection of commands here, so if you decided you&rsquo;d like to put in
+a &ldquo;PR&rdquo; or in <a href="https://launchpad.net/">launchpad</a>&rsquo;s term &ldquo;Propose for merging&rdquo; merge.</p>
+
+<p>Lets say you&rsquo;ve found a typo and you&rsquo;d like to fix it; something like <a href="https://code.launchpad.net/~d-jj/ironic/ironic-conductor/+merge/253085">this</a>.</p>
+
+<p>These steps assume you have a launchpad id and account set up correctly, and all you
+want to do is push up a change to an issue you&rsquo;ve found.</p>
+
+<p>First be sure to login to launchpad:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr launchpad-login &lt;username&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you clone down the code locally with this, NOTE: ubuntu/ironic can be anything on launchpad.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr branch lp:ubuntu/ironic
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then <code>checkout</code> the repo into a branch you can work on, NOTE: ironic-conductor will create a directory you will work in</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr checkout lp:ubuntu/ironic ironic-conductor
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you need to &lsquo;link&rsquo; the local working directory with your launchpad account, NOTE: this&rsquo;ll push up the initial branch to launchpad.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; <span class="nb">cd </span>ironic-conductor
+</span><span class='line'>ironic-conductor &gt; bzr branch --stacked --switch lp:ubuntu/ironic lp:~d-jj/ironic/ironic-conductor
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Make your changes!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; <span class="c"># I&#39;m doing awesome changes now, rm -rf my_file and blah blah blah</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sanity check your changes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; bzr diff
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yep, looks good, lets commit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; bzr commit -m <span class="s2">&quot;I did some amazing changes and this is that commit&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If everything goes to plan you should see something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Most recent Ubuntu version: 2015.1~b2-0ubuntu1
+</span><span class='line'>Packaging branch status: CURRENT
+</span><span class='line'>Committing to: bzr+ssh://bazaar.launchpad.net/~d-jj/ironic/ironic-conductor/
+</span><span class='line'>modified debian/ironic-conductor.init.in
+</span><span class='line'>Committed revision 14.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, so now if you go to your launchpad you should see the push, now go to the project and click that
+<code>Propose for merging</code> link.</p>
+
+<p>Under &ldquo;Target Branch&rdquo; place the active branch under development, also add a note to the &ldquo;Description of Change&rdquo;
+so you have a blurb on what it does. Click &ldquo;Propose Merge.&rdquo;</p>
+
+<p>I&rsquo;ve found that I constantly get it backwards, so be wary of that; you may have to re-propose the merge if the
+diffs look wrong. You can do this from the page after the &ldquo;Propose Merge.&rdquo; If someone figures out how to get it
+right the first time please ping me: @jjasghar on twitter, I&rsquo;d love to see the &ldquo;correct&rdquo; way to do this.</p>
+
+<p>Also for that matter, I couldn&rsquo;t figure out a way to do this without using the site, there&rsquo;s gotta be a CLI
+only version of this.</p>
+
+<p>Here are some links I looked at I was figuring this out:
+1) <a href="http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow">http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow</a>
+2) <a href="https://oxygene.sk/2009/10/working-with-branches-in-bazaar/">https://oxygene.sk/2009/10/working-with-branches-in-bazaar/</a>
+3) <a href="http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad">http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad</a>
+4) <a href="http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it">http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a></h1>
     
     
@@ -102,7 +234,7 @@ Being I &hellip;">
   
 
 
-<time datetime="2015-01-07T08:23:55-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
+<time datetime="2015-01-07T10:23:55-06:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
         
       </p>
     
@@ -162,7 +294,7 @@ Being I like distilling information down to the more important parts, here is my
   
 
 
-<time datetime="2014-10-13T13:19:30-07:00" pubdate data-updated="true">Oct 13<span>th</span>, 2014</time>
+<time datetime="2014-10-13T15:19:30-05:00" pubdate data-updated="true">Oct 13<span>th</span>, 2014</time>
         
       </p>
     
@@ -267,7 +399,7 @@ Being I like distilling information down to the more important parts, here is my
   
 
 
-<time datetime="2014-09-25T12:35:07-07:00" pubdate data-updated="true">Sep 25<span>th</span>, 2014</time>
+<time datetime="2014-09-25T14:35:07-05:00" pubdate data-updated="true">Sep 25<span>th</span>, 2014</time>
         
       </p>
     
@@ -318,7 +450,7 @@ my repos. This is a quick one liner that does the trick for me.</p>
   
 
 
-<time datetime="2014-08-26T09:06:29-07:00" pubdate data-updated="true">Aug 26<span>th</span>, 2014</time>
+<time datetime="2014-08-26T11:06:29-05:00" pubdate data-updated="true">Aug 26<span>th</span>, 2014</time>
         
       </p>
     
@@ -359,7 +491,7 @@ Being a jealous nerd I had to find something related to chef that would do this.
   
 
 
-<time datetime="2014-08-19T11:34:45-07:00" pubdate data-updated="true">Aug 19<span>th</span>, 2014</time>
+<time datetime="2014-08-19T13:34:45-05:00" pubdate data-updated="true">Aug 19<span>th</span>, 2014</time>
         
       </p>
     
@@ -537,7 +669,7 @@ much easier.</p>
   
 
 
-<time datetime="2014-06-24T11:09:23-07:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
+<time datetime="2014-06-24T13:09:23-05:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
         
       </p>
     
@@ -688,7 +820,7 @@ does.</p>
   
 
 
-<time datetime="2014-06-24T08:40:32-07:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
+<time datetime="2014-06-24T10:40:32-05:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
         
       </p>
     
@@ -811,7 +943,7 @@ will make this more enjoyable.</p>
   
 
 
-<time datetime="2014-06-11T14:42:36-07:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
+<time datetime="2014-06-11T16:42:36-05:00" pubdate data-updated="true">Jun 11<span>th</span>, 2014</time>
         
       </p>
     
@@ -908,7 +1040,7 @@ in this case chef for windows.</p>
   
 
 
-<time datetime="2014-06-04T15:13:43-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
+<time datetime="2014-06-04T17:13:43-05:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
         
       </p>
     
@@ -1035,123 +1167,6 @@ and it should get there too, but I didnt do it that way. The only place it&rsquo
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/">Updating a Rails Password via the Rails Console</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-02T09:28:40-07:00" pubdate data-updated="true">May 2<span>nd</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
-going through his screencasts.</p>
-
-<p>As I was watching his screencasts, I forgot one of my test passwords and realized I didn&rsquo;t have a quick way to redo the password. There is a simple handful of commands fix this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
-</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">002</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:46:48&quot;, updated_at: &quot;2014-04-25 23:21:10&quot;, password_digest: &quot;$2a$10$or/wJw1I8Wpf0lXNbtawveoQXETGJbUkv/VwXQXzn92r...&quot;, remember_token: &quot;uUJTExCyt4mpAOpQWd4PMA&quot;&gt;</span>
-</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
-</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">004</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password_confirmation</span> <span class="o">=</span> <span class="s2">&quot;a_stupid_pa$$word&quot;</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;_stupid_pa$$word&quot;</span>
-</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">005</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>   <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="k">BEGIN</span>
-</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">12</span><span class="o">.</span><span class="mi">2</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
-</span><span class='line'>   <span class="p">(</span><span class="mi">15</span><span class="o">.</span><span class="mi">8</span><span class="n">ms</span><span class="p">)</span>  <span class="no">UPDATE</span> <span class="s2">&quot;users&quot;</span> <span class="no">SET</span> <span class="s2">&quot;password_digest&quot;</span> <span class="o">=</span> <span class="s1">&#39;$2a$10$Za7prnrSthhE90AvB15BNOMl8sf3oL7onBpZ45nH/9skwHfn1EFA.&#39;</span><span class="p">,</span> <span class="s2">&quot;remember_token&quot;</span> <span class="o">=</span> <span class="s1">&#39;zOZYjEVovO143qrX1yhibw&#39;</span><span class="p">,</span> <span class="s2">&quot;updated_at&quot;</span> <span class="o">=</span> <span class="s1">&#39;2014-04-25 23:24:39.329502&#39;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span class='line'>   <span class="p">(</span><span class="mi">4</span><span class="o">.</span><span class="mi">6</span><span class="n">ms</span><span class="p">)</span>  <span class="no">COMMIT</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="kp">true</span>
-</span><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">006</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see, you need to create an object via a <code>find_by_&lt;something&gt;</code>, in my case <code>id</code> and write it to <code>u</code>. After that I change the password key to <code>a_stupid_pa$$word</code> along with the password_confirmation. I then write it to the
-database via <code>u.save</code>.</p>
-
-<p>You can also do this for anything that the object has, you just have to make sure that you follow the constraints you put in place. If you see an issue with the save, if it comes back as <code>false</code>, put a <code>!</code> at the end and it should bubble up the
-exception telling you why it won&rsquo;t work, example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>  <span class="no">User</span> <span class="no">Load</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">=</span> <span class="mi">1</span> <span class="no">LIMIT</span> <span class="mi">1</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;User id: 1, name: &quot;JJ Asghar&quot;, email: &quot;jjasghar@gmail.com&quot;, created_at: &quot;2014-04-18 17:12:49&quot;, updated_at: &quot;2014-04-24 20:17:57&quot;, password_digest: &quot;$2a$10$GeLuTvSL4giPYJWIozdj6e1UxrxM0NauI9ilXoB9pZDs...&quot;, remember_token: &quot;ZiAb_plRQdp9WaKjbZ4CAA&quot;&gt;</span>
-</span><span class='line'><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;1234&quot;</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;1234&quot;</span>
-</span><span class='line'><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
-</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
-</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="kp">false</span>
-</span><span class='line'><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">u</span><span class="o">.</span><span class="n">save!</span>
-</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="k">begin</span> <span class="n">transaction</span>
-</span><span class='line'>  <span class="no">User</span> <span class="no">Exists</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">ms</span><span class="p">)</span>  <span class="no">SELECT</span> <span class="mi">1</span> <span class="no">AS</span> <span class="n">one</span> <span class="no">FROM</span> <span class="s2">&quot;users&quot;</span> <span class="no">WHERE</span> <span class="p">(</span><span class="no">LOWER</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;email&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="no">LOWER</span><span class="p">(</span><span class="s1">&#39;jjasghar@gmail.com&#39;</span><span class="p">)</span> <span class="no">AND</span> <span class="s2">&quot;users&quot;</span><span class="o">.</span><span class="s2">&quot;id&quot;</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="no">LIMIT</span> <span class="mi">1</span>
-</span><span class='line'>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span>  <span class="n">rollback</span> <span class="n">transaction</span>
-</span><span class='line'><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:RecordInvalid</span><span class="p">:</span> <span class="no">Validation</span> <span class="ss">failed</span><span class="p">:</span> <span class="no">Password</span> <span class="n">is</span> <span class="n">too</span> <span class="n">short</span> <span class="p">(</span><span class="n">minimum</span> <span class="n">is</span> <span class="mi">6</span> <span class="n">characters</span><span class="p">),</span> <span class="no">Password</span> <span class="n">confirmation</span> <span class="n">can</span><span class="s1">&#39;t be blank</span>
-</span><span class='line'><span class="s1">from /Users/jasghar/.rvm/gems/ruby-2.0.0-p195/gems/activerecord-3.2.16/lib/active_record/validations.rb:56:in `save!&#39;</span>
-</span><span class='line'><span class="o">[</span><span class="mi">5</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1167,6 +1182,10 @@ exception telling you why it won&rsquo;t work, example:</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/16/bazaar-usage-from-a-git-user/">Bazaar Usage From a Git User</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a>
       </li>
     
@@ -1180,10 +1199,6 @@ exception telling you why it won&rsquo;t work, example:</p>
     
       <li class="post">
         <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/">Omnibus So You Dont Get Hit by the Bus</a>
       </li>
     
   </ul>

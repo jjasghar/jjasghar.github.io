@@ -9,7 +9,7 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="My company uses splunk yes yes, I know, I should be using kibana and logstash but I got the budget for splunk> so I&rsquo;m using splunk. I attempted &hellip;">
+  <meta name="description" content="Something that I never seemed to grok was chef handlers. I read that site like 50 times, got the jist, but never fully understood them. Then I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,112 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/">Chef Handler Why Did It Take a Year for Me to Use You</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-07T15:24:54-06:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
+
+<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
+
+<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
+
+<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
+
+<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
+and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
+there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
+in a good state.</p>
+
+<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
+
+<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_handler</span> <span class="s2">&quot;MailHandler&quot;</span> <span class="k">do</span>
+</span><span class='line'>   <span class="n">source</span> <span class="s1">&#39;chef/handler/mail&#39;</span>
+</span><span class='line'>   <span class="n">arguments</span> <span class="ss">:to_address</span> <span class="o">=&gt;</span> <span class="s2">&quot;root&quot;</span>
+</span><span class='line'>   <span class="n">action</span> <span class="ss">:nothing</span>
+</span><span class='line'><span class="k">end</span><span class="o">.</span><span class="n">run_action</span><span class="p">(</span><span class="ss">:enable</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see it&rsquo;s pretty straight forward.</p>
+
+<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
+first main internal recipe:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">include_recipe</span> <span class="s1">&#39;chef_handler&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-campfire&quot;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">action</span> <span class="ss">:install</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chef_handler</span> <span class="s1">&#39;Chef::Handler::Campfire&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">action</span> <span class="ss">:enable</span>
+</span><span class='line'>  <span class="n">arguments</span> <span class="o">[</span> <span class="s1">&#39;SUBDOMAIN&#39;</span><span class="p">,</span> <span class="s1">&#39;TOKEN&#39;</span> <span class="p">,</span> <span class="s1">&#39;ROOM&#39;</span> <span class="o">]</span>
+</span><span class='line'>  <span class="n">source</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Gem</span><span class="o">.</span><span class="n">all_load_paths</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/chef-handler-campfire/</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s1">&#39;chef&#39;</span><span class="p">,</span> <span class="s1">&#39;handler&#39;</span><span class="p">,</span> <span class="s1">&#39;campfire.rb&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
+
+<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/02/03/resourcenotfound-and-splunk%3E-fun-dot-dot-dot-gotta-love-that-error/">ResourceNotFound and Splunk> fun&#8230;gotta Love That Error</a></h1>
     
     
@@ -100,7 +206,7 @@
   
 
 
-<time datetime="2014-02-03T14:18:51-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2014</time>
+<time datetime="2014-02-03T16:18:51-06:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2014</time>
         
       </p>
     
@@ -153,7 +259,7 @@ oversight.</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/01/24/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/01/25/boxen-is-neat-but-man-chef-solo-was-so-much-easier/">Boxen Is Neat but Man Chef-solo Was So Much Easier</a></h1>
     
     
       <p class="meta">
@@ -169,7 +275,7 @@ oversight.</p>
   
 
 
-<time datetime="2014-01-24T22:24:28-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2014</time>
+<time datetime="2014-01-25T00:24:28-06:00" pubdate data-updated="true">Jan 25<span>th</span>, 2014</time>
         
       </p>
     
@@ -286,7 +392,7 @@ oversight.</p>
   
 
 
-<time datetime="2014-01-20T13:42:33-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+<time datetime="2014-01-20T15:42:33-06:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
         
       </p>
     
@@ -385,7 +491,7 @@ oversight.</p>
   
 
 
-<time datetime="2014-01-18T12:01:51-08:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
+<time datetime="2014-01-18T14:01:51-06:00" pubdate data-updated="true">Jan 18<span>th</span>, 2014</time>
         
       </p>
     
@@ -468,7 +574,7 @@ oversight.</p>
   
 
 
-<time datetime="2014-01-01T11:27:20-08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+<time datetime="2014-01-01T13:27:20-06:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
         
       </p>
     
@@ -742,7 +848,7 @@ oversight.</p>
   
 
 
-<time datetime="2013-12-31T15:54:00-08:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
+<time datetime="2013-12-31T15:54:00-06:00" pubdate data-updated="true">Dec 31<span>st</span>, 2013</time>
         
       </p>
     
@@ -859,7 +965,7 @@ oversight.</p>
   
 
 
-<time datetime="2013-12-23T10:36:00-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
+<time datetime="2013-12-23T10:36:00-06:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
         
       </p>
     
@@ -1029,7 +1135,7 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
   
 
 
-<time datetime="2013-12-17T13:56:00-08:00" pubdate data-updated="true">Dec 17<span>th</span>, 2013</time>
+<time datetime="2013-12-17T13:56:00-06:00" pubdate data-updated="true">Dec 17<span>th</span>, 2013</time>
         
       </p>
     
@@ -1099,7 +1205,7 @@ This is triggered a fog issue, where it&rsquo;s looking at the label for a netwo
   
 
 
-<time datetime="2013-11-27T11:41:00-08:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
+<time datetime="2013-11-27T11:41:00-06:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
         
       </p>
     
@@ -1168,95 +1274,6 @@ node to work on my local box for local development (<a href="https://gist.github
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/31/hub-workflow/">Hub Workflow</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-31T11:01:00-07:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently discovered <a href="https://github.com/github/hub">hub</a> and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I attempt to use <code>hub pull-request</code> I get this error:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
-</span><span class='line'>Error creating pull request: Unprocessable Entity <span class="o">(</span>HTTP 422<span class="o">)</span>
-</span><span class='line'>Missing field: <span class="s2">&quot;head_sha&quot;</span>
-</span><span class='line'>Missing field: <span class="s2">&quot;base_sha&quot;</span>
-</span><span class='line'>No commits between jjasghar:master and jjasghar:blah
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>WTF man? What the hell does this mean? It seems I wasn&rsquo;t the only one that had this <a href="https://github.com/github/hub/issues/189">problem</a>.  It seems that the work flow (at least in my case) was the problem. Here&rsquo;s a quick fix to be able to open up a PR off a forked branch:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git add some_file
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git commit -m <span class="s2">&quot;blah&quot;</span>
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % git push -u origin blah
-</span><span class='line'>Counting objects: 7, <span class="k">done</span>.
-</span><span class='line'>Delta compression using up to 4 threads.
-</span><span class='line'>Compressing objects: 100% <span class="o">(</span>3/3<span class="o">)</span>, <span class="k">done</span>.
-</span><span class='line'>Writing objects: 100% <span class="o">(</span>4/4<span class="o">)</span>, 351 bytes | 0 bytes/s, <span class="k">done</span>.
-</span><span class='line'>Total 4 <span class="o">(</span>delta 2<span class="o">)</span>, reused 0 <span class="o">(</span>delta 0<span class="o">)</span>
-</span><span class='line'>To git@github.com:jjasghar/learning_git.git
-</span><span class='line'>   5224edf..88ad1af  blah -&gt; blah
-</span><span class='line'>Branch blah <span class="nb">set </span>up to track remote branch blah from origin.
-</span><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request
-</span><span class='line'>https://github.com/jjasghar/learning_git/pull/1
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pretty slick eh?</p>
-
-<p>Bonus round you can attach your PR to an issue!</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>~/repo/learning_git/fakedir1<span class="o">]</span> % hub pull-request -i 3
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1274,6 +1291,10 @@ node to work on my local box for local development (<a href="https://gist.github
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/16/bazaar-usage-from-a-git-user/">Bazaar Usage From a Git User</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a>
       </li>
     
@@ -1287,10 +1308,6 @@ node to work on my local box for local development (<a href="https://gist.github
     
       <li class="post">
         <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/">Omnibus So You Dont Get Hit by the Bus</a>
       </li>
     
   </ul>

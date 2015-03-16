@@ -4,7 +4,7 @@
   <title><![CDATA[Category: windows | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/windows/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Managing Windows Servers with Chef]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/"/>
-    <updated>2014-06-11T14:42:36-07:00</updated>
+    <updated>2014-06-11T16:42:36-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef</id>
     <content type="html"><![CDATA[<p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
 through the complete book, and these are my thoughts. I&rsquo;ll be copying the following out to a couple places, but these are my thoughts on this

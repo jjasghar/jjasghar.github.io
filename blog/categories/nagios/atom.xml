@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nagios | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/nagios/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Checking CPU WAIT via nagios]]></title>
     <link href="http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios/"/>
-    <updated>2013-10-16T11:11:00-07:00</updated>
+    <updated>2013-10-16T11:11:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/10/16/checking-cpu-wait-via-nagios</id>
     <content type="html"><![CDATA[<p>So our machines swap&hellip;.swap alot. There are the  typical nagios system checks, you can have the <code>check_swap</code> call, but at my company the &lt; 20 % hits so often we needed to figure out a way to get warned about crippling proformance. We discovered that when a machine has CPU WAIT spikes, the proformance for the machine tanks, so I tried to find a check for specificly monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.</p>
 
@@ -49,7 +49,7 @@ exit $stateid
   <entry>
     <title type="html"><![CDATA[How to delete the cache in nagios]]></title>
     <link href="http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios/"/>
-    <updated>2013-10-05T16:06:00-07:00</updated>
+    <updated>2013-10-05T16:06:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/10/05/how-to-delete-the-cache-in-nagios</id>
     <content type="html"><![CDATA[<p>If you use the <a href="https://github.com/opscode-cookbooks/nagios">nagios cookbook</a>, and you have multiple disposable machines checking in and out of your chef-server, you might notice that running chef-client to pull new machines into nagios doesn&rsquo;t always work.  For a time my company had anything ranging from 4 to 8 machines spinning up and down, so I had to basically run chef-client on a 30 min interval to make sure I got them all. I discovered that my new machines weren&rsquo;t showing up, so I had to figure out how to &ldquo;clear the cache&rdquo; if you will.</p>
 
@@ -71,7 +71,7 @@ objects.cache  status.dat
   <entry>
     <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (Part 2)]]></title>
     <link href="http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2/"/>
-    <updated>2013-10-01T18:11:00-07:00</updated>
+    <updated>2013-10-01T18:11:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2</id>
     <content type="html"><![CDATA[<h1>Monitoring</h1>
 
@@ -181,7 +181,7 @@ This monitor I took from my typical <a href="https://github.com/jjasghar/scripts
   <entry>
     <title type="html"><![CDATA[Nagios-status-rackspace]]></title>
     <link href="http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace/"/>
-    <updated>2013-07-09T15:05:00-07:00</updated>
+    <updated>2013-07-09T15:05:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/07/09/nagios-status-rackspace</id>
     <content type="html"><![CDATA[<p>I posted a <a href="http://redd.it/1gefnf">this</a> on <a href="http://www.reddit.com/r/sysadmin">/r/sysadmin/</a> back on 6/15/13.  I wanted to put some context around why I created the nagios checks and why the <a href="https://status.rackspace.com/index/rss">RSS</a> after all that discussion still didn&rsquo;t fulfill my requirements.</p>
 

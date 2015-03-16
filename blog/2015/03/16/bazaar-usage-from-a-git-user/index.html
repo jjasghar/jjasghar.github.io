@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Bazaar Usage From a Git User - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="I love git. Honestly, I really do, hell I even have a sticker on my laptop.
+Unfortunately Canonical choose something different
+called bazaar. It& &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2015/03/16/bazaar-usage-from-a-git-user">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Bazaar Usage From a Git User</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-16T12:16:07-05:00" pubdate data-updated="true">Mar 16<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I love git. Honestly, I really do, hell I even have a sticker on my laptop.
+Unfortunately <a href="http://canonical.com">Canonical</a> choose something different
+called <a href="http://bazaar.canonical.com/en/">bazaar</a>. It&rsquo;s supposed to be easier,
+the jury is still out on that for my opinion; but it really is a tad bit different.</p>
+
+<p>I&rsquo;m putting a collection of commands here, so if you decided you&rsquo;d like to put in
+a &ldquo;PR&rdquo; or in <a href="https://launchpad.net/">launchpad</a>&rsquo;s term &ldquo;Propose for merging&rdquo; merge.</p>
+
+<p>Lets say you&rsquo;ve found a typo and you&rsquo;d like to fix it; something like <a href="https://code.launchpad.net/~d-jj/ironic/ironic-conductor/+merge/253085">this</a>.</p>
+
+<p>These steps assume you have a launchpad id and account set up correctly, and all you
+want to do is push up a change to an issue you&rsquo;ve found.</p>
+
+<p>First be sure to login to launchpad:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr launchpad-login &lt;username&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you clone down the code locally with this, NOTE: ubuntu/ironic can be anything on launchpad.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr branch lp:ubuntu/ironic
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then <code>checkout</code> the repo into a branch you can work on, NOTE: ironic-conductor will create a directory you will work in</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr checkout lp:ubuntu/ironic ironic-conductor
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you need to &lsquo;link&rsquo; the local working directory with your launchpad account, NOTE: this&rsquo;ll push up the initial branch to launchpad.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; <span class="nb">cd </span>ironic-conductor
+</span><span class='line'>ironic-conductor &gt; bzr branch --stacked --switch lp:ubuntu/ironic lp:~d-jj/ironic/ironic-conductor
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Make your changes!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; <span class="c"># I&#39;m doing awesome changes now, rm -rf my_file and blah blah blah</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sanity check your changes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; bzr diff
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yep, looks good, lets commit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; bzr commit -m <span class="s2">&quot;I did some amazing changes and this is that commit&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If everything goes to plan you should see something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Most recent Ubuntu version: 2015.1~b2-0ubuntu1
+</span><span class='line'>Packaging branch status: CURRENT
+</span><span class='line'>Committing to: bzr+ssh://bazaar.launchpad.net/~d-jj/ironic/ironic-conductor/
+</span><span class='line'>modified debian/ironic-conductor.init.in
+</span><span class='line'>Committed revision 14.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, so now if you go to your launchpad you should see the push, now go to the project and click that
+<code>Propose for merging</code> link.</p>
+
+<p>Under &ldquo;Target Branch&rdquo; place the active branch under development, also add a note to the &ldquo;Description of Change&rdquo;
+so you have a blurb on what it does. Click &ldquo;Propose Merge.&rdquo;</p>
+
+<p>I&rsquo;ve found that I constantly get it backwards, so be wary of that; you may have to re-propose the merge if the
+diffs look wrong. You can do this from the page after the &ldquo;Propose Merge.&rdquo; If someone figures out how to get it
+right the first time please ping me: @jjasghar on twitter, I&rsquo;d love to see the &ldquo;correct&rdquo; way to do this.</p>
+
+<p>Also for that matter, I couldn&rsquo;t figure out a way to do this without using the site, there&rsquo;s gotta be a CLI
+only version of this.</p>
+
+<p>Here are some links I looked at I was figuring this out:
+1) <a href="http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow">http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow</a>
+2) <a href="https://oxygene.sk/2009/10/working-with-branches-in-bazaar/">https://oxygene.sk/2009/10/working-with-branches-in-bazaar/</a>
+3) <a href="http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad">http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad</a>
+4) <a href="http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it">http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-16T12:16:07-05:00" pubdate data-updated="true">Mar 16<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/bzr/'>bzr</a>, <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2015/03/16/bazaar-usage-from-a-git-user/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2015/03/16/bazaar-usage-from-a-git-user/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/" title="Previous Post: How do I create a Mac USB boot disk">&laquo; How do I create a Mac USB boot disk</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/16/bazaar-usage-from-a-git-user/">Bazaar Usage From a Git User</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

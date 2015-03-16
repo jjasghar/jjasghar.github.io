@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Omnibus so you dont get hit by the bus]]></title>
     <link href="http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/"/>
-    <updated>2014-08-19T11:34:45-07:00</updated>
+    <updated>2014-08-19T13:34:45-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus</id>
     <content type="html"><![CDATA[<p>I recently took a new job at <a href="http://getchef.com">Chef</a> Inc. Needless to say I&rsquo;m challenged and excited. I took a position as the
 <a href="http://openstack.org">openstack</a> guy, which, again needless to say is a mountain of work. Part of my first responsibilities was to
@@ -138,7 +138,7 @@ A quick fix would be to blow away your</code>Gemfile.lock<code>and run another</
   <entry>
     <title type="html"><![CDATA[Managing Windows Servers with Chef]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/"/>
-    <updated>2014-06-11T14:42:36-07:00</updated>
+    <updated>2014-06-11T16:42:36-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef</id>
     <content type="html"><![CDATA[<p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
 through the complete book, and these are my thoughts. I&rsquo;ll be copying the following out to a couple places, but these are my thoughts on this
@@ -193,7 +193,7 @@ in this case chef for windows.</p>
   <entry>
     <title type="html"><![CDATA[Update to the chef error that has haunted me]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
-    <updated>2014-03-19T14:45:03-07:00</updated>
+    <updated>2014-03-19T16:45:03-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
     <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
 
@@ -220,7 +220,7 @@ in this case chef for windows.</p>
   <entry>
     <title type="html"><![CDATA[Help! I lost my vaildation.pem]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
-    <updated>2014-03-18T14:39:04-07:00</updated>
+    <updated>2014-03-18T16:39:04-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
     <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
 chef 11 server.</p>
@@ -271,7 +271,7 @@ chef# chown root.root /etc/chef-server/chef-webui.pem
   <entry>
     <title type="html"><![CDATA[chef-book lighting talk]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
-    <updated>2014-02-28T08:52:08-08:00</updated>
+    <updated>2014-02-28T10:52:08-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
     <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
 five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: vagrant | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[chef-jenkins-vagrant]]></title>
     <link href="http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant/"/>
-    <updated>2013-06-25T11:43:00-07:00</updated>
+    <updated>2013-06-25T11:43:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/06/25/chef-jenkins-vagrant</id>
     <content type="html"><![CDATA[<p>To quote the top of my <a href="https://github.com/jjasghar/chef-jenkins-vagrant/blob/master/README.md">README.md</a>:</p>
 

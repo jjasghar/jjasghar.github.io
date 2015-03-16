@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby, | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Moving to capistrano version 3 from version 2 git submodules]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
-    <updated>2014-06-04T15:13:43-07:00</updated>
+    <updated>2014-06-04T17:13:43-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
     <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
 to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be

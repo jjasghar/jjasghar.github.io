@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -14,9 +14,114 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Bazaar Usage From a Git User]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/03/16/bazaar-usage-from-a-git-user/"/>
+    <updated>2015-03-16T12:16:07-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/03/16/bazaar-usage-from-a-git-user</id>
+    <content type="html"><![CDATA[<p>I love git. Honestly, I really do, hell I even have a sticker on my laptop.
+Unfortunately <a href="http://canonical.com">Canonical</a> choose something different
+called <a href="http://bazaar.canonical.com/en/">bazaar</a>. It&rsquo;s supposed to be easier,
+the jury is still out on that for my opinion; but it really is a tad bit different.</p>
+
+<p>I&rsquo;m putting a collection of commands here, so if you decided you&rsquo;d like to put in
+a &ldquo;PR&rdquo; or in <a href="https://launchpad.net/">launchpad</a>&rsquo;s term &ldquo;Propose for merging&rdquo; merge.</p>
+
+<p>Lets say you&rsquo;ve found a typo and you&rsquo;d like to fix it; something like <a href="https://code.launchpad.net/~d-jj/ironic/ironic-conductor/+merge/253085">this</a>.</p>
+
+<p>These steps assume you have a launchpad id and account set up correctly, and all you
+want to do is push up a change to an issue you&rsquo;ve found.</p>
+
+<p>First be sure to login to launchpad:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr launchpad-login &lt;username&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you clone down the code locally with this, NOTE: ubuntu/ironic can be anything on launchpad.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr branch lp:ubuntu/ironic
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then <code>checkout</code> the repo into a branch you can work on, NOTE: ironic-conductor will create a directory you will work in</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; bzr checkout lp:ubuntu/ironic ironic-conductor
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you need to &lsquo;link&rsquo; the local working directory with your launchpad account, NOTE: this&rsquo;ll push up the initial branch to launchpad.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~ &gt; <span class="nb">cd </span>ironic-conductor
+</span><span class='line'>ironic-conductor &gt; bzr branch --stacked --switch lp:ubuntu/ironic lp:~d-jj/ironic/ironic-conductor
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Make your changes!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; <span class="c"># I&#39;m doing awesome changes now, rm -rf my_file and blah blah blah</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sanity check your changes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; bzr diff
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yep, looks good, lets commit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ironic-conductor &gt; bzr commit -m <span class="s2">&quot;I did some amazing changes and this is that commit&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If everything goes to plan you should see something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Most recent Ubuntu version: 2015.1~b2-0ubuntu1
+</span><span class='line'>Packaging branch status: CURRENT
+</span><span class='line'>Committing to: bzr+ssh://bazaar.launchpad.net/~d-jj/ironic/ironic-conductor/
+</span><span class='line'>modified debian/ironic-conductor.init.in
+</span><span class='line'>Committed revision 14.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, so now if you go to your launchpad you should see the push, now go to the project and click that
+<code>Propose for merging</code> link.</p>
+
+<p>Under &ldquo;Target Branch&rdquo; place the active branch under development, also add a note to the &ldquo;Description of Change&rdquo;
+so you have a blurb on what it does. Click &ldquo;Propose Merge.&rdquo;</p>
+
+<p>I&rsquo;ve found that I constantly get it backwards, so be wary of that; you may have to re-propose the merge if the
+diffs look wrong. You can do this from the page after the &ldquo;Propose Merge.&rdquo; If someone figures out how to get it
+right the first time please ping me: @jjasghar on twitter, I&rsquo;d love to see the &ldquo;correct&rdquo; way to do this.</p>
+
+<p>Also for that matter, I couldn&rsquo;t figure out a way to do this without using the site, there&rsquo;s gotta be a CLI
+only version of this.</p>
+
+<p>Here are some links I looked at I was figuring this out:
+1) <a href="http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow">http://stackoverflow.com/questions/5043104/step-by-step-bazaar-workflow</a>
+2) <a href="https://oxygene.sk/2009/10/working-with-branches-in-bazaar/">https://oxygene.sk/2009/10/working-with-branches-in-bazaar/</a>
+3) <a href="http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad">http://askubuntu.com/questions/13547/how-to-create-a-personal-branch-in-launchpad</a>
+4) <a href="http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it">http://askubuntu.com/questions/93859/what-is-bazaar-and-how-do-i-use-it</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[How Do I Create a Mac USB Boot Disk]]></title>
     <link href="http://jjasghar.github.io/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/"/>
-    <updated>2015-01-07T08:23:55-08:00</updated>
+    <updated>2015-01-07T10:23:55-06:00</updated>
     <id>http://jjasghar.github.io/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been installing Linux from my laptop on hardware for a while now. I can
 never remember how to do it, so I keep googling for <a href="http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx">this</a>.
@@ -49,7 +154,7 @@ Being I like distilling information down to the more important parts, here is my
   <entry>
     <title type="html"><![CDATA[Git Rebase and Git Detached Head Cheat Sheet]]></title>
     <link href="http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/"/>
-    <updated>2014-10-13T13:19:30-07:00</updated>
+    <updated>2014-10-13T15:19:30-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet</id>
     <content type="html"><![CDATA[<h2>git rebasing or fixing an auto merge conflict</h2>
 
@@ -127,7 +232,7 @@ Being I like distilling information down to the more important parts, here is my
   <entry>
     <title type="html"><![CDATA[Checking Active Branch in Multiple Repos]]></title>
     <link href="http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos/"/>
-    <updated>2014-09-25T12:35:07-07:00</updated>
+    <updated>2014-09-25T14:35:07-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/09/25/checking-active-branche-in-multiple-repos</id>
     <content type="html"><![CDATA[<p>I have a bunch of <a href="https://github.com/stackforge/?query=cookbook-openstack">repos</a> that I have to watch over and make patches against.
 Trying to figure out what branch I left checked out can be&hellip;well frustrating.
@@ -151,7 +256,7 @@ my repos. This is a quick one liner that does the trick for me.</p>
   <entry>
     <title type="html"><![CDATA[In Honor of Greg]]></title>
     <link href="http://jjasghar.github.io/blog/2014/08/26/in-honor-of-greg/"/>
-    <updated>2014-08-26T09:06:29-07:00</updated>
+    <updated>2014-08-26T11:06:29-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/08/26/in-honor-of-greg</id>
     <content type="html"><![CDATA[<p>A good friend of mine started his own <a href="http://gregkitson.com/">blog</a> and posted an interesting <a href="http://gregkitson.com/blog/2014/08/25/my-favorite-puppet-help-message/">easter egg</a>.
 Being a jealous nerd I had to find something related to chef that would do this. In my search I came up with something for <a href="http://kitchen.ci">test-kitchen</a>.</p>
@@ -165,7 +270,7 @@ Being a jealous nerd I had to find something related to chef that would do this.
   <entry>
     <title type="html"><![CDATA[Omnibus So You Dont Get Hit by the Bus]]></title>
     <link href="http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus/"/>
-    <updated>2014-08-19T11:34:45-07:00</updated>
+    <updated>2014-08-19T13:34:45-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/08/19/omnibus-so-you-dont-get-hit-by-the-bus</id>
     <content type="html"><![CDATA[<p>I recently took a new job at <a href="http://getchef.com">Chef</a> Inc. Needless to say I&rsquo;m challenged and excited. I took a position as the
 <a href="http://openstack.org">openstack</a> guy, which, again needless to say is a mountain of work. Part of my first responsibilities was to
@@ -316,7 +421,7 @@ much easier.</p>
   <entry>
     <title type="html"><![CDATA[Hubot Mysql Cli-table Tutorial]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
-    <updated>2014-06-24T11:09:23-07:00</updated>
+    <updated>2014-06-24T13:09:23-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
     <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
 
@@ -440,7 +545,7 @@ does.</p>
   <entry>
     <title type="html"><![CDATA[Hubot Mysql Instead of a Wrapper Shell Script]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/"/>
-    <updated>2014-06-24T08:40:32-07:00</updated>
+    <updated>2014-06-24T10:40:32-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script</id>
     <content type="html"><![CDATA[<p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
 useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
@@ -536,7 +641,7 @@ will make this more enjoyable.</p>
   <entry>
     <title type="html"><![CDATA[Managing Windows Servers With Chef]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef/"/>
-    <updated>2014-06-11T14:42:36-07:00</updated>
+    <updated>2014-06-11T16:42:36-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/11/managing-windows-servers-with-chef</id>
     <content type="html"><![CDATA[<p>I was asked to do a review of <a href="http://www.packtpub.com/managing-windows-servers-with-chef/book">Managing Windows Servers with Chef</a>. I&rsquo;ve read
 through the complete book, and these are my thoughts. I&rsquo;ll be copying the following out to a couple places, but these are my thoughts on this
@@ -606,7 +711,7 @@ in this case chef for windows.</p>
   <entry>
     <title type="html"><![CDATA[Moving to Capistrano Version 3 From Version 2 Git Submodules]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/"/>
-    <updated>2014-06-04T15:13:43-07:00</updated>
+    <updated>2014-06-04T17:13:43-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2</id>
     <content type="html"><![CDATA[<p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
 to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
@@ -727,7 +832,7 @@ and it should get there too, but I didnt do it that way. The only place it&rsquo
   <entry>
     <title type="html"><![CDATA[Updating a Rails Password via the Rails Console]]></title>
     <link href="http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console/"/>
-    <updated>2014-05-02T09:28:40-07:00</updated>
+    <updated>2014-05-02T11:28:40-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/05/02/updating-a-rails-password-via-the-rails-console</id>
     <content type="html"><![CDATA[<p>I&rsquo;m in the process of learning <a href="http://www.railstutorial.org/">ruby on rails</a> and it&rsquo;s going amazingly, plus <a href="http://michaelhartl.com/">Michael Hartl</a> as a great teacher, I strongly suggest
 going through his screencasts.</p>
@@ -817,7 +922,7 @@ exception telling you why it won&rsquo;t work, example:</p>
   <entry>
     <title type="html"><![CDATA[UTC and Me]]></title>
     <link href="http://jjasghar.github.io/blog/2014/04/26/utc-and-me/"/>
-    <updated>2014-04-26T14:15:54-07:00</updated>
+    <updated>2014-04-26T16:15:54-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/04/26/utc-and-me</id>
     <content type="html"><![CDATA[<p>I was in the office on Friday when I coworker of mine was discussing trouble he was having with restoring a DB backup. Normally I passively
 listen to those types of complaints, but something caught my ear about this one. He didn&rsquo;t realize the company we outsource our work to runs
@@ -864,7 +969,7 @@ a pretty straight forward way to convert any date and time of a timezone to UTC 
   <entry>
     <title type="html"><![CDATA[How to Add Growl Notifications to Rspec Tests]]></title>
     <link href="http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests/"/>
-    <updated>2014-04-08T08:45:59-07:00</updated>
+    <updated>2014-04-08T10:45:59-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/04/08/how-to-add-growl-notifications-to-rspec-tests</id>
     <content type="html"><![CDATA[<p>With some pushing from my work I&rsquo;ve decided to start learning rails, with rails comes TDD.
 I&rsquo;m reading some books and watching some screencasts, and rspec testing came up as the default testing way.  I&rsquo;m a
@@ -902,7 +1007,7 @@ be focused on your present screen and have the tests being run with a pop up.</p
   <entry>
     <title type="html"><![CDATA[Update to the Chef Error That Has Haunted Me]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me/"/>
-    <updated>2014-03-19T14:45:03-07:00</updated>
+    <updated>2014-03-19T16:45:03-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/19/update-to-the-chef-error-that-has-haunted-me</id>
     <content type="html"><![CDATA[<p>So it seems that with release of chef-client <code>11.10</code> the 403 error have&hellip;morphed. Now they look  something like:</p>
 
@@ -932,7 +1037,7 @@ be focused on your present screen and have the tests being run with a pop up.</p
   <entry>
     <title type="html"><![CDATA[Help! I Lost My vaildation.pem]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
-    <updated>2014-03-18T14:39:04-07:00</updated>
+    <updated>2014-03-18T16:39:04-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
     <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
 chef 11 server.</p>
@@ -998,7 +1103,7 @@ chef 11 server.</p>
   <entry>
     <title type="html"><![CDATA[Campfire + Sensu and Some Issues]]></title>
     <link href="http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues/"/>
-    <updated>2014-03-13T12:45:02-07:00</updated>
+    <updated>2014-03-13T14:45:02-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/03/13/campfire-plus-sensu-and-some-issues</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve got sensu enabled now, finally taken nagios out to pasture and shot it. You may now clap.</p>
 
@@ -1077,7 +1182,7 @@ he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
   <entry>
     <title type="html"><![CDATA[Chef-book Lighting Talk]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
-    <updated>2014-02-28T08:52:08-08:00</updated>
+    <updated>2014-02-28T10:52:08-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
     <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
 five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
@@ -1089,7 +1194,7 @@ five minutes long, and got a video of it <a href="https://www.youtube.com/watch?
   <entry>
     <title type="html"><![CDATA[Getting Authentication With Hubot Using auth.coffee]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
-    <updated>2014-02-19T09:07:03-08:00</updated>
+    <updated>2014-02-19T11:07:03-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
     <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
 First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
@@ -1208,7 +1313,7 @@ your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.
   <entry>
     <title type="html"><![CDATA[.kitchen.local.yml and When You Want to Use It]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
-    <updated>2014-02-17T13:32:20-08:00</updated>
+    <updated>2014-02-17T15:32:20-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
     <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol&#8217; <a href="https://twitter.com/fnichol">Fletcher</a>
 made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
@@ -1301,7 +1406,7 @@ but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PR
   <entry>
     <title type="html"><![CDATA[Docker Packer VM Oh My]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my/"/>
-    <updated>2014-02-13T10:17:09-08:00</updated>
+    <updated>2014-02-13T12:17:09-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my</id>
     <content type="html"><![CDATA[<p>So I&rsquo;ve been caught up in the <a href="http://docker.io">docker</a>, <a href="http://packer.io">packer</a>, and VM discussion a handful of times. I&rsquo;ve been defending and discussing<em>cough</em>attacking<em>cough</em> different
 versions and use cases. Then something happened, something I thought docker is wasn&rsquo;t what it was, and something I thought packer was isn&rsquo;t what it is. Welp, there&rsquo;s some egg on my face eh?
@@ -1331,85 +1436,6 @@ I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have wa
 <p>This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of groking them, rediscovering packer.</p>
 
 <p>So in a nutshell: docker is a wrapper for lxc/jails for linux running an app sharing a common kernel, VMs are separate entities and kernels that more production focused, and packer is a way to create transferable VMs between hypervisors.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Chef Handler Why Did It Take a Year for Me to Use You]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you/"/>
-    <updated>2014-02-07T13:24:54-08:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/07/chef-handler-why-did-it-take-a-year-for-me-to-use-you</id>
-    <content type="html"><![CDATA[<p>Something that I never seemed to grok was <a href="http://docs.opscode.com/essentials_handlers.html">chef handlers</a>. I read that site like 50 times, got the jist, but never fully understood them.</p>
-
-<p>Then I learned it in a nutshell: you know when you run <code>chef-client</code> or <code>chef-solo</code> and that error that pops up? A handler can export it to another location so you can have a centralized stream of information.</p>
-
-<p>This isn&rsquo;t just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.</p>
-
-<p>This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run <code>knife ssh 'chef_environment:staging' 'sudo chef-client'</code>.</p>
-
-<p>Awesome, so it kicks off, you have a few changes but you had a typo in your <code>role[db_slave]</code>. Well, if you&rsquo;ve ever used <code>knife ssh</code> before you&rsquo;ll know that it streams everything real-time
-and you&rsquo;ll probably miss the nasty red text that says you have an error. If you have your handler; it takes it says &ldquo;Hey error here, lets push it up to [email|campfire|growl|hipchat|etc]&rdquo; and boom everyone knows that
-there&rsquo;s a problem with the converge. If you are lucky enough to have a regular checkin with the chef-server you&rsquo;ll get the error pop up each run till you have it fixed. Annoying yes, but it makes sure you have all you machines
-in a good state.</p>
-
-<p>If this has peaked your interest, there is a cookbook called <a href="https://github.com/opscode-cookbooks/chef_handler">chef_handler</a> that does most if not all of your heavy lifting. It leverages an LWRP that needs to be close if not the first in your <code>run_list</code>.</p>
-
-<p>Here&rsquo;s an example for <a href="https://github.com/kisoku/chef-handler-mail">chef-handler-mail</a>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s2">&quot;chef-handler-mail&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">chef_handler</span> <span class="s2">&quot;MailHandler&quot;</span> <span class="k">do</span>
-</span><span class='line'>   <span class="n">source</span> <span class="s1">&#39;chef/handler/mail&#39;</span>
-</span><span class='line'>   <span class="n">arguments</span> <span class="ss">:to_address</span> <span class="o">=&gt;</span> <span class="s2">&quot;root&quot;</span>
-</span><span class='line'>   <span class="n">action</span> <span class="ss">:nothing</span>
-</span><span class='line'><span class="k">end</span><span class="o">.</span><span class="n">run_action</span><span class="p">(</span><span class="ss">:enable</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see it&rsquo;s pretty straight forward.</p>
-
-<p>My company uses <a href="http://campfirenow.com/">campfire</a> and there&rsquo;s a <a href="https://github.com/ampledata/chef-handler-campfire">chef-handler-campfire</a> gem for it. The LWRP stanza that you put in your recipe requires something to this effect, I put this in the
-first main internal recipe:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">include_recipe</span> <span class="s1">&#39;chef_handler&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">chef_gem</span> <span class="s2">&quot;chef-handler-campfire&quot;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">action</span> <span class="ss">:install</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">chef_handler</span> <span class="s1">&#39;Chef::Handler::Campfire&#39;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">action</span> <span class="ss">:enable</span>
-</span><span class='line'>  <span class="n">arguments</span> <span class="o">[</span> <span class="s1">&#39;SUBDOMAIN&#39;</span><span class="p">,</span> <span class="s1">&#39;TOKEN&#39;</span> <span class="p">,</span> <span class="s1">&#39;ROOM&#39;</span> <span class="o">]</span>
-</span><span class='line'>  <span class="n">source</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">Gem</span><span class="o">.</span><span class="n">all_load_paths</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/chef-handler-campfire/</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s1">&#39;chef&#39;</span><span class="p">,</span> <span class="s1">&#39;handler&#39;</span><span class="p">,</span> <span class="s1">&#39;campfire.rb&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note: Unfortunately the newest <a href="https://github.com/collectiveidea/tinder">tinder</a> requires <code>json ~&gt; '1.8.0'</code> and chef <code>11.8.2</code> requires <code>json ~&gt; '1.7.7'</code>.  Last night (2014-02-06) chef <a href="http://www.getchef.com/blog/2014/02/06/chef-client-11-10-0-release/">released 11.10</a> which fixes this, the embedded chef binary now uses 1.8.0. I have a <a href="https://github.com/ampledata/chef-handler-campfire/pull/2">PR</a> to fix up the README.</p>
-
-<p>There&rsquo;s a lot more to handlers, but for now this is huge win for me, I&rsquo;ll post more as I start learning the reporting side of it.</p>
 ]]></content>
   </entry>
   

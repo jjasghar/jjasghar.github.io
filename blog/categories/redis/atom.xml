@@ -4,7 +4,7 @@
   <title><![CDATA[Category: redis | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (Part 2)]]></title>
     <link href="http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2/"/>
-    <updated>2013-10-01T18:11:00-07:00</updated>
+    <updated>2013-10-01T18:11:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/10/01/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis-part-2</id>
     <content type="html"><![CDATA[<h1>Monitoring</h1>
 
@@ -126,7 +126,7 @@ This monitor I took from my typical <a href="https://github.com/jjasghar/scripts
   <entry>
     <title type="html"><![CDATA[Adventures migrating from 2.4.16 redis to 2.6.16 redis (part 1)]]></title>
     <link href="http://jjasghar.github.io/blog/2013/09/30/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis/"/>
-    <updated>2013-09-30T20:15:00-07:00</updated>
+    <updated>2013-09-30T20:15:00-05:00</updated>
     <id>http://jjasghar.github.io/blog/2013/09/30/adventures-migrating-from-2-dot-4-16-redis-to-2-dot-6-16-redis</id>
     <content type="html"><![CDATA[<p>Like most sysadmins out there, I read the blogs and posts about new technologies that are relevant to my product(s).  There has been a lot of buzz about NoSQL and the key value store type db&rsquo;s out there, yet I have never really focused directly on it.  I have paid passing attention, until I realized that we use one heavily at my company.</p>
 

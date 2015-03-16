@@ -4,7 +4,7 @@
   <title><![CDATA[Category: hubot | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/hubot/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-01-07T15:50:00-08:00</updated>
+  <updated>2015-03-16T13:22:32-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[hubot mysql cli-table tutorial]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial/"/>
-    <updated>2014-06-24T11:09:23-07:00</updated>
+    <updated>2014-06-24T13:09:23-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-cli-table-tutorial</id>
     <content type="html"><![CDATA[<p>So you get some output in a fun like the previous post with mysql.  If you are just looking I&rsquo;m taking the example like:</p>
 
@@ -115,7 +115,7 @@ And boom, you now have a nice readable outputted chart that hubot can answer for
   <entry>
     <title type="html"><![CDATA[hubot mysql instead of a wrapper shell script]]></title>
     <link href="http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/"/>
-    <updated>2014-06-24T08:40:32-07:00</updated>
+    <updated>2014-06-24T10:40:32-05:00</updated>
     <id>http://jjasghar.github.io/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script</id>
     <content type="html"><![CDATA[<p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
 useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
@@ -203,7 +203,7 @@ will make this more enjoyable.</p>
   <entry>
     <title type="html"><![CDATA[Getting authentication with hubot using auth.coffee]]></title>
     <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
-    <updated>2014-02-19T09:07:03-08:00</updated>
+    <updated>2014-02-19T11:07:03-06:00</updated>
     <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
     <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
 First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
