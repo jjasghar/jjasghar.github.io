@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: maas | jjasghar rants and ramblings]]></title>
+  <link href="http://jjasghar.github.io/blog/categories/maas/atom.xml" rel="self"/>
+  <link href="http://jjasghar.github.io/"/>
+  <updated>2015-04-14T14:23:58-05:00</updated>
+  <id>http://jjasghar.github.io/</id>
+  <author>
+    <name><![CDATA[JJ Asghar]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[maas setting up region-controller and cluster-controller]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/"/>
+    <updated>2015-04-14T11:30:25-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller</id>
+    <content type="html"><![CDATA[<p>I attempted to set up a <code>region-controller</code> inside of MAAS recently. It was a disaster;
+I ended up breaking my whole environment. Luckly it was a demo environment, so I scratched
+it and started from square one again. This post is how I got it working, most of this is
+out of the internet, but this is a distilled version so you can just see what you need to
+do.</p>
+
+<p>First thing first, on what you want your <code>region-controller</code> to be:</p>
+
+<p><code>bash
+$ sudo cat /var/lib/maas/secret
+</code></p>
+
+<p>This&rsquo;ll give you a 16 digit hex number that you need to copy for any <code>cluster-controller</code> that you
+want to connect to the <code>region-controller</code>.</p>
+
+<p>After this, go to your <code>cluster-controller</code> and do the following:</p>
+
+<p><code>bash
+$ sudo dpkg-reconfigure maas-cluster-controller # point it to the MAAS instance that is your future region-controller
+$ sudo maas-provision install-shared-secret # it'll ask for the above secret you copy'd
+</code></p>
+
+<p>If you&rsquo;ve done everything correct you should see something like the following in the logs on the <code>cluster-controller</code>,
+then check your <code>region-controller</code> and it should be under &ldquo;Clusters.&rdquo;</p>
+
+<p><code>
+$ sudo cat /var/log/maas/pserv.log
+2015-04-14 11:27:30-0500 [ClusterClient,client] Event-loop 'vm-controller-maas:pid=1318' authenticated.
+2015-04-14 11:27:30-0500 [ClusterClient,client] Event-loop 'vm-controller-maas:pid=1317' authenticated.
+</code></p>
+
+<p>I rebooted my <code>cluster-controller</code> to make sure everything came up as expected, and saw this error is <code>/var/log/apache2/error.log</code>.</p>
+
+<p><code>
+$ sudo cat /var/log/apache2/error.log
+[Tue Apr 14 13:29:36.548078 2015] [:error] [pid 2766:tid 140219708958464] [remote 127.0.0.1:7825] AssertionError: The secret stored in the database does not match the secret stored on the filesystem at /var/lib/maas/secret. Please investigate.
+</code></p>
+
+<p>I resolved it by:</p>
+
+<p>```bash
+$ sudo su &ndash; maas
+$ psql maasdb
+maasdb => select * from maasserver_config;
+ id |       name        |               value
+&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+  1 | rpc_shared_secret | &ldquo;05e2NOT_REALLY_MY_SECRET03d412547&rdquo;
+(1 row)
+maasdb=> begin transaction ;
+BEGIN
+maasdb=> update maasserver_config set value = &lsquo;83f247fMY_NEW_VALUEcf00b2d1120aa&rsquo; where id = 1;
+UPDATE 1
+maasdb=> end
+maasdb-> ;
+COMMIT
+maasdb=> select * from maasserver_config ;
+ id |       name        |              value
+&mdash;&mdash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+  1 | rpc_shared_secret | 83f247fMY_NEW_VALUEcf00b2d11280aa
+(1 row)</p>
+
+<p>maasdb=>
+```</p>
+
+<p>Hopefully the <code>installed-shared-secret</code> will update the database in the future too, so you don&rsquo;t have to hack it like this.</p>
+]]></content>
+  </entry>
+  
+</feed>

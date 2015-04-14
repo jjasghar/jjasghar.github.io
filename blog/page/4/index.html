@@ -9,7 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I recently discovered hub and man this is really really cool. I&rsquo;m starting to fork out projects and making PRs, but it seems that when I &hellip;">
+  <meta name="description" content="So I recently watched ChatOps and got sold on Hubot. We had him at my company for a while, but
+with a migration we lost him; so I took it upon myself &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +79,96 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/27/hubot-plus-herkou-and-how-i-spent-much-more-time-than-i-thought-i-should/">Hubot+Herkou+Campfire and How I Spent Much More Time Than I Thought I Should</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-27T11:41:00-06:00" pubdate data-updated="true">Nov 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So I recently watched <a href="http://www.youtube.com/watch?v=NST3u-GjjFw">ChatOps</a> and got sold on <a href="http://hubot.github.com/">Hubot</a>.  We had him at my company for a while, but
+with a migration we lost him; so I took it upon myself to learn how to use him again.  All in all getting him running inside my company was pretty straight forward, hell even getting
+node to work on my local box for local development (<a href="https://gist.github.com/isaacs/579814">this gist</a> sums it up nicely) wasn&rsquo;t hard at all.  I found myself wanting my own hubot for <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/meme_captain.coffee">memes</a> generation, or just to play around with.</p>
+
+<p>So I decided hell, lets try out the <a href="https://github.com/github/hubot/blob/master/docs/deploying/heroku.md">heroku</a> install. It was pretty straight forward, I got my repo running, got it deployed; but I ran into an error:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is what the doc says&hellip;.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% heroku config:add HUBOT_CAMPFIRE_ACCOUNT=yourcampfireaccount
+</span><span class='line'>% heroku config:add HUBOT_CAMPFIRE_TOKEN=yourcampfiretoken</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I put my <code>HUBOT_CAMPEFIRE_ACCOUNT</code> name as my hubot&rsquo;s account name with the token which seems logical&hellip;wth man?</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=hubotsemail@myaccountname.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I did some searching, googling, (it seems a few people had this <a href="https://www.google.com/search?q=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;oq=ERROR+Campfire+request+error%3A+Error%3A+getaddrinfo+ENOTFOUND&amp;aqs=chrome..69i57j69i59.2689j0j9&amp;sourceid=chrome&amp;espv=210&amp;es_sm=91&amp;ie=UTF-8">issue</a>, but no fixes were posted), more reading, and it something clicked with me, maybe it&rsquo;s the actual consumer account that it connects to, not the hubot account? So I tried this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Damn, nope.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I figured I&rsquo;d try with <code>https://</code>&hellip;..</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=https://myaccountname.campfirenow.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Damnit.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ERROR Campfire request error: Error: getaddrinfo ENOTFOUND</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally I started searching around actual hubot <a href="https://github.com/github/hubot/issues/329">issues</a> and came across that guy. The <code>HUBOT_CAMPFIRE_ACCOUNT</code> just needed to be the subdomain. Do&#8217;h!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HUBOT_CAMPFIRE_ACCOUNT=myaccountname</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Boom, it worked.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1048,59 +1139,6 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/11/a-bash-numbering-trick-i-just-learned-today/">A Bash Numbering Trick I Just Learned Today</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-11T13:05:00-05:00" pubdate data-updated="true">Sep 11<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;ve been using bash for&hellip;a really really long time.  I&rsquo;ve always done <code>seq 1 10</code> in my for loops to get <code>1 2 3 4 5 6 7 8 9 10</code>.  Today I learned these three ways do the exact same thing. (Note: bash v4 above) I&rsquo;m writing this out, mainly because I want to remind myself of this again one day.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span>1; i&lt;<span class="o">=</span>10; i++<span class="o">))</span>; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for </span>i in <span class="sb">`</span>seq 1 10<span class="sb">`</span> ; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for </span>i in <span class="o">{</span>1..10<span class="o">}</span> ; <span class="k">do </span><span class="nb">echo</span> <span class="nv">$i</span>; <span class="k">done</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Dang you really do learn something new every day.</p>
-
-<p>Note: A good friend of mine <a href="https://github.com/awaxa/">awaxa</a> pointed out that {1..10} is the fastest in this case because it&rsquo;s a built into bash.  Thanks awaxa!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1118,6 +1156,10 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/">Maas Setting Up Region-controller and Cluster-controller</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/03/16/bazaar-usage-from-a-git-user/">Bazaar Usage From a Git User</a>
       </li>
     
@@ -1131,10 +1173,6 @@ Now I have a working master slave configuration.  Next (part 2) I&rsquo;ll post 
     
       <li class="post">
         <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-03-16T13:57:21-05:00</updated>
+  <updated>2015-04-14T14:23:58-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,108 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Maas Setting Up Region-controller and Cluster-controller]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/"/>
+    <updated>2015-04-14T11:30:25-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller</id>
+    <content type="html"><![CDATA[<p>I attempted to set up a <code>region-controller</code> inside of MAAS recently. It was a disaster;
+I ended up breaking my whole environment. Luckly it was a demo environment, so I scratched
+it and started from square one again. This post is how I got it working, most of this is
+out of the internet, but this is a distilled version so you can just see what you need to
+do.</p>
+
+<p>First thing first, on what you want your <code>region-controller</code> to be:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/lib/maas/secret
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This&rsquo;ll give you a 16 digit hex number that you need to copy for any <code>cluster-controller</code> that you
+want to connect to the <code>region-controller</code>.</p>
+
+<p>After this, go to your <code>cluster-controller</code> and do the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo dpkg-reconfigure maas-cluster-controller <span class="c"># point it to the MAAS instance that is your future region-controller</span>
+</span><span class='line'><span class="nv">$ </span>sudo maas-provision install-shared-secret <span class="c"># it&#39;ll ask for the above secret you copy&#39;d</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;ve done everything correct you should see something like the following in the logs on the <code>cluster-controller</code>,
+then check your <code>region-controller</code> and it should be under &ldquo;Clusters.&rdquo;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/log/maas/pserv.log
+</span><span class='line'>2015-04-14 11:27:30-0500 <span class="o">[</span>ClusterClient,client<span class="o">]</span> Event-loop <span class="s1">&#39;vm-controller-maas:pid=1318&#39;</span> authenticated.
+</span><span class='line'>2015-04-14 11:27:30-0500 <span class="o">[</span>ClusterClient,client<span class="o">]</span> Event-loop <span class="s1">&#39;vm-controller-maas:pid=1317&#39;</span> authenticated.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I rebooted my <code>cluster-controller</code> to make sure everything came up as expected, and saw this error is <code>/var/log/apache2/error.log</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/log/apache2/error.log
+</span><span class='line'><span class="o">[</span>Tue Apr 14 13:29:36.548078 2015<span class="o">]</span> <span class="o">[</span>:error<span class="o">]</span> <span class="o">[</span>pid 2766:tid 140219708958464<span class="o">]</span> <span class="o">[</span>remote 127.0.0.1:7825<span class="o">]</span> AssertionError: The secret stored in the database does not match the secret stored on the filesystem at /var/lib/maas/secret. Please investigate.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I resolved it by:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo su - maas
+</span><span class='line'><span class="nv">$ </span>psql maasdb
+</span><span class='line'><span class="nv">maasdb</span> <span class="o">=</span>&gt; <span class="k">select</span> * from maasserver_config;
+</span><span class='line'> id |       name        |               value
+</span><span class='line'>----+-------------------+------------------------------------
+</span><span class='line'>  1 | rpc_shared_secret | <span class="s2">&quot;05e2NOT_REALLY_MY_SECRET03d412547&quot;</span>
+</span><span class='line'><span class="o">(</span>1 row<span class="o">)</span>
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; begin transaction ;
+</span><span class='line'>BEGIN
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; update maasserver_config <span class="nb">set </span><span class="nv">value</span> <span class="o">=</span> <span class="s1">&#39;83f247fMY_NEW_VALUEcf00b2d1120aa&#39;</span> where <span class="nv">id</span> <span class="o">=</span> 1;
+</span><span class='line'>UPDATE 1
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; end
+</span><span class='line'>maasdb-&gt; ;
+</span><span class='line'>COMMIT
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; <span class="k">select</span> * from maasserver_config ;
+</span><span class='line'> id |       name        |              value
+</span><span class='line'>----+-------------------+----------------------------------
+</span><span class='line'>  1 | rpc_shared_secret | 83f247fMY_NEW_VALUEcf00b2d11280aa
+</span><span class='line'><span class="o">(</span>1 row<span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hopefully the <code>installed-shared-secret</code> will update the database in the future too, so you don&rsquo;t have to hack it like this.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bazaar Usage From a Git User]]></title>
@@ -1404,42 +1506,6 @@ the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env v
 but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
 
 <p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Docker Packer VM Oh My]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my/"/>
-    <updated>2014-02-13T12:17:09-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/13/docker-packer-vm-oh-my</id>
-    <content type="html"><![CDATA[<p>So I&rsquo;ve been caught up in the <a href="http://docker.io">docker</a>, <a href="http://packer.io">packer</a>, and VM discussion a handful of times. I&rsquo;ve been defending and discussing<em>cough</em>attacking<em>cough</em> different
-versions and use cases. Then something happened, something I thought docker is wasn&rsquo;t what it was, and something I thought packer was isn&rsquo;t what it is. Welp, there&rsquo;s some egg on my face eh?
-So here&rsquo;s a cheatsheet type post about the difference and <strong>POSSIBLE</strong> use cases.</p>
-
-<h3>docker</h3>
-
-<p>As the docker says in their <a href="http://www.slideshare.net/dotCloud/docker-intro-november">intro slide deck</a>, it&rsquo;s designed to &ldquo;ship code.&rdquo; This is important distinction between this and what a VM does.
-docker is a souped–up version of <a href="http://linuxcontainers.org/">lxc</a> or to a lesser extent <a href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/jails.html">freebsd jails</a>. It allows you to
-run an application in it&rsquo;s own little bubble, but has a <em>shared</em> underlying OS/kernel. (in this case linux) It allows for a quick provisioning of an application disposable and transient applications
-which is great for development work. You can spin up a &ldquo;base&rdquo; build extremely quickly and hack away and it and rollback to a know good spot, without having to reimage/build the machine. In the new <a href="http://en.wikipedia.org/wiki/Test-driven_development">TDD</a>
-world this is great for iterations. I guess a good simile is like you have a pad of paper with a base story printed on each page, you tack on the writing you want at the bottom, and if you don&rsquo;t like it just tear it
-away and start again.</p>
-
-<h3>VM</h3>
-
-<p>So docker is designed for an application? Isn&rsquo;t that what a VM is designed for? Not exactly. docker shares the kernel and base os, while a VM is it&rsquo;s own entity. VMs also require a hypervisor of some type
-that sits on another os; so if you can imagine it, VM = os ontop of hypervisor (that controls the VMs) on top of another os. This has it&rsquo;s merits, but at the same time it can be cumbersome, for development. It seems
-VMs use case, compared to something like docker, is more for production deployments, more static content that updates through a deployment system.  This can bring in security uses and the like, keep that in mind.</p>
-
-<h3>packer</h3>
-
-<p>packer in a couple words is this: a way to create base or gold VM images. It&rsquo;s designed to create a typical/transferable VM image that works with multiple platforms and hypervisors. An example, you have a beloved mail server, you create
-an image of this box, but you&rsquo;re boss now says you&rsquo;re moving cloud providers and  have to get it working on <a href="http://digitalocean.com/">digital ocean</a>. packer makes that conversion &ldquo;simple,&rdquo; which packs up the image to be portable and transferable.
-I say simple mainly because honestly I haven&rsquo;t tried it yet, but I have watched a few youtube tutorials on it.</p>
-
-<p>This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of groking them, rediscovering packer.</p>
-
-<p>So in a nutshell: docker is a wrapper for lxc/jails for linux running an app sharing a common kernel, VMs are separate entities and kernels that more production focused, and packer is a way to create transferable VMs between hypervisors.</p>
 ]]></content>
   </entry>
   

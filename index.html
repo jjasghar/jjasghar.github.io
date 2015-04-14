@@ -9,9 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I love git. Honestly, I really do, hell I even have a sticker on my laptop.
-Unfortunately Canonical choose something different
-called bazaar. It& &hellip;">
+  <meta name="description" content="I attempted to set up a region-controller inside of MAAS recently. It was a disaster;
+I ended up breaking my whole environment. Luckly it was a demo &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,135 @@ called bazaar. It& &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/">Maas Setting Up Region-controller and Cluster-controller</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-14T11:30:25-05:00" pubdate data-updated="true">Apr 14<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I attempted to set up a <code>region-controller</code> inside of MAAS recently. It was a disaster;
+I ended up breaking my whole environment. Luckly it was a demo environment, so I scratched
+it and started from square one again. This post is how I got it working, most of this is
+out of the internet, but this is a distilled version so you can just see what you need to
+do.</p>
+
+<p>First thing first, on what you want your <code>region-controller</code> to be:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/lib/maas/secret
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This&rsquo;ll give you a 16 digit hex number that you need to copy for any <code>cluster-controller</code> that you
+want to connect to the <code>region-controller</code>.</p>
+
+<p>After this, go to your <code>cluster-controller</code> and do the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo dpkg-reconfigure maas-cluster-controller <span class="c"># point it to the MAAS instance that is your future region-controller</span>
+</span><span class='line'><span class="nv">$ </span>sudo maas-provision install-shared-secret <span class="c"># it&#39;ll ask for the above secret you copy&#39;d</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;ve done everything correct you should see something like the following in the logs on the <code>cluster-controller</code>,
+then check your <code>region-controller</code> and it should be under &ldquo;Clusters.&rdquo;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/log/maas/pserv.log
+</span><span class='line'>2015-04-14 11:27:30-0500 <span class="o">[</span>ClusterClient,client<span class="o">]</span> Event-loop <span class="s1">&#39;vm-controller-maas:pid=1318&#39;</span> authenticated.
+</span><span class='line'>2015-04-14 11:27:30-0500 <span class="o">[</span>ClusterClient,client<span class="o">]</span> Event-loop <span class="s1">&#39;vm-controller-maas:pid=1317&#39;</span> authenticated.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I rebooted my <code>cluster-controller</code> to make sure everything came up as expected, and saw this error is <code>/var/log/apache2/error.log</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/log/apache2/error.log
+</span><span class='line'><span class="o">[</span>Tue Apr 14 13:29:36.548078 2015<span class="o">]</span> <span class="o">[</span>:error<span class="o">]</span> <span class="o">[</span>pid 2766:tid 140219708958464<span class="o">]</span> <span class="o">[</span>remote 127.0.0.1:7825<span class="o">]</span> AssertionError: The secret stored in the database does not match the secret stored on the filesystem at /var/lib/maas/secret. Please investigate.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I resolved it by:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo su - maas
+</span><span class='line'><span class="nv">$ </span>psql maasdb
+</span><span class='line'><span class="nv">maasdb</span> <span class="o">=</span>&gt; <span class="k">select</span> * from maasserver_config;
+</span><span class='line'> id |       name        |               value
+</span><span class='line'>----+-------------------+------------------------------------
+</span><span class='line'>  1 | rpc_shared_secret | <span class="s2">&quot;05e2NOT_REALLY_MY_SECRET03d412547&quot;</span>
+</span><span class='line'><span class="o">(</span>1 row<span class="o">)</span>
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; begin transaction ;
+</span><span class='line'>BEGIN
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; update maasserver_config <span class="nb">set </span><span class="nv">value</span> <span class="o">=</span> <span class="s1">&#39;83f247fMY_NEW_VALUEcf00b2d1120aa&#39;</span> where <span class="nv">id</span> <span class="o">=</span> 1;
+</span><span class='line'>UPDATE 1
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; end
+</span><span class='line'>maasdb-&gt; ;
+</span><span class='line'>COMMIT
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; <span class="k">select</span> * from maasserver_config ;
+</span><span class='line'> id |       name        |              value
+</span><span class='line'>----+-------------------+----------------------------------
+</span><span class='line'>  1 | rpc_shared_secret | 83f247fMY_NEW_VALUEcf00b2d11280aa
+</span><span class='line'><span class="o">(</span>1 row<span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hopefully the <code>installed-shared-secret</code> will update the database in the future too, so you don&rsquo;t have to hack it like this.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1023,154 +1151,6 @@ in this case chef for windows.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/04/moving-to-capistrano-version-3-from-version-2/">Moving to Capistrano Version 3 From Version 2 Git Submodules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-04T17:13:43-05:00" pubdate data-updated="true">Jun 4<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m in the process of moving from <a href="http://capistranorb.com/">capistrano</a> version 2
-to capistrano version 3. This is a post of a nasty hiccup I had, hopefully it&rsquo;ll be
-useful for someone else.</p>
-
-<h2>git submodules</h2>
-
-<p>I had a requirement to get git submodules to work with one of my applications. It&rsquo;s seems
-that v3 doesn&rsquo;t have the &ldquo;clone&rdquo; version anymore, so the <code>.git</code> directory isn&rsquo;t there.
-It seems it uses the <code>git archive</code> and doesn&rsquo;t have an &ldquo;out of the box&rdquo; support for submodules.
-See <a href="http://stackoverflow.com/questions/19403138/capistrano-v3-deploy-git-repository-and-its-submodules/19573220#19573220">here</a>.
-I did some searching and found the above stack overflow and  <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">this gist</a>
-which gave me the bulk of what I needed to get done.</p>
-
-<p>There were some gotchas on this so I&rsquo;m going to do my best to document them here.
-First off, as you can see on <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L20">line 20</a>
-there is a new variable named <code>repo_path</code>.  This is due to the need now of the
-<code>git clone</code> to the file system and a place it needs to put it. So that means you need
-to add the <code>repo/</code> directory in your <code>:deploy_to</code> directory. Might I suggest the something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>ssh &lt;deployuser&gt;@&lt;remotehost&gt;://var/www/&lt;app&gt;/repo/
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then after the fact, you might want to steal this cap rake task:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;Check that we can access the repo directory&quot;</span>
-</span><span class='line'><span class="n">task</span> <span class="ss">:check_repo_permissions</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">host</span><span class="o">|</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">test</span><span class="p">(</span><span class="s2">&quot;[ -w </span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_to</span><span class="p">)</span><span class="o">/</span><span class="n">repo</span><span class="si">}</span><span class="s2"> ]&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">info</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_to</span><span class="p">)</span><span class="o">/</span><span class="n">repo</span><span class="si">}</span><span class="s2"> is writable on </span><span class="si">#{</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="n">error</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_to</span><span class="p">)</span><span class="o">/</span><span class="n">repo</span><span class="si">}</span><span class="s2"> is not writable on </span><span class="si">#{</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Also may I suggest you putting this at the &ldquo;top&rdquo; of your <code>deploy.rb</code> something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before</span> <span class="ss">:deploy</span><span class="p">,</span> <span class="ss">:check_repo_permissions</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So just in case you&rsquo;re <code>cap</code> task will fail out early on of you have decided to remove, or
-do something with that repo directory.</p>
-
-<p>Now if you go ahead and run <code>cap staging deploy</code> (you&rsquo;re testing in STAGING right?)
-You might run into some errors. Most are pretty self explanatory, and if you take care of them
-and run <code>cap</code> again, you should be good&hellip;but I digress.</p>
-
-<p>After adding that repo directory, you want to add the above <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc">gist</a> to <code>lib/capistrano/submodule_strategy.rb</code>
-and add the following two lines to your <code>Capfile</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/git&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;./lib/capistrano/submodule_strategy&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After that, you need to add to your <code>config/deploy.rb</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:git_strategy</span><span class="p">,</span> <span class="no">SubmoduleStrategy</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This should wire everything up now.</p>
-
-<p>There is one other <em>optional</em> file, <code>.capignore</code> that needs to be created, it is a <code>.gitignore</code> for this cap deployment.
-I ended up taking the example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">.</span><span class="n">capignore</span>
-</span><span class='line'><span class="n">lib</span>
-</span><span class='line'><span class="n">config</span>
-</span><span class='line'><span class="o">.</span><span class="n">git</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>and adding it directory to the <code>(:deploy_to)/repo/.capignore</code>. I believe you can add it to your the root of your repo,
-and it should get there too, but I didnt do it that way. The only place it&rsquo;s referanced is <a href="https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L45">here</a> so if you see fit, you could probably just remove the referance.</p>
-
-<p>You should be able to do a <code>cap staging deploy</code> now and you should notice something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>...
-</span><span class='line'>DEBUG<span class="o">[</span>639d0d29<span class="o">]</span> Command: <span class="nb">cd</span> /var/www/app/repo <span class="o">&amp;&amp;</span> <span class="o">(</span> <span class="nv">GIT_ASKPASS</span><span class="o">=</span>/bin/echo <span class="nv">GIT_SSH</span><span class="o">=</span>/tmp/app/git-ssh.sh /usr/bin/env git submodule update --init <span class="o">)</span>
-</span><span class='line'>DEBUG<span class="o">[</span>639d0d29<span class="o">]</span>   Submodule <span class="s1">&#39;i-hate-submodules&#39;</span> <span class="o">()</span> registered <span class="k">for </span>path <span class="s1">&#39;i-hate-submodules&#39;</span>
-</span><span class='line'>...
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And you should be good to go!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1186,6 +1166,10 @@ and it should get there too, but I didnt do it that way. The only place it&rsquo
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/">Maas Setting Up Region-controller and Cluster-controller</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/03/16/bazaar-usage-from-a-git-user/">Bazaar Usage From a Git User</a>
       </li>
     
@@ -1199,10 +1183,6 @@ and it should get there too, but I didnt do it that way. The only place it&rsquo
     
       <li class="post">
         <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/26/in-honor-of-greg/">In Honor of Greg</a>
       </li>
     
   </ul>

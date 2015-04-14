@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Maas Setting Up Region-controller and Cluster-controller - jjasghar rants and ramblings</title>
+  <meta name="author" content="JJ Asghar">
+
+  
+  <meta name="description" content="I attempted to set up a region-controller inside of MAAS recently. It was a disaster;
+I ended up breaking my whole environment. Luckly it was a demo &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-47435051-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jjasghar rants and ramblings</a></h1>
+  
+    <h2>background info on his projects</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jjasghar.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">blog</a></li>
+  <li><a href="/blog/archives">archives</a></li>
+  <li><a href="/about">about</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Maas Setting Up Region-controller and Cluster-controller</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-14T11:30:25-05:00" pubdate data-updated="true">Apr 14<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I attempted to set up a <code>region-controller</code> inside of MAAS recently. It was a disaster;
+I ended up breaking my whole environment. Luckly it was a demo environment, so I scratched
+it and started from square one again. This post is how I got it working, most of this is
+out of the internet, but this is a distilled version so you can just see what you need to
+do.</p>
+
+<p>First thing first, on what you want your <code>region-controller</code> to be:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/lib/maas/secret
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This&rsquo;ll give you a 16 digit hex number that you need to copy for any <code>cluster-controller</code> that you
+want to connect to the <code>region-controller</code>.</p>
+
+<p>After this, go to your <code>cluster-controller</code> and do the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo dpkg-reconfigure maas-cluster-controller <span class="c"># point it to the MAAS instance that is your future region-controller</span>
+</span><span class='line'><span class="nv">$ </span>sudo maas-provision install-shared-secret <span class="c"># it&#39;ll ask for the above secret you copy&#39;d</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;ve done everything correct you should see something like the following in the logs on the <code>cluster-controller</code>,
+then check your <code>region-controller</code> and it should be under &ldquo;Clusters.&rdquo;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/log/maas/pserv.log
+</span><span class='line'>2015-04-14 11:27:30-0500 <span class="o">[</span>ClusterClient,client<span class="o">]</span> Event-loop <span class="s1">&#39;vm-controller-maas:pid=1318&#39;</span> authenticated.
+</span><span class='line'>2015-04-14 11:27:30-0500 <span class="o">[</span>ClusterClient,client<span class="o">]</span> Event-loop <span class="s1">&#39;vm-controller-maas:pid=1317&#39;</span> authenticated.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I rebooted my <code>cluster-controller</code> to make sure everything came up as expected, and saw this error is <code>/var/log/apache2/error.log</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo cat /var/log/apache2/error.log
+</span><span class='line'><span class="o">[</span>Tue Apr 14 13:29:36.548078 2015<span class="o">]</span> <span class="o">[</span>:error<span class="o">]</span> <span class="o">[</span>pid 2766:tid 140219708958464<span class="o">]</span> <span class="o">[</span>remote 127.0.0.1:7825<span class="o">]</span> AssertionError: The secret stored in the database does not match the secret stored on the filesystem at /var/lib/maas/secret. Please investigate.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I resolved it by:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo su - maas
+</span><span class='line'><span class="nv">$ </span>psql maasdb
+</span><span class='line'><span class="nv">maasdb</span> <span class="o">=</span>&gt; <span class="k">select</span> * from maasserver_config;
+</span><span class='line'> id |       name        |               value
+</span><span class='line'>----+-------------------+------------------------------------
+</span><span class='line'>  1 | rpc_shared_secret | <span class="s2">&quot;05e2NOT_REALLY_MY_SECRET03d412547&quot;</span>
+</span><span class='line'><span class="o">(</span>1 row<span class="o">)</span>
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; begin transaction ;
+</span><span class='line'>BEGIN
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; update maasserver_config <span class="nb">set </span><span class="nv">value</span> <span class="o">=</span> <span class="s1">&#39;83f247fMY_NEW_VALUEcf00b2d1120aa&#39;</span> where <span class="nv">id</span> <span class="o">=</span> 1;
+</span><span class='line'>UPDATE 1
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; end
+</span><span class='line'>maasdb-&gt; ;
+</span><span class='line'>COMMIT
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt; <span class="k">select</span> * from maasserver_config ;
+</span><span class='line'> id |       name        |              value
+</span><span class='line'>----+-------------------+----------------------------------
+</span><span class='line'>  1 | rpc_shared_secret | 83f247fMY_NEW_VALUEcf00b2d11280aa
+</span><span class='line'><span class="o">(</span>1 row<span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">maasdb</span><span class="o">=</span>&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hopefully the <code>installed-shared-secret</code> will update the database in the future too, so you don&rsquo;t have to hack it like this.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">JJ Asghar</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-14T11:30:25-05:00" pubdate data-updated="true">Apr 14<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/maas/'>maas</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/16/bazaar-usage-from-a-git-user/" title="Previous Post: bazaar usage from a git user">&laquo; bazaar usage from a git user</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/14/maas-setting-up-region-controller-and-cluster-controller/">Maas Setting Up Region-controller and Cluster-controller</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/16/bazaar-usage-from-a-git-user/">Bazaar Usage From a Git User</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/25/checking-active-branche-in-multiple-repos/">Checking Active Branch in Multiple Repos</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jjasghar">@jjasghar</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jjasghar',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - JJ Asghar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
