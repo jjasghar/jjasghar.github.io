@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-07-20T16:29:00-05:00</updated>
+  <updated>2015-07-20T16:54:41-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -36,6 +36,16 @@
 
 <p>Now it&rsquo;s possible it&rsquo;s <code>knife</code> sending back something like that error. Checkout <a href="https://twitter.com/jtimberman">Joshua Timberman</a>&rsquo;s post <a href="http://jtimberman.housepub.org/blog/2014/12/11/chef-12-fix-untrusted-self-sign-certs/">here</a>
 to help out with specific <code>knife</code> issues.</p>
+
+<p>Update:</p>
+
+<p>Thanks to <a href="https://twitter.com/ryancragun">Ryan Cragun</a> my co-worker and general badass, pointing out a way to get around this too.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo '{"ssl":{"verify": false }}' &gt; ~/.berkshelf/config.json</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can drop that <code>--no-ssl-verify</code>.</p>
 ]]></content>
   </entry>
   
