@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-04-14T14:23:58-05:00</updated>
+  <updated>2015-07-20T16:29:00-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SSL_connect Returned=1 Errno=0 state=SSLv3 Read Server Certificate B]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b/"/>
+    <updated>2015-07-20T16:18:16-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b</id>
+    <content type="html"><![CDATA[<p>If you have a self signed cert on your chef-server, there&rsquo;s a change you&rsquo;ve seen this before using berkshelf:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>E, [2015-07-20T16:15:33.369649 #34774] ERROR -- : Ridley::Errors::ClientError: SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
+</span><span class='line'>E, [2015-07-20T16:15:33.369737 #34774] ERROR -- : /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/celluloid-0.16.0/lib/celluloid/responses.rb:29:in `value'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is berkshelf telling you you&rsquo;re not running a signed cert, and it bombs out.</p>
+
+<p>Looking at <a href="https://github.com/berkshelf/berkshelf/issues/1266">this</a> they give the answer, which is:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chef exec berks upload --no-ssl-verify</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now it&rsquo;s possible it&rsquo;s <code>knife</code> sending back something like that error. Checkout <a href="https://twitter.com/jtimberman">Joshua Timberman</a>&rsquo;s post <a href="http://jtimberman.housepub.org/blog/2014/12/11/chef-12-fix-untrusted-self-sign-certs/">here</a>
+to help out with specific <code>knife</code> issues.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Maas Setting Up Region-controller and Cluster-controller]]></title>
@@ -1413,99 +1439,6 @@ to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&g
 your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
 
 <p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[.kitchen.local.yml and When You Want to Use It]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it/"/>
-    <updated>2014-02-17T15:32:20-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/17/dot-kitchen-dot-local-dot-yml-and-when-you-want-to-use-it</id>
-    <content type="html"><![CDATA[<p>I recently bought the vagrant <a href="http://www.vagrantup.com/vmware">vmware fusion</a> plugin to start testing out <a href="https://gist.github.com/fnichol/8609348">test-kitchen for mac</a>. Good ol&#8217; <a href="https://twitter.com/fnichol">Fletcher</a>
-made it ridiculously easy to do and I thank him for that.  Interestingly enough though in the process of figuring it out I ran into a problem.  I have a few other <code>.kitchen.yml</code> files in different
-cookbooks, and I wanted to start leveraging what I just paid for.</p>
-
-<p>So take this <code>.kitchen.yml</code> for instance:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>---
-</span><span class='line'>driver:
-</span><span class='line'>  name: vagrant
-</span><span class='line'>
-</span><span class='line'>provisioner:
-</span><span class='line'>  name: chef_solo
-</span><span class='line'>
-</span><span class='line'>platforms:
-</span><span class='line'>  - name: ubuntu-12.04
-</span><span class='line'>
-</span><span class='line'>suites:
-</span><span class='line'>  - name: default
-</span><span class='line'>    run_list:
-</span><span class='line'>      - recipe[hubot-solo::default]
-</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Yep, it runs off the default of virtualbox.  If you create a <code>.kitchen.local.yml</code> file in that directory, something like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>---
-</span><span class='line'>driver:
-</span><span class='line'>  name: vagrant
-</span><span class='line'>  provider: vmware_fusion
-</span><span class='line'>
-</span><span class='line'>provisioner:
-</span><span class='line'>  name: chef_solo
-</span><span class='line'>
-</span><span class='line'>platforms:
-</span><span class='line'>  - name: ubuntu-12.04
-</span><span class='line'>
-</span><span class='line'>suites:
-</span><span class='line'>  - name: default
-</span><span class='line'>    run_list:
-</span><span class='line'>      - recipe[hubot-solo::default]
-</span><span class='line'>    attributes:</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It&rsquo;ll run it with vmare as the hypervisor or provider, in kitchen lingo.</p>
-
-<p>That&rsquo;s all fine and dandy, but what about an over arching config? I thought you could create something like <code>~/.kitchen.local.yml</code> that didn&rsquo;t seem to work.</p>
-
-<p>I pinged <a href="https://webchat.freenode.net/?channels=%23kitchenci">#kitchenci</a> and <strong>teukka</strong> gave me
-the answer: set/export <code>VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> env var (in your shell&rsquo;s rc file), and boom, it worked.</p>
-
-<p>So, long story short: if you want to have a specific change that overrides the default <code>.kitchen.yml</code> make a <code>.kitchen.local.yml</code> in the directory,
-but if you want to override every hypervisor use <code>export VAGRANT_DEFAULT_PROVIDER=vmware_fusion</code> in your bashrc/zshrc.</p>
-
-<p>I hope this helps someone making the conversion from virtualbox to vmware.</p>
 ]]></content>
   </entry>
   

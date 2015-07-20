@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-04-14T14:23:58-05:00</updated>
+  <updated>2015-07-20T16:29:00-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b/"/>
+    <updated>2015-07-20T16:18:16-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b</id>
+    <content type="html"><![CDATA[<p>If you have a self signed cert on your chef-server, there&rsquo;s a change you&rsquo;ve seen this before using berkshelf:</p>
+
+<p><code>
+E, [2015-07-20T16:15:33.369649 #34774] ERROR -- : Ridley::Errors::ClientError: SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
+E, [2015-07-20T16:15:33.369737 #34774] ERROR -- : /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/celluloid-0.16.0/lib/celluloid/responses.rb:29:in `value'
+</code></p>
+
+<p>This is berkshelf telling you you&rsquo;re not running a signed cert, and it bombs out.</p>
+
+<p>Looking at <a href="https://github.com/berkshelf/berkshelf/issues/1266">this</a> they give the answer, which is:</p>
+
+<p><code>
+chef exec berks upload --no-ssl-verify
+</code></p>
+
+<p>Now it&rsquo;s possible it&rsquo;s <code>knife</code> sending back something like that error. Checkout <a href="https://twitter.com/jtimberman">Joshua Timberman</a>&rsquo;s post <a href="http://jtimberman.housepub.org/blog/2014/12/11/chef-12-fix-untrusted-self-sign-certs/">here</a>
+to help out with specific <code>knife</code> issues.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Omnibus so you dont get hit by the bus]]></title>
@@ -265,18 +290,6 @@ chef 11 server.</p>
 [~] % #scp it up to your chef box
 chef# chown root.root /etc/chef-server/chef-webui.pem
 </code></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[chef-book lighting talk]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk/"/>
-    <updated>2014-02-28T10:52:08-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/28/chef-book-lighting-talk</id>
-    <content type="html"><![CDATA[<p>On February 25th 2014 I did a lighting talk on my <a href="https://github.com/jjasghar/chef-book">chef-book</a> at <a href="http://austinonrails.org/">Austin on Rails</a>.  It was about
-five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
-
-<p>PS, I apologize for the quality.</p>
 ]]></content>
   </entry>
   
