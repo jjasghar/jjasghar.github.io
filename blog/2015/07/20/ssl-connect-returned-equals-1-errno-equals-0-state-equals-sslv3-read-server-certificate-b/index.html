@@ -9,9 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="If you have a self signed cert on your chef-server, there&rsquo;s a change you&rsquo;ve seen this before using berkshelf: 1
-2
-E, [2015-07-20T16:15:33 &hellip;">
+  <meta name="description" content="tl;dr: You&rsquo;re getting self signed cert errors using Berkshelf or knife.rb, add this to your knife.rb and run this command: 1
+ssl_verify_mode : &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,20 +105,40 @@ E, [2015-07-20T16:15:33 &hellip;">
   </header>
 
 
-<div class="entry-content"><p>If you have a self signed cert on your chef-server, there&rsquo;s a change you&rsquo;ve seen this before using berkshelf:</p>
+<div class="entry-content"><h2>tl;dr:</h2>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>You&rsquo;re getting self signed cert errors using Berkshelf or <code>knife.rb</code>, add this to your <code>knife.rb</code> and run this command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ssl_verify_mode</span> <span class="ss">:verify_none</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">echo</span> <span class="s1">&#39;{&quot;ssl&quot;:{&quot;verify&quot;: false }}&#39;</span> <span class="o">&gt;</span> <span class="o">~</span><span class="sr">/.berkshelf/</span><span class="n">config</span><span class="o">.</span><span class="n">json</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Explanation</h2>
+
+<p>If you have a self signed cert on your chef-server, there&rsquo;s a change you&rsquo;ve seen this before using berkshelf:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>E, [2015-07-20T16:15:33.369649 #34774] ERROR -- : Ridley::Errors::ClientError: SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
-</span><span class='line'>E, [2015-07-20T16:15:33.369737 #34774] ERROR -- : /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/celluloid-0.16.0/lib/celluloid/responses.rb:29:in `value'</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">E</span><span class="p">,</span> <span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">20</span><span class="ss">T16</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">33</span><span class="o">.</span><span class="mi">369649</span> <span class="c1">#34774] ERROR -- : Ridley::Errors::ClientError: SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed</span>
+</span><span class='line'><span class="n">E</span><span class="p">,</span> <span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mi">20</span><span class="ss">T16</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">33</span><span class="o">.</span><span class="mi">369737</span> <span class="c1">#34774] ERROR -- : /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/celluloid-0.16.0/lib/celluloid/responses.rb:29:in `value&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>This is berkshelf telling you you&rsquo;re not running a signed cert, and it bombs out.</p>
 
 <p>Looking at <a href="https://github.com/berkshelf/berkshelf/issues/1266">this</a> they give the answer, which is:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>chef exec berks upload --no-ssl-verify</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">chef</span> <span class="nb">exec</span> <span class="n">berks</span> <span class="n">upload</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">ssl</span><span class="o">-</span><span class="n">verify</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Now it&rsquo;s possible it&rsquo;s <code>knife</code> sending back something like that error. Checkout <a href="https://twitter.com/jtimberman">Joshua Timberman</a>&rsquo;s post <a href="http://jtimberman.housepub.org/blog/2014/12/11/chef-12-fix-untrusted-self-sign-certs/">here</a>
@@ -129,11 +148,132 @@ to help out with specific <code>knife</code> issues.</p>
 
 <p>Thanks to <a href="https://twitter.com/ryancragun">Ryan Cragun</a> my co-worker and general badass, pointing out a way to get around this too.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>echo '{"ssl":{"verify": false }}' &gt; ~/.berkshelf/config.json</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">echo</span> <span class="s1">&#39;{&quot;ssl&quot;:{&quot;verify&quot;: false }}&#39;</span> <span class="o">&gt;</span> <span class="o">~</span><span class="sr">/.berkshelf/</span><span class="n">config</span><span class="o">.</span><span class="n">json</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Now you can drop that <code>--no-ssl-verify</code>.</p>
+
+<p>Another Update:</p>
+
+<p>So it seems you might see this with <code>knife cookbook upload</code> or any <code>knife</code> command for that matter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ubuntu</span><span class="vi">@aoeu</span><span class="ss">:~</span><span class="sr">/chef-repo$ knife status</span>
+</span><span class='line'><span class="sr">ERROR: SSL Validation failure connecting to host: 172.16.20.62 - SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed</span>
+</span><span class='line'><span class="sr">ERROR: Could not establish a secure connection to the server.</span>
+</span><span class='line'><span class="sr">Use `knife ssl check` to troubleshoot your SSL configuration.</span>
+</span><span class='line'><span class="sr">If your Chef Server uses a self-signed certificate, you can use</span>
+</span><span class='line'><span class="sr">`knife ssl fetch` to make knife trust the server&#39;s certificates.</span>
+</span><span class='line'><span class="sr">Original Exception: OpenSSL::SSL::SSLError: SSL_connect r</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And if you run <code>knife ssl check</code> you&rsquo;d see:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ubuntu</span><span class="vi">@aoeu</span><span class="ss">:~</span><span class="sr">/chef-repo$ knife ssl check</span>
+</span><span class='line'><span class="sr">Connecting to host 172.16.20.62:443</span>
+</span><span class='line'><span class="sr">ERROR: The SSL certificate of 172.16.20.62 could not be verified</span>
+</span><span class='line'><span class="sr">Certificate issuer data: /</span><span class="n">C</span><span class="o">=</span><span class="no">US</span><span class="o">/</span><span class="no">ST</span><span class="o">=</span><span class="no">WA</span><span class="o">/</span><span class="n">L</span><span class="o">=</span><span class="no">Seattle</span><span class="o">/</span><span class="n">O</span><span class="o">=</span><span class="no">YouCorp</span><span class="o">/</span><span class="no">OU</span><span class="o">=</span><span class="no">Operations</span><span class="o">/</span><span class="no">CN</span><span class="o">=</span><span class="n">chefie</span><span class="o">.</span><span class="n">novalocal</span><span class="o">/</span><span class="n">emailAddress</span><span class="o">=</span><span class="n">you</span><span class="vi">@example</span><span class="o">.</span><span class="n">com</span>
+</span><span class='line'><span class="no">Configuration</span> <span class="ss">Info</span><span class="p">:</span>
+</span><span class='line'><span class="no">OpenSSL</span> <span class="ss">Configuration</span><span class="p">:</span>
+</span><span class='line'><span class="o">*</span> <span class="ss">Version</span><span class="p">:</span> <span class="no">OpenSSL</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">1</span><span class="n">m</span> <span class="mi">19</span> <span class="no">Mar</span> <span class="mi">2015</span>
+</span><span class='line'><span class="o">*</span> <span class="no">Certificate</span> <span class="ss">file</span><span class="p">:</span> <span class="sr">/opt/</span><span class="n">chef</span><span class="o">/</span><span class="n">embedded</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">cert</span><span class="o">.</span><span class="n">pem</span>
+</span><span class='line'><span class="o">*</span> <span class="no">Certificate</span> <span class="ss">directory</span><span class="p">:</span> <span class="sr">/opt/</span><span class="n">chef</span><span class="o">/</span><span class="n">embedded</span><span class="o">/</span><span class="n">ssl</span><span class="o">/</span><span class="n">certs</span>
+</span><span class='line'><span class="no">Chef</span> <span class="no">SSL</span> <span class="ss">Configuration</span><span class="p">:</span>
+</span><span class='line'><span class="o">*</span> <span class="n">ssl_ca_path</span><span class="p">:</span> <span class="kp">nil</span>
+</span><span class='line'><span class="o">*</span> <span class="n">ssl_ca_file</span><span class="p">:</span> <span class="kp">nil</span>
+</span><span class='line'><span class="o">*</span> <span class="n">trusted_certs_dir</span><span class="p">:</span> <span class="s2">&quot;/home/ubuntu/chef-repo/.chef/trusted_certs&quot;</span>
+</span><span class='line'><span class="no">TO</span> <span class="no">FIX</span> <span class="no">THIS</span> <span class="ss">ERROR</span><span class="p">:</span>
+</span><span class='line'><span class="no">If</span> <span class="n">the</span> <span class="n">server</span> <span class="n">you</span> <span class="n">are</span> <span class="n">connecting</span> <span class="n">to</span> <span class="n">uses</span> <span class="n">a</span> <span class="nb">self</span><span class="o">-</span><span class="n">signed</span> <span class="n">certificate</span><span class="p">,</span> <span class="n">you</span> <span class="n">must</span>
+</span><span class='line'><span class="n">configure</span> <span class="n">chef</span> <span class="n">to</span> <span class="n">trust</span> <span class="n">that</span> <span class="n">server</span><span class="s1">&#39;s certificate.</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">By default, the certificate is stored in the following location on the host</span>
+</span><span class='line'><span class="s1">where your chef-server runs:</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">  /var/opt/opscode/nginx/ca/SERVER_HOSTNAME.crt</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">Copy that file to your trusted_certs_dir (currently: /home/ubuntu/chef-repo/.chef/trusted_certs)</span>
+</span><span class='line'><span class="s1">using SSH/SCP or some other secure method, then re-run this command to confirm</span>
+</span><span class='line'><span class="s1">that the server&#39;</span><span class="n">s</span> <span class="n">certificate</span> <span class="n">is</span> <span class="n">now</span> <span class="n">trusted</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So you do what the command says:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ubuntu</span><span class="vi">@aoeu</span><span class="ss">:~</span><span class="sr">/chef-repo$ knife ssl fetch</span>
+</span><span class='line'><span class="sr">WARNING: Certificates from 172.16.20.62 will be fetched and placed in your trusted_cert</span>
+</span><span class='line'><span class="sr">directory (/</span><span class="n">home</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">/</span><span class="n">chef</span><span class="o">-</span><span class="n">repo</span><span class="o">/.</span><span class="n">chef</span><span class="o">/</span><span class="n">trusted_certs</span><span class="p">)</span><span class="o">.</span>
+</span><span class='line'><span class="no">Knife</span> <span class="n">has</span> <span class="n">no</span> <span class="n">means</span> <span class="n">to</span> <span class="n">verify</span> <span class="n">these</span> <span class="n">are</span> <span class="n">the</span> <span class="n">correct</span> <span class="n">certificates</span><span class="o">.</span> <span class="no">You</span> <span class="n">should</span>
+</span><span class='line'><span class="n">verify</span> <span class="n">the</span> <span class="n">authenticity</span> <span class="n">of</span> <span class="n">these</span> <span class="n">certificates</span> <span class="n">after</span> <span class="n">downloading</span><span class="o">.</span>
+</span><span class='line'><span class="no">Adding</span> <span class="n">certificate</span> <span class="k">for</span> <span class="n">chefie</span><span class="o">.</span><span class="n">novalocal</span> <span class="k">in</span> <span class="sr">/home/u</span><span class="n">buntu</span><span class="o">/</span><span class="n">chef</span><span class="o">-</span><span class="n">repo</span><span class="o">/.</span><span class="n">chef</span><span class="o">/</span><span class="n">trusted_certs</span><span class="o">/</span><span class="n">chefie_novalocal</span><span class="o">.</span><span class="n">crt</span>
+</span><span class='line'><span class="n">ubuntu</span><span class="vi">@aoeu</span><span class="ss">:~</span><span class="sr">/chef-repo$ knife status</span>
+</span><span class='line'><span class="sr">ERROR: SSL Validation failure connecting to host: 172.16.20.62 - hostname &quot;172.16.20.62&quot; does not match the server certificate</span>
+</span><span class='line'><span class="sr">ERROR: Could not establish a secure connection to the server.</span>
+</span><span class='line'><span class="sr">Use `knife ssl check` to troubleshoot your SSL configuration.</span>
+</span><span class='line'><span class="sr">If your Chef Server uses a self-signed certificate, you can use</span>
+</span><span class='line'><span class="sr">`knife ssl fetch` to make knife trust the server&#39;s certificates.</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">Original Exception: OpenSSL::SSL::SSLError: hostname &quot;172.16.20.62&quot; does not match the server certificate</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That look fimilar, and it feels like you&rsquo;re in a loop&hellip;.</p>
+
+<p>Turns out you can bypass this check completley by adding this to your <code>knife.rb</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ssl_verify_mode</span> <span class="ss">:verify_none</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you&rsquo;ll be right as rain.</p>
 </div>
 
 

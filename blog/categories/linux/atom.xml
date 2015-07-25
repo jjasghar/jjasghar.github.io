@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-07-20T16:54:41-05:00</updated>
+  <updated>2015-07-25T15:26:04-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -18,7 +18,21 @@
     <link href="http://jjasghar.github.io/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b/"/>
     <updated>2015-07-20T16:18:16-05:00</updated>
     <id>http://jjasghar.github.io/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b</id>
-    <content type="html"><![CDATA[<p>If you have a self signed cert on your chef-server, there&rsquo;s a change you&rsquo;ve seen this before using berkshelf:</p>
+    <content type="html"><![CDATA[<h2>tl;dr:</h2>
+
+<p>You&rsquo;re getting self signed cert errors using Berkshelf or <code>knife.rb</code>, add this to your <code>knife.rb</code> and run this command:</p>
+
+<p><code>ruby
+ssl_verify_mode :verify_none
+</code></p>
+
+<p><code>
+echo '{"ssl":{"verify": false }}' &gt; ~/.berkshelf/config.json
+</code></p>
+
+<h2>Explanation</h2>
+
+<p>If you have a self signed cert on your chef-server, there&rsquo;s a change you&rsquo;ve seen this before using berkshelf:</p>
 
 <p><code>
 E, [2015-07-20T16:15:33.369649 #34774] ERROR -- : Ridley::Errors::ClientError: SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
@@ -45,6 +59,79 @@ echo '{"ssl":{"verify": false }}' &gt; ~/.berkshelf/config.json
 </code></p>
 
 <p>Now you can drop that <code>--no-ssl-verify</code>.</p>
+
+<p>Another Update:</p>
+
+<p>So it seems you might see this with <code>knife cookbook upload</code> or any <code>knife</code> command for that matter:</p>
+
+<p><code>
+ubuntu@aoeu:~/chef-repo$ knife status
+ERROR: SSL Validation failure connecting to host: 172.16.20.62 - SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
+ERROR: Could not establish a secure connection to the server.
+Use `knife ssl check` to troubleshoot your SSL configuration.
+If your Chef Server uses a self-signed certificate, you can use
+`knife ssl fetch` to make knife trust the server's certificates.
+Original Exception: OpenSSL::SSL::SSLError: SSL_connect r
+</code></p>
+
+<p>And if you run <code>knife ssl check</code> you&rsquo;d see:</p>
+
+<p>```
+ubuntu@aoeu:~/chef-repo$ knife ssl check
+Connecting to host 172.16.20.62:443
+ERROR: The SSL certificate of 172.16.20.62 could not be verified
+Certificate issuer data: /C=US/ST=WA/L=Seattle/O=YouCorp/OU=Operations/CN=chefie.novalocal/emailAddress=<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#121;&#111;&#117;&#64;&#101;&#x78;&#97;&#109;&#112;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;">&#121;&#x6f;&#117;&#64;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;</a>
+Configuration Info:
+OpenSSL Configuration:
+* Version: OpenSSL 1.0.1m 19 Mar 2015
+* Certificate file: /opt/chef/embedded/ssl/cert.pem
+* Certificate directory: /opt/chef/embedded/ssl/certs
+Chef SSL Configuration:
+* ssl_ca_path: nil
+* ssl_ca_file: nil
+* trusted_certs_dir: &ldquo;/home/ubuntu/chef-repo/.chef/trusted_certs&rdquo;
+TO FIX THIS ERROR:
+If the server you are connecting to uses a self-signed certificate, you must
+configure chef to trust that server&rsquo;s certificate.</p>
+
+<p>By default, the certificate is stored in the following location on the host
+where your chef-server runs:</p>
+
+<p>  /var/opt/opscode/nginx/ca/SERVER_HOSTNAME.crt</p>
+
+<p>Copy that file to your trusted_certs_dir (currently: /home/ubuntu/chef-repo/.chef/trusted_certs)
+using SSH/SCP or some other secure method, then re-run this command to confirm
+that the server&rsquo;s certificate is now trusted.
+```</p>
+
+<p>So you do what the command says:</p>
+
+<p><code>``
+ubuntu@aoeu:~/chef-repo$ knife ssl fetch
+WARNING: Certificates from 172.16.20.62 will be fetched and placed in your trusted_cert
+directory (/home/ubuntu/chef-repo/.chef/trusted_certs).
+Knife has no means to verify these are the correct certificates. You should
+verify the authenticity of these certificates after downloading.
+Adding certificate for chefie.novalocal in /home/ubuntu/chef-repo/.chef/trusted_certs/chefie_novalocal.crt
+ubuntu@aoeu:~/chef-repo$ knife status
+ERROR: SSL Validation failure connecting to host: 172.16.20.62 - hostname "172.16.20.62" does not match the server certificate
+ERROR: Could not establish a secure connection to the server.
+Use</code>knife ssl check<code>to troubleshoot your SSL configuration.
+If your Chef Server uses a self-signed certificate, you can use
+</code>knife ssl fetch` to make knife trust the server&rsquo;s certificates.</p>
+
+<p>Original Exception: OpenSSL::SSL::SSLError: hostname &ldquo;172.16.20.62&rdquo; does not match the server certificate
+```</p>
+
+<p>That look fimilar, and it feels like you&rsquo;re in a loop&hellip;.</p>
+
+<p>Turns out you can bypass this check completley by adding this to your <code>knife.rb</code>.</p>
+
+<p><code>ruby
+ssl_verify_mode :verify_none
+</code></p>
+
+<p>Then you&rsquo;ll be right as rain.</p>
 ]]></content>
   </entry>
   
