@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-07-25T15:26:04-05:00</updated>
+  <updated>2015-08-16T15:25:28-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -80,7 +80,7 @@ Original Exception: OpenSSL::SSL::SSLError: SSL_connect r
 ubuntu@aoeu:~/chef-repo$ knife ssl check
 Connecting to host 172.16.20.62:443
 ERROR: The SSL certificate of 172.16.20.62 could not be verified
-Certificate issuer data: /C=US/ST=WA/L=Seattle/O=YouCorp/OU=Operations/CN=chefie.novalocal/emailAddress=<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#121;&#111;&#117;&#64;&#101;&#x78;&#97;&#109;&#112;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#109;">&#121;&#x6f;&#117;&#64;&#101;&#120;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;</a>
+Certificate issuer data: /C=US/ST=WA/L=Seattle/O=YouCorp/OU=Operations/CN=chefie.novalocal/emailAddress=<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x79;&#x6f;&#x75;&#x40;&#x65;&#120;&#97;&#x6d;&#x70;&#108;&#101;&#x2e;&#99;&#111;&#109;">&#121;&#111;&#x75;&#x40;&#101;&#x78;&#x61;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;</a>
 Configuration Info:
 OpenSSL Configuration:
 * Version: OpenSSL 1.0.1m 19 Mar 2015

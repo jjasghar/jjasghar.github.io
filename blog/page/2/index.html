@@ -9,8 +9,8 @@
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="I was asked to do a review of Managing Windows Servers with Chef. I&rsquo;ve read
-through the complete book, and these are my thoughts. I&rsquo;ll be &hellip;">
+  <meta name="description" content="So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
+useful commands and scripts. (An example would &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,129 @@ through the complete book, and these are my thoughts. I&rsquo;ll be &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/24/hubot-mysql-instead-of-a-wrapper-shell-script/">Hubot Mysql Instead of a Wrapper Shell Script</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-24T10:40:32-05:00" pubdate data-updated="true">Jun 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So you&rsquo;ve gotten hubot to do some cool things. You&rsquo;ve even got it to shell out to run some
+useful commands and scripts. (An example would be <a href="http://github.com/hubot-scripts/hubot-chef/blob/master/src/chef.coffee">hubot-chef</a>
+shelling out and running knife.) So you&rsquo;ve started playing with pulling data from
+mysql or the like, and you&rsquo;ve come up with something like the following.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">mysql</span> <span class="o">-</span><span class="n">u</span><span class="err">$</span><span class="k">user</span> <span class="o">-</span><span class="n">p</span><span class="err">$</span><span class="n">pwd</span> <span class="o">-</span><span class="n">h</span> <span class="err">$</span><span class="k">host</span> <span class="o">-</span><span class="n">N</span> <span class="o">-</span><span class="n">e</span> <span class="ss">&quot;select name, id from mydatabase&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty straight forward eh? You run it on your cli and yeah you get the data you expect. You attempt to run it with hubot maybe something
+like this?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'> <span class="nx">robot</span><span class="p">.</span><span class="nx">respond</span> <span class="o">/</span><span class="nx">database</span> <span class="nx">name</span> <span class="nx">and</span> <span class="nx">id$</span><span class="o">/</span><span class="nx">i</span><span class="p">,</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>   <span class="nx">msg</span><span class="p">.</span><span class="nx">send</span> <span class="s2">&quot;determining the name and ids&quot;</span>
+</span><span class='line'>   <span class="nx">exec</span> <span class="s2">&quot;bash /home/hubot/bash_scripts/name_id_database.sh&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">)</span> <span class="o">=&gt;</span>
+</span><span class='line'>     <span class="nx">msg</span><span class="p">.</span><span class="nx">send</span> <span class="nx">stdout</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It might come out all gross, yeah that&rsquo;s a different post about <a href="https://github.com/LearnBoost/cli-table">cli-table</a> which I hope i&rsquo;ll be
+doing after this post.  Anyway i digress; that&rsquo;s great, so you get the data hubot gives you the date, but man you have your password in your
+shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckly, <a href="https://twitter.com/mattdbridges">Matt Bridges</a> showed
+me how to leverage coffeescript and the <a href="https://www.npmjs.org/package/mysql">mysql npm</a> package to do just that.</p>
+
+<p>First off, you&rsquo;ll need to add to your <code>package.json</code> something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'> <span class="s2">&quot;dependencies&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="err">....</span>
+</span><span class='line'>          <span class="nt">&quot;mysql&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;= 2.0.1&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="err">....</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At the top of your coffee script add something like this, it will open up the ability to start calling the commands.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'>  <span class="nx">mysql</span> <span class="o">=</span> <span class="nx">require</span> <span class="s1">&#39;mysql&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome, now lets convert that top sql to coffee, first thing you need to do is create the connection:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'>  <span class="nx">connection</span> <span class="o">=</span> <span class="nx">mysql</span><span class="p">.</span><span class="nx">createConnection</span>
+</span><span class='line'>    <span class="nx">host</span><span class="o">:</span> <span class="s1">&#39;mydbhostname&#39;</span>
+</span><span class='line'>    <span class="nx">user</span><span class="o">:</span> <span class="s1">&#39;myuser&#39;</span>
+</span><span class='line'>    <span class="nx">password</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DB_PASSWORD</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see it&rsquo;s pretty self explanatory. You create the object called <code>connection</code> then give it some variables. The password is interesting here
+it&rsquo;s now is a environment variable that you can just add to your hubot (however you choose, like in heroku: <code>heroku config:set DB_PASSWORD=a_really_strong_pa$$word</code>) so
+you don&rsquo;t have to have it checked into you scm/code.</p>
+
+<p>After this, now you&rsquo;ll want to do something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">sql</span> <span class="o">=</span> <span class="s2">&quot;select name, id from mydatabase&quot;</span>
+</span><span class='line'><span class="nx">sql</span> <span class="o">=</span> <span class="nx">mysql</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="nx">sql</span><span class="p">)</span>
+</span><span class='line'><span class="nx">connection</span><span class="p">.</span><span class="nx">query</span> <span class="nx">sql</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="k">throw</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+</span><span class='line'>  <span class="k">for</span> <span class="nx">row</span> <span class="k">in</span> <span class="nx">results</span>
+</span><span class='line'>    <span class="nx">msg</span><span class="p">.</span><span class="nx">send</span> <span class="nx">row</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This also is pretty self explanatory, you put your sql statement in as a variable, format it with mysql, open the connection via the query command, then
+if it errors, throws the error, otherwise outputs each row and a seporate <code>msg.send</code>.</p>
+
+<p>Yes, yes, this is dirty, gross and if you have anything more than 3-4 users you&rsquo;re gonna get annoyed really fast. Again, this is just an example, the cli-table tutorial
+will make this more enjoyable.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -876,152 +999,6 @@ five minutes long, and got a video of it <a href="https://www.youtube.com/watch?
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/">Getting Authentication With Hubot Using auth.coffee</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-19T11:07:03-06:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
-First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
-that means you need to figure out &ldquo;HUBOT_AUTH_ADMIN&rdquo;. Assuming you have hubot already connecting to a site, run <code>hubot show users</code>
-and he should come back with all the people he knows about. Grab the id number for the person/people you want to have admin rights.</p>
-
-<p>Add <code>HUBOT_AUTH_ADMIN="&lt;number&gt;,&lt;nextnumber&gt;"</code> to the <code>bin/hubot</code> or however you add variables to him, go ahead and restart hubot to
-see if he now thinks you&rsquo;re and admin.</p>
-
-<p>If all goes well, you should see something like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
-as the example, so lets give our user the first role:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-</span><span class='line'>Hubot&gt; Hubot shell has ping role
-</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
-</span><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
-</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
-can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>, to fail for us.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell doesn't have ping role
-</span><span class='line'>Hubot&gt; Shell: Ok, shell doesn't have the 'ping' role.
-</span><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-</span><span class='line'>Hubot&gt; </span></code></pre></td></tr></table></div></figure>
-
-
-<p>Go ahead into your <code>scripts/</code> directory, and open up your ping.coffee. Take a look at the following snippet:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
-</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
-</span><span class='line'>    msg.send "PONG"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pretty straight forward eh? Go ahead and tack on this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
-</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
-</span><span class='line'>    if robot.auth.hasRole(msg.envelope.user, "ping")
-</span><span class='line'>      msg.send "PONG"
-</span><span class='line'>    else
-</span><span class='line'>     msg.send "Sorry you can't ask me to PONG"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note: a quick explanation, if hubot responds to &ldquo;ping&rdquo; case insensitive, it&rsquo;ll respond with the &ldquo;PONG&rdquo; only if you have the role of ping.</p>
-
-<p>Go and ahead and restart hubot, and say PING. :)</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; hubot PING
-</span><span class='line'>Hubot&gt; Sorry you can't ask me to PONG</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Sweet!</p>
-
-<p>Ok, next step, lets give ourselves access to make this happen:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell has ping role
-</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
-</span><span class='line'>Hubot&gt; hubot PING
-</span><span class='line'>Hubot&gt; PONG
-</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>PERFECT!</p>
-
-<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
-to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
-your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
-
-<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1039,6 +1016,10 @@ your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/08/16/since-server-api-v1-all-keys/">Since Server API V1 All Keys</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b/">SSL_connect Returned=1 Errno=0 state=SSLv3 Read Server Certificate B</a>
       </li>
     
@@ -1052,10 +1033,6 @@ your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.
     
       <li class="post">
         <a href="/blog/2015/01/07/how-do-i-create-a-mac-usb-boot-disk/">How Do I Create a Mac USB Boot Disk</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/13/git-rebase-and-git-detached-head-cheat-sheet/">Git Rebase and Git Detached Head Cheat Sheet</a>
       </li>
     
   </ul>

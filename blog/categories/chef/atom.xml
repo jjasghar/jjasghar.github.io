@@ -4,7 +4,7 @@
   <title><![CDATA[Category: chef | jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/blog/categories/chef/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-07-25T15:26:04-05:00</updated>
+  <updated>2015-08-16T15:25:28-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Since Server API v1 all keys]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/08/16/since-server-api-v1-all-keys/"/>
+    <updated>2015-08-16T15:10:37-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/08/16/since-server-api-v1-all-keys</id>
+    <content type="html"><![CDATA[<p>I was playing around with <a href="https://downloads.chef.io/chef-server/">Chef Server 12</a> and attempted to do a <code>knife bootsrap</code> a machine. My bootstrap failed due to a timeout with a <code>remote_file</code> download. I attempted to run a second <code>knife bootstrap</code> against the same machine, and I saw the <code>first-boot.json</code> start doing it&rsquo;s thing.</p>
+
+<p>About 30 seconds late I saw this error:</p>
+
+<p>```</p>
+
+<h2>Server Response:</h2>
+
+<p>Since Server API v1, all keys must be updated via the keys endpoint.
+```</p>
+
+<p>Needless to say I got frustrated extremely quickly. I wasn&rsquo;t doing anything due to keys, and now I need to update? :sad_panda: I re-ran the <code>knife bootstrap</code> again, and it bombed out with that same error. Double :sad_panda:</p>
+
+<p>I did some searching around, asked a few people around Chef, and ended up at <a href="https://www.chef.io/blog/2015/07/14/chef-server-12-1-1-released/">this blog post</a>.</p>
+
+<p>I did what was suggested in the comments <code>knife client delete &lt;machine&gt;</code> and to be safe <code>knife node delete &lt;machine&gt;</code> and re-ran <code>knife bootstrap</code>. It continued on and bootstrapped the box. I haven&rsquo;t seen the error since.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B]]></title>
@@ -80,7 +104,7 @@ Original Exception: OpenSSL::SSL::SSLError: SSL_connect r
 ubuntu@aoeu:~/chef-repo$ knife ssl check
 Connecting to host 172.16.20.62:443
 ERROR: The SSL certificate of 172.16.20.62 could not be verified
-Certificate issuer data: /C=US/ST=WA/L=Seattle/O=YouCorp/OU=Operations/CN=chefie.novalocal/emailAddress=<a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#121;&#x6f;&#117;&#64;&#x65;&#120;&#x61;&#109;&#112;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#x79;&#x6f;&#117;&#x40;&#101;&#x78;&#97;&#109;&#x70;&#108;&#x65;&#46;&#x63;&#111;&#x6d;</a>
+Certificate issuer data: /C=US/ST=WA/L=Seattle/O=YouCorp/OU=Operations/CN=chefie.novalocal/emailAddress=<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x79;&#111;&#x75;&#64;&#101;&#x78;&#x61;&#109;&#112;&#108;&#101;&#x2e;&#x63;&#x6f;&#109;">&#x79;&#x6f;&#117;&#64;&#101;&#120;&#x61;&#109;&#x70;&#x6c;&#x65;&#46;&#99;&#111;&#109;</a>
 Configuration Info:
 OpenSSL Configuration:
 * Version: OpenSSL 1.0.1m 19 Mar 2015
@@ -336,57 +360,6 @@ in this case chef for windows.</p>
 
 <p>[~] % sudo chef-server-ctl reconfigure
 ```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Help! I lost my vaildation.pem]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem/"/>
-    <updated>2014-03-18T16:39:04-05:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/03/18/help-i-lost-my-vaildation-dot-pem</id>
-    <content type="html"><![CDATA[<p>So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my <code>validation.pem</code> and my <code>chef-webui.pem</code>&hellip;went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
-chef 11 server.</p>
-
-<p>(OK, fine I broke them, but this post is how to recreate either with <code>knife</code> on your workstation incase <strong>cough</strong>like me<strong>cough</strong> you have lost your chef-webui.)</p>
-
-<p>It turns out there is a great simple command to re-create your validation.pem.</p>
-
-<p>Note: This can also work as <code>validator.pem</code> also, but my code checks for <code>validation.pem</code></p>
-
-<p>```bash
-[~] % knife client reregister chef-validator</p>
-
-<h1>or if you want to name it and save it&hellip;.</h1>
-
-<p>[~] % knife client reregister chef-validator -f validaton.pem
-```</p>
-
-<p>The first one will spit out the new <code>.pem</code> you&rsquo;ll need to copy it to a file otherwise you&rsquo;ll just have to do run the command again. This/these commands are the equivalent of the <code>https://&lt;chefserver&gt;/clients/chef-validator/edit</code> and clicking that
-&ldquo;Regenerate Private Key (Existing one will no longer work!).&rdquo;</p>
-
-<p>Pretty straight forward eh?</p>
-
-<p>On the other hand, if you&rsquo;ve broken you chef-webui, and you see something like&hellip;.</p>
-
-<p><code>
-2014-03-18_21:31:54.98838 Chef::Exceptions::PrivateKeyMissing: I cannot read /etc/chef-server/chef-webui.pem, which you told me to use to sign requests!
-2014-03-18_21:31:54.98840 {:request_params=&gt;
-2014-03-18_21:31:54.98840   {"utf8"=&gt;"✓",
-2014-03-18_21:31:54.98841    "authenticity_token"=&gt;"uSheCVhYuGJPBAyDBHb4AIyEfkB2EqXwLD6Uolk//ig=",
-2014-03-18_21:31:54.98841    "name"=&gt;"admin",
-2014-03-18_21:31:54.98841    "commit"=&gt;"login",
-2014-03-18_21:31:54.98842    "password"=&gt;"p@ssw0rd1",
-2014-03-18_21:31:54.98842    "action"=&gt;"login_exec",
-2014-03-18_21:31:54.98842    "controller"=&gt;"users"}}
-</code></p>
-
-<p>In your <code>/var/log/chef-server/chef-server-webui/current</code> then the fix is pretty straight forward:</p>
-
-<p><code>bash
-[~] % knife client reregister chef-webui
-[~] % #scp it up to your chef box
-chef# chown root.root /etc/chef-server/chef-webui.pem
-</code></p>
 ]]></content>
   </entry>
   

@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Testing This Out - jjasghar rants and ramblings</title>
+  <title>Since Server API V1 All Keys - jjasghar rants and ramblings</title>
   <meta name="author" content="JJ Asghar">
 
   
-  <meta name="description" content="This is a test, lets see it work
-">
+  <meta name="description" content="I was playing around with Chef Server 12 and attempted to do a knife bootsrap a machine. My bootstrap failed due to a timeout with a remote_file &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jjasghar.github.io/blog/2013/06/25/testing-this-out">
+  <link rel="canonical" href="http://jjasghar.github.io/blog/2015/08/16/since-server-api-v1-all-keys">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="jjasghar rants and ramblings" type="application/atom+xml">
@@ -82,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">Testing This Out</h1>
+      <h1 class="entry-title">Since Server API V1 All Keys</h1>
     
     
       <p class="meta">
@@ -98,14 +97,30 @@
   
 
 
-<time datetime="2013-06-25T11:28:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
+<time datetime="2015-08-16T15:10:37-05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>This is a test, lets see it work</p>
+<div class="entry-content"><p>I was playing around with <a href="https://downloads.chef.io/chef-server/">Chef Server 12</a> and attempted to do a <code>knife bootsrap</code> a machine. My bootstrap failed due to a timeout with a <code>remote_file</code> download. I attempted to run a second <code>knife bootstrap</code> against the same machine, and I saw the <code>first-boot.json</code> start doing it&rsquo;s thing.</p>
+
+<p>About 30 seconds late I saw this error:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Server Response:
+</span><span class='line'>----------------
+</span><span class='line'>Since Server API v1, all keys must be updated via the keys endpoint.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Needless to say I got frustrated extremely quickly. I wasn&rsquo;t doing anything due to keys, and now I need to update? :sad_panda: I re-ran the <code>knife bootstrap</code> again, and it bombed out with that same error. Double :sad_panda:</p>
+
+<p>I did some searching around, asked a few people around Chef, and ended up at <a href="https://www.chef.io/blog/2015/07/14/chef-server-12-1-1-released/">this blog post</a>.</p>
+
+<p>I did what was suggested in the comments <code>knife client delete &lt;machine&gt;</code> and to be safe <code>knife node delete &lt;machine&gt;</code> and re-ran <code>knife bootstrap</code>. It continued on and bootstrapped the box. I haven&rsquo;t seen the error since.</p>
 </div>
 
 
@@ -128,15 +143,21 @@
   
 
 
-<time datetime="2013-06-25T11:28:00-05:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time>
+<time datetime="2015-08-16T15:10:37-05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2015</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2013/06/25/testing-this-out/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2013/06/25/testing-this-out/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jjasghar.github.io/blog/2015/08/16/since-server-api-v1-all-keys/" data-via="jjasghar" data-counturl="http://jjasghar.github.io/blog/2015/08/16/since-server-api-v1-all-keys/" >Tweet</a>
   
   
   
@@ -145,8 +166,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2015/07/20/ssl-connect-returned-equals-1-errno-equals-0-state-equals-sslv3-read-server-certificate-b/" title="Previous Post: SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B">&laquo; SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B</a>
       
-        <a class="basic-alignment right" href="/blog/2013/06/25/chef-jenkins-vagrant/" title="Next Post: chef-jenkins-vagrant">chef-jenkins-vagrant &raquo;</a>
       
     </p>
   </footer>

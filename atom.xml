@@ -4,7 +4,7 @@
   <title><![CDATA[jjasghar rants and ramblings]]></title>
   <link href="http://jjasghar.github.io/atom.xml" rel="self"/>
   <link href="http://jjasghar.github.io/"/>
-  <updated>2015-07-25T15:26:04-05:00</updated>
+  <updated>2015-08-16T15:25:28-05:00</updated>
   <id>http://jjasghar.github.io/</id>
   <author>
     <name><![CDATA[JJ Asghar]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Since Server API V1 All Keys]]></title>
+    <link href="http://jjasghar.github.io/blog/2015/08/16/since-server-api-v1-all-keys/"/>
+    <updated>2015-08-16T15:10:37-05:00</updated>
+    <id>http://jjasghar.github.io/blog/2015/08/16/since-server-api-v1-all-keys</id>
+    <content type="html"><![CDATA[<p>I was playing around with <a href="https://downloads.chef.io/chef-server/">Chef Server 12</a> and attempted to do a <code>knife bootsrap</code> a machine. My bootstrap failed due to a timeout with a <code>remote_file</code> download. I attempted to run a second <code>knife bootstrap</code> against the same machine, and I saw the <code>first-boot.json</code> start doing it&rsquo;s thing.</p>
+
+<p>About 30 seconds late I saw this error:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Server Response:
+</span><span class='line'>----------------
+</span><span class='line'>Since Server API v1, all keys must be updated via the keys endpoint.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Needless to say I got frustrated extremely quickly. I wasn&rsquo;t doing anything due to keys, and now I need to update? :sad_panda: I re-ran the <code>knife bootstrap</code> again, and it bombed out with that same error. Double :sad_panda:</p>
+
+<p>I did some searching around, asked a few people around Chef, and ended up at <a href="https://www.chef.io/blog/2015/07/14/chef-server-12-1-1-released/">this blog post</a>.</p>
+
+<p>I did what was suggested in the comments <code>knife client delete &lt;machine&gt;</code> and to be safe <code>knife node delete &lt;machine&gt;</code> and re-ran <code>knife bootstrap</code>. It continued on and bootstrapped the box. I haven&rsquo;t seen the error since.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SSL_connect Returned=1 Errno=0 state=SSLv3 Read Server Certificate B]]></title>
@@ -1471,125 +1496,6 @@ he&rsquo;ll probably get it fixed. Love ya Sean :)</p>
 five minutes long, and got a video of it <a href="https://www.youtube.com/watch?v=LW9njlylhiQ">here</a>. It&rsquo;s pretty straight forward, and I hope you enjoy it.</p>
 
 <p>PS, I apologize for the quality.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Getting Authentication With Hubot Using auth.coffee]]></title>
-    <link href="http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee/"/>
-    <updated>2014-02-19T11:07:03-06:00</updated>
-    <id>http://jjasghar.github.io/blog/2014/02/19/getting-authentication-with-hubot-using-auth-dot-coffee</id>
-    <content type="html"><![CDATA[<p>So you want to add some authentication to hubot eh? Great, this post should walk you through the majority of it.
-First thing first, set up <a href="https://github.com/github/hubot-scripts/blob/master/src/scripts/auth.coffee">auth.coffee</a>, by this
-that means you need to figure out &ldquo;HUBOT_AUTH_ADMIN&rdquo;. Assuming you have hubot already connecting to a site, run <code>hubot show users</code>
-and he should come back with all the people he knows about. Grab the id number for the person/people you want to have admin rights.</p>
-
-<p>Add <code>HUBOT_AUTH_ADMIN="&lt;number&gt;,&lt;nextnumber&gt;"</code> to the <code>bin/hubot</code> or however you add variables to him, go ahead and restart hubot to
-see if he now thinks you&rsquo;re and admin.</p>
-
-<p>If all goes well, you should see something like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Great! Lets give shell our first role. I&rsquo;m going to hack the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>
-as the example, so lets give our user the first role:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-</span><span class='line'>Hubot&gt; Hubot shell has ping role
-</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
-</span><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles: ping and is also an admin.
-</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see <code>shell</code> only has the admin role like expected. Then I gave <code>shell</code> the ping role, and checked it. Great. Ok, lets remove ping for now, so we
-can change the <a href="https://github.com/github/hubot/blob/master/src/scripts/ping.coffee">ping.coffee</a>, to fail for us.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell doesn't have ping role
-</span><span class='line'>Hubot&gt; Shell: Ok, shell doesn't have the 'ping' role.
-</span><span class='line'>Hubot&gt; Hubot what role does shell have
-</span><span class='line'>Hubot&gt; Shell: shell has the following roles:  and is also an admin.
-</span><span class='line'>Hubot&gt; </span></code></pre></td></tr></table></div></figure>
-
-
-<p>Go ahead into your <code>scripts/</code> directory, and open up your ping.coffee. Take a look at the following snippet:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
-</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
-</span><span class='line'>    msg.send "PONG"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pretty straight forward eh? Go ahead and tack on this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = (robot) -&gt;
-</span><span class='line'>  robot.respond /PING$/i, (msg) -&gt;
-</span><span class='line'>    if robot.auth.hasRole(msg.envelope.user, "ping")
-</span><span class='line'>      msg.send "PONG"
-</span><span class='line'>    else
-</span><span class='line'>     msg.send "Sorry you can't ask me to PONG"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note: a quick explanation, if hubot responds to &ldquo;ping&rdquo; case insensitive, it&rsquo;ll respond with the &ldquo;PONG&rdquo; only if you have the role of ping.</p>
-
-<p>Go and ahead and restart hubot, and say PING. :)</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; hubot PING
-</span><span class='line'>Hubot&gt; Sorry you can't ask me to PONG</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Sweet!</p>
-
-<p>Ok, next step, lets give ourselves access to make this happen:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Hubot&gt; Hubot shell has ping role
-</span><span class='line'>Hubot&gt; Shell: Ok, shell has the 'ping' role.
-</span><span class='line'>Hubot&gt; hubot PING
-</span><span class='line'>Hubot&gt; PONG
-</span><span class='line'>Hubot&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>PERFECT!</p>
-
-<p>So, we now can wrap certain hubot scripts for certain people. But there&rsquo;s a disappointing portion of this; in order to enforce the commands you&rsquo;ll need
-to have the scripts with <code>robot.auth.hasRole(msg.envelope.user, "&lt;role&gt;")</code>, this means you&rsquo;ll have to fork the script you want to leverage and dump it in
-your <code>scripts/</code> directory, and removed from your <code>hubot-scripts.json</code> and <code>external-scripts.json</code>.</p>
-
-<p>This will probably get annoying as the scripts get updated and new features are added, but until I figure out a better way I think we&rsquo;re stuck here.</p>
 ]]></content>
   </entry>
   
