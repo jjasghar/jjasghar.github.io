@@ -63,6 +63,8 @@ titlecase: true       # Converts page and post titles to titlecase
 #   3rd Party Settings    #
 # ----------------------- #
 
+exclude: [vendor]
+
 # Google Analytics
 google_analytics_tracking_id: UA-47435051-1
 
