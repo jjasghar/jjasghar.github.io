@@ -1,0 +1,73 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: jjasghar rants and ramblings
+subtitle: background info on his projects
+email: jjasghar@gmail.com
+description: >
+   This is JJ's little corner of the internet where he tries to capture
+   things that he learns that he thinks someone else might want.
+url: "https://jjasghar.github.io" # the base hostname & protocol for your site
+twitter_username: jjasghar
+github_username:  jjasghar
+
+# Build settings
+markdown: kramdown
+author: JJ Asghar
+simple_search: http://google.com/search
+
+# Default date format is "ordinal" (resulting in "July 22nd 2007")
+# You can customize the format as defined in
+# http://www.ruby-doc.org/core-1.9.2/Time.html#method-i-strftime
+# Additionally, %o will give you the ordinal representation of the day
+date_format: "ordinal"
+
+# RSS / Email (optional) subscription links (change if using something like Feedburner)
+subscribe_rss: /atom.xml
+
+# ----------------------- #
+#    Jekyll & Plugins     #
+# ----------------------- #
+
+# If publishing to a subdirectory as in http://site.com/project set 'root: /project'
+root: /
+permalink: /blog/:year/:month/:day/:title/
+# source: source
+# destination: public
+# plugins: plugins
+# code_dir: downloads/code
+# category_dir: blog/categories
+rdiscount:
+  extensions:
+    - autolink
+    - footnotes
+    - smart
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+paginate: 10          # Posts per page on the blog index
+pagination_dir: "/blog/page:num/"  # Directory base for pagination URLs eg. /blog/page/2/
+recent_posts: 5       # Posts in the sidebar Recent Posts section
+excerpt_link: "Read on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
+
+titlecase: true       # Converts page and post titles to titlecase
+
+# ----------------------- #
+#   3rd Party Settings    #
+# ----------------------- #
+
+# Google Analytics
+google_analytics_tracking_id: UA-47435051-1
+
+gems:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jemoji
+  - rouge
