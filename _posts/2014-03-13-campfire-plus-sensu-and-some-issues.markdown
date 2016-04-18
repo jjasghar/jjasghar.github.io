@@ -47,7 +47,7 @@ Ok, honestly it'll be locked up in the `sensu-client.log` but if you break up th
 So as you can see it fails with the `SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed (Faraday::Error::ConnectionFailed)` trying to verify the certs,
 I spent some time trying to updated the pkg version of the ssl certs, reading more than I ever wanted to know about SSL, finally I pinged Bethany asked her after finding that gist.
 
-She responded back with something that just seemed so obious, if you look at the [handler](https://github.com/sensu/sensu-community-plugins/blob/master/handlers/notification/campfire.rb#L30) it defaults to true.
+She responded back with something that just seemed so obious, if you look at the [handler](https://github.com/sensu-plugins/sensu-plugins-campfire) it defaults to true.
 
 Change that to it to something like:
 ```ruby

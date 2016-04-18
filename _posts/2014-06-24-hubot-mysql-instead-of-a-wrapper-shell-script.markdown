@@ -27,7 +27,7 @@ like this?
 
 It might come out all gross, yeah that's a different post about [cli-table](https://github.com/LearnBoost/cli-table) which I hope i'll be
 doing after this post.  Anyway i digress; that's great, so you get the data hubot gives you the date, but man you have your password in your
-shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckly, [Matt Bridges](https://twitter.com/mattdbridges) showed
+shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckly, Matt Bridges showed
 me how to leverage coffeescript and the [mysql npm](https://www.npmjs.org/package/mysql) package to do just that.
 
 First off, you'll need to add to your `package.json` something like:
