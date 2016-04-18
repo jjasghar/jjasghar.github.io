@@ -187,7 +187,7 @@ task :preview do
 end
 
 # rake deploy["Commit message"]
-desc "Deploy the site to a remote git repo"
+desc "Deploy the site to Github, because that's what you do "
 task :deploy, :message do |t, args|
   message = args[:message]
   branch = CONFIG["git"]["branch"]
@@ -205,7 +205,7 @@ task :deploy, :message do |t, args|
 end
 
 # rake transfer
-desc "Transfer the site (remote server or a local git repo)"
+#desc "Transfer the site (remote server or a local git repo)"
 task :transfer do
   command = CONFIG["transfer"]["command"]
   source = CONFIG["transfer"]["source"]
