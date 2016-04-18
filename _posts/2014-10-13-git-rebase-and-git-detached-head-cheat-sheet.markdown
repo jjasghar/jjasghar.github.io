@@ -13,6 +13,7 @@ In my adventures with openstack and gerrit reviews I sometimes see something to 
 This makes me very sad. I hate these things, and to quote Mark Vanderwiel, it's basically like someone snuck in a change before you.
 
 We had a great conversation about it [here](http://youtu.be/wsWj_NQJKI0?t=3m50s) for about 3 mins, but if you want a tl;dw (watch) it's this:
+
 ```bash
 $ git remote update
 $ git checkout master
@@ -31,6 +32,7 @@ It looks like a lot, but all in all not bad at all. The rebasing might look scar
 ## Detached head what the hell does that mean?
 
 If you continue watching that video we start to talk about detached heads. If you have played in the openstack/gerrit world you'll notice a copy paste off a review by download, something like:
+
 ```bash
 $ git fetch https://review.openstack.org/stackforge/cookbook-openstack-client refs/changes/65/126365/9 && git checkout FETCH_HEAD
 ```
