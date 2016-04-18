@@ -47,7 +47,7 @@ Hubot>
 
 Go ahead into your `scripts/` directory, and open up your ping.coffee. Take a look at the following snippet:
 
-```
+```coffee
 module.exports = (robot) ->
   robot.respond /PING$/i, (msg) ->
     msg.send "PONG"
@@ -55,7 +55,7 @@ module.exports = (robot) ->
 
 Pretty straight forward eh? Go ahead and tack on this:
 
-```
+```coffee
 module.exports = (robot) ->
   robot.respond /PING$/i, (msg) ->
     if robot.auth.hasRole(msg.envelope.user, "ping")

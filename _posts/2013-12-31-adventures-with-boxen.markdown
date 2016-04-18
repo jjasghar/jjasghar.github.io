@@ -13,6 +13,7 @@ So I started watching a couple videos on [boxen](http://boxen.github.com) both a
 I think the thing that got me was the "one line cURL" that you can run which is from [boxen-web](https://github.com/boxen/boxen-web) so that's my ultimate goal here; ok lets start this off.
 
 First thing, read the [README.md](https://github.com/boxen/our-boxen/blob/master/README.md) and something jumps out at me straight off the bat:
+
 ```
 Boxen requires at least the Xcode Command Line Tools installed.
 Boxen will not work with an existing rvm install.
@@ -23,6 +24,7 @@ Boxen may not play nice with an existing homebrew install.
 Boxen may not play nice with an existing nvm install.
 Boxen recommends installing the full Xcode.
 ```
+
 *sigh* So this means I need a vm to start playing with this. I chose virtualbox as my hypervisor. The trick is; you can only virtualize OS X on OS X so get it installed on your mac ;).
 
 It seems there is a Mavericks network issue with [virtualbox 4.2](https://forums.virtualbox.org/viewtopic.php?f=8&t=58036) so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn't get farther than Manual/DHCP network setup. *grrr*
@@ -40,24 +42,29 @@ After you got that done boot up the vm open terminal run the following:
 This should prompt you to install the "mac cli tools" without needing to install Xcode. Badass.
 
 Go ahead and fork [our-boxen](https://github.com/boxen/our-boxen) like it suggests. Now if you want this to be private, for your company..(I'm not doing because I'm trying to learn this), you have to go through the following:
+
 ```bash
-[~] % sudo mkdir -p /opt/boxen
-[~] % sudo chown ${USER}:staff /opt/boxen
-[~] % git clone https://github.com/boxen/our-boxen /opt/boxen/repo
-[~] % cd /opt/boxen/repo
-[/opt/boxen/repo] % git remote rm origin
-[/opt/boxen/repo] % git remote add origin <the location of my new git repository>
-[/opt/boxen/repo] % git push -u origin master
+~% sudo mkdir -p /opt/boxen
+~% sudo chown ${USER}:staff /opt/boxen
+~% git clone https://github.com/boxen/our-boxen /opt/boxen/repo
+~% cd /opt/boxen/repo
+/opt/boxen/repo% git remote rm origin
+/opt/boxen/repo% git remote add origin <the location of my new git repository>
+/opt/boxen/repo% git push -u origin master
 ```
+
 This deploys the default boxen setup like the README.md says, customizing is in a following post.
 
 Ok, now try out boxen:
+
 ```bash
-[/opt/boxen/repo] % ./script/boxen
+/opt/boxen/repo% ./script/boxen
 ```
+
 Alas this will probably bitch about no Full Disk Encryption, so you'll need to run (good for developing this):
+
 ```bash
-[/opt/boxen/repo] % ./script/boxen --no-fde
+/opt/boxen/repo% ./script/boxen --no-fde
 ```
 
 It should ask you for your github credentials (yes it works with two factor authentication), then you should start seeing a bunch of stuff on the screen!
@@ -65,4 +72,3 @@ It should ask you for your github credentials (yes it works with two factor auth
 NOTE: you might see it get stuck at `Dnsmasq` for a default run. If you check activity monitor it is running and talking to Greg, it seems that's gcc/make compiling something in the background. This might take a long time, wait it out.
 
 Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post...
-

@@ -88,6 +88,7 @@ knife spork check COOKBOOK --all
 ```
 
 Here's an example:
+
 ```bash
 Checking versions for cookbook nagios...
 
@@ -103,9 +104,10 @@ Remote Versions: (* indicates frozen)
 ERROR: The version 5.1.5 exists on the server and is not frozen. Uploading will overwrite!
 ```
 
-As you can see with the error, it's pretty self explaintory.  
+As you can see with the error, it's pretty self explanatory.
 
 The second step is to bump the version:
+
 ```bash
 knife spork bump nagios patch
 Git: Pulling latest changes from /Users/jasghar/repo/chef_repo/environments

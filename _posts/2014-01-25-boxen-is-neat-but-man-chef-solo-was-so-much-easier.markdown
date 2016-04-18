@@ -8,7 +8,7 @@ categories: chef linux sysadmin puppet
 
 So over the 2013 holiday break I played around with [boxen](http://boxen.github.com/), I even wrote a couple beginner posts on it. If you want go check them out, I'll wait.....
 
-So, yeah, you can tell I was pretty impressed with it right? 
+So, yeah, you can tell I was pretty impressed with it right?
 
 Well from a guy that uses [chef](http://getchef.com) day in and day out, using it in a real life scenario it was a nightmare.
 
@@ -17,6 +17,7 @@ First off, I can understand some of the choices they made; like putting everythi
 Along with that nasty turn, one of the selling points was my ability to `git clone` down my companies code from Github. Yeah that didn't work at all. I forgot how hard it was to make a damn directory with puppet, then to use the [puppet-repository](https://github.com/boxen/puppet-repository) and have it fall on it's face only frustrated me even farther. Strike two boxen, strike two.
 
 The final strike came pretty simply but I didn't realize how much of a pain it was. The [puppet-mysql](https://github.com/boxen/puppet-mysql) runs it's socket file in both a completely different location and runs a completely nonstandard port to connect to it. Now to a sysadmin like myself, this seems negligible, neigh, not even negligible,  but put this in front of a Developer that has to change his `database.yml` and all hell breaks loose.   And to top that off, because the database.yml is part of the code base, if said Dev decides to push it back upstream it opens up a can of worms asking why we have to have something like the following for everyone:
+
 ```ruby
 <%
   socket = [

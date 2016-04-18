@@ -3,12 +3,13 @@ layout: post
 title: "ResourceNotFound and splunk> fun...gotta love that error"
 date: 2014-02-03 16:18:51 -0600
 comments: true
-categories: sysadmin splunk 
+categories: sysadmin splunk
 ---
 
 My company uses [splunk](http://splunk.com) yes yes, I know, I should be using [kibana](https://github.com/rashidkpc/Kibana) and [logstash](http://logstash.net/) but I got the budget for splunk> so I'm using splunk.
 
 I attempted to install an updated license the other day and got an interesting error after restarting splunk and attempting to log in:
+
 ```
 500 Internal Server Error
 

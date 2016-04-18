@@ -50,6 +50,7 @@ I spent some time trying to updated the pkg version of the ssl certs, reading mo
 She responded back with something that just seemed so obious, if you look at the [handler](https://github.com/sensu-plugins/sensu-plugins-campfire) it defaults to true.
 
 Change that to it to something like:
+
 ```ruby
 Tinder::Campfire.new('mydomain', :ssl_verify => false, :token => '7505e9c7ed5c30a77dTHIS_IS_FAKE93029a494eb7c3d20')
 ```

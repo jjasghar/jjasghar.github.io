@@ -15,7 +15,7 @@ do.
 First thing first, on what you want your `region-controller` to be:
 
 ```bash
-$ sudo cat /var/lib/maas/secret
+~$ sudo cat /var/lib/maas/secret
 ```
 
 This'll give you a 16 digit hex number that you need to copy for any `cluster-controller` that you
@@ -24,15 +24,15 @@ want to connect to the `region-controller`.
 After this, go to your `cluster-controller` and do the following:
 
 ```bash
-$ sudo dpkg-reconfigure maas-cluster-controller # point it to the MAAS instance that is your future region-controller
-$ sudo maas-provision install-shared-secret # it'll ask for the above secret you copy'd
+~$ sudo dpkg-reconfigure maas-cluster-controller # point it to the MAAS instance that is your future region-controller
+~$ sudo maas-provision install-shared-secret # it'll ask for the above secret you copy'd
 ```
 
 If you've done everything correct you should see something like the following in the logs on the `cluster-controller`,
 then check your `region-controller` and it should be under "Clusters."
 
 ```
-$ sudo cat /var/log/maas/pserv.log
+~$ sudo cat /var/log/maas/pserv.log
 2015-04-14 11:27:30-0500 [ClusterClient,client] Event-loop 'vm-controller-maas:pid=1318' authenticated.
 2015-04-14 11:27:30-0500 [ClusterClient,client] Event-loop 'vm-controller-maas:pid=1317' authenticated.
 ```
@@ -40,15 +40,15 @@ $ sudo cat /var/log/maas/pserv.log
 I rebooted my `cluster-controller` to make sure everything came up as expected, and saw this error is `/var/log/apache2/error.log`.
 
 ```
-$ sudo cat /var/log/apache2/error.log
+~$ sudo cat /var/log/apache2/error.log
 [Tue Apr 14 13:29:36.548078 2015] [:error] [pid 2766:tid 140219708958464] [remote 127.0.0.1:7825] AssertionError: The secret stored in the database does not match the secret stored on the filesystem at /var/lib/maas/secret. Please investigate.
 ```
 
 I resolved it by:
 
 ```bash
-$ sudo su - maas
-$ psql maasdb
+~$ sudo su - maas
+~$ psql maasdb
 maasdb => select * from maasserver_config;
  id |       name        |               value
 ----+-------------------+------------------------------------

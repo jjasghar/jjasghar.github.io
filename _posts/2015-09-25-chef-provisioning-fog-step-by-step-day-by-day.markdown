@@ -72,7 +72,7 @@ end
 After doing this, you'll need to install the `chef-provisioning-fog` gem.
 
 ```
-$ gem install chef-provisioning-fog
+~$ gem install chef-provisioning-fog
 ```
 
 If you have a `knife.rb` already, you can break it open and this is where you can declare how to connect to your OpenStack cloud. You'll need to fill in the following with your own strings:
@@ -88,7 +88,7 @@ driver_options :compute_options => { :openstack_auth_url => 'http://YOUROPENSTAC
 Something that bit me, was the name of the `:key_name`. It seems that the ssh key needs to match what you call it in the `machine_options` above. So I did this:
 
 ```
-cp ~/.ssh/id_rsa ~/.ssh/jdizzle
+~$ cp ~/.ssh/id_rsa ~/.ssh/jdizzle
 ```
 
 I know it's not great, but hell it worked and I'm not going to complain.
@@ -96,14 +96,14 @@ I know it's not great, but hell it worked and I'm not going to complain.
 After this, you can go to where you wrote your provisioning script and run these commands,
 
 ```
-$ export CHEF_DRIVER=fog:OpenStack # this is only needed if you haven't added the driver to your knife.rb
-$ chef-client -z my_provisioning_script.rb
+~$ export CHEF_DRIVER=fog:OpenStack # this is only needed if you haven't added the driver to your knife.rb
+~$ chef-client -z my_provisioning_script.rb
 ```
 
 You should see [chef-zero](https://github.com/chef/chef-zero) kick off and soon you'll see your machines in your OpenStack cloud. When you want to blow everything away, all you need to do is:
 
 ```
-$ chef-client -z destroy.rb
+~$ chef-client -z destroy.rb
 ```
 
 This should be enough to get you off the ground. Happy Provisioning!

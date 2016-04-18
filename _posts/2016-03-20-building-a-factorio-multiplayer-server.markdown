@@ -28,15 +28,25 @@ plugins, and slightly different commands to create servers, so please read the d
 -   Run `chef exec knife digital_ocean sshkey list` to verify you can talk to Digital Ocean, and figure out your SSHKEYNUMBER for a following step.
 -   Run `chef exec knife cookbook upload factorio-cookbook` to upload factorio-cookbook to your hosted Chef instance.
 -   Run `chef exec knife cookbook list` to verify you successfully uploaded the cookbook. You should see the cookbook name and version number output.
--   You should be ready to run something like the following: `chef exec knife digital_ocean droplet create --server-name factorio --image ubuntu-14-04-x64 --location sfo1 --size 4gb --ssh-keys <YOURSSHKEYNUMBER> --bootstrap --run-list "recipe[factorio]"` You may want to tweak this for your usage, I picked 4 gig. A 4 gig box will run you 40 bucks a month, or $0.06 cents an hour, while a 2 gig instance will cost you $0.03 per hour or 20 bucks a month. Don’t forget to blow the machine away, if you aren’t planing on running the Digital Ocean server 24x7. I take no responsibility for your forgetfulness ;). I haven’t tested this build with anything other then Ubuntu, but I’d be interested if you got it working on other distributions.
+-   You should be ready to run something like the following. You may want to tweak this for your usage, I picked 4 gig. A 4 gig box will run you 40 bucks a month, or $0.06 cents an hour, while a 2 gig instance will cost you $0.03 per hour or 20 bucks a month. Don’t forget to blow the machine away, if you aren’t planing on running the Digital Ocean server 24x7. I take no responsibility for your forgetfulness ;). I haven’t tested this build with anything other then Ubuntu, but I’d be interested if you got it working on other distributions.
+
+```bash
+~$ chef exec knife digital_ocean droplet create --server-name factorio --image ubuntu-14-04-x64 --location sfo1 --size 4gb --ssh-keys <YOURSSHKEYNUMBER> --bootstrap --run-list "recipe[factorio]"
+```
 
 When you are done, you can blow it all away with these commands:
-```
+
+```bash
 ~$ SERVER=`chef exec knife digital_ocean droplet list | grep factorio | awk -F ' ' {'print $1'}`
 ~$ chef exec knife digital_ocean droplet destroy -S $SERVER # This destroys the machine on Digital Ocean
 ~$ chef exec knife node delete factorio -y && chef exec knife client delete factorio -y # This deletes it from Hosted Chef
 ```
 
 If you’ve completed these steps, you won’t need to login to the Host Chef instance unless you want to check the cookbook.
-You should be able to just spin up your factorio server with just `chef exec knife digital_ocean droplet create --server-name factorio --image ubuntu-14-04-x64 --location sfo1 --size 4gb --ssh-keys <YOURSSHKEYNUMBER> --bootstrap --run-list "recipe[factorio]"`.
+You should be able to just spin up your factorio server with just
+
+```bash
+~$ chef exec knife digital_ocean droplet create --server-name factorio --image ubuntu-14-04-x64 --location sfo1 --size 4gb --ssh-keys <YOURSSHKEYNUMBER> --bootstrap --run-list "recipe[factorio]"`
+```
+
 And use the above commands to blow everything away.

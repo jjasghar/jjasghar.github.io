@@ -12,7 +12,7 @@ cookbooks, and I wanted to start leveraging what I just paid for.
 
 So take this `.kitchen.yml` for instance:
 
-```
+```yml
 ---
 driver:
   name: vagrant
@@ -32,7 +32,7 @@ suites:
 
 Yep, it runs off the default of virtualbox.  If you create a `.kitchen.local.yml` file in that directory, something like this:
 
-```
+```yml
 ---
 driver:
   name: vagrant

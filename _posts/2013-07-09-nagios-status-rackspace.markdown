@@ -13,7 +13,8 @@ The biggest problem I have with the RSS feed is that it is everything inside the
 After our account manager suggested us to check http://status.rackspace.com a developer on my team asked if there was an automated way to check this.  I ran a quick `curl http://status.rackspace.com` and discovered it's flat html.  Boom, I had a way to get the data, I just needed a way to parse it.
 
 I had a default nagios check template and all I had to do was put that `curl` in to parse it out.
-``` bash
+
+```bash
 #!/bin/bash
 
 stateid=
@@ -35,7 +36,8 @@ elif [ "${SOMECMD}" != ${SOMETHING} ];
  fi
 exit $stateid
 ```
-I don't think this actually works, but hell you get the point. 
+
+I don't think this actually works, but hell you get the point.
 
 So with some patience using `sed` and `grep` I was able to start parsing out the data for my back ends specifically.  I ended up parsing out each section so you could have London Next-Gen and Rackconnect General.  I had a couple posts about "You should write it as one script and then add flags or variables at the end." I disagree, I wrote this so it could be dropped in nagios, straight forward install with little to no overhead.  As long as you have `curl` installed and write the command stanza, like my suggestion in the [README.md](https://github.com/jjasghar/nagios-status-rackspace/blob/master/README.md) you should be off to the races.
 

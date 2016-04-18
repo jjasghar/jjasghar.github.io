@@ -23,7 +23,7 @@ So on with the show/tutorial:
 
 The first thing you need to know is that [Omnibus](https://github.com/opscode/omnibus) is actually in two pieces. First the framework,
 at this repo: [omnibus](https://github.com/opscode/omnibus) and the [omnibus-software](https://github.com/opscode/omnibus-software)
-which is the the building blocks for whatever you're trying to package. 
+which is the the building blocks for whatever you're trying to package.
 
 The first thing that got me learning omnibus was the two files that sat inside of `project/` and `software/`. You'll notice that they
 probably are both named your package and probably wonder why it's named the same thing. The best description is this; `project/blah.rb` is the
@@ -35,10 +35,10 @@ is so it's all in one place.
 So let's take a step back. How do you create a new project? Here's a snippet to do it:
 
 ```bash
-$ gem install omnibus
-$ omnibus new $MY_PROJECT_NAME # this will create a directory with omnibus-$MY_PROJECT_NAME
-$ cd omnibus-$MY_PROJECT_NAME
-$ bundle install
+~$ gem install omnibus
+~$ omnibus new $MY_PROJECT_NAME # this will create a directory with omnibus-$MY_PROJECT_NAME
+~$ cd omnibus-$MY_PROJECT_NAME
+~$ bundle install
 ```
 Something pretty straight forward. I want to stress though the portion of `$MY_PROJECT_NAME`, that caught me a couple times. Yes, a couple times.
 
@@ -46,16 +46,16 @@ So lets say you are on a Ubuntu box and you're trying to build the pkg for Ubunt
 you won't see too much go by, but it'll tell you when it's done.
 
 ```bash
-$ cd omnibus-$MY_PROJECT_NAME
-$ bundle exec omnibus build $MY_PROJECT_NAME
+~$ cd omnibus-$MY_PROJECT_NAME
+~$ bundle exec omnibus build $MY_PROJECT_NAME
 ```
 
 Now if you want to see more things go by,
 
 ```bash
-$ cd $MY_PROJECT_NAME
-$ bundle install
-$ bundle exec omnibus build $MY_PROJECT_NAME --log-level=debug
+~$ cd $MY_PROJECT_NAME
+~$ bundle install
+~$ bundle exec omnibus build $MY_PROJECT_NAME --log-level=debug
 ```
 
 I personally like it, I like to see my computer work ;).
@@ -65,8 +65,8 @@ life so much easier.
 You should do something like the following:
 
 ```bash
-$ bundle exec kitchen list
-$ bundle exec kitchen converge <os you want to converge to build the pkg>
+~$ bundle exec kitchen list
+~$ bundle exec kitchen converge <os you want to converge to build the pkg>
 ```
 
 This will set up the box via test-kitchen, you'll want to `kitchen login` the box but then you can do the above commands to build the pkg.
@@ -75,6 +75,7 @@ Something I noticed as I was attempting to leverage test-kitchen as my build box
 much easier.
 
 I added the following to my `~/.ssh/config`.
+
 ```bash
 host localhost
      User vagrant
@@ -83,33 +84,37 @@ host localhost
 Where the `~/.ssh/vagrant` is from [here](https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant)
 
 Then you can do something like, then ship it off to some place else. NOTE: check the port number ;)
+
 ```bash
-$ mkdir ~/tmp && cd ~/tmp
-$ scp -P 2201 vagrant@localhost://home/vagrant/$MY_PACKAGE_NAME/pkg/* ./
+~$ mkdir ~/tmp && cd ~/tmp
+~$ scp -P 2201 vagrant@localhost://home/vagrant/$MY_PACKAGE_NAME/pkg/* ./
 ```
 
 And say you spin up another vagrant box to test. NOTE: check that port number ;)
+
 ```bash
-$ scp -P 2202 $MY_PACKAGE_NAME_0.1.0+20140819210922-1_amd64.deb vagrant@localhost://home/vagrant/
+~$ scp -P 2202 $MY_PACKAGE_NAME_0.1.0+20140819210922-1_amd64.deb vagrant@localhost://home/vagrant/
 ```
 
 I ran into an error during my adventures with Omnibus, and figured I should capture it here:
 
 If you see an error like the following:
+
 ```ruby
               [NullFetcher: libgcc] I | Fetching `libgcc' (nothing to fetch)
               [NetFetcher: cacerts] I | Downloading from `http://curl.haxx.se/ca/cacert.pem'
               [NetFetcher: cacerts] I | Verifying checksum
 Verification for cacerts failed due to a checksum mismatch:
- 
+
     expected: fd48275847fa10a8007008379ee902f1
     actual:   c9f4f7f4d6a5ef6633e893577a09865e
- 
+
 This added security check is used to prevent MITM attacks when downloading the
 remote file. If you have updated the version or URL for the download, you will
 also need to update the checksum value. You can find the checksum value on the
 software publisher's website.
 ```
+
 A quick fix would be to blow away your `Gemfile.lock` and run another `bundle install`.
 
 So here's some notes on Omnibus, I'll probably add more as time progresses, but this is at least a start!

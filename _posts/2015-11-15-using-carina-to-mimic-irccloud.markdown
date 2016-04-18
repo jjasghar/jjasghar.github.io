@@ -54,13 +54,13 @@ these steps. These are the actual commands I ran, and now, I have a working znc
 bouncer in Carina now.
 
 ```bash
-mkdir ~/carina
-carina create znc-pushover --wait --nodes=1
-carina credentials --path=/Users/jasghar/carina/znc-pushover znc-pushover
-source ~/carina/znc-pushover/docker.env
-docker info # to confirm everything is talking correctly
-docker create -v /zncdata --name zncdata training/postgres /bin/true # creating a Volume Container
-docker run -d --volumes-from zncdata --name znc-pushover -p 36667:6667 jjasghar/znc-pushover
+~$ mkdir ~/carina
+~$ carina create znc-pushover --wait --nodes=1
+~$ carina credentials --path=/Users/jasghar/carina/znc-pushover znc-pushover
+~$ source ~/carina/znc-pushover/docker.env
+~$ docker info # to confirm everything is talking correctly
+~$ docker create -v /zncdata --name zncdata training/postgres /bin/true # creating a Volume Container
+~$ docker run -d --volumes-from zncdata --name znc-pushover -p 36667:6667 jjasghar/znc-pushover
 ```
 
 The `/zncdata` container was the most challenging part for me, but as soon

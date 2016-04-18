@@ -19,5 +19,5 @@ So putting it all together I come up with something like the following to tell m
 my repos. This is a quick one liner that does the trick for me.
 
 ```bash
-for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
+~$ for i in *; do cd $i ; pwd; git rev-parse --abbrev-ref HEAD ; cd ../ ; done
 ```

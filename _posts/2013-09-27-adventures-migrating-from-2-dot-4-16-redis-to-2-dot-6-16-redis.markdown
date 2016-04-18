@@ -6,11 +6,21 @@ comments: true
 categories: linux sysadmin redis
 ---
 
-Like most sysadmins out there, I read the blogs and posts about new technologies that are relevant to my product(s).  There has been a lot of buzz about NoSQL and the key value store type db's out there, yet I have never really focused directly on it.  I have paid passing attention, until I realized that we use one heavily at my company.
+Like most sysadmins out there, I read the blogs and posts about new technologies
+that are relevant to my product(s).  There has been a lot of buzz about NoSQL and
+the key value store type db's out there, yet I have never really focused directly
+on it.  I have paid passing attention, until I realized that we use one heavily
+at my company.
 
-[Redis](http://redis.io) is a key value store that runs completely in memory. It's fast, REALLY fast, and after spending some time with a few tutorials like [The Little Redis Book](http://openmymind.net/2012/1/23/The-Little-Redis-Book/) by [Karl Seguin](https://twitter.com/karlseguin), it makes a ton of sense, and an extremely neat backend piece of software.
+[Redis](http://redis.io) is a key value store that runs completely in memory.
+It's fast, REALLY fast, and after spending some time with a few tutorials like
+[The Little Redis Book](http://openmymind.net/2012/1/23/The-Little-Redis-Book/)
+by [Karl Seguin](https://twitter.com/karlseguin), it makes a ton of sense, and
+an extremely neat backend piece of software.
 
-I started to learn more about it, and I started talking to a coworker and he said that he really wanted to upgrade from 2.4 redis to 2.6 redis. I took this as a challenge, and ran with it.
+I started to learn more about it, and I started talking to a coworker and he said
+that he really wanted to upgrade from 2.4 redis to 2.6 redis. I took this as a
+challenge, and ran with it.
 
 The first part of the migration is creating a slave.  We had .aof and .rdb snapshotting, but we didn't have a slave. This post is be going to be chronicling my adventures getting from 2.4.16 to 2.6.16.
 
@@ -23,6 +33,7 @@ Secondly I did my `FLUSHALL` command, then shutdown my redis instance then copie
 I went through quite a few different iterations, but I'll just explain the basic trouble shooting that I did, and maybe you can leverage off it.
 
 So with my redis 2.4 instance with a 2 gig db, and my 2.6 blank db instance it was time to start the fun.  I ran the following commands in a tmux session on my main workstation.  I liked the idea of a 3rd party machine actually looking at all this stuff instead of running directly on one of the machines.
+
 ``` bash
 watch "redis-cli -h redis-slave info | grep master_sync_left_bytes "
 redis-cli -h redis-slave keys "*" | wc -l
@@ -32,9 +43,14 @@ redis-cli -h redis-slave info | grep used_memory
 redis-cli -h redis-master --latency
 ```
 
-Most, if not all are pretty self explanatory.  The most interesting one of them all is probably the last one, the `--latency`.  It used it as a way to emulate something poking my redis instance during the inital clone. The thing we, [where|are|still] worried about is customer impact, and as long as the number didn't sky rocket then stay high it was an acceptable risk.
+Most, if not all are pretty self explanatory.  The most interesting one of them
+all is probably the last one, the `--latency`.  It used it as a way to emulate
+something poking my redis instance during the inital clone. The thing we,
+[where|are|still] worried about is customer impact, and as long as the number
+didn't sky rocket then stay high it was an acceptable risk.
 
-After I got the tmux session all up and happy, i  ran these two commands to start the `slaveof`:
+After I got the tmux session all up and happy, I ran these two commands to start the `slaveof`:
+
 ```bash
 # on the master
 redis-master:6379> slaveof no one

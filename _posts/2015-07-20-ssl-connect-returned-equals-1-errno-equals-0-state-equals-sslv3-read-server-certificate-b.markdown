@@ -14,7 +14,7 @@ You're getting self signed cert errors using Berkshelf or `knife.rb`, add this t
 ssl_verify_mode :verify_none
 ```
 
-```
+```bash
 echo '{"ssl":{"verify": false }}' > ~/.berkshelf/config.json
 ```
 
@@ -31,8 +31,8 @@ This is berkshelf telling you you're not running a signed cert, and it bombs out
 
 Looking at [this](https://github.com/berkshelf/berkshelf/issues/1266) they give the answer, which is:
 
-```
-chef exec berks upload --no-ssl-verify
+```bash
+~% chef exec berks upload --no-ssl-verify
 ```
 
 Now it's possible it's `knife` sending back something like that error. Checkout [Joshua Timberman](https://twitter.com/jtimberman)'s post [here](http://jtimberman.housepub.org/blog/2014/12/11/chef-12-fix-untrusted-self-sign-certs/)
@@ -43,8 +43,8 @@ Update:
 
 Thanks to [Ryan Cragun](https://twitter.com/ryancragun) my co-worker and general badass, pointing out a way to get around this too.
 
-```
-echo '{"ssl":{"verify": false }}' > ~/.berkshelf/config.json
+```bash
+~$ echo '{"ssl":{"verify": false }}' > ~/.berkshelf/config.json
 ```
 
 Now you can drop that `--no-ssl-verify`.
@@ -53,7 +53,7 @@ Another Update:
 
 So it seems you might see this with `knife cookbook upload` or any `knife` command for that matter:
 
-```
+```bash
 ubuntu@aoeu:~/chef-repo$ knife status
 ERROR: SSL Validation failure connecting to host: 172.16.20.62 - SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
 ERROR: Could not establish a secure connection to the server.
@@ -65,7 +65,7 @@ Original Exception: OpenSSL::SSL::SSLError: SSL_connect r
 
 And if you run `knife ssl check` you'd see:
 
-```
+```bash
 ubuntu@aoeu:~/chef-repo$ knife ssl check
 Connecting to host 172.16.20.62:443
 ERROR: The SSL certificate of 172.16.20.62 could not be verified
@@ -95,7 +95,7 @@ that the server's certificate is now trusted.
 
 So you do what the command says:
 
-```
+```bash
 ubuntu@aoeu:~/chef-repo$ knife ssl fetch
 WARNING: Certificates from 172.16.20.62 will be fetched and placed in your trusted_cert
 directory (/home/ubuntu/chef-repo/.chef/trusted_certs).

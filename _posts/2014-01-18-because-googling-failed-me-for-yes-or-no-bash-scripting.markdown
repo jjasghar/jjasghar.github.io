@@ -15,6 +15,7 @@ I ran the script a couple times, it worked like a charm, but without thinking ab
 I continued googling around and then remembered the `case` statement.
 
 I created this:
+
 ```bash
 #!/bin/bash
 
@@ -33,6 +34,7 @@ case "$RESPONSE" in
     ;;
 esac
 ```
+
 Now you are probably wondering why I even bothered posting this. Honestly, I spent way too much time on this and I figured I'll find myself looking for this again 6+ months down the line.
 
 Hopefully this post will save you some time in the future.

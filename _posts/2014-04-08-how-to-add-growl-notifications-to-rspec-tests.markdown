@@ -15,6 +15,7 @@ be focused on your present screen and have the tests being run with a pop up.
 I use vim as my development platform. This is why I needed a way to run rspec in the background, hopping out of the vim buffer breaks my focus. So I used guard-rspec, it was perfect for what I wanted to do, problem was it was in another tab or terminal again breaking my focus. I figured I have growl installed, so this is how I set up this perfect rspec+guard+growl setup.
 
 First add these two gems to your Gemfile:
+
 ```ruby
 group :development, :test do
     gem ...

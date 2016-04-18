@@ -30,6 +30,7 @@ ssh <deployuser>@<remotehost>://var/www/<app>/repo/
 ```
 
 Then after the fact, you might want to steal this cap rake task:
+
 ```ruby
 desc "Check that we can access the repo directory"
 task :check_repo_permissions do
@@ -44,9 +45,11 @@ end
 ```
 
 Also may I suggest you putting this at the "top" of your `deploy.rb` something like:
+
 ```ruby
 before :deploy, :check_repo_permissions
 ```
+
 So just in case you're `cap` task will fail out early on of you have decided to remove, or
 do something with that repo directory.
 
@@ -72,16 +75,19 @@ This should wire everything up now.
 
 There is one other _optional_ file, `.capignore` that needs to be created, it is a `.gitignore` for this cap deployment.
 I ended up taking the example:
+
 ```
 .capignore
 lib
 config
 .git
 ```
+
 and adding it directory to the `(:deploy_to)/repo/.capignore`. I believe you can add it to your the root of your repo,
 and it should get there too, but I didnt do it that way. The only place it's referanced is [here](https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L45) so if you see fit, you could probably just remove the referance.
 
 You should be able to do a `cap staging deploy` now and you should notice something like:
+
 ```bash
 ...
 DEBUG[639d0d29] Command: cd /var/www/app/repo && ( GIT_ASKPASS=/bin/echo GIT_SSH=/tmp/app/git-ssh.sh /usr/bin/env git submodule update --init )
@@ -90,4 +96,3 @@ DEBUG[639d0d29]   Submodule 'i-hate-submodules' () registered for path 'i-hate-s
 ```
 
 And you should be good to go!
-

@@ -25,12 +25,18 @@ You can do the following steps with something like [Rackspace](http://www.racksp
 1. I haven't automated the saving or exporting the worlds that is created with this cookbook _yet_. But here is a link to a place that tells you how to do it by [hand](http://www.howtogeek.com/202591/how-to-backup-your-minecraft-worlds-mods-and-more/), in case you need a refresher.
 1. When you are done, you can blow it all away with these commands:
 
-```
+```bash
 ~$ SERVER=`chef exec knife digital_ocean droplet list | grep minecraft | awk -F ' ' {'print $1'}`
 ~$ chef exec knife digital_ocean droplet destroy -S $SERVER # This destroys the machine on Digital Ocean
 ~$ chef exec knife node delete minecraft -y && chef exec knife client delete minecraft -y # This deletes it from Hosted Chef
 ```
 
-If you've completed these steps, you won't need to login to the Host Chef instance unless you want to check the cookbook. You should be able to just spin up your Minecraft server with just `chef exec knife digital_ocean droplet create --server-name minecraft --image ubuntu-14-04-x64 --location sfo1 --size 4gb --ssh-keys <YOURSSHKEYNUMBER> --bootstrap --run-list "recipe[minecraft-basic]"`. And use the above commands to blow everything away.
+If you've completed these steps, you won't need to login to the Host Chef instance unless you want to check the cookbook. You should be able to just spin up your Minecraft server with just
+
+```bash
+~$ chef exec knife digital_ocean droplet create --server-name minecraft --image ubuntu-14-04-x64 --location sfo1 --size 4gb --ssh-keys <YOURSSHKEYNUMBER> --bootstrap --run-list "recipe[minecraft-basic]"
+```
+
+And use the above commands to blow everything away.
 
 I'll post another article when I figure out a good/chefie/automated way to backup, export, and share your worlds you create.

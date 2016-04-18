@@ -21,34 +21,40 @@ With my [fork](https://github.com/jjasghar/our-boxen)...now it's time to start m
 Where we want to start is at the default [site.pp](https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp) this is what will be installed on all your boxes by well, default.
 
 Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):
+
 ```
-[~] % git --version # click "Install" for the developer tools
-[~] % sudo mkdir -p /opt/boxen
-[~] % sudo chown ${USER}:staff /opt/boxen
-[~] % git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
-[~] % cd /opt/boxen/repo
-[/opt/boxen/repo] % git checkout -b removing_nodejs_old_ruby
-[/opt/boxen/repo] % cd manifests
-[/opt/boxen/repo/manifests] % vim site.pp
+~%  git --version # click "Install" for the developer tools
+~%  sudo mkdir -p /opt/boxen
+~%  sudo chown ${USER}:staff /opt/boxen
+~%  git clone https://github.com/jjasghar/our-boxen.git /opt/boxen/repo
+~%  cd /opt/boxen/repo
+/opt/boxen/repo% git checkout -b removing_nodejs_old_ruby
+/opt/boxen/repo% cd manifests
+/opt/boxen/repo/manifests% vim site.pp
 ```
+
 I don't care for nodejs or the older versions of ruby for this example, so I'm going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I'll push this up to my repo so I can track my work.
 
 Ok, lets give boxen a shot!
+
+```bash
+/opt/boxen/repo/manifests% cd ..
+/opt/boxen/repo/% script/boxen --no-fde
+/opt/boxen/repo/% source /opt/boxen/env.sh
+/opt/boxen/repo/% boxen
 ```
-[/opt/boxen/repo/manifests] % cd ..
-[/opt/boxen/repo/] % script/boxen --no-fde
-[/opt/boxen/repo/] % source /opt/boxen/env.sh
-[/opt/boxen/repo/] % boxen
-```
+
 You'll notice a warning about auto-update, that's fine, you are developing manifests right?
 
 Go ahead and run these commands on the command line, if our changes worked as expected it should say:
+
 ```bash
 jjasghar-Mac:repo jjasghar$ node
 -bash: node: command not found
 jjasghar-Mac:repo jjasghar$ ruby --version
 ruby 2.0.0p247 (2013-06-27 revision 41674) [universal.x86_64-darwin13]
 ```
+
 Hell yes! We got what we expected! Ok, go ahead and commit your changes so you can track your work, and push the branch up if you want to be completely safe.
 
 ## Per user manifests
@@ -56,14 +62,17 @@ Hell yes! We got what we expected! Ok, go ahead and commit your changes so you c
 Ok, go ahead and go to that `modules/people` and read that [README.md](https://github.com/jjasghar/our-boxen/tree/master/modules/people) so you get some background.
 
 Now:
+
 ```bash
-[/opt/boxen/repo/] % cd modules/people/manifests
-[/opt/boxen/repo/modules/people/manifests] % git checkout master
-[/opt/boxen/repo/modules/people/manifests] % git checkout -b jjasghar_manifest
-[/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
+/opt/boxen/repo/% cd modules/people/manifests
+/opt/boxen/repo/modules/people/manifests% git checkout master
+/opt/boxen/repo/modules/people/manifests% git checkout -b jjasghar_manifest
+/opt/boxen/repo/modules/people/manifests% vim jjasghar.pp # this needs to be your github account name
 ```
+
 Here's a template from [Greg](https://github.com/awaxa/awaxa-boxen/blob/master/modules/people/manifests/awaxa.pp), if you want to see what he's done.
-```ruby awaxa.pp
+
+```ruby
 class people::awaxa {
   include people::awaxa::applications
   include people::awaxa::dotfiles
@@ -73,7 +82,8 @@ class people::awaxa {
 }
 ```
 As you can see he references other files located in that same directory, though in a sub directory as `awaxa/`. Lets use that `include people::awaxa::applications` initially.
-```ruby applications.pp
+
+```ruby
 class people::awaxa::applications {
   include caffeine
   include chrome
@@ -100,19 +110,24 @@ class people::awaxa::applications {
   }
 }
 ```
+
 Ok here's the one I created:
-```ruby jjasghar.pp
+
+```ruby
 class people::jjasghar {
   include people::jjasghar::applications
 }
 ```
+
 Nice! Ok, now we need to create:
+
 ```bash
-[/opt/boxen/repo/modules/people/manifests] % mkdir jjasghar
-[/opt/boxen/repo/modules/people/manifests] % vim jjasghar/applications.pp
+/opt/boxen/repo/modules/people/manifests% mkdir jjasghar
+/opt/boxen/repo/modules/people/manifests% vim jjasghar/applications.pp
 ```
 
 This is where we add our apps!
+
 ```ruby applications.pp
 class people::jjasghar::applications {
   include iterm2::stable
@@ -126,6 +141,7 @@ class people::jjasghar::applications {
 ```
 
 Ok, now you need to add these to the `Puppetfile` located at the root of the boxen repo
+
 ```ruby
 [-- snip --]
 
@@ -141,9 +157,10 @@ github "vagrant"
 ```
 
 After you update the `Puppetfile` go ahead and run `boxen` again:
+
 ```bash
-[/opt/boxen/repo/modules/people/manifests] % cd /opt/boxen/repo
-[/opt/boxen/repo] % boxen
+/opt/boxen/repo/modules/people/manifests% cd /opt/boxen/repo
+/opt/boxen/repo% boxen
 ```
 
 Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.

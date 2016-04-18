@@ -17,6 +17,7 @@ You come in at a new job, you have the initial "Hey newguy, here's your new netw
 This is where serverspec comes into play.  You know that list that starts to grow, learning about your app servers, your one off web machines? If you use serverspec, you can keep the pseudo-english list and be able to check against what should be on there. It  gives you a way to confirm everything is exactly what you expect.
 
 serverspec only requires ruby to run, the following command will get it installed if you have ruby 1.9.x+ installed. ```gem install serverspec``` and ssh access to the boxes you want to check.  The example of the webserver on the main page is priceless and speaks volumes. The following is that example with a small edit from me.
+
 ``` ruby
 require 'spec_helper'
 
@@ -38,11 +39,12 @@ describe file('/etc/httpd/conf/httpd.conf') do
   it { should contain "ServerName my-server-name" }
 end
 ```
+
 That's it, now all you have to do is `rake spec` and you have a test that checks for all the basic apache web server stuff, and instead of sshing out to each machine you can make the computer do the work for you, and this is just the tip of the iceberg!
 
 nagios (or automated process monitoring) vs serverspec
 -----------------------------------------
-I understand the hesitation about _another_ monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren't erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I'd like to state that this isn't designed to take place of something like nagios, but to augment it. 
+I understand the hesitation about _another_ monitoring solution, but every sysadmin goes through this situation like this when learning a new network.  Like the story above, there should be at least one rudimentary monitoring solution, a way to  make sure machines are up and maybe processes aren't erring.  With the low overhead of serverspec you can leverage this in an ad-hoc way and, I'd like to state that this isn't designed to take place of something like nagios, but to augment it.
 
 The advantage of something like serverspec over nagios or, a polling based monitoring solution, is that there is a lag between when you deploy something and the monitoring systems reporting it.  You can run serverspec in an ad-hoc manner you'll get a much faster feedback loop.  I have 1034 tests on about 40 boxes, and it only takes about 2 minutes 30 seconds to run, needless to say that's a small price to pay for a piece of mind.  The default polling for nagios is 5 minutes, so cutting it in half that's already a great turn around to see the state of the machines.
 

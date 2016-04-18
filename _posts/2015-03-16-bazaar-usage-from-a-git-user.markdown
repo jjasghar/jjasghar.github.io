@@ -22,25 +22,25 @@ want to do is push up a change to an issue you've found.
 First be sure to login to launchpad:
 
 ```bash
-~ > bzr launchpad-login <username>
+~$ bzr launchpad-login <username>
 ```
 
 Then you clone down the code locally with this, NOTE: ubuntu/ironic can be anything on launchpad.
 
 ```bash
-~ > bzr branch lp:ubuntu/ironic
+~$ bzr branch lp:ubuntu/ironic
 ```
 
 Then `checkout` the repo into a branch you can work on, NOTE: ironic-conductor will create a directory you will work in
 
 ```bash
-~ > bzr checkout lp:ubuntu/ironic ironic-conductor
+~$ bzr checkout lp:ubuntu/ironic ironic-conductor
 ```
 
 Then you need to 'link' the local working directory with your launchpad account, NOTE: this'll push up the initial branch to launchpad.
 
 ```bash
-~ > cd ironic-conductor
+~$ cd ironic-conductor
 ironic-conductor > bzr branch --stacked --switch lp:ubuntu/ironic lp:~d-jj/ironic/ironic-conductor
 ```
 
@@ -63,7 +63,8 @@ ironic-conductor > bzr commit -m "I did some amazing changes and this is that co
 ```
 
 If everything goes to plan you should see something like:
-```
+
+```bash
 Most recent Ubuntu version: 2015.1~b2-0ubuntu1
 Packaging branch status: CURRENT
 Committing to: bzr+ssh://bazaar.launchpad.net/~d-jj/ironic/ironic-conductor/

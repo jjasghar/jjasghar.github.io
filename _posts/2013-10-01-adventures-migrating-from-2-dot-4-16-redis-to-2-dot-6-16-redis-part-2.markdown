@@ -9,7 +9,18 @@ categories: linux sysadmin redis monitoring nagios
 Monitoring
 =========
 
-Everyone loves monitoring. Ok, that's a lie, only [DevOps|Sysadmins] love monitoring. Ok, that's probably a lie too, hell I love monitoring, and I love nagios.  I've followed used nagios in some shape or another since nagios-1.0b6. My first real paid job as an "IT guy" was setting up nagios for a company.  I've actually gotten in the habit of walking into a new company using [serverspec](http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/), to learn what each machine does, then implementing nagios behind the serverspec scripts for a proactive monitoring on error conditions. This might seem redundant, but I don't think so. serverspec is great for spot checking, while nagios gives the best "state of the union" snapshot. Granted a lot of the time creating these checks are reactive, but sometimes like here, I wrote some proactive monitoring because I know there are certain error conditions on the slaves I've spun up.
+Everyone loves monitoring. Ok, that's a lie, only [DevOps|Sysadmins] love monitoring.
+Ok, that's probably a lie too, hell I love monitoring, and I love nagios.  I've
+followed used nagios in some shape or another since nagios-1.0b6. My first real
+paid job as an "IT guy" was setting up nagios for a company.  I've actually gotten
+in the habit of walking into a new company using
+[serverspec](http://jjasghar.github.io/blog/2013/07/12/serverspec-the-new-best-way-to-learn-and-audit-your-infrastructure/),
+to learn what each machine does, then implementing nagios behind the serverspec
+scripts for a proactive monitoring on error conditions. This might seem redundant,
+but I don't think so. serverspec is great for spot checking, while nagios gives
+the best "state of the union" snapshot. Granted a lot of the time creating these
+checks are reactive, but sometimes like here, I wrote some proactive monitoring
+because I know there are certain error conditions on the slaves I've spun up.
 
 I use nrpe to monitor my machines, and I set up my `nrpe.cfg` to something like the following. I use chef, so the `<%= node['hostname'] %>` is from [ohai](https://github.com/opscode/ohai).
 
@@ -68,6 +79,7 @@ I stole this monitor from [here](http://blog.winfieldpeterson.com/2012/12/13/mon
 As a side note: I even put in a [PR](https://github.com/miah/chef-redis/pull/55) to update to 2.6.16, because of this project.  I ran all the [test-kitchen](https://github.com/opscode/test-kitchen) tests and it passed like a charm.  I actually learned about [bats](https://github.com/sstephenson/bats) in the process, and honestly I'm pretty damn impressed with something so straight forward.  Because serverspec fulfills my requirements at the moment, I don't have to use it; but I like the idea of having it in my back pocket.  The replication between master and slave seems extremely important, so this monitor has been a god sent.  I never have seen it spike over 45 seconds, but then the next check pop back to <3 seconds.
 
 The second monitor I wrote was this:
+
 ```bash
 #!/bin/bash
 

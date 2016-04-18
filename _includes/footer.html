@@ -8,7 +8,7 @@
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
           <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-          <li><a href="https://twitter.com/intent/tweet?screen_name=jjasghar" class="twitter-mention-button" data-related="jjasghar">Tweet to @jjasghar</a>
+          <li><a href="https://twitter.com/intent/tweet?screen_name={{ site.twitter_username }}" class="twitter-mention-button" data-related="{{ site.twitter_username }}">Tweet to @{{ site.twitter_username }}</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
             </li>
         </ul>
@@ -18,16 +18,17 @@
         <ul class="social-media-list">
           {% if site.github_username %}
           <li>
-            {% include icon-github.html username=site.github_username %}
+            <iframe src="https://ghbtns.com/github-btn.html?user={{ site.github_username }}&type=follow&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
           </li>
           {% endif %}
 
           {% if site.twitter_username %}
           <li>
-            {% include icon-twitter.html username=site.twitter_username %}
+            <a href="https://twitter.com/{{ site.twitter_username }}" class="twitter-follow-button" data-show-count="false">Follow @{{ site.twitter_username }}</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
           </li>
           <li>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-via="jjasghar">Tweet</a>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="{{ site.twitter_username }}">Tweet</a> this page.
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
           </li>
           {% endif %}

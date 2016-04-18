@@ -11,6 +11,7 @@ So as the title says, people keep asking me "How to start with chef?" This an ou
 chef-solo is your best friend (step 1)
 --------------------------------------
 A lot of people can start here, and end here believe it or not.  chef-solo is unbelievably powerful and can full-fill 90% of all requirements for basic usage. I spent some time looking around for a good tutorial (doing all of them that I could find), and [this](http://www.opinionatedprogrammer.com/2011/06/chef-solo-tutorial-managing-a-single-server-with-chef/) on was the best "I have no idea what the fuck I'm doing." situation.  Modern chef installs are a tad bit different than this guy, so the "install.sh" changes I suggest are this:
+
 ```bash
 #!/bin/bash
 
@@ -28,6 +29,7 @@ fi &&
 
 chef-solo -c solo.rb -j solo.json
 ```
+
 As you can see I use the omnibus installer, not the gem, and choose the ruby version you want ;), and yes if you use those lame-ass rpm-based distros, `apt-get` won't work for you.
 
 There's something clever here (step 2)
