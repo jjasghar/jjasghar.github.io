@@ -73,3 +73,13 @@ gems:
   - jekyll-sitemap
   - jemoji
   - rouge
+
+post:
+  template: _post.txt
+  extension: md
+page:
+  template: _page.txt
+  extension: md
+editor: emacsclient -n
+git:
+  branch: master
