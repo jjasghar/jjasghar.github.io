@@ -62,7 +62,7 @@ Now:
 [/opt/boxen/repo/modules/people/manifests] % git checkout -b jjasghar_manifest
 [/opt/boxen/repo/modules/people/manifests] % vim jjasghar.pp # this needs to be your github account name
 ```
-Here's a template from [Greg](https://github.com/awaxa/our-boxen/blob/master/modules/people/manifests/awaxa.pp), if you want to see what he's done.
+Here's a template from [Greg](https://github.com/awaxa/awaxa-boxen/blob/master/modules/people/manifests/awaxa.pp), if you want to see what he's done.
 ```ruby awaxa.pp
 class people::awaxa {
   include people::awaxa::applications
@@ -147,4 +147,3 @@ After you update the `Puppetfile` go ahead and run `boxen` again:
 ```
 
 Grats! You got everything installed. This is just the start, but you can see the beauty of this now. Or at least I could.
-

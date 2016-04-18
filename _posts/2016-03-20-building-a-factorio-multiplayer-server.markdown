@@ -8,7 +8,7 @@ categories: linux gaming chef factorio
 
 
 These are the steps to create a [factorio](http://factorio.com) server on
-[Digital Ocean](http://digialocean). The initial setup is only done the first time, then you’ll be
+[Digital Ocean](http://digialocean.com). The initial setup is only done the first time, then you’ll be
 able to do just the create command when you want a new Factorio Server.
 
 You can do the following steps with something like Rackspace or AWS you just need
