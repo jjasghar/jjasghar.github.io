@@ -74,6 +74,10 @@ gems:
   - jemoji
   - rouge
 
+# ----------------------- #
+#  Rake file settings     #
+# ----------------------- #
+
 post:
   template: _post.txt
   extension: md
