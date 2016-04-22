@@ -52,7 +52,7 @@ python so `jjb` can compile correctly.
 
 ```bash
 ~/jenkins-job-builder$ sudo apt-get install python-pip
-~/jenkins-job-builder$ sudo pip install yaml
+~/jenkins-job-builder$ sudo pip install pyyaml
 ~/jenkins-job-builder$ sudo pip install pbr
 ~/jenkins-job-builder$ sudo pip install python-jenkins
 ~/jenkins-job-builder$ sudo pip install setuptools
@@ -140,7 +140,7 @@ You can do this either by the `data_bag` if you want, or if you're lazy like me
 you can use the GUI. After you create the user, take note of the API key, you'll
 need to know it for the next step.
 
-After this, you need to create a `etc/jenkin_jobs.ini` file, here's a very basic one:
+After this, you need to create a `etc/jenkins_jobs.ini` file, here's a very basic one:
 
 ```
 [job_builder]
@@ -177,7 +177,7 @@ and commit them. The following is an example of a simple `yaml`.
 - job:
     name: Basic example
     project-type: freestyle
-    description: 'A basic example of a `jjb` job that echos "Hello world and cat's out /etc/password"'
+    description: 'A basic example of a `jjb` job that echos "Hello world and cats out /etc/password"'
     builders:
         - shell: |
             echo 'Hello world!'
