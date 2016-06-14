@@ -101,7 +101,7 @@ you can only get words not hashtags. I'm investigating this farther.
 After this, run `docker compose up` again then:
 
 ```bash
-$ curl http://<hostname>:9200/_cat/indices?v
+$ curl http://HOSTNAME:9200/_cat/indices?v
 health status index               pri rep docs.count docs.deleted store.size pri.store.size
 yellow open   .kibana               1   1          8            0     65.8kb         65.8kb
 yellow open   twitter-2016.06.14    5   1       2171            0     18.3mb         18.3mb
