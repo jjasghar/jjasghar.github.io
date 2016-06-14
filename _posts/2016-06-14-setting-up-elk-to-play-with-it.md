@@ -32,7 +32,7 @@ $ git clone https://github.com/deviantony/docker-elk
 ```
 
 After you get everything down run docker-compose up to make sure everything is working as expected. You should
-be able to go to the machine with http://<hostname>:5601 and see the kibana dashboard.
+be able to go to the machine with http://HOSTNAME:5601 and see the kibana dashboard.
 
 ```bash
 $ cd docker-elk
