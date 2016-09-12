@@ -3,7 +3,7 @@ layout: post
 title: "Moving to capistrano version 3 from version 2 git submodules"
 date: 2014-06-04 17:13:43 -0500
 comments: true
-categories: ruby, rails
+categories: rails
 ---
 
 I'm in the process of moving from [capistrano](http://capistranorb.com/) version 2

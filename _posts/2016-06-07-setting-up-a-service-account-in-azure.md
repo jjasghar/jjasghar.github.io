@@ -2,7 +2,7 @@
 layout: post
 title: "Setting up a service account in Azure"
 date: 2016-06-07 16:47:03
-categories:
+categories: azure chef
 ---
 
 I have been tasked with some [Azure][azure] work for chef, including [knife-azure][knife].

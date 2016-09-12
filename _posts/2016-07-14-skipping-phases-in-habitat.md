@@ -2,7 +2,7 @@
 layout: post
 title: "Skipping phases in habitat"
 date: 2016-07-14 12:19:31
-categories:
+categories: habitat linux bash
 ---
 
 This is how to skip a build phase in a `plan.sh` in [habitat][habitat].

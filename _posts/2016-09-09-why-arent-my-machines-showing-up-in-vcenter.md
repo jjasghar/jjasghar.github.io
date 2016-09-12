@@ -2,7 +2,7 @@
 layout: post
 title: "Why aren't my machines showing up in vCenter"
 date: 2016-09-09 16:09:14
-categories:
+categories: vmware
 ---
 
 I've started using [knife-vsphere][knife] and vCenter by [VMware][vmware]. I was

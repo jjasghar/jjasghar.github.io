@@ -3,7 +3,7 @@ layout: post
 title: "ERROR: Excon::Errors::CertificateError: SSL_connect and knife"
 date: 2016-04-16 19:49:10 -0500
 comments: true
-categories:
+categories: chef linux
 ---
 
 I was playing around with [knife-rackspace][knife-rackspace] and when I

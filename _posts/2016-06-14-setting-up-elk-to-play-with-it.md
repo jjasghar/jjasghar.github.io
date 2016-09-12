@@ -2,7 +2,7 @@
 layout: post
 title: "Setting up ELK to play with it"
 date: 2016-06-14 14:22:53
-categories:
+categories: docker linux
 ---
 
 I was at an Austin DevOps meetup last night and there were some great

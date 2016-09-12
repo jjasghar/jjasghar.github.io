@@ -2,7 +2,7 @@
 layout: post
 title:  "Welcome to Jekyll and and not octopress anymore!"
 date:   2016-04-17 09:42:15 -0500
-categories: jekyll update
+categories:
 ---
 
 NOTE: I'm keeping this because well, it has useful information!

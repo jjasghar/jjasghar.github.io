@@ -3,7 +3,7 @@ layout: post
 title: "Managing Windows Servers with Chef"
 date: 2014-06-11 16:42:36 -0500
 comments: true
-categories: book chef windows
+    categories: chef windows
 ---
 
 I was asked to do a review of [Managing Windows Servers with Chef](http://www.packtpub.com/managing-windows-servers-with-chef/book). I've read

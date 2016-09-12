@@ -3,7 +3,7 @@ layout: post
 title: "How do I create a Mac USB boot disk"
 date: 2015-01-07 08:23:55 -0800
 comments: true
-categories: sysadmin, mac
+categories: sysadmin mac
 ---
 
 I've been installing Linux from my laptop on hardware for a while now. I can
