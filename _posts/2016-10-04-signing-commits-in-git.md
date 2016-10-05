@@ -27,6 +27,8 @@ $ git commit --signoff
 If you already have the commit, use `git commit --amend` or `git rebase -i` to
 edit your commit message, and add the above signoff line.
 
+## .gitconfig
+
 If you would like something more permanent, you can add to your `.gitconfig`
 something like the following:
 
@@ -36,6 +38,24 @@ something like the following:
   cm = commit -s -m
   commit = commit -s
 ```
+
+Or you can do something like [Dave Parfitt][dave] suggests; which is supprisingly
+easy. You can add this to your ~/.gitconfig: (be sure to change your name and email address)
+
+```
+[commit]
+    template = ~/.gitmessage
+```
+
+followed by:
+
+```bash
+~$ cat ~/.gitmessage
+
+Signed-off-by: Your Name <email@addre.ss>
+```
+
+## magit
 
 If you are attempting to do it in emacs with [magit][magit] you need to
 the following:
@@ -47,3 +67,4 @@ the following:
 [detailed]: http://stackoverflow.com/questions/13457203/how-to-add-the-signed-off-by-field-in-the-git-patch
 [magit]: https://magit.vc/
 [gpg]: https://harryrschwartz.com/2014/11/01/automatically-signing-your-git-commits.html
+[dave]: https://twitter.com/metadave
