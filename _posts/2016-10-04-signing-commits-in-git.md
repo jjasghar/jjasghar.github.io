@@ -29,7 +29,7 @@ edit your commit message, and add the above signoff line.
 
 ## .gitconfig
 
-If you would like something more permanent, you can add to your `.gitconfig`
+If you would like something more permanent, you can add to your `~/.gitconfig`
 something like the following:
 
 ```
@@ -40,7 +40,7 @@ something like the following:
 ```
 
 Or you can do something like [Dave Parfitt][dave] suggests; which is surprisingly
-easy. You can add this to your ~/.gitconfig: (be sure to change your name and email address)
+easy. You can add this to your `~/.gitconfig`: (be sure to change your name and email address)
 
 ```
 [commit]
