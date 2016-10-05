@@ -39,7 +39,7 @@ something like the following:
   commit = commit -s
 ```
 
-Or you can do something like [Dave Parfitt][dave] suggests; which is supprisingly
+Or you can do something like [Dave Parfitt][dave] suggests; which is surprisingly
 easy. You can add this to your ~/.gitconfig: (be sure to change your name and email address)
 
 ```
