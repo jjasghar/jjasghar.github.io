@@ -41,9 +41,9 @@ $ hab studio enter
 Run the package(s):
 
 ```shell
-$ docker run -p 8501:8500 -it jjasghar/consul:latest
-$ docker run -p 8502:8500 -it jjasghar/consul:latest
-$ docker run -p 8503:8500 -it jjasghar/consul:latest
+$ docker run -p 8501:8500 -it core/consul:latest
+$ docker run -p 8502:8500 -it core/consul:latest
+$ docker run -p 8503:8500 -it core/consul:latest
 ```
 
 Spin up another container to do some administrative commands:
