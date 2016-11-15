@@ -92,7 +92,7 @@ Enter the hab studio and build the `.hart`.
 ```shell
 $ hab studio enter
 [1][default:/src:0]# build
-[1][default:/src:0]# hab pkg export docker core/vault
+[2][default:/src:0]# hab pkg export docker core/vault
 ```
 
 Start a vault instance pointing to the consul cluster.
