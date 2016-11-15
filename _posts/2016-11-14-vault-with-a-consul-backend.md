@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "vault with a consul backend"
+title: "vault with a consul back end"
 date: 2016-11-14 21:24:41
 categories: vault sysadmin consul linux
 ---
