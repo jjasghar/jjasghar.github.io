@@ -150,8 +150,10 @@ The following will connect to your vault instance and create `secret/bacon`.
 ```ruby
 require 'vault'
 Vault.address = 'http://172.17.0.7:8200'
-Vault.token   = "6d725951-b18d-caeb-5c51-4ad45eb54af0"
+# test a failing token first
 Vault.token   = "6d725951-b18d-caeb-5c51-bad"
+# now put in the correct token.
+Vault.token   = "6d725951-b18d-caeb-5c51-4ad45eb54af0"
 Vault.logical.write("secret/bacon", delicious: true, cooktime: "11")
 Vault.logical.read("secret/bacon")
 ```
@@ -160,7 +162,7 @@ The following will use the `vault` client to list and read `secret/bacon`.
 
 ```shell
 root@402825380ff6:~/vault# ./vault status
-root@402825380ff6:~/vault# vault auth
+root@402825380ff6:~/vault# ./vault auth
 root@402825380ff6:~/vault# ./vault list secret/
 root@402825380ff6:~/vault# ./vault read secret/bacon
 ```
