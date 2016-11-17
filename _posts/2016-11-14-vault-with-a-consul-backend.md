@@ -173,7 +173,7 @@ The following is the way to use the vault API via curl to get things from
 vault.
 
 ```shell
-root@402825380ff6:~/vault# export VAULT_TOKEN>=6d725951-b18d-caeb-5c51-4ad45eb54af0
+root@402825380ff6:~/vault# export VAULT_TOKEN=6d725951-b18d-caeb-5c51-4ad45eb54af0
 ```
 
 The following will overwrite `secret/bacon` with with `"bar":"baz"`, then query
