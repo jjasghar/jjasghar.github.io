@@ -63,7 +63,7 @@ root@402825380ff6#:~/consul# ./consul join -rpc-addr=172.17.0.2:8400 172.17.0.2 
 The above IPs should be the ones that came up from the `hab-sup` you should be
 able to see them in the back scroll.
 
-Go to <http://localhost:8501/ui/#/dc1/services/consul> to verify everything is there
+Go to <http://localhost:8501/ui/> to verify everything is there
 
 ### Setting up some health checks
 
