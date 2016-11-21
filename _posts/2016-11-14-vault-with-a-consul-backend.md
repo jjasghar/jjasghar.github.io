@@ -8,8 +8,8 @@ categories: vault sysadmin consul linux
 # vault with a consul back end
 
 Here are my notes on how I got [vault][vault] working with a [consul][consul] backend,
-building with Habitat. I should mention I'm trying to get these plans into core,
-the PRs are [285][285] and [286][286].
+building with Habitat. Being we are going to **edit the plans from some defaults**, please
+make sure you use your origin as the origin.
 
 ## Useful links
 
@@ -27,23 +27,23 @@ This link is from Sean Walberg leveraging the same thing and his notes.
 
 First thing you need to do: spin up three consul nodes.
 
-Convert the `default.toml` in `consul` from `127.0.0.1`, to `0.0.0.0`, and
-`mode = false` with `website = true`
+Convert the `default.toml` in `consul` from `127.0.0.1`, to `0.0.0.0` located
+under the `[server]` options, also the `[client]` `bind` address to `0.0.0.0`.
 
 Build the package:
 
 ```shell
 $ hab studio enter
 [1][default:/src:0]# build
-[2][default:/src:0]# hab pkg export docker core/consul
+[2][default:/src:0]# hab pkg export docker <YOURORIGIN>/consul
 ```
 
 Run the package(s):
 
 ```shell
-$ docker run -p 8501:8500 -it core/consul:latest
-$ docker run -p 8502:8500 -it core/consul:latest
-$ docker run -p 8503:8500 -it core/consul:latest
+$ docker run -p 8501:8500 -it <YOURORIGIN>/consul:latest
+$ docker run -p 8502:8500 -it <YOURORIGIN>/consul:latest
+$ docker run -p 8503:8500 -it <YOURORIGIN>/consul:latest
 ```
 
 Spin up another container to do some administrative commands:
@@ -59,6 +59,9 @@ Now have the consul cluster be created:
 root@402825380ff6#:/# cd ~/consul
 root@402825380ff6#:~/consul# ./consul join -rpc-addr=172.17.0.2:8400 172.17.0.2 172.17.0.3 172.17.0.4
 ```
+
+The above IPs should be the ones that came up from the `hab-sup` you should be
+able to see them in the back scroll.
 
 Go to <http://localhost:8501/ui/#/dc1/services/consul> to verify everything is there
 
@@ -84,21 +87,22 @@ Go to <http://localhost:8501/ui/#/dc1/services/consul> to verify your new health
 ### Creating the vault container
 
 First thing you need to do is edit the `default.toml`.
-Convert the `default.toml` from `127.0.0.1`, to `0.0.0.0`, and `mode = false`
-and location to `172.17.0.2`.
+Change the `[backend]` to the first address for the consul back end, I use the one
+I set as the `-rpc-addr` to. Change the `[dev]` mode from `true` to `false`, and
+finally `[listener]` change the `location` to `0.0.0.0`.
 
 Enter the hab studio and build the `.hart`.
 
 ```shell
 $ hab studio enter
 [1][default:/src:0]# build
-[2][default:/src:0]# hab pkg export docker core/vault
+[2][default:/src:0]# hab pkg export docker <YOURORIGIN>/vault
 ```
 
 Start a vault instance pointing to the consul cluster.
 
 ```shell
-$ docker run -p 8200:8200 -it core/vault:latest
+$ docker run -p 8200:8200 -it <YOURORIGIN>/vault:latest
 ```
 
 Spin up another container if you want to bootstrap vault connections, or use
@@ -106,8 +110,8 @@ the above administrative container.
 
 ```shell
 $ docker run --privileged -i -t ubuntu /bin/bash
-root@402825380ff6:/# apt-get update && apt-get install curl -y && curl -s -L <http://bit.ly/2eUDh3H> | bash
-root@402825380ff6:/# export VAULT_ADDR='http://172.17.0.7:8200'
+root@402825380ff6:/# apt-get update && apt-get install curl -y && curl -s -L http://bit.ly/2eUDh3H | bash
+root@402825380ff6:/# export VAULT_ADDR='http://172.17.0.X:8200' # what ever is the vault IP.
 root@402825380ff6:/# cd ~/vault
 root@402825380ff6:~/vault# ./vault init
 ```
@@ -181,7 +185,7 @@ against it and pipe it into `jq`. I should mention that `jq` isn't required here
 
 ```shell
 root@402825380ff6:~/vault# apt-get install -y curl jq
-root@402825380ff6:~/vault# curl -X POST -H "X-Vault-Token:$VAULT_TOKEN" -d '{"bar":"baz"}' <http://172.17.0.7:8200/v1/secret/bacon>
+root@402825380ff6:~/vault# curl -X POST -H "X-Vault-Token:$VAULT_TOKEN" -d '{"bar":"baz"}' http://172.17.0.7:8200/v1/secret/bacon
 root@402825380ff6:~/vault# curl -X GET -H "X-Vault-Token:$VAULT_TOKEN" http://172.17.0.7:8200/v1/secret/bacon | jq .
 root@402825380ff6:~/vault# curl -X POST -H "X-Vault-Token:$VAULT_TOKEN" -d '{"tasty":"very", "cooktime":"11"}' http://172.17.0.7:8200/v1/secret/bacon
 root@402825380ff6:~/vault# curl -X GET -H "X-Vault-Token:$VAULT_TOKEN" http://172.17.0.7:8200/v1/secret/bacon | jq .
@@ -189,5 +193,3 @@ root@402825380ff6:~/vault# curl -X GET -H "X-Vault-Token:$VAULT_TOKEN" http://17
 
 [vault]: https://vaultproject.io
 [consul]: https://www.consul.io
-[285]: https://github.com/habitat-sh/core-plans/pull/285
-[286]:https://github.com/habitat-sh/core-plans/pull/286
