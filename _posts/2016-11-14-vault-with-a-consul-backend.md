@@ -21,6 +21,10 @@ This link is the offical blog post about using Chef and Vault in tandem:
 This link is from Sean Walberg leveraging the same thing and his notes.
 <https://ertw.com/blog/2016/11/08/managing-secrets-in-chef-with-hashicorp-vault/>
 
+## Prework
+
+Be sure to have your [core-plans][core] checked out. You'll be leveraging those.
+
 ## consul
 
 ### Setting up a consul cluster
@@ -193,3 +197,4 @@ root@402825380ff6:~/vault# curl -X GET -H "X-Vault-Token:$VAULT_TOKEN" http://17
 
 [vault]: https://vaultproject.io
 [consul]: https://www.consul.io
+[core]: https://github.com/habitat-sh/core-plans
