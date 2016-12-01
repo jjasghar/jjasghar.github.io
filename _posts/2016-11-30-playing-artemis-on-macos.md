@@ -9,7 +9,7 @@ I recently discovered Artemis. It's amazing, but the problem is that it only run
 on Windows, iOS, and Android. These are my notes on how I got it working on one of
 my macOS machines.
 
-1. Installed https://www.playonmac.com/en/.
+1. Installed [PlayOnMac](https://www.playonmac.com/en/).
 1. Followed the onscreen instructions, including installing XQuartz
 1. Click on "Install a program"
 1. Click on "Install a non-listed program"
