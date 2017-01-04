@@ -27,8 +27,16 @@ Yay! You should have changed your font, to take from the [wiki][font_wiki] this 
 Now if you want to change the default font, but not the current frame, run the following:
 
 ```elisp
-(set-face-attribute 'default true :font "-outline-Monaco-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1" )
+(set-face-attribute 'default t :font "-outline-Monaco-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1" )
 ```
+
+After posting this to [reddit][reddit], [eli-zaretskii][eli] suggested using:
+
+```elisp
+(add-to-list 'default-frame-alist '(font . "your-font-name-here"))
+```
+
+Which works, but doesn't seem to update the current buffer. If you're testing out different fonts, personally, I'd like to see the effect without reloading.
 
 If you haven't realized, the `16` is the font size in the line, personally `20` feels better, but you get the point. (eh? get it? eh? point?)
 
@@ -39,3 +47,5 @@ When you figure out what you want, you should add the `default nil` line to your
 
 [font_wiki]: https://www.emacswiki.org/emacs/SetFonts
 [font_list]: https://www.emacswiki.org/emacs/GoodFonts
+[reddit]: https://www.reddit.com/r/emacs/comments/5m0nig/notes_on_how_to_change_fonts_in_emacs_without/
+[eli]: https://www.reddit.com/user/eli-zaretskii
