@@ -30,7 +30,7 @@ Now if you want to change the default font, but not the current frame, run the f
 (set-face-attribute 'default true :font "-outline-Monaco-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1" )
 ```
 
-If you haven't realized, the `16` is the font size in the line, personally `20` feels better, but you get the point. (eh? eh? point?)
+If you haven't realized, the `16` is the font size in the line, personally `20` feels better, but you get the point. (eh? get it? eh? point?)
 
 If you want to find other fonts, to play around with check out [here][font_list].
 
