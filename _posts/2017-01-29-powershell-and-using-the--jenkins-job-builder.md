@@ -2,7 +2,7 @@
 layout: post
 title: "Powershell and using the Jenkins Job Builder"
 date: 2017-01-29 15:26:57
-categories: jenkins windows powershell 
+categories: jenkins windows powershell
 ---
 
 # Introduction
@@ -10,7 +10,7 @@ categories: jenkins windows powershell
 This is a blog post on how I was able to get [Jenkins][jenkins] with the [Jenkins Job Builder][jjb]
 (JJB) to start running Powershell scripts on a remote Windows machine. Doing research
 into this project, it seems there were all the pieces of this possible layout,
-but no tutorial. This is my attempt to make this tutorial, and any gotcas I had, happen.
+but no tutorial. This is my attempt to make this tutorial, and any gotchas I had, happen.
 
 My ultimate goal here is to create a Jenkins pipeline that takes [Chef Automate][automate] and creates
 a vApp out of it. I'm only going to focus on building the Jenkins portion in this post.
@@ -34,14 +34,14 @@ and do some local installation of applications for the JJB. (I swear I'll write 
 this at some point, but it's not too bad.) Go ahead and go [here to start][myjjb] if you don't have
 it set up already.
 
-You'll need to add the [Powershell plugin][plugin], to ship off the Powershell commands. Go ahead and
+You'll need to add the [Powershell plugin][plugin] to ship off the Powershell commands. Go ahead and
 do that now.
-    
+
 # Building the Windows slave
 
 The first thing you should do is get the version of Powershell you want to run. I'm attempting to
-learn Powershell so I went ahead with the newest release. You'll need to double check the version
-of Windows you're running too to make sure the version of Powershell you want to run, works on it.
+learn Powershell so I went ahead with the newest release. You should double check Powershell
+version compatibility with the version of Windows you're running too.
 
 After getting Powershell installed, you'll need to install Java. It's the easiest way to get the
 Jenkins service running on the machine; I chose Oracle Java, mainly because it was easy and gets
@@ -73,14 +73,14 @@ the spaces between the labels, this is intentional, commas make Jenkins sad it s
 
 The next two arrows are also important to set, the Usage section verifies that the label is
 what you declare. The other option if not changed to the one suggested, you might run Powershell
-on the Ubuntu machine! The final arrow, makes sure that you have the Launch button for your 
+on the Ubuntu machine! The final arrow, makes sure that you have the Launch button for your
 Windows slave. If it isn't there go to [this stackoverflow][stack] to fix the problem. It seems
 by default it's not enabled, so keep that in mind.
 
 If you'd like to set up a Ubuntu slave node, you can follow these same steps but `s/Powershell/bash/`
 and `s/Windows/Ubuntu/` should get you there too. I'm not going to type it all out but if you have
 problems don't hesitate to reach out to me via twitter.
-    
+
 # Connect the Windows machine to the master
 
 Now that everything is setup, you can now log into your Windows machine and go to your Jenkins instance
@@ -88,24 +88,24 @@ Now that everything is setup, you can now log into your Windows machine and go t
 
 ![launchnode][launchnode]
 
-You should see some Javaie things pop up, accept and run them. It'll install the required applicatation,
-then if you want to you can install it as a service. `File` > `Install as a service`.
+You should see some Java-y things pop up, accept and run them. It'll install the required application,
+then you can install as a service if you like. `File` > `Install as a service`.
 
 Congrats, everything should be should be wired up now. Now lets try to run some jobs.
-    
+
 # Template Jenkins Jobs
 
 The first thing I do when building a new Jenkins machine ran via the JJB, is I set up something called
 `update-jobs`. It's a basic job that watches a git repo, (in my case github), and then runs the `jenkins-job-builder`
 application when changes are made.
 
-Here is a basic template that I use, you'll need to edit for your changes in your environment.
+Here is a basic template that I use, you'll need to edit for changes in your environment.
 
 ```yaml
 - job:
     name: update-jobs
     project-type: freestyle
-    description: 'automagicly update the jjb jobs!'
+    description: 'automagically update the jjb jobs!'
     properties:
       - github:
           url: https://github.com/jjasghar/jjb_repo
@@ -117,7 +117,7 @@ Here is a basic template that I use, you'll need to edit for your changes in you
     builders:
       - shell: |
           #!/bin/bash
-          jenkins-jobs --conf jenkins_jobs.ini update jobs/ 
+          jenkins-jobs --conf jenkins_jobs.ini update jobs/
     wrappers:
       - workspace-cleanup
       - release:
@@ -127,21 +127,21 @@ Here is a basic template that I use, you'll need to edit for your changes in you
       - github
 ```
 
-As you can see it's pretty straight forward, and if you give your user(s) access you can even do
+As you can see it's pretty straightforward, and if you give your user(s) access you can even use
 private repos!
 
-Now when you make changes to your repo and push, you can either `Build Now` or even link up the 
+Now when you make changes to your repo and push, you can either `Build Now` or even link up the
 webhooks to update your jobs. Pretty slick.
 
 ## bash
 
-Here is a bash template job, to make sure that everything is wired up. It's pretty straight forward too.
+Here is a bash template job, to make sure that everything is wired up. It's pretty straightforward too.
 
 ```yaml
 - job:
     name: 'Basic bash example'
     project-type: freestyle
-    description: 'A basic example of a `jjb` job that echos "Hello world and cats out /etc/password"'
+    description: 'A basic example of a `jjb` job that echoes "Hello world" and cats out /etc/password'
     builders:
         - shell: |
             echo 'Hello world!'
@@ -150,8 +150,8 @@ Here is a bash template job, to make sure that everything is wired up. It's pret
 
 ## Powershell
 
-Here is a powershell template, go ahead and add this to your repo and push both up. This'll be a good
-verification. Take note of the `node: 'powershell` line, this is the **Labels** I was talking about earlier,
+Here is a powershell template, go ahead and add this to your repo and push both up. This will be a good
+verification. Take note of the `node: 'powershell'` line, this is the **Labels** I was talking about earlier,
 you can have anything there, this is just what I defaulted to.
 
 ```yaml
@@ -177,15 +177,15 @@ you can have anything there, this is just what I defaulted to.
 # Run the builds!
 
 So if you have these three templates up, and you have the jobs created, you should be able to
-test now. Your bash job should go to your bash executor, and your powershell should go to
+test now. Your bash job should go to your bash executor, and your Powershell should go to
 your Windows machine. You should see the outputs in your console logs too.
 
 # Conclusion
 
-I hoped this helpped, if not walked you through setting up a Distributed Jenkins build with
-both bash and Powershell.
+I hope this provides a coherent basic walkthrough (or helped) to setting up a Distributed
+Jenkins build with both bash and Powershell.
 
-Like I said at the beginning I'm working on getting `PowerCLI` working so I can automatically
+Like I said at the beginning, I'm working on getting `PowerCLI` working so I can automatically
 create vApps, so ideally it'll build off of this.
 
 If you found this useful, please tweet at me, I'd love to make this better or fill in any
