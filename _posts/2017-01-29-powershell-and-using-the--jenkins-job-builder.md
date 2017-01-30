@@ -84,7 +84,7 @@ problems don't hesitate to reach out to me via twitter.
 # Connect the Windows machine to the master
 
 Now that everything is setup, you can now log into your Windows machine and go to your Jenkins instance
-`http://<jenkins>/computer/windows-powershell/` and find the `Launch` button, like the following.
+`http://<jenkins>/computer/windows-node/` and find the `Launch` button, like the following.
 
 ![launchnode][launchnode]
 
