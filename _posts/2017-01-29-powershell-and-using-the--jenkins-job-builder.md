@@ -33,6 +33,9 @@ I have already created a blog post on how to bootstrap this process. I leverage 
 and do some local installation of applications for the JJB. (I swear I'll write a cookbook to automate
 this at some point, but it's not too bad.) Go ahead and go [here to start][myjjb] if you don't have
 it set up already.
+
+You'll need to add the [Powershell plugin][plugin], to ship off the Powershell commands. Go ahead and
+do that now.
     
 # Building the Windows slave
 
@@ -198,4 +201,5 @@ Thanks!
 [launchnode]: ../../../../../pics/launch_node.png
 [myjjb]: http://jjasghar.github.io/blog/2016/01/03/getting-jenkins-and-jenkins-job-builder-running/
 [newnode]: ../../../../../pics/new_node.png
+[plugin]: https://wiki.jenkins-ci.org/display/JENKINS/PowerShell+Plugin
 [stack]: http://stackoverflow.com/questions/38724448/creating-a-jenkins-slave-via-java-web-start/38740924#38740924
