@@ -3,12 +3,18 @@ layout: page
 title: About
 permalink: /about/
 ---
-JJ is a Sr. Partner Engineer at Chef, he was also the PTL for the Openstack-Chef
-project, and helped bootstrap the OSOps project in OpenStack. He lives in
-Austin, Texas and still is itching for Google Fiber.
 
-He enjoys a good strong stout, hoppy IPA, and some Dwarf Fortress or Factorio.
-He's a member of the Church of Emacs, and chooses Ubuntu over CentOS.
+JJ works with Strategic Technical Alliances at Chef Software making integrations
+work with Chef, Habitat, and InSpec.. He works on everything from Azure, VMware,
+OpenStack, and Cisco with everything in between. He also heads up the Chef Partner
+Cookbook Program, dubbed Sippy Cup, to make sure customers of Chef and vendors
+get the highest quality certified cookbooks.
 
-He's a father and husband, if he's not trying to automate his job away he's
-trying to convince his daughters to "be button makers not button pushers."
+He lives and grew up in Austin, Texas. He enjoys a good strong stout, hoppy IPA,
+and some team building Artemis, madding Dwarf Fortress or Rimworld or pair programming
+cluster Factorio. He's a member of the Church of Emacs, though jumps into Vim on
+remote machines. He usually chooses Ubuntu over CentOS, but secretly wants FreeBSD
+everywhere. He's always trying to become a better Ruby developer, but flirts with
+Go, Rust, and only when he has to, Node. A father and husband, if he's not trying
+to automate his job away he's always to convince his daughters to "be button makers
+not button pushers."
