@@ -48,3 +48,5 @@ gem 'knife-rackspace'
 ```
 
 The `rb-readline` seems to do the trick!
+
+[chefdk]: https://downloads.chef.io/chef-dk
