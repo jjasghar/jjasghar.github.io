@@ -4,17 +4,22 @@ title: About
 permalink: /about/
 ---
 
-JJ works with Strategic Technical Alliances at Chef Software making integrations
-work with Chef, Habitat, and InSpec.. He works on everything from Azure, VMware,
-OpenStack, and Cisco with everything in between. He also heads up the Chef Partner
-Cookbook Program, dubbed Sippy Cup, to make sure customers of Chef and vendors
+![](https://en.gravatar.com/userimage/24832742/b2d2a1566931d2d303135742259bcfa5.jpg?size=200)
+
+JJ works with Strategic Technical Alliances at [Chef Software][chef] making integrations
+work with Chef, Habitat, and InSpec. He works on everything from Azure, VMware,
+OpenStack, and Cisco with everything in between. He also heads up the [Chef Partner
+Cookbook Program][cpcp], dubbed Sippy Cup, to make sure customers of Chef and vendors
 get the highest quality certified cookbooks.
 
 He lives and grew up in Austin, Texas. He enjoys a good strong stout, hoppy IPA,
-and some team building Artemis, madding Dwarf Fortress or Rimworld or pair programming
+and some team building Artemis, madding Dwarf Fortress or Rimworld or possibly pair programming
 cluster Factorio. He's a member of the Church of Emacs, though jumps into Vim on
 remote machines. He usually chooses Ubuntu over CentOS, but secretly wants FreeBSD
 everywhere. He's always trying to become a better Ruby developer, but flirts with
 Go, Rust, and only when he has to, Node. A father and husband, if he's not trying
 to automate his job away he's always to convince his daughters to "be button makers
 not button pushers."
+
+[chef]: https://chef.io
+[cpcp]: https://www.chef.io/partners/cookbooks/
