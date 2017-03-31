@@ -92,6 +92,9 @@ $ docker rmi $(docker images | cut -d\  -f 1)
 $ docker rmi $(docker images -q)
 ```
 
+**Triple NOTE:** I have put in issue [#619][619] to attempt to track this `inode` issue. I did discover that adding another harddrive to the `OVA` and mounting it at `/var` seems to be a workaround for this issue.
+
+[619]: https://github.com/vmware/photon/issues/619
 [photon]: https://vmware.github.io/photon/
 [docker]: https://www.docker.com/
 [testkitchen]: http://kitchen.ci/
