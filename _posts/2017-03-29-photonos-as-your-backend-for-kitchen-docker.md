@@ -2,7 +2,7 @@
 layout: post
 title: "PhotonOS as your backend for kitchen-docker"
 date: 2017-03-29 15:09:11
-categories:
+categories: chef photon vmware kitchen
 ---
 
 ![](https://camo.githubusercontent.com/4d4cc8eedee941e882dc521eb37dd354c6beca20/687474703a2f2f73746f726167652e676f6f676c65617069732e636f6d2f70726f6a6563742d70686f746f6e2f766d772d6c6f676f2d70686f746f6e2e737667)
