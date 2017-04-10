@@ -32,10 +32,6 @@ $ docker run -p 8080:8080 -it YOURORIGIN/jenkins-war:latest # run container
 Now lets get the container over to the PhotonOS box:
 
 ```shell
-$ docker ps --all
-CONTAINER ID        IMAGE                                   COMMAND                  CREATED             STATUS                     PORTS               NAMES
-e546d06fb964        jjasghar/jenkins-war:latest             "/init.sh start jj..."   13 minutes ago      Exited (0) 6 minutes ago                       loving_hypatia
-[-- snip --]
 $ docker save jjasghar/jenkins-war:latest > jenkins.tar
 $ scp jenkins.tar root@PHOTONHOST://root/ # this can be where ever, but demowise...
 $ ssh root@PHOTONHOST
