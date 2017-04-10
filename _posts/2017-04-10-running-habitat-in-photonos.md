@@ -84,3 +84,4 @@ $ docker logs dbd600327638f247fd5851c8b7cdbf08a2c09b12908cc38bdeb51b0060d37b7c #
 
 [habitat]: https://www.habitat.sh/
 [photon]: https://vmware.github.io/photon/
+[jenkins]: https://github.com/jjasghar/habitat-jenkins
