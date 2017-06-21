@@ -1,0 +1,55 @@
+==================================================================
+https://keybase.io/jjasghar
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://jjasghar.github.io
+  * I am jjasghar (https://keybase.io/jjasghar) on keybase.
+  * I have a public key ASAoHd6F6XmHxkax5AqUlSNMPmgLD-cFSlUUHIUgN43Tdgo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0101e36b954314364fced1b649a749ad4cba1c85ef498bf654bea4d96b249777b4820a",
+            "host": "keybase.io",
+            "kid": "0120281dde85e97987c646b1e40a9495234c3e680b0fe7054a55141c8520378dd3760a",
+            "uid": "fd5de442d0fff7331c7c4dc39e8a7500",
+            "username": "jjasghar"
+        },
+        "merkle_root": {
+            "ctime": 1498065961,
+            "hash": "d79e6925995fe548b1b67ad736ca995443e527aa8d881e9fccb7af95b7c9cbf1161e4bac2fcd9e0a92dac34629f5cbde31ca8150929a2c3c674c4b3209e6737e",
+            "hash_meta": "d0c772c939071a512a12e800edadbc0cb6508690d1177ba28ad8c367bd47b8b3",
+            "seqno": 1185513
+        },
+        "service": {
+            "hostname": "jjasghar.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.24"
+    },
+    "ctime": 1498065975,
+    "expire_in": 504576000,
+    "prev": "249ab2373bbb9ac260165954fe38436b433eca7e7b52e4ce88f8524c71a89645",
+    "seqno": 37,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgKB3ehel5h8ZGseQKlJUjTD5oCw/nBUpVFByFIDeN03YKp3BheWxvYWTFA0t7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxZTM2Yjk1NDMxNDM2NGZjZWQxYjY0OWE3NDlhZDRjYmExYzg1ZWY0OThiZjY1NGJlYTRkOTZiMjQ5Nzc3YjQ4MjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwMjgxZGRlODVlOTc5ODdjNjQ2YjFlNDBhOTQ5NTIzNGMzZTY4MGIwZmU3MDU0YTU1MTQxYzg1MjAzNzhkZDM3NjBhIiwidWlkIjoiZmQ1ZGU0NDJkMGZmZjczMzFjN2M0ZGMzOWU4YTc1MDAiLCJ1c2VybmFtZSI6ImpqYXNnaGFyIn0sIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNDk4MDY1OTYxLCJoYXNoIjoiZDc5ZTY5MjU5OTVmZTU0OGIxYjY3YWQ3MzZjYTk5NTQ0M2U1MjdhYThkODgxZTlmY2NiN2FmOTViN2M5Y2JmMTE2MWU0YmFjMmZjZDllMGE5MmRhYzM0NjI5ZjVjYmRlMzFjYTgxNTA5MjlhMmMzYzY3NGM0YjMyMDllNjczN2UiLCJoYXNoX21ldGEiOiJkMGM3NzJjOTM5MDcxYTUxMmExMmU4MDBlZGFkYmMwY2I2NTA4NjkwZDExNzdiYTI4YWQ4YzM2N2JkNDdiOGIzIiwic2Vxbm8iOjExODU1MTN9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoiamphc2doYXIuZ2l0aHViLmlvIiwicHJvdG9jb2wiOiJodHRwczoifSwidHlwZSI6IndlYl9zZXJ2aWNlX2JpbmRpbmciLCJ2ZXJzaW9uIjoxfSwiY2xpZW50Ijp7Im5hbWUiOiJrZXliYXNlLmlvIGdvIGNsaWVudCIsInZlcnNpb24iOiIxLjAuMjQifSwiY3RpbWUiOjE0OTgwNjU5NzUsImV4cGlyZV9pbiI6NTA0NTc2MDAwLCJwcmV2IjoiMjQ5YWIyMzczYmJiOWFjMjYwMTY1OTU0ZmUzODQzNmI0MzNlY2E3ZTdiNTJlNGNlODhmODUyNGM3MWE4OTY0NSIsInNlcW5vIjozNywidGFnIjoic2lnbmF0dXJlIn2jc2lnxEC1z9s53EgvAq0KBRGV4iYlymEE2Nzn+Y1CbVD47rUUTdI/hdH8KW3GRSWM8NBLSsIaObW70dKgoB6nntrEr2gNqHNpZ190eXBlIKRoYXNogqR0eXBlCKV2YWx1ZcQgy574WnTXPcS4vE+UfYbIpOLRL5i2xfdQjomSmO0WAM+jdGFnzQICp3ZlcnNpb24B
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/jjasghar
+
+==================================================================
