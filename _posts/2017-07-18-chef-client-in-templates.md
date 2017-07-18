@@ -47,13 +47,13 @@ driver:
 ## knife
 
 ```shell
-$ chef exec knife bootstrap ubuntu@web01.tirefi.re --bootstrap-version "current"
+$ chef exec knife bootstrap ubuntu@web01.tirefi.re --bootstrap-version "13.2.20"
 ```
 
 ## curl || bash
 
 ```shell
-$ curl -L https://chef.io/chef/install.sh | sudo bash -s -- -P chef -c "current"
+$ curl -L https://chef.io/chef/install.sh | sudo bash -s -- -P chef -v "13.2.20"
 ```
 
 [kitchen]: http://kitchen.ci/
