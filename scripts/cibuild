@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 set -e # halt script on error
 
+function msg {
+  printf "\e[0;37m==> $1\e[0m\n"
+}
+
+DESTINATION="_site"
+
+IGNORE_HREFS=$(ruby -e 'puts %w{
+  localhost
+  github.com\/jjasghar
+}.map{|h| "/#{h}/"}.join(",")')
+
 bundle exec jekyll build
-bundle exec htmlproofer ./_site --allow-hash-href --empty-alt-ignore=true
+bundle exec htmlproofer ./$DESTINATION --allow-hash-href --url-ignore $IGNORE_HREFS $@
