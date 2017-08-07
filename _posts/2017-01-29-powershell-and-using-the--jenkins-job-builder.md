@@ -196,7 +196,7 @@ Thanks!
 [automate]: https://www.chef.io/automate/
 [boxdiagram]: ../../../../../pics/jenkins-linux-windows.png
 [nodeinfo]: ../../../../../pics/info_node.png
-[jenkins]: https://jenkinsio
+[jenkins]: https://jenkins.io
 [jjb]: http://docs.openstack.org/infra/jenkins-job-builder/
 [launchnode]: ../../../../../pics/launch_node.png
 [myjjb]: http://jjasghar.github.io/blog/2016/01/03/getting-jenkins-and-jenkins-job-builder-running/

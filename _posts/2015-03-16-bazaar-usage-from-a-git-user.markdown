@@ -7,8 +7,8 @@ categories: git linux bzr sysadmin
 ---
 
 I love git. Honestly, I really do, hell I even have a sticker on my laptop.
-Unfortunately [Canonical](http://canonical.com) choose something different
-called [bazaar](http://bazaar.canonical.com/en/). It's supposed to be easier,
+Unfortunately [Canonical](https://canonical.com) choose something different
+called [bazaar](https://bazaar.canonical.com/en/). It's supposed to be easier,
 the jury is still out on that for my opinion; but it really is a tad bit different.
 
 I'm putting a collection of commands here, so if you decided you'd like to put in

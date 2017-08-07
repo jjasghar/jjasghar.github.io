@@ -46,8 +46,8 @@ from.
 
 I spent some time looking for place to run this container from, I thought my
 development docker host, but it didn't seem right. I wanted a place that wouldn't
-rely on my 2 gig laptop having power. So I decided to look into [Carina][carina]
-which was announced at the Tokyo Summit. I went through [the setup][carina-setup]
+rely on my 2 gig laptop having power. So I decided to look into Carina
+which was announced at the Tokyo Summit. I went through the setup
 and had a working Docker Swarm cluster. Now I needed to get my container on this cluster.
 I did some head desk movements, some debugging, but eventually it came out to
 these steps. These are the actual commands I ran, and now, I have a working znc
@@ -100,5 +100,3 @@ I got my test message on my phone and smiled.
 [Jim_Myhrberg]: https://github.com/jimeh
 [docker-znc-pushover]: https://github.com/jjasghar/docker-znc-pushover
 [hub-container]: https://hub.docker.com/r/jjasghar/znc-pushover/
-[carina]: https://getcarina.com
-[carina-setup]: https://getcarina.com/docs/getting-started/getting-started-carina-cli/
