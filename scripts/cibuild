@@ -8,6 +8,7 @@ function msg {
 DESTINATION="_site"
 
 IGNORE_HREFS=$(ruby -e 'puts %w{
+  canonical.com
   en.gravatar.com
   github.com\/jjasghar
   githubusercontent.com
