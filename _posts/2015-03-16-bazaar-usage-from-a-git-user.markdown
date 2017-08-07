@@ -7,7 +7,7 @@ categories: git linux bzr sysadmin
 ---
 
 I love git. Honestly, I really do, hell I even have a sticker on my laptop.
-Unfortunately [Canonical](https://canonical.com) choose something different
+Unfortunately [Canonical](https://www.canonical.com) choose something different
 called [bazaar](https://bazaar.canonical.com/en/). It's supposed to be easier,
 the jury is still out on that for my opinion; but it really is a tad bit different.
 

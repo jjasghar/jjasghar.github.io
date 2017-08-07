@@ -8,8 +8,11 @@ function msg {
 DESTINATION="_site"
 
 IGNORE_HREFS=$(ruby -e 'puts %w{
-  localhost
+  en.gravatar.com
   github.com\/jjasghar
+  githubusercontent.com
+  jjasghar.github.io
+  localhost
 }.map{|h| "/#{h}/"}.join(",")')
 
 bundle exec jekyll build
