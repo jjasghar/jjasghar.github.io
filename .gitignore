@@ -3,3 +3,5 @@ _site
 .jekyll-metadata
 .direnv/
 .DS_Store
+.ruby-version
+.envrc
