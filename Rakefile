@@ -157,7 +157,7 @@ end
 # rake watch
 # rake watch[number]
 # rake watch["drafts"]
-desc "Serve and watch the site (with post limit or drafts)"
+desc "Serve and watch the site (with post limit or drafts) ex: rake watch['drafts'] "
 task :watch, :option do |t, args|
   option = args[:option]
   if option.nil? or option.empty?

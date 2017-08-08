@@ -5,7 +5,7 @@ date: 2017-08-08 11:54:39
 categories: vmware chef sysadmin
 ---
 
-Something I've started to discuss more often then not is the idea of using a
+Something I've started to discuss more often is the idea of using a
 [cookbook-generator][docscookbook] sooner then later. Unfortunately, if you start
 too soon, it can cause some significant confusion to a newbie Chef user. My post
 here is going to do the best I can to explain why you should and give you a clear
@@ -25,12 +25,12 @@ incantation.
 Here is another possible situation. You have grown your team that writes Chef cookbooks,
 but you start noticing that your documentation starts to become lackluster like
 most projects. ;) Using a standard cookbook generator with specific `TODO`s in it,
-will not only force good practice but encourage it.
+will encourage good practices from the outset.
 Here is an [example][cpcptodo] of this for the Chef Partner Cookbook Program that I wrote up for the
 same type of situation from a generic community standardization stand point.
 Also, you can take it to the next step too, set up a simple CI job
 that looks for `TODO:` and fails when it greps out that line. As I like to say let the bots do the work
-for you and shame people into documenting their code correctly.
+for you and encourage people into documenting their code correctly.
 
 ## How?
 
@@ -38,7 +38,7 @@ There are a couple ways to get a generator to be built. You can use the [chefdk]
 to build it for you with the following command:
 
 ```bash
-$ chef generate generator <cookbook-name>
+$ chef generate generator <name-generator>
 ```
 
 This gives you a generic generator, that you can start from scratch. Personally, I think it's
@@ -46,10 +46,10 @@ a tad bit too stripped down for most, so lets start with something that is a bit
 
 ```bash
 ~ $ git clone https://github.com/chef-partners/cookbook-guide-generator.git
-~ $ mv cookbook-guide-generator <cookbook-name-generator>
-~ $ cd <cookbook-name-generator>
-~/<cookbook-name-generator> $ rm -rf .git/
-~/<cookbook-name-generator> $ git init
+~ $ mv cookbook-guide-generator <name-generator>
+~ $ cd <name-generator>
+~/<name-generator> $ rm -rf .git/
+~/<name-generator> $ git init
 ```
 
 This will pull down the Chef Partner Cookbook-guide generator, remove the git history, and initialize
@@ -58,7 +58,7 @@ a new git repository, giving you a directory with many more options.
 Lets start with what the generator gives you, run the following command to see what you get:
 
 ```bash
-~ $ chef generate cookbook -g ~/<cookbook-name-generator>/cookbooks tempcookbook
+~ $ chef generate cookbook -g ~/<name-generator>/cookbooks tempcookbook
 ~ $ cd tempcookbook
 ~/tempcookbook $ ls
 Berksfile       Gemfile         LICENSE         Rakefile        chefignore      recipes         test
@@ -71,9 +71,9 @@ from a `TESTING.md` to a `test/` directory, to even two `.kitchen.yml`s! Now, le
 Go ahead and open up the following:
 
 ```bash
-~ $ vi ~/<cookbook-name-generator>/cookbooks/code_generator/recipes/cookbook.rb
+~ $ vi ~/<name-generator>/cookbooks/code_generator/recipes/cookbook.rb
 ~ $ # Change the line for .kitchen-docker.yml to .kitchen.docker.yml
-~ $ chef generate cookbook -g ~/<cookbook-name-generator>/cookbooks tempcookbook2
+~ $ chef generate cookbook -g ~/<name-generator>/cookbooks tempcookbook2
 ~ $ ls -a tempcookbook2/.kitchen*
 .kitchen.docker.yml .kitchen.yml
 ```
@@ -81,16 +81,16 @@ Go ahead and open up the following:
 Pretty slick eh? Now lets edit the contents of a file. Go ahead and do the following:
 
 ```bash
-~ $ vi ~/<cookbook-name-generator>/cookbooks/code_generator/cookbooks/code_generator/templates/default/kitchen.docker.yml.erb
+~ $ vi ~/<name-generator>/cookbooks/code_generator/cookbooks/code_generator/templates/default/kitchen.docker.yml.erb
 ~ $ # Edit the line under privileged to: socket: <%= ENV['DOCKER_HOST'] || "localhost" %>
-~ $ chef generate cookbook -g ~/<cookbook-name-generator>/cookbooks tempcookbook3
+~ $ chef generate cookbook -g ~/<name-generator>/cookbooks tempcookbook3
 ~ $ head -5 tempcookbook3/.kitchen.docker.yml
 driver:
   name: dokken
   chef_version: latest
   privileged: true # because Docker and SystemD/Upstart
   socket: localhost
-~ $ DOCKER_HOST=tcp://192.168.1.1:2375 chef generate cookbook -g ~/<cookbook-name-generator>/cookbooks tempcookbook4
+~ $ DOCKER_HOST=tcp://192.168.1.1:2375 chef generate cookbook -g ~/<name-generator>/cookbooks tempcookbook4
 ~ $ head -5 tempcookbook4/.kitchen.docker.yml
 driver:
   name: dokken
