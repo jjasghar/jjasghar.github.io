@@ -135,7 +135,7 @@ After that, as time progresses you can add change things to make it more delight
 be sure that before people use the `generate` command, they do a `git pull` to get the
 most up to date.
 
-[chefdk]: https://chefdk.io
+[chefdk]: http://chefdk.io
 [cpcptodo]: https://github.com/chef-partners/cookbook-guide-generator/blob/master/cookbooks/code_generator/templates/default/README.md.erb
 [docscookbook]: https://docs.chef.io/ctl_chef.html#chef-generate-cookbook
 [cpvsphere]: https://github.com/chef-partners/chef-provisioning-vsphere
