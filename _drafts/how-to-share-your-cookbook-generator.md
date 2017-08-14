@@ -13,7 +13,7 @@ might inspire you for your company.
 I'll assume you've already got a first iteration of your cookbook generator. I'll tell this story
 by introducing 2 people, first, Betty, who created the generator, and wants to share it with her
 team and maybe one day her whole company. The second person is Billy, he has been tasked with
-creating a pilot cookbook to validate that [vim][vim] is installed on every machine.
+creating a pilot cookbook ensure that [vim][vim] is installed on every machine.
 
 So sitting at her desk, Betty has ready to ship her standardized cookbook, she created the
 Github repository with the fun green button.
