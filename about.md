@@ -21,7 +21,5 @@ Go, Rust, and only when he has to, Node. A father and husband, if he's not tryin
 to automate his job away he's always to convince his daughters to "be button makers
 not button pushers."
 
-{% twitter https://twitter.com/jjasghar maxwidth=500 limit=3 %}
-
 [chef]: https://chef.io
 [cpcp]: https://www.chef.io/partners/cookbooks/
