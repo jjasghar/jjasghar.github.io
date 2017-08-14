@@ -5,3 +5,4 @@ _site
 .DS_Store
 .ruby-version
 .envrc
+.tweet-cache/
