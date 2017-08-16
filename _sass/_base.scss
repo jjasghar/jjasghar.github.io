@@ -8,7 +8,12 @@ dl, dd, ol, ul, figure {
     padding: 0;
 }
 
-
+img.rounded {
+    width: 52px;
+    border-radius: 50%;
+    top: -2px;
+    left: -64px;
+}
 
 /**
  * Basic styling
