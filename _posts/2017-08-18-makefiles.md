@@ -15,6 +15,7 @@ a template hear inspired from the post that if anything might help me in the fut
 # are: clean, install, run,...
 # Otherwise, if somebody creates an install directory, make will
 # silently fail, because the build target already exists.
+
 .PHONY: help print
 
 help:
@@ -55,6 +56,9 @@ socks: pullover  ## Blisters suck, these help stop those
 # make target: <dependancies> ## comment for the self documenting
 print: ## Output the Makefile, demo more then just @echo
 	@cat Makefile
+
+# If you want to have it at the bottom of the file:
+# .DEFAULT_GOAL := help
 ```
 
 [afraid]: https://matthias-endler.de/2017/makefiles/
