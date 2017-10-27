@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Using chef, terraform, and vCenter"
+title: "Using chef, terraform and vCenter"
 date: 2017-10-22 15:06:47
 categories: chef sysadmin vmware terraform
 ---
