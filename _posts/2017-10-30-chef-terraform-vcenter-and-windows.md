@@ -4,6 +4,7 @@ title: "Using chef, terraform, vCenter and Windows"
 date: 2017-10-27 14:41:23
 categories: chef sysadmin vmware windows terraform
 ---
+
 I posted recently about using Terraform, vCenter, and Chef, and promised a follow-up post about extending the Terraform plans to work with Windows and multiple Virtual Machines. Here is the follow-up, it will be significantly shorter than [the previous post](http://jjasghar.github.io/blog/2017/10/22/chef-terraform-and-vcenter/) but it will still build off of this plan:
 
 [https://gist.github.com/jjasghar/f061f493ad8f631a6d4b5b5085c7cb35](https://gist.github.com/jjasghar/f061f493ad8f631a6d4b5b5085c7cb35)
@@ -55,7 +56,7 @@ resource "aws_instance" "web" {
   }
 }
 ```
-And edited it to my liking on line 12. This way now my machines will be called `terraform-0X` where `X` is the number of the machine count we created. Finally, line 20 and 21 create the node objects on the chef server with the same name of the machine inside vCenter, which helps keep things in line.
+And edited it to my liking on line 12. This way now my machines will be called `terraform-0x` where `x` is the number of the machine count we created. Finally, line 20 and 21 create the node objects on the chef server with the same name of the machine inside vCenter, which helps keep things in line.
 
 ## Clean up
 
