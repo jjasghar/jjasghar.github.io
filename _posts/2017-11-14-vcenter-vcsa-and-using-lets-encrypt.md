@@ -6,7 +6,7 @@ categories: sysadmin vmware
 ---
 
 If you are using the [VCSA][vcsa] for your vCenter you might have searched
-around to figure out how to update the Cert from Let's Encrypt. It seems that
+around to figure out how to update the certificate from Let's Encrypt. It seems that
 throughout my Googling I personally wasn't able to find a tutorial so this is
 mine. If you have suggestions or ideas I'd love to hear them, reach out via
 twitter: [@jjasghar][twitter].
