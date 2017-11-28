@@ -13,7 +13,7 @@ $ curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /
 $ sudo apt-get update
 $ sudo apt-get install -y powershell
 powershell
-$ powershell
+$ pwsh
 PowerShell
 Copyright (C) Microsoft Corporation. All rights reserved.
 
