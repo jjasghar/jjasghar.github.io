@@ -21,6 +21,8 @@ Go, Rust, and only when he has to, Node. A father and husband, if he's not tryin
 to automate his job away he's always to convince his daughters to "be button makers
 not button pushers."
 
+![](../../../../../pics/one_start_vexpert.png =200x200)
+
 <a class="twitter-timeline" data-lang="en" data-width="500" data-height="500" href="https://twitter.com/jjasghar">Tweets by jjasghar</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 [chef]: https://chef.io
