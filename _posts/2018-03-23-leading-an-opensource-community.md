@@ -22,7 +22,7 @@ up on Github and the Open Source horde will come to help you out. That’s not t
 so much more most never see. You need to market your code, you need to get people involved, you need
 to have folks already engaged and committed to shepherd them through the process of engaging with
 what you have created. This also doesn’t happen overnight, this takes months or years even of
-dead silence or a trickle of engagement than if you’re lucky might create a community. The scary
+dead silence or a trickle of engagement then if you’re lucky might create a community. The scary
 thing is that because it’s all volunteers that help you, you have to continue to cultivate it,
 and if you or your project does something wrong you can lose all of your members overnight. Yes,
 it can take months or years to build it, and overnight people’s priorities can change and you can
@@ -76,7 +76,7 @@ largest and most frustrating part of your job.
 Finally, one of the best portions of the job is the ability to celebrate the members of the
 community. The ability to say thank you and highlight the committers to your project to build
 something together is the reward. It’s amazing what the human engineering spirit can do when
-there are a common goal and resources to make it happen. Most, I would say at least 80% of Open
-Source projects never get to this point, but if you do this is something to be celebrated.
+there is a common goal and resources to make it happen. Most, I would say at least 80% of Open
+Source projects never get to this point, but if you do is something to be celebrated.
 You can have all the corporate backing to make this happen, but if you don’t grow the
 community organically you’ll never see the return on the investment.
