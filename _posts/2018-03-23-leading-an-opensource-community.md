@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building Leading an Open Source Community"
+title: "Building and Leading an Open Source Community"
 date: 2018-03-23 11:22:18
 categories: essay opinion
 ---
