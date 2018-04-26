@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-![](https://en.gravatar.com/userimage/24832742/b2d2a1566931d2d303135742259bcfa5.jpg?size=200)
+![](https://avatars2.githubusercontent.com/u/810824?s=200&v=4)
 
 JJ works with Strategic Technical Alliances at [Chef Software][chef] making integrations
 work with Chef, Habitat, and InSpec. He works on everything from Azure, VMware,
