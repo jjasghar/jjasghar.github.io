@@ -22,10 +22,13 @@ After that you need to allow for `iptables` to open the port for the docker proc
 root@photon-iso [ ~ ]# iptables -A INPUT -p tcp --dport 2375 -j ACCEPT
 ```
 
-Then you need to edit `/etc/default/docker` to enable remote connections:
-
+You'll need to add `-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock` to the end of `ExecStart`
 ```shell
-DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
+root@photon-iso [ /usr/lib/systemd/system ]# vi docker.service.d/10-dockerd.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+root@photon-iso [ /usr/lib/systemd/system ]#
 ```
 
 Then start the process!

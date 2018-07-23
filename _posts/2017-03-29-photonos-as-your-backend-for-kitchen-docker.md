@@ -33,14 +33,16 @@ and change the password to something secure.
 
 When you get to the command prompt: `root@photon-machine [ ~ ]#` you are ready for the next steps.
 
-I could repeat everything here, but it's probably just better read it directly from [Ryan Kelly][ryan]'s mouth.
-So, click this following [link to allow PhotonOS to allow remote connections][remote].
+~~I could repeat everything here, but it's probably just better read it directly from [Ryan Kelly][ryan]'s mouth.
+So, click this following [link to allow PhotonOS to allow remote connections][remote].~~
+
+NOTE: With PhotonOS 2.0, they have changed how to set up the remote connections. Please look at [here][github] for instructions.
 
 To test this, bring up your command line and type
 
 ```shell
 $ export DOCKER_HOST=tcp://DOCKERHOST:2375
-$ docker info`
+$ docker info
 ```
 
 You should see one of the lines come back say: `Operating System: VMware Photon/Linux`.
@@ -102,3 +104,4 @@ $ docker rmi $(docker images -q)
 [photonwiki]: https://github.com/vmware/photon/wiki
 [ryan]: https://twitter.com/vmtocloud
 [remote]: https://blogs.vmware.com/cloudnative/enable-docker-remote-api-photon-os/
+[github]: https://github.com/vmware/photon/issues/691
