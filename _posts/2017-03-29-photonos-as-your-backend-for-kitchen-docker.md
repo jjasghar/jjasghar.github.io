@@ -103,5 +103,5 @@ $ docker rmi $(docker images -q)
 [kitchendocker]: https://github.com/test-kitchen/kitchen-docker
 [photonwiki]: https://github.com/vmware/photon/wiki
 [ryan]: https://twitter.com/vmtocloud
-[remote]: https://blogs.vmware.com/cloudnative/enable-docker-remote-api-photon-os/
+[remote]: https://blogs.vmware.com/cloudnative/enable-docker-remote-api-photon-os?src=af_5b804d3334401&cid=70134000001YXKx
 [github]: https://github.com/vmware/photon/issues/691

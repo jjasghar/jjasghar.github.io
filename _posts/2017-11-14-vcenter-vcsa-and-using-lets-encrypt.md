@@ -248,4 +248,4 @@ You have successfully updated your Certificate!
 [certbot]: https://certbot.eff.org/
 [googling]: https://www.google.com/search?q=signing+certificate+of+the+Machine+SSL+certificate
 [twitter]: https://twitter.com/jjasghar
-[vcsa]: https://docs.vmware.com/en/VMware-vSphere/6.5/com.vmware.vsphere.vcsa.doc/GUID-223C2821-BD98-4C7A-936B-7DBE96291BA4.html
+[vcsa]: https://docs.vmware.com/en/VMware-vSphere/6.5/com.vmware.vsphere.vcsa.doc/GUID-223C2821-BD98-4C7A-936B-7DBE96291BA4.html?src=af_5b804d3334401&cid=70134000001YXKx

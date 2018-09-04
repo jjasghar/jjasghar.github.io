@@ -39,5 +39,5 @@ Gotta love how you assume one thing and trust software to do the right thing
 and you're off base.
 
 [knife]: https://github.com/chef-partners/knife-vsphere
-[vmware]: http://www.vmware.com/
+[vmware]: http://www.vmware.com?src=af_5b804d3334401&cid=70134000001YXKx
 [refresh]: ../../../../../pics/vCenter_refresh.png

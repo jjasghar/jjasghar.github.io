@@ -47,6 +47,6 @@ updated and installed.
 [pr]: https://github.com/jjasghar/chef-vmware-tools/pulls
 [publicvmwaretools]: https://packages.vmware.com/tools/esx/latest/windows/x64
 [supermarket]: https://supermarket.chef.io/cookbooks/vmware-tools
-[toolssite]: https://docs.vmware.com/en/VMware-Tools/index.html
-[vmwareblog]: https://blogs.vmware.com/vsphere/2015/09/open-vm-tools-ovt-the-future-of-vmware-tools-for-linux.html
+[toolssite]: https://docs.vmware.com/en/VMware-Tools/index.html?src=af_5b804d3334401&cid=70134000001YXKx
+[vmwareblog]: https://blogs.vmware.com/vsphere/2015/09/open-vm-tools-ovt-the-future-of-vmware-tools-for-linux.html?src=af_5b804d3334401&cid=70134000001YXKx
 [windows]: https://github.com/jjasghar/chef-vmware-tools/blob/master/recipes/_windows.rb

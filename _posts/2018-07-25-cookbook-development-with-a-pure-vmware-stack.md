@@ -62,7 +62,7 @@ three containers, it only bootstraps one and emulates a virtual machine.
 
 In the example code, you'll notice that you can use `kitchen-docker` on remote hosts. I should say this is also true
 with `kitchen-dokken` but for this example `dokken` is local, and `docker` is remote. If you work at a company that
-doesn't allow [VirtualBox](https://www.virtualbox.org/) or [VMware Workstation](https://www.vmware.com/products/workstation-pro.html)
+doesn't allow [VirtualBox](https://www.virtualbox.org/) or [VMware Workstation](https://www.vmware.com/products/workstation-pro.html?src=af_5b804d3334401&cid=70134000001YXKx)
 using a remote docker endpoint might be the answer. This gives you a secure place in your VMware SDDC to have
 a docker endpoint allowing for this quick iterations for early is your development cycle.
 

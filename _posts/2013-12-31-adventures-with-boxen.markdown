@@ -29,7 +29,7 @@ Boxen recommends installing the full Xcode.
 
 It seems there is a Mavericks network issue with [virtualbox 4.2](https://forums.virtualbox.org/viewtopic.php?f=8&t=58036) so I suggest updating to the latest before going any farther. I ran into a problem with the network adapter and the install wizard wouldn't get farther than Manual/DHCP network setup. *grrr*
 
-Ok, so I'm writing this real time...yeah this blew up. So I converted to [VMware Fusion 6](https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0) to attempt to build the box. Lets see how that goes.
+Ok, so I'm writing this real time...yeah this blew up. So I converted to [VMware Fusion 6](https://my.vmware.com/web/vmware/info/slug/desktop_end_user_computing/vmware_fusion/6_0?src=af_5b804d3334401&cid=70134000001YXKx) to attempt to build the box. Lets see how that goes.
 
 So tricky VMware Fusion, it says it's designed for Windows, but you can use the Install.App you got from the Mac App store. When it asks for an image to install from, just point it there!
 
