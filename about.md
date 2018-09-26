@@ -6,11 +6,9 @@ permalink: /about/
 
 ![](https://avatars2.githubusercontent.com/u/810824?s=200&v=4)
 
-JJ works with Strategic Technical Alliances at [Chef Software][chef] making integrations
-work with Chef, Habitat, and InSpec. He works on everything from Azure, VMware,
-OpenStack, and Cisco with everything in between. He also heads up the [Chef Partner
-Cookbook Program][cpcp], dubbed Sippy Cup, to make sure customers of Chef and vendors
-get the highest quality certified cookbooks.
+JJ works at IBM on the IBM cloud as a Developer Advocate. He's focusing on
+the IBM Kubernetes Service trying to make companies and users have a successful
+on boarding to the Cloud Native ecosystem.
 
 He lives and grew up in Austin, Texas. He enjoys a good strong stout, hoppy IPA,
 and some team building Artemis, madding Dwarf Fortress or Rimworld or possibly pair programming
@@ -25,5 +23,4 @@ not button pushers."
 
 <a class="twitter-timeline" data-lang="en" data-width="500" data-height="500" href="https://twitter.com/jjasghar">Tweets by jjasghar</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-[chef]: https://chef.io
-[cpcp]: https://www.chef.io/partners/cookbooks/
+[ibm]: https://ibm.com/cloud
