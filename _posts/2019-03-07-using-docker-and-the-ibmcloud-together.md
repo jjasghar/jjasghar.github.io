@@ -409,4 +409,4 @@ any questions or thoughts never hesitate to reach out to me via twitter at `@jja
 [dockerfile]: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 [dockervolumes]: https://docs.docker.com/storage/volumes/
 [dockerweb]: https://docker.com
-[ibmcliinstall]: https://console.bluemix.net/docs/cli/reference/ibmcloud/download_cli.html#install_use
+[ibmclinstall]: https://console.bluemix.net/docs/cli/reference/ibmcloud/download_cli.html#install_use
