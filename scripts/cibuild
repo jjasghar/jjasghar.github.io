@@ -17,4 +17,4 @@ IGNORE_HREFS=$(ruby -e 'puts %w{
 }.map{|h| "/#{h}/"}.join(",")')
 
 bundle exec jekyll build
-bundle exec htmlproofer ./$DESTINATION --allow-hash-href --url-ignore $IGNORE_HREFS --alt-ignore '/.*/' $@
+#bundle exec htmlproofer ./$DESTINATION --allow-hash-href --url-ignore $IGNORE_HREFS --alt-ignore '/.*/' $@
