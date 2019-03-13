@@ -6,10 +6,12 @@ categories: sysadmin linux
 ---
 
 I was talking to some coworkers recently. Working at IBM I have access to a cloud
-that allows me to us it for remote workloads. We started talking about getting [xorg][xorg]
+that allows me to use it for remote workloads. We started talking about getting [xorg][xorg]
 working on our remote machine and connect via X to my local laptop.
 
 These are my notes to getting this working with a CentOS remote machine with a Ubuntu laptop.
+Though any machine running xorg, and any machine that can take these configurations should
+work.
 
 1) Spin up a remote machine with CentOS installed, I have tested this with CentOS 7 server
 and Ubuntu 18.04 laptop.
