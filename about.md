@@ -5,10 +5,12 @@ permalink: /about/
 ---
 
 ![](https://avatars2.githubusercontent.com/u/810824?s=200&v=4)
+JJ works as a Developer Advocate representing the [IBM Cloud][ibm] all over the world. He mainly focuses on the IBM Kubernetes Service and OpenShift trying to make companies and users have a successful onboarding to the Cloud Native ecosystem. He’s also been known in the DevOps tooling ecosystem and generalized Linux communities. If he isn’t building automation to make his work streamlined he’s building the groundwork to just that.
 
-JJ works at IBM on the IBM cloud as a Developer Advocate. He’s focusing on the IBM Kubernetes Service trying to make companies and users have a successful on boarding to the Cloud Native ecosystem.
+He lives and grew up in Austin, Texas. A father and husband, trying to learn to balance his natural nerdiness with family life. He enjoys a good strong stout, hoppy IPA, some team building Artemis, and epic Gloohaven campaigning. He’s a member of the Church of Emacs, though he jumps into vim on remote machines. 
 
-He lives and grew up in Austin, Texas. He enjoys a good strong stout, hoppy IPA, and some team building Artemis, madding Dwarf Fortress, Rimworld, or Factorio. He’s a member of the Church of Emacs, though jumps into Vim on remote machines. He usually chooses Ubuntu over CentOS, but secretly wants FreeBSD everywhere. He’s always trying to become a better Ruby developer, but experiments with Go, Python, and only when he has to, Node. A father and husband, if he’s not trying to automate his job away he’s always trying to convince his daughters to “be button makers not button pushers.
+He has recently dove headfirst into Fedora since IBM buying Redhat, but still secretly wants FreeBSD everywhere. He’s always trying to become a better web technology developer, though normally just uses bash to get the job done.
+
 
 ![](../../../../../pics/one_start_vexpert.png)
 
