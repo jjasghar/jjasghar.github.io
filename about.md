@@ -19,6 +19,6 @@ He has recently dove headfirst into Fedora since IBM buying Redhat, but still se
 
 [ibm]: https://cloud.ibm.com/
 [artemis]: https://artemisspaceshipbridge.com/
-[gloohaven]: https://boardgamegeek.com/boardgame/174430/gloomhaven
+[gloomhaven]: https://boardgamegeek.com/boardgame/174430/gloomhaven
 [ale]: https://www.beeradvocate.com/beer/profile/48/155/
 [ipa]: https://www.beeradvocate.com/beer/profile/2642/314808/
