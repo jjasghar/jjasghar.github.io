@@ -243,4 +243,13 @@ chmod +x openvpn-install.sh
 
 Follow the prompts...
 
+EDIT: It seems I couldn't get "across" my network, so I had to edit the `/etc/openvpn/server/server.conf`
+with the following:
+
+```ini
+push "route 172.16.10.0 255.255.255.0"
+```
+
+Now I can get to my *internal* network, which is what I was hoping for.
+
 Congrats! You now have a working router/vpn machine!
