@@ -15,8 +15,8 @@ With two NICs, you're gonna need to forward some traffic. First
 thing first, forward those packets:
 
 ```bash
-sysctl -w net.ipv4.ip_forward=1
-vi /etc/sysctl.d/99-sysctl.conf # put the 'net' in this file
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo vi /etc/sysctl.d/99-sysctl.conf # put the 'net' in this file
 ```
 
 ## Static IP
@@ -53,14 +53,13 @@ Being this is going to be in the internet, you should install [fail2ban](https:/
 I have take these notes from [here](https://tecadmin.net/install-fail2ban-centos8/).
 
 ```bash
-dnf install epel-release
-dnf install fail2ban
+sudo dnf install -y epel-release fail2ban
 ```
 
 Configure the local jail:
 
 ```bash
-cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 ```
 
 > Now we need to make necessary changes in jail.local file to create ban rules. Editthis file in your favorite editor and make changes in [DEFAULT] section.
@@ -96,8 +95,8 @@ maxretry = 3
 Then enable and start the service:
 
 ```bash
-systemctl start fail2ban.service
-systemctl enable fail2ban.service
+sudo systemctl start fail2ban.service
+sudo systemctl enable fail2ban.service
 ```
 
 ## DNSMasq
@@ -111,9 +110,9 @@ to combine the two.
 Install `dnsmasq`, enable and start it:
 
 ```bash
-dnf -y install dnsmasq
-systemctl start dnsmasq
-systemctl enable dnsmasq
+sudo dnf -y install dnsmasq
+sudo systemctl start dnsmasq
+sudo systemctl enable dnsmasq
 ```
 
 ### DNS
@@ -121,7 +120,7 @@ systemctl enable dnsmasq
 Edit the configuration file:
 
 ```bash
-vi /etc/dnsmasq.conf
+sudo vi /etc/dnsmasq.conf
 ```
 
 First thing you want to do is edit the listen address for
@@ -157,7 +156,7 @@ This is how to get the DNS portion up, go ahead and get out
 of the file and run a sanity check:
 
 ```bash
-dnsmasq --test
+sudo dnsmasq --test
 ```
 
 `dnsmasq` uses your `resolv.conf` as your upstream DNS and your
@@ -168,20 +167,20 @@ If you need to make changes, `NetworkManager` will override your
 changes, so you need to make the file immutable:
 
 ```bash
-chattr +i /etc/resolv.conf
-chattr -i /etc/resolv.conf
-vi /etc/resolv.conf
-chattr +i /etc/resolv.conf
-lsattr /etc/resolv.conf
+sudo chattr +i /etc/resolv.conf
+sudo chattr -i /etc/resolv.conf
+sudo vi /etc/resolv.conf
+sudo chattr +i /etc/resolv.conf
+sudo lsattr /etc/resolv.conf
 ```
 
 Now that everything is set up, we should restart `dnsmasq` and add
 the firewall changes in:
 
 ```bash
-firewall-cmd --add-service=dns --permanent
-firewall-cmd --add-service=dhcp --permanent
-firewall-cmd --list-all
+sudo firewall-cmd --add-service=dns --permanent
+sudo firewall-cmd --add-service=dhcp --permanent
+sudo firewall-cmd --list-all
 ```
 
 ### DHCP
@@ -204,7 +203,7 @@ dhcp-authoritative
 Restart `dnsmasq` and you should be good!
 
 ```bash
-systemctl restart dnsmasq
+sudo systemctl restart dnsmasq
 ```
 
 ## `firewalld` configuration
@@ -215,8 +214,8 @@ your router actually routes things.
 You need to add masquerade to your `firewalld` chain.
 
 ```bash
-firewall-cmd --add-masquerade --permanent
-firewall-cmd --reload
+sudo firewall-cmd --add-masquerade --permanent
+sudo firewall-cmd --reload
 ```
 
 ## OpenVPN configuration
@@ -229,7 +228,7 @@ for automaticly configuring `openvpn`.
 
 ```bash
 cd ~
-dnf -y install git
+sudo dnf -y install git
 git clone https://github.com/Nyr/openvpn-install.git
 ```
 
@@ -237,7 +236,7 @@ Run the installer in the repository:
 
 ```bash
 cd openvpn-install
-chmod +x openvpn-install.sh
+sudo chmod +x openvpn-install.sh
 ./openvpn-install.sh
 ```
 
