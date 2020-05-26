@@ -81,6 +81,6 @@ post:
 page:
   template: _page.txt
   extension: md
-editor: emacsclient -n
+editor: vim
 git:
   branch: master
