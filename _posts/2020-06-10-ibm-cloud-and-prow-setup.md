@@ -141,7 +141,7 @@ Take note of your `Ingress Subdomain` and Ingress Secret` for the next step.
 ## Updating `Ingress` to work
 
 Go ahead and take the following `yaml` and change it for your subdomain and change
-the `prow` to something else if you disire.
+the `prow` to something else if you desire.
 
 ```yaml
 apiVersion: networking.k8s.io/v1beta1
