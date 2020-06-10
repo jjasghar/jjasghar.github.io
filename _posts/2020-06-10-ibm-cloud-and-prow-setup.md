@@ -16,8 +16,8 @@ for a generic Kubernetes Cluster minus the IBM Cloud commands.
 ### Create a Bot
 
 The first thing you should do is create a GitHub bot. It'll be the account that
-will work from your `prow` instance. If you don't know how ore where use this
-[signup][signup] page.
+will work from your `prow` instance. If you don't know how to create another account
+use this [signup][signup] page.
 
 Be sure to add the bot to the repositories you expect it to watch, it should be
 an administrator/owner, to make sure it can see and do what it needs with the
@@ -25,9 +25,9 @@ repository. Next create an GitHub Personal Access Token for the bot.
 
 For permissions add the following:
 Create a personal access token for the GitHub bot account, adding the following scopes
-- Must have the public_repo and repo:status scopes
-- Add the repo scope if you plan on handing private repos
-- Add the admin:org_hook scope if you plan on handling a github org
+- Must have the `public_repo` and `repo:status` scopes
+- Add the `repo` scope if you plan on handing private repos
+- Add the `admin:org_hook` scope if you plan on handling a github org
 
 Place this API key in a file like `github_token` or the like.
 
