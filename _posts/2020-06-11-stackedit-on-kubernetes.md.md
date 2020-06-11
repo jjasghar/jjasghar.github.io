@@ -1,9 +1,7 @@
-
-
 ---
 layout: post
-title: "Managing Windows Servers with Chef"
-date: 2014-06-11 16:42:36 -0500
+title: "Building a stackedit instance on Kubernetes"
+date: 20-06-11 16:52:36 -0500
 comments: true
 categories: chef windows
 ---
@@ -30,5 +28,5 @@ helm install stackedit stackedit/stackedit --values=stackedit_values.yaml -n sta
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTkxMjg0MDI0NF19
+eyJoaXN0b3J5IjpbLTgyNDU1MjQ3MF19
 -->
