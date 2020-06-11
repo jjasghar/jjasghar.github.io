@@ -24,7 +24,19 @@ helm repo update
 githubClientId: ""
 githubClientSecret: ""
 ```
-8. Deploy the app via `helm`
+7. Create a values.yaml with ingress for ibmcloud
+```yaml
+ingress:
+  enabled: true
+  hosts:
+    - host: stackedit.k8sasgharlabsio-706821-0e3e0ef4c9c6d831e8aa6fe01f33bfc4-0000.us-south.containers.appdomain.cloud
+      paths: ["/"]
+  tls:
+    - hosts: ["stackedit.k8sasgharlabsio-706821-0e3e0ef4c9c6d831e8aa6fe01f33bfc4-0000.us-south.containers.appdomain.cloud"]
+      secretName: k8sasgharlabsio-706821-0e3e0ef4c9c6d831e8aa6fe01f33bfc4-0000
+
+```
+9. Deploy the app via `helm`
 ```bash
 helm install stackedit stackedit/stackedit --values=stackedit_values.yaml -n stackedit
 ```
@@ -32,5 +44,5 @@ helm install stackedit stackedit/stackedit --values=stackedit_values.yaml -n sta
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk3MTgzNzMwN119
+eyJoaXN0b3J5IjpbMzkyMjU4MTQ2XX0=
 -->
