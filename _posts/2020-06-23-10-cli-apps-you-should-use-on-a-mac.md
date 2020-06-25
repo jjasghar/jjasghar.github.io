@@ -16,7 +16,7 @@ often I did, and was surprised on the consistency I did use them. OK lets go!
 
 Alright, alright, I know I'm cheating here. [iTerm][iterm] isn't actually a CLI
 application, but an interface _to_ your CLI applications. You may have found the
-`Terminal` under `Applicattions > Utilities > Terimial.app` but honestly it's very
+`Terminal` under `Applications > Utilities > Terimial.app` but honestly it's very
 static. `iTerm2` is unbelievably powerful, and should become your main way to CLI
 apps. There's tons of options, and knobs and dials to turn. I strongly suggest having
 the quick tips enabled, and just use it; before you know it, it becomes your second
@@ -110,7 +110,7 @@ Take our fake `src` directory...
 ```bash
 for i in $(ag -l foo src/)
 do
-  sed -i s/foo/bar/g $i
+  sed -i '' s/foo/bar/g $i
 done
 ```
 So to walk through this example, we use `ag` to search all our `src` directory outputting
