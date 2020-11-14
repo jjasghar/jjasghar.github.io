@@ -12,7 +12,7 @@ app first to Cloud Foundry on the IBM Cloud, then the equivalent to
 OpenShift on the IBM Cloud. Hopefully this could be a "rosetta stone"
 if you're coming from CF to OS.
 
-> This will have a YouTube video HERE(todo) soon, but these are the notes.
+> This will have a YouTube video [HERE][video] soon, but these are the notes.
 
 ## Cloud Foundry
 
@@ -157,4 +157,6 @@ oc status # will give you the URL :)
 Awesome! You've successfully deployed the same app into OpenShift now.
 The next step is to use Web-hooks with OpenShift and GitHub, so you can
 just commit to your repository, and kick off builds automatically. If you'd
-like to see that demo, I'll have a YouTube link [here](https://youtube.com/c/jjasghar) walking through the beginning of this to the auto deploy.
+like to see that demo, I'll have a YouTube link [here][video] walking through the beginning of this to the auto deploy.
+
+[video]: https://youtu.be/vHVtKMhB9cU
