@@ -2,10 +2,8 @@
 layout: post
 title: "IBM Code Engine and static hugo site"
 date: 2021-03-17 14:06:44
-categories:
+categories: ibm serverless
 ---
-# code-engine hugo
-
 # Scope
 
 This is a tutorial/demo of getting [hugo][mainhugo] to work with [code-engine][codeengine]
@@ -22,6 +20,7 @@ from IBM Cloud.
 
 1. First thing you need to do is create a example hugo site, you run the following command:
 **NOTE**: `code-engine-hugo` is just an example name
+
 ```bash
 $ hugo new site code-engine-hugo
 Congratulations! Your new Hugo site is created in /code-engine-hugo.
@@ -39,6 +38,7 @@ Visit https://gohugo.io/ for quickstart guide and full documentation.
 ```
 
 2. Next test your site and create a `git` repository, follow these next directions:
+
 ```bash
 $ cd /code-engine-hugo
 $ git init
@@ -48,6 +48,7 @@ $ hugo new posts/my-first-post.md
 $ vim content/posts/my-first-post.md # just fill it with dummy text
 $ hugo server -D
 ```
+
 You should be able to see a site that says "My New Hugo Site". The `my-first-post.md`
 has a `draft: true`, when you want to make it real change that to `false`.
 
@@ -132,29 +133,6 @@ to Docker Hub. This will create a repository for you and push this container to 
 7. Click "Done", and "Create."
 
 Now if you open up the application URL you should have the `hugo` site!
-
-## License & Authors
-
-If you would like to see the detailed LICENSE click [here](./LICENSE).
-
-- Author: JJ Asghar <awesome@ibm.com>
-
-```text
-Copyright:: 2021- IBM, Inc
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
-
 
 [codeengine]: https://www.ibm.com/cloud/code-engine
 [codeengines-overview]: https://cloud.ibm.com/codeengine/overview
