@@ -110,31 +110,38 @@ $ open localhost:8080
 
 1. Now that we have our repository on GitHub, login to the [IBM Cloud][ibmcloud]
 console.
+
 ![console](../../../../../pics/codeengineconsole.png)
 
 2. You should come to the [overview][codeengine-overview] page.
+
 ![overview](../../../../../pics/codeengineoverview.png)
 
 3. Now take your repository from above and add it to the "Start with source code"
 entry box.
-![github](../../../../../pics/codeengineoverview-github.png)
 And click "Start creating"
+
+![github](../../../../../pics/codeengineoverview-github.png)
 
 4. If you haven't created a project yet, create one where I'm pointing to, or select
 one like I have as "jjtesting".
+
 ![project](../../../../../pics/codeengineoverview-project.png)
 
 5. Scroll down and click the "Specifiy build details" and put in `/` as your
 root directory. `hugo` needs to be able to find the `config.toml` file.
+
 ![builddetails](../../../../../pics/codeengineoverview-specifybuild.png)
 
 6. Next you need to tell Code Engine where your `Dockerfile` is, this is under
 the "Strategy" section of the build details:
+
 ![strategy](../../../../../pics/codeengineoverview-dockerfile.png)
 
 7. You'll need to make sure it can see your `Dockerfile` and add your credentails
 to Docker Hub. This will create a repository for you, build the container
 and push this container to it. **NOTE**: The `Tag` needs to be unique.
+
 ![buildcontainer](../../../../../pics/codeengineoverview-output.png)
 
 8. Click "Done", and "Create."
