@@ -126,11 +126,18 @@ one like I have as "jjtesting".
 
 5. Scroll down and click the "Specifiy build details" and put in `/` as your
 root directory. `hugo` needs to be able to find the `config.toml` file.
+![builddetails](../../../../../pics/codeengineoverview-specifybuild.png)
 
-6. You'll need to make sure it can see your `Dockerfile` and add your credentails
-to Docker Hub. This will create a repository for you and push this container to it.
+6. Next you need to tell Code Engine where your `Dockerfile` is, this is under
+the "Strategy" section of the build details:
+![strategy](../../../../../pics/codeengineoverview-dockerfile.png)
 
-7. Click "Done", and "Create."
+7. You'll need to make sure it can see your `Dockerfile` and add your credentails
+to Docker Hub. This will create a repository for you, build the container
+and push this container to it. **NOTE**: The `Tag` needs to be unique.
+![buildcontainer](../../../../../pics/codeengineoverview-output.png)
+
+8. Click "Done", and "Create."
 
 Now if you open up the application URL you should have the `hugo` site!
 
