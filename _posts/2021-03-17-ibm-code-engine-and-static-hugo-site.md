@@ -149,7 +149,7 @@ and push this container to it. **NOTE**: The `Tag` needs to be unique.
 Now if you open up the application URL you should have the `hugo` site!
 
 [codeengine]: https://www.ibm.com/cloud/code-engine
-[codeengines-overview]: https://cloud.ibm.com/codeengine/overview
+[codeengine-overview]: https://cloud.ibm.com/codeengine/overview
 [hugo]: https://gohugo.io/getting-started/installing/
 [ibmcloud]: https://cloud.ibm.com
 [mainhugo]: https://gohugo.io/
