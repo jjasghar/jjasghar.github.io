@@ -10,7 +10,7 @@ and more maintenance and administration on the system. One of the oddites with
 job maintenance is that there is no "relaunch" button. If you look below you
 can see what I mean:
 
-IMAGE-OF-NO-RELAUNCH
+![](../../../../../pics/awx_no_relaunch.png)
 
 We spent some time trying to figure out how to do this, and noticed quickly that
 there was no CLI version. So this blog post will teach you how to write a python
