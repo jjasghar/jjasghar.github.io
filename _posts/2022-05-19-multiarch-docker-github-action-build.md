@@ -63,5 +63,5 @@ jobs:
         
 
     - name: Print image url
-      run: echo "Image pushed to $`{`{ steps.push-to-quay.outputs.registry-paths `}`}"
+      run: echo "Image pushed to $\{\{ steps.push-to-quay.outputs.registry-paths \}\}"
 ```
