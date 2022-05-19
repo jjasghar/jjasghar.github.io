@@ -2,7 +2,11 @@ A while ago my brother reached out to me asking about containerizing his applica
 
 This was a great representation of containers making your life easier, and leveraging the following GitHub Action it should work out of the box. 
 
-Obviously you’ll need to change the registry targets, create the secrets, and fair warning it’s slow due to `qemu` but it does work. Hopefully this’ll help someone in the future :).
+Obviously you’ll need to change the registry targets, create the secrets, and fair warning it’s slow due to `qemu` but it does work. 
+
+**NOTE**: You'll need to remove the `\` from the `{{ }}` too, formatting was being mean. 
+ 
+Hopefully this’ll help someone in the future :).
 
 
 ```yaml
@@ -33,8 +37,8 @@ jobs:
       uses: redhat-actions/podman-login@v1
       with:
         username: $\{\{ secrets.DOCKER_USERNAME \}\}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        registry: ${{ env.DOCKER_REGISTRY }}
+        password: $\{\{ secrets.DOCKER_PASSWORD \}\}
+        registry: $\{\{ env.DOCKER_REGISTRY \}\}
 
     - name: Install qemu dependency
       run: |
@@ -43,17 +47,17 @@ jobs:
     - name: Buildah Action
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ env.DOCKER_IMAGE }}
+        image: $\{\{ env.DOCKER_IMAGE \}\}
         tags: latest
-        arch: ${{ matrix.arch }}
-        build-args: ARCH=${{ matrix.arch }}
+        arch: $\{\{ matrix.arch \}\}
+        build-args: ARCH=$\{\{ matrix.arch \}\}
         containerfiles: |
           ./Dockerfile
     - name: Push To quay.io
       id: push-to-quay
       uses: redhat-actions/push-to-registry@v2
       with:
-        image: ${{ env.IMAGE_NAME }}
+        image: $\{\{ env.IMAGE_NAME \}\}
         tags: latest
         registry: quay.io/awesome
         
