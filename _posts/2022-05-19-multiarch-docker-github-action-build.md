@@ -4,7 +4,7 @@ This was a great representation of containers making your life easier, and lever
 
 Obviously you’ll need to change the registry targets, create the secrets, and fair warning it’s slow due to `qemu` but it does work. 
 
-**NOTE**: You'll need to remove the `\` from the `{{ }}` too, formatting was being mean. 
+**NOTE**: You'll need to remove the `\` from the `yaml`, formatting was being mean. 
  
 Hopefully this’ll help someone in the future :).
 
