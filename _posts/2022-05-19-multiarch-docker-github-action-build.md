@@ -32,7 +32,7 @@ jobs:
     - name: Log in to Quay.io
       uses: redhat-actions/podman-login@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: $\{\{ secrets.DOCKER_USERNAME \}\}
         password: ${{ secrets.DOCKER_PASSWORD }}
         registry: ${{ env.DOCKER_REGISTRY }}
 
