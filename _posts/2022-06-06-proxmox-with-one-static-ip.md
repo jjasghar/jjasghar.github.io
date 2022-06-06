@@ -55,8 +55,8 @@ interface=ens18
 listen-address=172.16.1.2
 expand-hosts
 domain=asgharlabs.io
-dhcp-range=172.16.1.50# 72.16.1.240# 2h
-dhcp-option=3# 72.16.1.1
+dhcp-range=172.16.1.50,172.16.1.240,12h
+dhcp-option=3,172.16.1.1
 dhcp-leasefile=/var/lib/misc/dnsmasq.leases
 dhcp-authoritative
 ```
