@@ -23,12 +23,12 @@ it all.
 Ok, lets say we have this following script:
 ```bash
 FOO="in the script"
-echo "This was outputted from" ${FOO} 
+echo "This was outputted from" ${FOO}
 ```
 It outputs:
 ```bash
 $ bash script.sh
-This was outputted from the script
+This was outputted from in the script
 ```
 Perfect, now lets override this:
 ```bash
@@ -57,9 +57,9 @@ $ export FOO="from the shell"
 $ bash run.sh
 This was outputted from from the shell
 ```
-OK this seems more reasonable, now I can change the variables around if I want to. 
+OK this seems more reasonable, now I can change the variables around if I want to.
 
-One last experiment, and hopefully this should make it make total sense on the 
+One last experiment, and hopefully this should make it make total sense on the
 scoping of environmental varibles in `bash`.
 
 Let's take it one step farther, lets say we have a file of `VAR`s that we source
