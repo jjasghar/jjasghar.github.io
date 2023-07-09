@@ -8,14 +8,24 @@ permalink: /about/
 
 If you'd like to see all his links online, please don't hesitate to go to: <https://jjasghar.me>
 
-JJ works as a Developer Advocate representing the [IBM][ibm] worldwide. He focuses on the IBM's **watson**x service, the Open Source AI ecosystem, and  Kubernetes x with a core focus on OpenShift. He is always trying to make companies and users have a successful onboarding to the AI and Cloud Native ecosystem. He’s also been known in the DevOps ecosystem and generalized Linux communities. If he isn’t building automation to streamline his work, he’s building the groundwork to do just that. He’s been an avid homelab and self-hoster of open source software for years and gives back to that community as much as physically possible.
+JJ works as a Developer Advocate representing the [IBM][ibm] worldwide.
+He engages in the IBM's **watson**x service, the Open Source AI ecosystem,
+and Kubernetes ecosystem with a focus on Red Hat's OpenShift. He attempts to teach
+enterprises and users succesfully skills to onboard to the AI and
+Cloud Native ecosystem though he learned his trade in the DevOps ecosystem.
+If he isn’t building highlevel automation to streamline
+his work, he’s building the groundwork to prepare for that need. He’s been an avid
+homelaber and self-hoster of open source software for years and gives
+back to that community as much as possible.
 
-He lives and grew up in Austin, Texas. A father and husband, trying to learn to balance his natural nerdiness with family life. He enjoys a [good strong dark ale][ale], [hoppy IPA][ipa], some team building [Artemis][artemis], and epic [Gloomhaven][gloomhaven] campaigning.
+He lives and grew up in Austin, Texas. A father and husband, trying to learn
+to balance his natural nerdiness with family life. He enjoys
+a [good strong dark ale][ale], [hoppy IPA][ipa], some team building
+[Artemis][artemis], and epic [Gloomhaven][gloomhaven] campaigning.
 
-He has dove headfirst into Fedora since IBM buying Redhat, but still secretly wants FreeBSD everywhere. He’s always trying to become a better web technology developer, though normally just uses `bash` to get the job done.
-
-
-![](../../../../../pics/one_start_vexpert.png)
+He has dove headfirst into Fedora since IBM buying Redhat, but still secretly
+wants FreeBSD everywhere. He’s always trying to become a better web technology
+developer, though normally just uses `bash` and `python` to get the job done.
 
 <a class="twitter-timeline" data-lang="en" data-width="500" data-height="500" href="https://twitter.com/jjasghar">Tweets by jjasghar</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
