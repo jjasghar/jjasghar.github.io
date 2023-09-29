@@ -19,3 +19,5 @@ This is JJ's watsonx example page.
     document.head.appendChild(t);
   });
 </script>
+
+<img src="https://count.asgharlabs.io/count?p=/watsonx_jjasghar_github_page">
