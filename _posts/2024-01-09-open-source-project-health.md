@@ -7,9 +7,13 @@ categories: opensource linux ibm
 
 > I was writing this up for some internal conversations, but felt like this could be a more generic list for my blog. Hopefully this'll help someone in the future.
 
+## Introduction
+
 These are some criteria for understanding the health of an open-source project. These guidelines should be researched and understood before leveraging anything from upstream. There will be situations where some of these guidelines may clash, and that is expected.  In this situation you should make a judgement call on what the risker option is of the offending guideline, take a moment and balance this. Many of these markers come with experience in the open-source ecosystem, and eventually, you get a “feel” for the health by just looking at the main pages of the open-source project.
 
-Note: These guidelines are not in any “order” or "have a value.” You should ask yourself questions before adopting or building upon any open-source project.
+**Note**: These guidelines are not in any “order” or "have a value.” You should ask yourself questions before adopting or building upon any open-source project.
+
+## Questions
 
 - How many “watchers” are on the project?
 
@@ -46,6 +50,8 @@ Reason: As open-source developers, we must pay attention to the projects we want
 - What is their policy for releasing “numbered” releases?
 
 Reason: If they are going via the SemVer release process, how far are they from 1.0.0? How far are they from a “production” release if they are going through another process? This can show the confidence in the project from the Core maintainers and how “production healthy” they think it is.
+
+## Conclusion
 
 Many of these positives and negatives are situational, and there are many more exceptions than this being a “steadfast” rubric to grade against. Like all open-source and professional developers, you must use your judgment and understand that taking code from upstream has associated risks.
 
