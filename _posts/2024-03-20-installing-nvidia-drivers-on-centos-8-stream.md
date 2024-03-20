@@ -15,7 +15,7 @@ but look [here](https://www.nvidia.com/Download/Find.aspx?lang=en-us) for the ne
 
 ```bash
 wget https://us.download.nvidia.com/tesla/550.54.15/NVIDIA-Linux-x86_64-550.54.15.run
-chmod +x NVIDIA-Linux-x86_64--550.54.15.run
+chmod +x NVIDIA-Linux-x86_64-550.54.15.run
 ```
 
 Then install the [main line](https://elrepo.org/wiki/doku.php?id=kernel-ml) kernel, because
