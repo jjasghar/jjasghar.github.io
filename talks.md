@@ -1,60 +1,60 @@
 ---
-title: "Home"
+title: "Talks"
 date: 2021-03-25T13:03:46-04:00
 draft: false
 ---
 
-## Talks
+## Public Talks
 
 - ATX PowerShell
-- All Things Open: 2018 || 2021
+- All Things Open: 2018 , 2021
 - Austin Bare-Metal Club
 - Austin DevOps: [video 2016](https://www.youtube.com/watch?v=lZKhwSGxa58)
 - Austin JAX (Jenkins Meetup)
 - Austin Operators Meetup
-- AutomaCon: [video 2015](https://www.youtube.com/watch?v=qvSGJslwpDA) || [video 2016](https://www.youtube.com/watch?v=D3LS3lHWFnE)
+- AutomaCon: [video 2015](https://www.youtube.com/watch?v=qvSGJslwpDA) , [video 2016](https://www.youtube.com/watch?v=D3LS3lHWFnE)
 - BSides OK: 2022
 - Chef Summit London: 2015
-- ChefConf: [video 2016](https://www.youtube.com/watch?v=HfYI1KcKFoo) || [video 2018](https://www.youtube.com/watch?v=jtgXQpcJFT0)
+- ChefConf: [video 2016](https://www.youtube.com/watch?v=HfYI1KcKFoo) , [video 2018](https://www.youtube.com/watch?v=jtgXQpcJFT0)
 - Cloud Austin
-- ConfigManagement Camp Ghent: 2015 || [video 2019](https://www.youtube.com/watch?v=W1d7r3mIj0A) || [video 2024](https://www.youtube.com/watch?v=U-H3s5V0w3Y)
+- ConfigManagement Camp Ghent: 2015 , [video 2019](https://www.youtube.com/watch?v=W1d7r3mIj0A) , [video 2024](https://www.youtube.com/watch?v=U-H3s5V0w3Y)
 - ConfigManagement Camp Portland: 2017
 - ContainerStack Zurich: 2019
 - DevConf.US: 2022
 - DevOps MidWest: [Keynote 2023](https://www.sketchdev.io/devops-midwest-speaker-bio-page)
 - DevOpsDays Amsterdam: oNLine 2021
 - DevOpsDays Atlanta: 2019
-- DevOpsDays Austin: [video 2015](https://vimeo.com/130554525) || [video 2016](https://vimeo.com/165731277) || [video 2017](https://youtu.be/Z0Qtf2XJBcA?t=1h10m49s) || 2019
+- DevOpsDays Austin: [video 2015](https://vimeo.com/130554525) , [video 2016](https://vimeo.com/165731277) , [video 2017](https://youtu.be/Z0Qtf2XJBcA?t=1h10m49s) , 2019
 - DevOpsDays Birmingham, AL: [2022 Keynote](https://www.youtube.com/watch?v=pJvDFpYKzv0&feature=youtu.be)
 - DevOpsDays Boise: 2022
 - DevOpsDays Buffalo: [video 2020](https://youtu.be/Kr9uc285Z2k) | 2023
-- DevOpsDays Dallas: 2016 || [video 2019](https://www.youtube.com/watch?v=tcq1-kNQd2Q)
+- DevOpsDays Dallas: 2016 , [video 2019](https://www.youtube.com/watch?v=tcq1-kNQd2Q)
 - DevOpsDays Ghent: 2019
 - DevOpsDays Hardford: 2019
-- DevOpsDays Houston: 2019 || 2021
+- DevOpsDays Houston: 2019 , 2021
 - DevOpsDays Indianapolis: 2019
-- DevOpsDays Kansas City: 2019 || 2024
+- DevOpsDays Kansas City: 2019 , 2024
 - DevOpsDays Medellín: 2021
-- DevOpsDays Portland: [video 2016](https://www.youtube.com/watch?v=JqwgmePMEw4) || 2017 || 2019
+- DevOpsDays Portland: [video 2016](https://www.youtube.com/watch?v=JqwgmePMEw4) , 2017 , 2019
 - DevOpsDays Poznan: 2021
 - DevOpsDays Seattle: [video 2016](https://www.youtube.com/watch?v=9iuYqZU8mj8)
 - DevOpsDays Stocklhom: 2019
 - DevOpsDays Toronto: 2016
-- DevOpsDays Vancouver: 2016 || 2019
+- DevOpsDays Vancouver: 2016 , 2019
 - DevRelCon Tokyo: [video 2021](https://youtu.be/Aoliy98BCwI?t=1315)
 - EmacsATX: [video 2014](https://www.youtube.com/watch?v=VO7xj2ArpZw)
 - FOSSY: 2023
-- FOSDEM: [2020](http://bofh.nikhef.nl/events/FOSDEM/2020/UB5.230/osslessons.webm) || Emcee AI and ML Room [2024](https://ftp.osuosl.org/pub/fosdem/2024/ub2252a/)
+- FOSDEM: [2020](http://bofh.nikhef.nl/events/FOSDEM/2020/UB5.230/osslessons.webm) , Emcee AI and ML Room [2024](https://ftp.osuosl.org/pub/fosdem/2024/ub2252a/)
 - GM and Chef engineering day: 2018
 - Gitex EMEA: 2023
 - HPE and Chef engineering day: [video](https://www.periscope.tv/HPE_ConvergedDI/1YpKkWlEYnjKj)
 - IBM THINK Gov: 2019
 - Indianapolis DevOps Meetup
 - Interop ITX: 2017
-- KCDC: 2022 || 2023
+- KCDC: 2022 , 2023
 - KubeCon APAC: 2019
-- KubeCon EU: 2019: IBM booth Speaker 3x || 2021: IBM booth Speaker 2x || 2023: IBM booth Speaker 2x
-- KubeCon NA: 2018: IBM booth Speaker 2x || 2021: IBM booth Speaker 4x || 2022: IBM booth Speaker 1x
+- KubeCon EU: 2019: IBM booth Speaker 3x , 2021: IBM booth Speaker 2x , 2023: IBM booth Speaker 2x
+- KubeCon NA: 2018: IBM booth Speaker 2x , 2021: IBM booth Speaker 4x , 2022: IBM booth Speaker 1x
 - KubeHuddle: 2022
 - LEAP 2024
 - LibrePlanet: [video 2020](https://media.libreplanet.org/u/libreplanet/m/lessons-learned-from-cultivating-free-software-projects-and-communities/)
@@ -67,25 +67,25 @@ draft: false
 - OpenStack Summit Vancouver: [video](https://youtu.be/FBCKCO45xIw?t=34m35s)
 - OSS EU 2022
 - Portland Chef Meetup
-- SCaLE: 17x || 19x || 20x || 21x
+- SCaLE: 17x , 19x , 20x , 21x
 - SeaGL: 2018
-- Sketch Conference 2023 || 2024
+- Sketch Conference 2023 , 2024
 - SRE Day: 2022
 - StackConf: 2022 Full and Ignite
 - TalkDevOps Toronto: [video](https://channel9.msdn.com/Blogs/TalkDevOps/TalkDevOps--Introduction-to-Chef-with-JJ-Ashgar-as-a-DotNet-Developer)
-- Texas Linux Fest: 2015 || 2016 || 2018
-- that.us Texas: 2022 || 2023
+- Texas Linux Fest: 2015 , 2016 , 2018
+- that.us Texas: 2022 , 2023
 - The Cloud First EU: [video 2021](https://youtu.be/OGFkz81mKf8?t=22331)
 - VMUG Austin: 2018
 - VMUG Carolina: 2019
-- VMworld: [video 2017](https://www.vmworldonline.com/searchsite?search=SER1906BU) || [video 2018](https://www.youtube.com/watch?v=II4IsntZnyY) || 2019 || [video 2020](https://youtu.be/aBzJ6wrE6xA)
+- VMworld: [video 2017](https://www.vmworldonline.com/searchsite?search=SER1906BU) , [video 2018](https://www.youtube.com/watch?v=II4IsntZnyY) , 2019 , [video 2020](https://youtu.be/aBzJ6wrE6xA)
 - [Dallas Docker](https://events.docker.com/events/detaihttp://jjasghar.github.io/talks/ls/docker-docker-dallas-presents-chef-habitat-docker-113)
 - future{stack}: 2022
 
 ## Streaming Conferences and/or Webinars
 
-- All Day DevOps: [video 2020](https://content.sonatype.com/2020addo-ct/addo2020-ct-asghar) || 2021 || 2022 || 2023
-- Angelbeat: [video 2020](https://youtu.be/LVXiOyzuF_E) || [video 2021](https://youtu.be/spHxba0eARg)
+- All Day DevOps: [video 2020](https://content.sonatype.com/2020addo-ct/addo2020-ct-asghar) , 2021 , 2022 , 2023
+- Angelbeat: [video 2020](https://youtu.be/LVXiOyzuF_E) , [video 2021](https://youtu.be/spHxba0eARg)
 - Ansiblefest: [video 2021](https://events.ansiblefest.redhat.com/widget/redhat/ansible21/sessioncatalog/session/1623166230807001Iqrk)
 - Apps ON Cloud Summit 2021
 - AzureFunBytes: [episode 46](https://www.youtube.com/watch?v=ZGNuhgR_SdE) [blogpost](https://dev.to/azure/azurefunbytes-episode-46-openshift-on-azure-with-jjasghar-4nh1)
@@ -109,7 +109,7 @@ draft: false
 - IBM Cloud Day: [video 2021](https://ibmcloudday-vconf.bemyapp.com/#/conference/5ff8bc27013733001b01d3d6)
 - IBM Digital Developer Conference: AIOps & Integration: 2021
 - IBM Pakistan Dev Summit: 2020
-- IBM THINK: 2021 || Roundtable Champions 2022 [video Day 1](https://www.youtube.com/watch?v=tXoMGP2yI0M) [video Day 2](https://www.youtube.com/watch?v=mJefrsMIlSc)
+- IBM THINK: 2021 , Roundtable Champions 2022 [video Day 1](https://www.youtube.com/watch?v=tXoMGP2yI0M) [video Day 2](https://www.youtube.com/watch?v=mJefrsMIlSc)
 - IBM Tech TV: 2020
 - IBM Turkey Dev Day 2020
 - Indy Python Web Conferance: [video 2019](https://youtu.be/lGdoyHeHsBo)
@@ -121,8 +121,8 @@ draft: false
 - OpenShift Exploration and Learnings: [Part 1](https://www.youtube.com/watch?v=d7nxzB0YtR0)
 - OpenShift.tv: [video 2020](https://www.youtube.com/watch?v=erO6XXj8Kl0)
 - Pyjamas.live: 2021
-- Python Web Conf: [video 2021](https://2021.pythonwebconf.com/presentations/deploying-a-simple-python-app-to-kubernetes-openshift) | [2022 Keynote](https://2022.pythonwebconf.com/presentations/we-accidentally-created-a-serverless-application) [video](https://youtu.be/PmT2MD6_k8M) || [2023 Keynote](https://2023.pythonwebconf.com/presentations/taking-a-step-back-and-leveraging-gitops-to-wrangle-your-clusters-and-projects)
-- StackConf 2020 || 2021
+- Python Web Conf: [video 2021](https://2021.pythonwebconf.com/presentations/deploying-a-simple-python-app-to-kubernetes-openshift) | [2022 Keynote](https://2022.pythonwebconf.com/presentations/we-accidentally-created-a-serverless-application) [video](https://youtu.be/PmT2MD6_k8M) , [2023 Keynote](https://2023.pythonwebconf.com/presentations/taking-a-step-back-and-leveraging-gitops-to-wrangle-your-clusters-and-projects)
+- StackConf 2020 , 2021
 - Tanzu TV: [Running a Cobol ETL application on Kubernetes.](https://www.youtube.com/watch?v=yhC6SFZI8Mw)
 - The DEVOPS Conference (eficode): 2021
 - Turbonomic Live: [2020](https://gateway.on24.com/wcc/eh/2339289/lp/2374731/demystifying-devops%2C-kubernetes%2C-and-cloud-native-applications/)
@@ -146,7 +146,7 @@ draft: false
 - Inside Appsec: [episode 16](https://soundcloud.com/contrastsecurity/devops-trends-and-best-practices-a-perspective-from-the-trenches)
 - OSpod: [interview](https://itunes.apple.com/us/podcast/chef-jj-asghar-episode-48-on-ospod/id913351029?i=1000360509387&mt=2)
 - OnCall Nightmares: [2019](https://www.podomatic.com/podcasts/oncallnightmares/episodes/2019-10-24T11_14_36-07_00)
-- Software Defined Talk: [episode 21](http://www.softwaredefinedinterviews.com/21) || [episode 63](http://www.softwaredefinedinterviews.com/63) || [episode 263](https://www.softwaredefinedtalk.com/263) || [Guest Host for that.us Texas recording 2022](https://www.youtube.com/watch?v=n_RwGqqCTBM&t=1384s) || [episode 398](https://www.softwaredefinedtalk.com/398)
+- Software Defined Talk: [episode 21](http://www.softwaredefinedinterviews.com/21) , [episode 63](http://www.softwaredefinedinterviews.com/63) , [episode 263](https://www.softwaredefinedtalk.com/263) , [Guest Host for that.us Texas recording 2022](https://www.youtube.com/watch?v=n_RwGqqCTBM&t=1384s) , [episode 398](https://www.softwaredefinedtalk.com/398)
 - Stackoverflow Podcast: [episode 230](https://stackoverflow.blog/2020/04/28/podcast-230-mastering-the-mainframe-cobol-ibm/)
 - ~~Drunk and Retired~~ The Hallway Track: [host page](https://drunkandretired.com/hosts/jjasghar)
 
