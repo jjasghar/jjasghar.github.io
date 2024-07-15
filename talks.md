@@ -27,7 +27,7 @@ draft: false
 - DevOpsDays Austin: [video 2015](https://vimeo.com/130554525) , [video 2016](https://vimeo.com/165731277) , [video 2017](https://youtu.be/Z0Qtf2XJBcA?t=1h10m49s) , 2019
 - DevOpsDays Birmingham, AL: [2022 Keynote](https://www.youtube.com/watch?v=pJvDFpYKzv0&feature=youtu.be)
 - DevOpsDays Boise: 2022
-- DevOpsDays Buffalo: [video 2020](https://youtu.be/Kr9uc285Z2k) | 2023
+- DevOpsDays Buffalo: [video 2020](https://youtu.be/Kr9uc285Z2k) , 2023
 - DevOpsDays Dallas: 2016 , [video 2019](https://www.youtube.com/watch?v=tcq1-kNQd2Q)
 - DevOpsDays Ghent: 2019
 - DevOpsDays Hardford: 2019
@@ -121,7 +121,7 @@ draft: false
 - OpenShift Exploration and Learnings: [Part 1](https://www.youtube.com/watch?v=d7nxzB0YtR0)
 - OpenShift.tv: [video 2020](https://www.youtube.com/watch?v=erO6XXj8Kl0)
 - Pyjamas.live: 2021
-- Python Web Conf: [video 2021](https://2021.pythonwebconf.com/presentations/deploying-a-simple-python-app-to-kubernetes-openshift) | [2022 Keynote](https://2022.pythonwebconf.com/presentations/we-accidentally-created-a-serverless-application) [video](https://youtu.be/PmT2MD6_k8M) , [2023 Keynote](https://2023.pythonwebconf.com/presentations/taking-a-step-back-and-leveraging-gitops-to-wrangle-your-clusters-and-projects)
+- Python Web Conf: [video 2021](https://2021.pythonwebconf.com/presentations/deploying-a-simple-python-app-to-kubernetes-openshift) , [2022 Keynote](https://2022.pythonwebconf.com/presentations/we-accidentally-created-a-serverless-application) [video](https://youtu.be/PmT2MD6_k8M) , [2023 Keynote](https://2023.pythonwebconf.com/presentations/taking-a-step-back-and-leveraging-gitops-to-wrangle-your-clusters-and-projects)
 - StackConf 2020 , 2021
 - Tanzu TV: [Running a Cobol ETL application on Kubernetes.](https://www.youtube.com/watch?v=yhC6SFZI8Mw)
 - The DEVOPS Conference (eficode): 2021
@@ -136,7 +136,7 @@ draft: false
 
 - Arrested DevOps: [episode 58](https://www.arresteddevops.com/openstack/) (bad audio :( )
 - Cloud with Chris: [video 2021](https://youtu.be/W4xoq_iCn7E)
-- Cloud Native Compass: [video 2023 | Trust and Validation in AI](https://www.youtube.com/watch?v=SoZ4s1Ew0CA)
+- Cloud Native Compass: [video 2023 Trust and Validation in AI](https://www.youtube.com/watch?v=SoZ4s1Ew0CA)
 - DevChat.tv: Two DevOps Old Dogs Sharing Tricks with JJ Asghar: [DevOps 048](https://devchat.tv/adventures-in-devops/devops-048-two-devops-old-dogs-sharing-tricks-with-jj-asghar/)
 - Developer Advocast: [episode 4](https://open.spotify.com/episode/01gsWap8IaGw98K7kgOu2y?si=9e9eaba390c149f6)
 - DevCentral Connects: episode 128 Stumbling Blocks in App Modernization w JJ Asghar: May 30, 2023
