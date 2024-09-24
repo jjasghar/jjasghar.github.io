@@ -29,6 +29,7 @@ draft: false
 - DevOpsDays Boise: 2022
 - DevOpsDays Buffalo: [video 2020](https://youtu.be/Kr9uc285Z2k) , 2023
 - DevOpsDays Dallas: 2016 , [video 2019](https://www.youtube.com/watch?v=tcq1-kNQd2Q)
+- DevOpsDays Denver: 2024
 - DevOpsDays Ghent: 2019
 - DevOpsDays Hardford: 2019
 - DevOpsDays Houston: 2019 , 2021
@@ -179,3 +180,4 @@ draft: false
 - [Open Minds: Hybrid Cloud](https://www.ibm.com/resources/modernize/jjasghar)
 - [What excites developers about watsonx?](https://youtu.be/kbksx4xn9UQ)
 - [Wild and Dangerous, w/ Marty and JJ: Helm: The Story, Part 1](https://youtu.be/KU5hHtrX8ZQ)
+- [AI in Action: Rewriting the future: how devs are driving gen AI](https://www.youtube.com/watch?v=MmgdcWA3bcs&t=2s)
