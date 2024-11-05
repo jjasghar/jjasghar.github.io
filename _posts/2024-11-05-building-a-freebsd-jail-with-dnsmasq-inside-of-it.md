@@ -40,7 +40,6 @@ After that you need to confirm your _host_ machine's `rc.conf` you will probably
 gateway_enable="yes"
 ipv6_gateway_enable="yes"
 jail_enable="YES"
-jail_enable="YES"
 pf_enable="YES"
 cloned_interfaces="lo1"
 ipv4_addrs_lo1="192.168.0.2-20/24"
