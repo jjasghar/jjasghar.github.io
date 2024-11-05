@@ -7,7 +7,7 @@ draft: false
 ## Public Talks
 
 - ATX PowerShell
-- All Things Open: 2018 , 2021
+- All Things Open: 2018, 2021, 2024
 - Austin Bare-Metal Club
 - Austin DevOps: [video 2016](https://www.youtube.com/watch?v=lZKhwSGxa58)
 - Austin JAX (Jenkins Meetup)
@@ -28,20 +28,20 @@ draft: false
 - DevOpsDays Birmingham, AL: [2022 Keynote](https://www.youtube.com/watch?v=pJvDFpYKzv0&feature=youtu.be)
 - DevOpsDays Boise: 2022
 - DevOpsDays Buffalo: [video 2020](https://youtu.be/Kr9uc285Z2k) , 2023
-- DevOpsDays Dallas: 2016 , [video 2019](https://www.youtube.com/watch?v=tcq1-kNQd2Q)
+- DevOpsDays Dallas: 2016, [video 2019](https://www.youtube.com/watch?v=tcq1-kNQd2Q)
 - DevOpsDays Denver: 2024
 - DevOpsDays Ghent: 2019
 - DevOpsDays Hardford: 2019
-- DevOpsDays Houston: 2019 , 2021
+- DevOpsDays Houston: 2019, 2021
 - DevOpsDays Indianapolis: 2019
-- DevOpsDays Kansas City: 2019 , 2024
+- DevOpsDays Kansas City: 2019, 2024
 - DevOpsDays Medellín: 2021
 - DevOpsDays Portland: [video 2016](https://www.youtube.com/watch?v=JqwgmePMEw4) , 2017 , 2019
 - DevOpsDays Poznan: 2021
 - DevOpsDays Seattle: [video 2016](https://www.youtube.com/watch?v=9iuYqZU8mj8)
 - DevOpsDays Stocklhom: 2019
 - DevOpsDays Toronto: 2016
-- DevOpsDays Vancouver: 2016 , 2019
+- DevOpsDays Vancouver: 2016, 2019
 - DevRelCon Tokyo: [video 2021](https://youtu.be/Aoliy98BCwI?t=1315)
 - EmacsATX: [video 2014](https://www.youtube.com/watch?v=VO7xj2ArpZw)
 - FOSSY: 2023
@@ -49,6 +49,7 @@ draft: false
 - GM and Chef engineering day: 2018
 - Gitex EMEA: 2023
 - HPE and Chef engineering day: [video](https://www.periscope.tv/HPE_ConvergedDI/1YpKkWlEYnjKj)
+- IBM TechXchange: 2024
 - IBM THINK Gov: 2019
 - Indianapolis DevOps Meetup
 - Interop ITX: 2017
@@ -68,14 +69,14 @@ draft: false
 - OpenStack Summit Vancouver: [video](https://youtu.be/FBCKCO45xIw?t=34m35s)
 - OSS EU 2022
 - Portland Chef Meetup
-- SCaLE: 17x , 19x , 20x , 21x
+- SCaLE: 17x, 19x, 20x, 21x
 - SeaGL: 2018
-- Sketch Conference 2023 , 2024
+- Sketch Conference 2023, 2024
 - SRE Day: 2022
 - StackConf: 2022 Full and Ignite
 - TalkDevOps Toronto: [video](https://channel9.msdn.com/Blogs/TalkDevOps/TalkDevOps--Introduction-to-Chef-with-JJ-Ashgar-as-a-DotNet-Developer)
-- Texas Linux Fest: 2015 , 2016 , 2018
-- that.us Texas: 2022 , 2023
+- Texas Linux Fest: 2015, 2016, 2018
+- that.us Texas: 2022, 2023
 - The Cloud First EU: [video 2021](https://youtu.be/OGFkz81mKf8?t=22331)
 - VMUG Austin: 2018
 - VMUG Carolina: 2019
