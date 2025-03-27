@@ -8,6 +8,7 @@ draft: false
 
 - ATX PowerShell
 - All Things Open: 2018, 2021, 2024
+- All Things Open.AI: 2025
 - Austin Bare-Metal Club
 - Austin DevOps: [video 2016](https://www.youtube.com/watch?v=lZKhwSGxa58)
 - Austin JAX (Jenkins Meetup)
@@ -17,7 +18,7 @@ draft: false
 - Chef Summit London: 2015
 - ChefConf: [video 2016](https://www.youtube.com/watch?v=HfYI1KcKFoo) , [video 2018](https://www.youtube.com/watch?v=jtgXQpcJFT0)
 - Cloud Austin
-- ConfigManagement Camp Ghent: 2015 , [video 2019](https://www.youtube.com/watch?v=W1d7r3mIj0A) , [video 2024](https://www.youtube.com/watch?v=U-H3s5V0w3Y)
+- ConfigManagement Camp Ghent: 2015 , [video 2019](https://www.youtube.com/watch?v=W1d7r3mIj0A) , [video 2024](https://www.youtube.com/watch?v=U-H3s5V0w3Y), 2025
 - ConfigManagement Camp Portland: 2017
 - ContainerStack Zurich: 2019
 - DevConf.US: 2022
@@ -43,9 +44,10 @@ draft: false
 - DevOpsDays Toronto: 2016
 - DevOpsDays Vancouver: 2016, 2019
 - DevRelCon Tokyo: [video 2021](https://youtu.be/Aoliy98BCwI?t=1315)
+- DevWorld Amsterdam - 2025
 - EmacsATX: [video 2014](https://www.youtube.com/watch?v=VO7xj2ArpZw)
 - FOSSY: 2023
-- FOSDEM: [2020](http://bofh.nikhef.nl/events/FOSDEM/2020/UB5.230/osslessons.webm) , Emcee AI and ML Room [2024](https://ftp.osuosl.org/pub/fosdem/2024/ub2252a/)
+- FOSDEM: [2020](http://bofh.nikhef.nl/events/FOSDEM/2020/UB5.230/osslessons.webm) , Emcee AI and ML Room [2024](https://ftp.osuosl.org/pub/fosdem/2024/ub2252a/), Emcee Low Level AI Room 2025
 - GM and Chef engineering day: 2018
 - Gitex EMEA: 2023
 - HPE and Chef engineering day: [video](https://www.periscope.tv/HPE_ConvergedDI/1YpKkWlEYnjKj)
@@ -62,6 +64,7 @@ draft: false
 - LibrePlanet: [video 2020](https://media.libreplanet.org/u/libreplanet/m/lessons-learned-from-cultivating-free-software-projects-and-communities/)
 - London Chef Meetup
 - LonghornPHP: 2021
+- Michigan Tech Con: 2025x2
 - Nutanix .NEXT: [video 2018](https://vimeo.com/270129963/9d32cc9b0f)
 - OpenStack Summit Austin: [interview](https://soundcloud.com/thenewstackmakers/jj-asghar-interview)
 - OpenStack Summit Paris
