@@ -154,6 +154,7 @@ draft: false
 - Software Defined Talk: [episode 21](http://www.softwaredefinedinterviews.com/21) , [episode 63](http://www.softwaredefinedinterviews.com/63) , [episode 263](https://www.softwaredefinedtalk.com/263) , [Guest Host for that.us Texas recording 2022](https://www.youtube.com/watch?v=n_RwGqqCTBM&t=1384s) , [episode 398](https://www.softwaredefinedtalk.com/398)
 - Stackoverflow Podcast: [episode 230](https://stackoverflow.blog/2020/04/28/podcast-230-mastering-the-mainframe-cobol-ibm/)
 - ~~Drunk and Retired~~ The Hallway Track: [host page](https://drunkandretired.com/hosts/jjasghar)
+- Packet Pushers: [TL010: Leading With Influence Rather Than Mandating](https://packetpushers.net/podcasts/technically-leadership/tl010-leading-with-influence-rather-than-mandating/)
 
 ## Articles/Interviews
 
