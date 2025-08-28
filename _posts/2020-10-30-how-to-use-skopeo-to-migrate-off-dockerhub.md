@@ -83,7 +83,7 @@ a [Personal Access Token aka PAT][PAT] to start. This will be your "password." G
 command:
 
 ```bash
-skopeo login ghrc.io
+skopeo login ghcr.io
 username: <github-username>
 password: <github-PAT>
 ```
