@@ -6,8 +6,6 @@ permalink: /about/
 
 ![](https://avatars2.githubusercontent.com/u/810824?s=200&v=4)
 
-If you'd like to see all his links online, please don't hesitate to go to: <https://jjasghar.me>
-
 JJ works as a Developer Advocate representing [IBM][ibm] worldwide.
 He engages in the IBM's **watson**x service, the Open Source AI ecosystem,
 and Kubernetes ecosystem with a focus on Red Hat's OpenShift. He attempts to teach
@@ -27,7 +25,7 @@ He has dove headfirst into Fedora since IBM buying Redhat, but still secretly
 wants FreeBSD everywhere. He’s always trying to become a better web technology
 developer, though normally just uses `bash` and `python` to get the job done.
 
-[ibm]: https://cloud.ibm.com/
+[ibm]: https://research.ibm.com/
 [artemis]: https://artemisspaceshipbridge.com/
 [gloomhaven]: https://boardgamegeek.com/boardgame/174430/gloomhaven
 [ale]: https://www.beeradvocate.com/beer/profile/48/155/

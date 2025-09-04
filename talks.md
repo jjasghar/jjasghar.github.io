@@ -21,6 +21,7 @@ draft: false
 - ConfigManagement Camp Ghent: 2015 , [video 2019](https://www.youtube.com/watch?v=W1d7r3mIj0A) , [video 2024](https://www.youtube.com/watch?v=U-H3s5V0w3Y), 2025
 - ConfigManagement Camp Portland: 2017
 - ContainerStack Zurich: 2019
+- DataWeek: 2025
 - DevConf.US: 2022
 - DevOps MidWest: [Keynote 2023](https://www.sketchdev.io/devops-midwest-speaker-bio-page)
 - DevOpsDays Amsterdam: oNLine 2021
@@ -35,7 +36,7 @@ draft: false
 - DevOpsDays Hardford: 2019
 - DevOpsDays Houston: 2019, 2021
 - DevOpsDays Indianapolis: 2019
-- DevOpsDays Kansas City: 2019, 2024
+- DevOpsDays Kansas City: 2019, 2024, 2025
 - DevOpsDays Medellín: 2021
 - DevOpsDays Portland: [video 2016](https://www.youtube.com/watch?v=JqwgmePMEw4) , 2017 , 2019
 - DevOpsDays Poznan: 2021
@@ -44,13 +45,14 @@ draft: false
 - DevOpsDays Toronto: 2016
 - DevOpsDays Vancouver: 2016, 2019
 - DevRelCon Tokyo: [video 2021](https://youtu.be/Aoliy98BCwI?t=1315)
-- DevWorld Amsterdam - 2025
+- DevWorld Amsterdam: 2025
 - EmacsATX: [video 2014](https://www.youtube.com/watch?v=VO7xj2ArpZw)
 - FOSSY: 2023
 - FOSDEM: [2020](http://bofh.nikhef.nl/events/FOSDEM/2020/UB5.230/osslessons.webm) , Emcee AI and ML Room [2024](https://ftp.osuosl.org/pub/fosdem/2024/ub2252a/), Emcee Low Level AI Room 2025
 - GM and Chef engineering day: 2018
 - Gitex EMEA: 2023
 - HPE and Chef engineering day: [video](https://www.periscope.tv/HPE_ConvergedDI/1YpKkWlEYnjKj)
+- IBM Dallas DevDay: 2025
 - IBM TechXchange: 2024
 - IBM THINK Gov: 2019
 - Indianapolis DevOps Meetup
@@ -64,7 +66,7 @@ draft: false
 - LibrePlanet: [video 2020](https://media.libreplanet.org/u/libreplanet/m/lessons-learned-from-cultivating-free-software-projects-and-communities/)
 - London Chef Meetup
 - LonghornPHP: 2021
-- Michigan Tech Con: 2025x2
+- Michigan Technology Conference: 2025x2
 - Nutanix .NEXT: [video 2018](https://vimeo.com/270129963/9d32cc9b0f)
 - OpenStack Summit Austin: [interview](https://soundcloud.com/thenewstackmakers/jj-asghar-interview)
 - OpenStack Summit Paris
