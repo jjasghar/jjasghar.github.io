@@ -18,6 +18,7 @@ draft: false
 - Chef Summit London: 2015
 - ChefConf: [video 2016](https://www.youtube.com/watch?v=HfYI1KcKFoo) , [video 2018](https://www.youtube.com/watch?v=jtgXQpcJFT0)
 - Cloud Austin
+- Commit Your Code: 2024, 2025
 - ConfigManagement Camp Ghent: 2015 , [video 2019](https://www.youtube.com/watch?v=W1d7r3mIj0A) , [video 2024](https://www.youtube.com/watch?v=U-H3s5V0w3Y), 2025
 - ConfigManagement Camp Portland: 2017
 - ContainerStack Zurich: 2019
@@ -53,7 +54,7 @@ draft: false
 - Gitex EMEA: 2023
 - HPE and Chef engineering day: [video](https://www.periscope.tv/HPE_ConvergedDI/1YpKkWlEYnjKj)
 - IBM Dallas DevDay: 2025
-- IBM TechXchange: 2024
+- IBM TechXchange: 2024, 2025
 - IBM THINK Gov: 2019
 - Indianapolis DevOps Meetup
 - Interop ITX: 2017
@@ -67,6 +68,7 @@ draft: false
 - London Chef Meetup
 - LonghornPHP: 2021
 - Michigan Technology Conference: 2025x2
+- Nagios World Conf: [video 2025](https://youtu.be/2Eoe-3JLBh0?si=pMYWy8z9oi_LfPFQ)
 - Nutanix .NEXT: [video 2018](https://vimeo.com/270129963/9d32cc9b0f)
 - OpenStack Summit Austin: [interview](https://soundcloud.com/thenewstackmakers/jj-asghar-interview)
 - OpenStack Summit Paris
@@ -80,7 +82,7 @@ draft: false
 - SRE Day: 2022
 - StackConf: 2022 Full and Ignite
 - TalkDevOps Toronto: [video](https://channel9.msdn.com/Blogs/TalkDevOps/TalkDevOps--Introduction-to-Chef-with-JJ-Ashgar-as-a-DotNet-Developer)
-- Texas Linux Fest: 2015, 2016, 2018
+- Texas Linux Fest: 2015, 2016, 2018, 2025
 - that.us Texas: 2022, 2023
 - The Cloud First EU: [video 2021](https://youtu.be/OGFkz81mKf8?t=22331)
 - VMUG Austin: 2018
