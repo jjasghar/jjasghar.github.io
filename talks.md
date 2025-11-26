@@ -7,7 +7,7 @@ draft: false
 ## Public Talks
 
 - ATX PowerShell
-- All Things Open: 2018, 2021, 2024
+- All Things Open: 2018, 2021, 2024, 2025: IBM Lounge
 - All Things Open.AI: 2025
 - Austin Bare-Metal Club
 - Austin DevOps: [video 2016](https://www.youtube.com/watch?v=lZKhwSGxa58)
@@ -61,8 +61,9 @@ draft: false
 - KCDC: 2022 , 2023
 - KubeCon APAC: 2019
 - KubeCon EU: 2019: IBM booth Speaker 3x , 2021: IBM booth Speaker 2x , 2023: IBM booth Speaker 2x
-- KubeCon NA: 2018: IBM booth Speaker 2x , 2021: IBM booth Speaker 4x , 2022: IBM booth Speaker 1x
+- KubeCon NA: 2018: IBM booth Speaker 2x , 2021: IBM booth Speaker 4x , 2022: IBM booth Speaker 1x, 2025: IBM booth Speaker 1x
 - KubeHuddle: 2022
+- LASCON: 2025
 - LEAP 2024
 - LibrePlanet: [video 2020](https://media.libreplanet.org/u/libreplanet/m/lessons-learned-from-cultivating-free-software-projects-and-communities/)
 - London Chef Meetup
