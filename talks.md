@@ -133,6 +133,7 @@ draft: false
 - Pyjamas.live: 2021
 - Python Web Conf: [video 2021](https://2021.pythonwebconf.com/presentations/deploying-a-simple-python-app-to-kubernetes-openshift) , [2022 Keynote](https://2022.pythonwebconf.com/presentations/we-accidentally-created-a-serverless-application) [video](https://youtu.be/PmT2MD6_k8M) , [2023 Keynote](https://2023.pythonwebconf.com/presentations/taking-a-step-back-and-leveraging-gitops-to-wrangle-your-clusters-and-projects)
 - StackConf 2020 , 2021
+- Suffolk University LIT Lab: [video 2026](https://suffolklitlab.org/how-to-set-up-a-free-open-source-local-ai-assistant-using-ollama-granite-and-open-webui/)
 - Tanzu TV: [Running a Cobol ETL application on Kubernetes.](https://www.youtube.com/watch?v=yhC6SFZI8Mw)
 - The DEVOPS Conference (eficode): 2021
 - Turbonomic Live: [2020](https://gateway.on24.com/wcc/eh/2339289/lp/2374731/demystifying-devops%2C-kubernetes%2C-and-cloud-native-applications/)
