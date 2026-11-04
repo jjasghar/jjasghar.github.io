@@ -66,9 +66,6 @@ titlecase: true       # Converts page and post titles to titlecase
 
 exclude: [vendor]
 
-# Google Analytics
-google_analytics_tracking_id: UA-47435051-1
-
 gems: ["jekyll-gist","jekyll-paginate", "jekyll-sitemap", "rouge"]
 
 # ----------------------- #
