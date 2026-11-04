@@ -22,7 +22,7 @@ an Operator practice. I'm here to try to set the record straight.
 
 ## Why?
 
-First thing first, *why*. Standardizing on coding practices, and yes you now code,
+First things first, *why*. Standardizing on coding practices, and yes you now code,
 will save you from insane overhead and tech debt in the future. When your teams'
 `bash` scripts start to look the same,
 it's easier to read, and with that, people start paying attention to what's happening
@@ -76,10 +76,10 @@ else
 fi
 ```
 
-It gives me a piece of mind that my code all is standardized and just "works" as expected.
+It gives me a peace of mind that my code all is standardized and just "works" as expected.
 The output of `shellcheck` also tells you exactly why your offending code is, with a dedicated
 wiki page [here][shellcheck_wiki] with some very explicit why you shouldn't do it this way.
-I applaud the main developer [Vidar Holen][vidar] and team to help make use better
+I applaud the main developer [Vidar Holen][vidar] and team to help make us better
 developers.
 
 ## Wrap Up

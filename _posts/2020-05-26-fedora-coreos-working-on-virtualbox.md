@@ -9,7 +9,7 @@ categories: sysadmin, linux, tutorial
 
 Hi! I wanted to build up a VM for Fedora CoreOS, and these were my steps to get
 it to work. It's just a basic installation, and enough to play with it. I have a
-romatic goal of moving all my servers and applications to an immutable OSs, and
+romantic goal of moving all my servers and applications to an immutable OS, and
 getting my hands on a disposable Fedora CoreOS is the first learning step.
 
 ## Prereqs

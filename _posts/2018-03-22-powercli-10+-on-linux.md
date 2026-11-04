@@ -7,7 +7,7 @@ categories: vmware sysadmin powershell
 
 Here are some direct steps to getting PowerCLI 10+ working on Ubuntu Linux.
 
-First thing first, you need to get on a Ubuntu (debian) Machine. Now you need to
+First things first, you need to get on a Ubuntu (debian) Machine. Now you need to
 get Powershell installed:
 
 ```
@@ -47,7 +47,7 @@ WSManStackVersion              3.0
 PS > exit
 ```
 
-Notice the exit, you need to go back to your Ubuntu command prompt to to create a directory. You might
+Notice the exit, you need to go back to your Ubuntu command prompt to create a directory. You might
 be able to do that in the PowerShell prompt, but due to the "non-production" release, it's best to
 have this created outside of the shell then recreate it.
 

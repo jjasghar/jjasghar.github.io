@@ -11,7 +11,7 @@ my macOS machines.
 
 1. Install [PlayOnMac](https://www.playonmac.com/en/).
 1. Followed the onscreen instructions, including installing XQuartz
-1. Download the [ArtemisDemo](http://artemis.eochu.com/ArtemisDEMOInstall.exe), you'll need it for the inital install.
+1. Download the [ArtemisDemo](http://artemis.eochu.com/ArtemisDEMOInstall.exe), you'll need it for the initial install.
 1. Click on "Install a program"
 1. Click on "Install a non-listed program"
 1. Read the popups for the installation

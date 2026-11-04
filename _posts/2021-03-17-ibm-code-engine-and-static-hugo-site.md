@@ -9,10 +9,10 @@ categories: ibm serverless
 This is a tutorial/demo of getting [hugo][mainhugo] to work with [code-engine][codeengine]
 from IBM Cloud.
 
-# Prerequiesits
+# Prerequisites
 
 1. You need hugo installed, there's a few different installation paths, check [this][hugo] out.
-1. Create a [GitHub][githubnew] repostiory that you can push your `hugo` site to.
+1. Create a [GitHub][githubnew] repository that you can push your `hugo` site to.
 
 # Steps
 
@@ -74,7 +74,7 @@ $ git commit -m "inital commit"
 $ git push origin main
 ```
 
-5. Just as a sanity check, lets verify that the container we have/built will work locally. Run
+5. Just as a sanity check, let's verify that the container we have/built will work locally. Run
 the following commands and to test it:
 
 ```bash
@@ -128,7 +128,7 @@ one like I have as "jjtesting".
 
 ![project](../../../../../pics/codeengineoverview-project.png)
 
-5. Scroll down and click the "Specifiy build details" and put in `/` as your
+5. Scroll down and click the "Specify build details" and put in `/` as your
 root directory. `hugo` needs to be able to find the `config.toml` file.
 
 ![builddetails](../../../../../pics/codeengineoverview-specifybuild.png)
@@ -138,7 +138,7 @@ the "Strategy" section of the build details:
 
 ![strategy](../../../../../pics/codeengineoverview-dockerfile.png)
 
-7. You'll need to make sure it can see your `Dockerfile` and add your credentails
+7. You'll need to make sure it can see your `Dockerfile` and add your credentials
 to Docker Hub. This will create a repository for you, build the container
 and push this container to it. **NOTE**: The `Tag` needs to be unique.
 

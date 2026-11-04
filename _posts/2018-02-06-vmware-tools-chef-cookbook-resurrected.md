@@ -6,7 +6,7 @@ categories: sysadmin chef vmware
 ---
 **tl;dr**: I'd like to announce that I have released an updated and modernized version of the
 [vmware-tools cookbook][supermarket]. This cookbook installs [open-vm-tools][opengithub], or the
-public version of [vmware-tools posted here][publicvmwaretools] which has become the [defacto standard
+public version of [vmware-tools posted here][publicvmwaretools] which has become the [de facto standard
 for vmware-tools][vmwareblog] since around the release of ESXi 6.0.
 
 As a user/consumer of the VMware stack, you are pretty much required to use [vmware-tools][toolssite] for

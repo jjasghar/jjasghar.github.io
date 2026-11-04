@@ -68,7 +68,7 @@ main page:
 It's a way to interface with your terminal sessions via the keyboard and split your
 windows to test multiple things. Take a moment and think of this process, without
 `tmux` if you had your code in one window, and a terminal in the other running
-your code out putting logs. Lets say you needed to bring up another command prompt
+your code out putting logs. Let's say you needed to bring up another command prompt
 to run something else. You'd have to either make another tab, or a new window taking
 you away from the running application.
 With `tmux` all you have to do is `Control-b c` to create a new terminal, or 
@@ -105,7 +105,7 @@ That's actually the main reason why I started writing this blog post, on a Mac, 
 actually BSD `sed` which requires the `-i ''` flag for backup. If you put `-i .bak`
 for instance, you'd change `foo` to `bar` in file.txt, but you'd also have a file.txt.bak
 created in original state. `-i ''` tells `sed` to skip the creation of the backup
-Now lets take `ag` and play with some `sed`.
+Now let's take `ag` and play with some `sed`.
 Take our fake `src` directory...
 ```bash
 for i in $(ag -l foo src/)

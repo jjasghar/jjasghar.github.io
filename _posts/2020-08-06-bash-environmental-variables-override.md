@@ -20,7 +20,7 @@ it all.
 
 ## Example
 
-Ok, lets say we have this following script:
+Ok, let's say we have this following script:
 ```bash
 FOO="in the script"
 echo "This was outputted from" ${FOO}
@@ -30,13 +30,13 @@ It outputs:
 $ bash script.sh
 This was outputted from in the script
 ```
-Perfect, now lets override this:
+Perfect, now let's override this:
 ```bash
 $ FOO="from the shell" bash script.sh
 This was outputted from the script
 ```
-What! This wasn't what expected. I wanted `This was outputted from the shell`.
-Ok, lets try something different:
+What! This wasn't what I expected. I wanted `This was outputted from the shell`.
+Ok, let's try something different:
 ```bash
 $ export FOO="from the shell"
 $ bash script.sh
@@ -60,7 +60,7 @@ This was outputted from from the shell
 OK this seems more reasonable, now I can change the variables around if I want to.
 
 One last experiment, and hopefully this should make it make total sense on the
-scoping of environmental varibles in `bash`.
+scoping of environmental variables in `bash`.
 
 Let's take it one step farther, lets say we have a file of `VAR`s that we source
 then run the script:
@@ -81,7 +81,7 @@ This was outputted from a file
 ```
 
 Well, that's interesting. So even on the command line, using `source` you'll still
-get the most "local" decaration of the `VAR` in `bash`.
+get the most "local" declaration of the `VAR` in `bash`.
 
-Hopefully this show's the scope of how `bash` scopes it's variables, and if you're
+Hopefully this shows the scope of how `bash` scopes its variables, and if you're
 like me, and like to have options to run scripts, this'll help you in the future.

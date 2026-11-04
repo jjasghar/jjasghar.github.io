@@ -35,7 +35,7 @@ using the `libpam-google-authenticator` which you can find the code [here][googl
 
 It seems that every user has to run the authentication software in order to get the keys created,
 there is a way to use something like Chef or Ansible for automation, but that'll be at the
-end of this tutorial. For now lets just get it working with one user (admini).
+end of this tutorial. For now let's just get it working with one user (admini).
 
 I have a brand new machine up and running:
 
@@ -43,7 +43,7 @@ I have a brand new machine up and running:
 admini@debian-template:~$
 ```
 
-First thing first, gotta install the software. I'm on Debian, but you however you install your
+First things first, gotta install the software. I'm on Debian, but however you install your
 packages do something like:
 
 ```bash
@@ -103,7 +103,7 @@ Then the extra questions: you shouldn't share your tokens so `y` is a good optio
 Same with the third and forth questions are just good practice, so answer `y` on each
 too.
 
-Congrats! You've successfully configured the application. Now lets link it
+Congrats! You've successfully configured the application. Now let's link it
 up to `ssh`.
 
 Now we need to edit the `/etc/pam.d/sshd` file, you'll need to be `root` so

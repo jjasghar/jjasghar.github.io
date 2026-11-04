@@ -15,7 +15,7 @@ and [mobileforgood][good] to make work in my IBM container Repositories.
 
 Thanks to these two for the direction, and hopefully this will help someone in the future.
 
-First thing first, I needed to install the `travis` gem.
+First things first, I needed to install the `travis` gem.
 
 ```shell
 gem install travis

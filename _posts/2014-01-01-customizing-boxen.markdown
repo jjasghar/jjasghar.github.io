@@ -20,7 +20,7 @@ With my [fork](https://github.com/jjasghar/our-boxen)...now it's time to start m
 
 Where we want to start is at the default [site.pp](https://github.com/jjasghar/our-boxen/blob/master/manifests/site.pp) this is what will be installed on all your boxes by well, default.
 
-Ok, first thing first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):
+Ok, first things first, get a base image running again, open up terminal, and checkout boxen from your fork, (this is my fork and the commands I use from a base install):
 
 ```
 ~%  git --version # click "Install" for the developer tools
@@ -35,7 +35,7 @@ Ok, first thing first, get a base image running again, open up terminal, and che
 
 I don't care for nodejs or the older versions of ruby for this example, so I'm going to remove lines 66-69 and 72,73 of that site.pp file. If you noticed I created a branch for this too, so I'll push this up to my repo so I can track my work.
 
-Ok, lets give boxen a shot!
+Ok, let's give boxen a shot!
 
 ```bash
 /opt/boxen/repo/manifests% cd ..

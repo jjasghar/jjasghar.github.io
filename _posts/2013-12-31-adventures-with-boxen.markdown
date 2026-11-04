@@ -10,7 +10,7 @@ Note: Thanks to [Greg Kitson](https://github.com/awaxa/) as my sounding board an
 
 So I started watching a couple videos on [boxen](http://boxen.github.com) both are done by [@wfarr](https://twitter.com/wfarr) and he's convinced me to give it a shot. Here is the "first" part of me getting up a dev env to play around with it.
 
-I think the thing that got me was the "one line cURL" that you can run which is from [boxen-web](https://github.com/boxen/boxen-web) so that's my ultimate goal here; ok lets start this off.
+I think the thing that got me was the "one line cURL" that you can run which is from [boxen-web](https://github.com/boxen/boxen-web) so that's my ultimate goal here; ok let's start this off.
 
 First thing, read the [README.md](https://github.com/boxen/our-boxen/blob/master/README.md) and something jumps out at me straight off the bat:
 
@@ -71,4 +71,4 @@ It should ask you for your github credentials (yes it works with two factor auth
 
 NOTE: you might see it get stuck at `Dnsmasq` for a default run. If you check activity monitor it is running and talking to Greg, it seems that's gcc/make compiling something in the background. This might take a long time, wait it out.
 
-Grats you have successfully started up boxen and got it running. Now lets customize it, that should be the following post...
+Grats you have successfully started up boxen and got it running. Now let's customize it, that should be the following post...

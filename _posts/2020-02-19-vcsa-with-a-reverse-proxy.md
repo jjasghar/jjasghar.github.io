@@ -54,7 +54,7 @@ sudo firewall-cmd --reload
 ```
 
 And finally, ([Major](https://twitter.com/majorhayden/) please don't yell at me) I disabled
-SELinux. I converted it from `enforcing` to `disabled` and reboot my machine. Now, let’s
+SELinux. I converted it from `enforcing` to `disabled` and rebooted my machine. Now, let’s
 configure the meat of this blog post.
 
 ## Nginx reverse proxy set up

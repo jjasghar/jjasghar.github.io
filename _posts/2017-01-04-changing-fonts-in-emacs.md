@@ -7,7 +7,7 @@ categories: emacs linux
 
 Something I can never remember is how fonts are set in emacs. Here are some notes on how I figured it out.
 
-First thing first, figure out what font you're using. Open up your `*scratch*` buffer and type:
+First things first, figure out what font you're using. Open up your `*scratch*` buffer and type:
 
 ```elisp
 (face-attribute 'default :font)

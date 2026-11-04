@@ -13,7 +13,7 @@ about the ecosystem they work in daily. The best part of DevOpsDays is the "[ope
 unconference style for half the day, and people learn things together. I have learned more about the innovative
 technologies we use, and I have learned about a tool that streamlined my workflow. There are talks throughout
 the day, and my primary responsibility is the "cfp" (call for paper) lead, where I help recruit and run the
-agenda for that part of the conference. We get 100s submissions each year, and it takes significant time to
+agenda for that part of the conference. We get 100s of submissions each year, and it takes significant time to
 sift through them. I have even grown a "sixth sense" of reading some of these cfps to find "sales pitches"
 or "not in the spirit" of what we are trying to do.
 
@@ -25,7 +25,7 @@ honestly, it is a waste of everyone's time. We want our speakers to write someth
 experience so you can help grow our community's knowledge. Along with AI-generated abstracts, another thing
 we deprioritize is obvious "sales pitches." Our audience does not want to give you our stage for you to
 attempt to sell your product. Don’t get me wrong, we have sponsorship time slots where our community
-understands it is the correct place for this place interaction, but not our main stage or talk tracks.
+understands it is the correct place for this type of interaction, but not our main stage or talk tracks.
 We also get a few attempts from marketing teams and developer relations professionals to sneak in these
 types of cfps, which are just product pitches.
 
@@ -34,8 +34,8 @@ these abstracts submitted to our conferences and gives a score of 0-100% of bein
 possible "sales pitch." This gives us, part of the CFP committee, an ability to de-prioritize talks we
 are not looking for. It runs locally, leveraging [Granite][granite] via Ollama, with an interface of AnythingLLM.
 It is a straightforward, secure, local, and private way to leverage an open source LLM to save us hours
-of reading; ideally, we do not have to do it during the first pass of cfps. If you want give it a shot,
-it has support for CSVs and some test abstracts already in place, but the main power all of this is
+of reading; ideally, we do not have to do it during the first pass of cfps. If you want to give it a shot,
+it has support for CSVs and some test abstracts already in place, but the main power of all of this is
 running through our Granite model, and saving us so so much time.
 
 [dod]: https://devopsdays.org

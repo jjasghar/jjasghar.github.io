@@ -53,7 +53,7 @@ Congrats! You now have a remote docker host running PhotonOS.
 
 Ok, now here comes the specific `kitchen` steps.
 
-First, open up your `.kitchen.yml` or `.kitchen.local.yml` or `.kitchen.docker.yml` which ever you want to drive
+First, open up your `.kitchen.yml` or `.kitchen.local.yml` or `.kitchen.docker.yml`—whichever you want to drive
 your kitchen settings.
 
 Here's a quick snippet to set it up for the changes you need to make at the top:

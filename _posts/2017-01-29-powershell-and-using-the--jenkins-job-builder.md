@@ -91,7 +91,7 @@ Now that everything is setup, you can now log into your Windows machine and go t
 You should see some Java-y things pop up, accept and run them. It'll install the required application,
 then you can install as a service if you like. `File` > `Install as a service`.
 
-Congrats, everything should be should be wired up now. Now lets try to run some jobs.
+Congrats, everything should be should be wired up now. Now let's try to run some jobs.
 
 # Template Jenkins Jobs
 

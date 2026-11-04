@@ -17,7 +17,7 @@ kubectl get secrets | grep software-sa
 kubectl describe secret software-sa-token-<SOME-HASH>
 ```
 
-The following is a `yaml` defintion that should give you the secret that does basiclly a `cluster-admin`
+The following is a `yaml` definition that should give you the secret that does basically a `cluster-admin`
 
 ```yaml
 apiVersion: v1

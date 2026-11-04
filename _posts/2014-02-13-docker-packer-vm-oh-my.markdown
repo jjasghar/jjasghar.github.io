@@ -28,7 +28,7 @@ packer in a couple words is this: a way to create base or gold VM images. It's d
 an image of this box, but you're boss now says you're moving cloud providers and  have to get it working on [digital ocean](http://digitalocean.com/). packer makes that conversion "simple," which packs up the image to be portable and transferable.
 I say simple mainly because honestly I haven't tried it yet, but I have watched a few youtube tutorials on it.
 
-This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of groking them, rediscovering packer.
+This post is spurred from my miss understanding of the scope of docker and VMs, and in the process of grokking them, rediscovering packer.
 
 So in a nutshell: docker is a wrapper for lxc/jails for linux running an app sharing a common kernel, VMs are separate entities and kernels that more production focused, and packer is a way to create transferable VMs between hypervisors.
 

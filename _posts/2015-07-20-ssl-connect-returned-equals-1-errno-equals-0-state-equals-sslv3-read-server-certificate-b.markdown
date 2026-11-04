@@ -112,9 +112,9 @@ If your Chef Server uses a self-signed certificate, you can use
 Original Exception: OpenSSL::SSL::SSLError: hostname "172.16.20.62" does not match the server certificate
 ```
 
-That look fimilar, and it feels like you're in a loop....
+That look familiar, and it feels like you're in a loop....
 
-Turns out you can bypass this check completley by adding this to your `knife.rb`.
+Turns out you can bypass this check completely by adding this to your `knife.rb`.
 
 ```ruby
 ssl_verify_mode :verify_none

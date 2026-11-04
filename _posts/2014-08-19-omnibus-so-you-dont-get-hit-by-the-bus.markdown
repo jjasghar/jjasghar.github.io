@@ -23,7 +23,7 @@ So on with the show/tutorial:
 
 The first thing you need to know is that [Omnibus](https://github.com/opscode/omnibus) is actually in two pieces. First the framework,
 at this repo: [omnibus](https://github.com/opscode/omnibus) and the [omnibus-software](https://github.com/opscode/omnibus-software)
-which is the the building blocks for whatever you're trying to package.
+which is the building blocks for whatever you're trying to package.
 
 The first thing that got me learning omnibus was the two files that sat inside of `project/` and `software/`. You'll notice that they
 probably are both named your package and probably wonder why it's named the same thing. The best description is this; `project/blah.rb` is the
@@ -60,7 +60,7 @@ Now if you want to see more things go by,
 
 I personally like it, I like to see my computer work ;).
 
-Now lets say you're still on that Ubuntu box but your coworker is using Centos, this is where [test-kitchen](http://kitchen.ci) can take part making your
+Now let's say you're still on that Ubuntu box but your coworker is using Centos, this is where [test-kitchen](http://kitchen.ci) can take part making your
 life so much easier.
 You should do something like the following:
 

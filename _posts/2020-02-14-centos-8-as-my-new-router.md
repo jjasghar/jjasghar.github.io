@@ -7,12 +7,12 @@ categories: linux centos sysadmin
 
 I had to rebuild my router, and these are my notes. Hopefully I
 won't have to look all this up _again_, in the future. I really
-feel like I do this more then I should.
+feel like I do this more than I should.
 
 ## IPv4 Forwarding
 
 With two NICs, you're gonna need to forward some traffic. First
-thing first, forward those packets:
+things first, forward those packets:
 
 ```bash
 sudo sysctl -w net.ipv4.ip_forward=1
@@ -50,7 +50,7 @@ DNS1=8.8.8.8
 
 Being this is going to be in the internet, you should install [fail2ban](https://www.fail2ban.org/wiki/index.php/Main_Page).
 
-I have take these notes from [here](https://tecadmin.net/install-fail2ban-centos8/).
+I have taken these notes from [here](https://tecadmin.net/install-fail2ban-centos8/).
 
 ```bash
 sudo dnf install -y epel-release fail2ban
@@ -62,7 +62,7 @@ Configure the local jail:
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 ```
 
-> Now we need to make necessary changes in jail.local file to create ban rules. Editthis file in your favorite editor and make changes in [DEFAULT] section.
+> Now we need to make necessary changes in jail.local file to create ban rules. Edit this file in your favorite editor and make changes in [DEFAULT] section.
 
 ```ini
 [DEFAULT]
@@ -193,7 +193,7 @@ Edit the `dhcp-range` in the `/etc/dnsmasq.conf`
 dhcp-range=172.16.10.100,172.16.10.250,12h
 ```
 
-Next, edit the `dhcp-leasefile` and make it authoritive by uncommenting:
+Next, edit the `dhcp-leasefile` and make it authoritative by uncommenting:
 
 ```bash
 dhcp-leasefile=/var/lib/dnsmasq/dnsmasq.leases
@@ -224,7 +224,7 @@ Now that you have a working router, you probably want to VPN
 into your network. Lets get [OpenVPN](https://www.openvpn.org) up and running.
 
 First thing you need to do is install `git` and pull down `Nyr`'s repo
-for automaticly configuring `openvpn`.
+for automatically configuring `openvpn`.
 
 ```bash
 cd ~

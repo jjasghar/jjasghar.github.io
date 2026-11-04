@@ -29,7 +29,7 @@ $ hab studio enter
 $ docker run -p 8080:8080 -it YOURORIGIN/jenkins-war:latest # run container
 ```
 
-Now lets get the container over to the PhotonOS box:
+Now let's get the container over to the PhotonOS box:
 
 ```shell
 $ docker save jjasghar/jenkins-war:latest > jenkins.tar
@@ -41,7 +41,7 @@ Loaded image: YOURORIGIN/jenkins-war:latest
 root@PHOTONHOST [ ~ ]# logout
 ```
 
-Ok, lets verify everything is what we expect.
+Ok, let's verify everything is what we expect.
 
 ```shell
 $ export DOCKER_HOST=tcp://PHOTONHOST:2375

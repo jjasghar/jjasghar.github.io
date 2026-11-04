@@ -6,7 +6,7 @@ categories: awx sysadmin ansible python
 ---
 
 As my team has been working more and more with [AWX][awx] we've had to do more
-and more maintenance and administration on the system. One of the oddites with
+and more maintenance and administration on the system. One of the oddities with
 job maintenance is that there is no "relaunch" button. If you look below you
 can see what I mean:
 

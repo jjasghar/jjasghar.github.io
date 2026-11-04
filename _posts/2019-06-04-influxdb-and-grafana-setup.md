@@ -7,7 +7,7 @@ categories: sysadmin database graphs
 
 # Learning InfluxDB and Grafana
 
-First thing first, you need a machine to install InfluxDB and Grafana. I've
+First things first, you need a machine to install InfluxDB and Grafana. I've
 chosen Debian 9, you may choose something else.
 
 ## InfluxDB
@@ -39,7 +39,7 @@ _internal
 
 Success! We now have InfluxDB up and running and listening on `localhost:8086`.
 
-Now lets create a new database to play around in.
+Now let's create a new database to play around in.
 
 ```sql
 > CREATE DATABASE testdata
@@ -82,10 +82,10 @@ Come to a command prompt like above, and make sure `curl` in installed.
 ~$ curl -i -XPOST 'http://localhost:8086/write?precision=s&db=testdata' --data-binary 'temp,Name=data1 value=101'
 ```
 
-Lets talk about what's happening here. You are making a `POST` to the `8086` endpoint. Then you have a `precision`
+Let's talk about what's happening here. You are making a `POST` to the `8086` endpoint. Then you have a `precision`
 declaration at `s` which means seconds. (you can change that, and I'm pretty sure it defaults to `ms` but please read the docs ;) ). You point to the `testdata` database, and inject the values like you did at the command line. Success! You now have a way to remotely add data to `InfluxDB`. (Bonus, try from remote machine to see if it works too :) )
 
-Ok, so we now can inject data both locally and remotely. Now lets get some real data so we can start playing with our Grafana instance.
+Ok, so we now can inject data both locally and remotely. Now let's get some real data so we can start playing with our Grafana instance.
 
 Go ahead and `wget` down the **NOAA_data.txt** file to your influxdb local machine. Then run the following command to import the data into a new database.
 
@@ -118,7 +118,7 @@ h2o_quality
 h2o_temperature
 ```
 
-And now lets look at some data from `h2o_temperature`.
+And now let's look at some data from `h2o_temperature`.
 
 ```sql
 > SELECT * FROM h2o_temperature LIMIT 5
@@ -132,13 +132,13 @@ time                degrees location
 1439856720000000000 68      coyote_creek
 ```
 
-Awesome! We now have data injected into our database and we can read from it. Now lets open up Grafana.
+Awesome! We now have data injected into our database and we can read from it. Now let's open up Grafana.
 
 ## Grafana
 
 We need to install it first, if you noticed before hand we just installed InfluxDB. This was on purpose
 in case you wanted to decoulpe the software. Both use HTTP to talk, so as long as they have network access
-you can talk each of them. First thing first, lets install Grafana. (I'm choosing stable here because I want
+you can talk each of them. First things first, let's install Grafana. (I'm choosing stable here because I want
 this to be long lived.)
 
 ```bash

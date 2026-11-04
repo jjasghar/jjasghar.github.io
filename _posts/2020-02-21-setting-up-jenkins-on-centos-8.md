@@ -11,7 +11,7 @@ my blog instead of [here](https://linuxize.com/post/how-to-install-jenkins-on-ce
 
 ## Vanilla Jenkins
 
-First thing first, we need some `jdk`. Time to install it.
+First things first, we need some `jdk`. Time to install it.
 
 ```bash
 sudo dnf install -y java-1.8.0-openjdk-devel wget epel-release
@@ -36,21 +36,21 @@ sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
 sudo firewall-cmd --reload
 ```
 
-Awesome, now we go to `http://<ip>:8080` and put in the inital `AdminPassword`.
+Awesome, now we go to `http://<ip>:8080` and put in the initial `AdminPassword`.
 
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-Wonderful, now lets get `nginx` infront of it so we can connect to a webserver instead of the
+Wonderful, now let's get `nginx` in front of it so we can connect to a webserver instead of the
 `java` application directly.
 
 ## nginx forwarding for Jenkins
 
-If you google for `nginx jenkins` you come directly to the [Jenkins Wiki](https://wiki.jenkins.io/display/JENKINS/Jenkins+behind+an+NGinX+reverse+proxy). It's not wrong, it's just more informatin then we need
+If you google for `nginx jenkins` you come directly to the [Jenkins Wiki](https://wiki.jenkins.io/display/JENKINS/Jenkins+behind+an+NGinX+reverse+proxy). It's not wrong, it's just more information than we need
 right now.
 
-Lets first install `ngnix`.
+Let's first install `nginx`.
 
 ```bash
 sudo dnf install -y nginx
@@ -68,7 +68,7 @@ sudo firewall-cmd --reload
 
 You should be able to hit `http://<ip>` and see the nginx website.
 
-Next, I disabled SELinux. I converted it from enforcing to disabled and reboot my machine.
+Next, I disabled SELinux. I converted it from enforcing to disabled and rebooted my machine.
 
 Now, let’s configure the meat of this blog post, lets get some self signed certs going:
 

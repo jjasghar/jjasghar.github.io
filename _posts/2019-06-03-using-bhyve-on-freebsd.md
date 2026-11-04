@@ -16,7 +16,7 @@ got me over the edge.
 
 **NOTE:** These commands all have to be run as `root`.
 
-1) First thing first, install grub2-bhyve. This allows for the Linux kernel to
+1) First things first, install grub2-bhyve. This allows for the Linux kernel to
 boot and is _required_.
 
 ```bash

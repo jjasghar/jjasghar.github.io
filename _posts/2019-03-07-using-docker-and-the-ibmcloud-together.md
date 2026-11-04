@@ -15,8 +15,8 @@ IBM Container Registry. OK! Lets get started.
 
 ## Docker
 
-You need to install Docker, there are quite a few ways do do this, but the first and
-best place to is by going to [the main docs site][dockerinstall]. Try to keep the the
+You need to install Docker, there are quite a few ways to do this, but the first and
+best place is by going to [the main docs site][dockerinstall]. Try to keep the
 most up-to-date, and install it for your operating system.
 
 At the time of this blog post, there are two main editions of Docker, I'd like to take
@@ -25,7 +25,7 @@ or `docker-ce`, and Docker Enterprise Edition, or `docker-ee`. They both have ad
 are aimed at different use cases. I strongly suggest after walking through this blog post
 revisiting if `docker-ce` or `docker-ee` is the right fit for you.
 
-Which ever you choose, these commands should work on either.
+Whichever you choose, these commands should work on either.
 
 ### Docker CLI
 
@@ -104,8 +104,8 @@ containers this way they are ephemeral. Ephemeral means they only live for the t
 running, so as soon as you exit it is now gone. We'll show you how to do longer lived containers
 in a little while.
 
-Now lets play around in the container for a second. Being a CentOS machine, you have `yum` so
-lets install something.
+Now let's play around in the container for a second. Being a CentOS machine, you have `yum` so
+let's install something.
 
 ```bash
 [root@583c6cec5d41 /]# yum install vim
@@ -182,14 +182,14 @@ ENTRYPOINT ["vim"]
 
 Save the file and make sure it's called `Dockerfile`.
 
-Lets talk about what these three lines mean.
+Let's talk about what these three lines mean.
 
 - `FROM`       : creates a layer from the `centos`:`latest` Docker image
 - `RUN`        : builds your container by installing `vim` into it and creating a directory called `/vim`
 - `WORKDIR`    : informs the container where the working directory should be for it
 - `ENTRYPOINT` : is the command that is ran when the container starts, instead of `/bin/bash` like how we did above
 
-Now lets build this locally. Run the following in the directory that the `Dockerfile` is and lets see this come
+Now let's build this locally. Run the following in the directory that the `Dockerfile` is and lets see this come
 together.
 
 ```bash
@@ -220,7 +220,7 @@ $
 
 Congratulations! You have built your first `Dockerfile` and customized docker container.
 
-Lets give it a run now. Go ahead and run the following command.
+Let's give it a run now. Go ahead and run the following command.
 
 ```bash
 $ docker run -it eda2652aa25e
@@ -251,7 +251,7 @@ Inside of `vim` type `:e hello`. You should see `hello world` come up! As you ca
 the file you created on the host machine, created a contiainer with `vim` inside, mounted the directory
 and was able to open the file!
 
-If you'd like you can type `i` and type something out, then type `:wq` when your done. The container should
+If you'd like you can type `i` and type something out, then type `:wq` when you're done. The container should
 close out, and then you can type the following on your command line:
 
 ```bash
@@ -263,7 +263,7 @@ $
 
 **Note**: Obviously `I added th is line from my container` will be what you write not this statement.
 
-Awesome! Now lets start figuring out how to share this container to the world.
+Awesome! Now let's start figuring out how to share this container to the world.
 
 ### IBM cloud
 
@@ -293,7 +293,7 @@ Tip: If you are managing Cloud Foundry applications and services
 $
 ```
 
-Now lets create a container registry name-space for you. You need to take a moment and think of something
+Now let's create a container registry name-space for you. You need to take a moment and think of something
 globally unique, and that will be descriptive enough to tell you what it is. If you're lazy like me using
 your username or something to that effect is a safe bet.
 
@@ -310,7 +310,7 @@ This command uses the container registry plugin to create the name space of `jja
 
 Luckily IBM has created some short cuts for you. If we would like to push our container to the IBM
 container registry that we have created it's just one command.
-Lets quickly talk about what's happening before running this. This will build the container, tag it
+Let's quickly talk about what's happening before running this. This will build the container, tag it
 with the name of `vim` and the version of `1` and then push it to the registry. You'll need to change
 your name from the `jjasghar` and maybe change the name of the container too.
 
@@ -341,7 +341,7 @@ OK
 
 Huzzah! We now have a container pushed to the IBM container registry that we have created!
 
-Lets verify that it's pushed run the following command to list out your containers:
+Let's verify that it's pushed run the following command to list out your containers:
 
 ```bash
 $ ibmcloud cr image-list
@@ -353,7 +353,7 @@ us.icr.io/jjasghar/vim   1     831fcbac319d   jjasghar    4 minutes ago   120 MB
 OK
 ```
 
-Now lets pull your container down run the following command:
+Now let's pull your container down run the following command:
 
 ```bash
 $ docker run -v ${PWD}:/vim -it registry.ng.bluemix.net/jjasghar/vim

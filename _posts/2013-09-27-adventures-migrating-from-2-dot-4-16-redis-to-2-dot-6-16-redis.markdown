@@ -45,7 +45,7 @@ redis-cli -h redis-master --latency
 
 Most, if not all are pretty self explanatory.  The most interesting one of them
 all is probably the last one, the `--latency`.  It used it as a way to emulate
-something poking my redis instance during the inital clone. The thing we,
+something poking my redis instance during the initial clone. The thing we,
 [where|are|still] worried about is customer impact, and as long as the number
 didn't sky rocket then stay high it was an acceptable risk.
 

@@ -12,7 +12,7 @@ it to work "back in the day" but I really wanted my tutorial re-written up.
 
 ## Pre-reqs
 
-I spun up a VM with 32 Gigs of RAM and 8 vCPUs, and pointed the extrenal IP
+I spun up a VM with 32 Gigs of RAM and 8 vCPUs, and pointed the external IP
 to `chat.asgharlabs.io`.
 On the machine I ran:
 ```bash
@@ -111,13 +111,13 @@ You should now have the "Open Shared Document" option on the meeting!
 
 #### jibri setup
 
-The the streaming software is called: [jibri][jibri].
+The streaming software is called: [jibri][jibri].
 
 > Jibri provides services for recording or streaming a Jitsi Meet conference.
 
 > It works by launching a Chrome instance rendered in a virtual framebuffer and capturing and encoding the output with ffmpeg. It is intended to be run on a separate machine (or a VM), with no other applications using the display or audio devices. Only one recording at a time is supported on a single jibri.
 
-Being it assumes you have a _seperate_ machine for jibri, i spun up another machine
+Being it assumes you have a _separate_ machine for jibri, i spun up another machine
 without an external IP to run this software. jibri was built with 16.04, so I spun one
 up.
 
@@ -167,7 +167,7 @@ sudo chown root:root /usr/local/bin/chromedriver
 sudo chmod 0755 /usr/local/bin/chromedriver
 ```
 
-And finally the misc tools and dependancies for `jibri`
+And finally the misc tools and dependencies for `jibri`
 ```bash
 apt-get install default-jre-headless ffmpeg curl alsa-utils icewm xdotool xserver-xorg-input-void xserver-xorg-video-dummy
 apt autoremove

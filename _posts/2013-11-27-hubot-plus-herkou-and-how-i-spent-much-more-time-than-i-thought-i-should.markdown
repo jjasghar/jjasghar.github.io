@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Hubot+Herkou+Campfire and how I spent much more time than I thought I should"
+title: "Hubot+Heroku+Campfire and how I spent much more time than I thought I should"
 date: 2013-11-27 11:41
 comments: true
 categories: sysadmin linux

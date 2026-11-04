@@ -15,7 +15,7 @@ Let's start by setting up the _actual_ jail.
 
 ## FreeBSD Jail
 
-First thing first, you "install" the Jail source code with `bsdinstall` like the following:
+First things first, you "install" the Jail source code with `bsdinstall` like the following:
 ```bash
 bsdinstall jail /usr/home/jails/dnshole
 ```
@@ -69,7 +69,7 @@ And check the status with `jls`, and get "into" the jail with `jexec 1 sh`
 
 ## DNSMasq
 
-Now that you've gotten a jail running, you need to install some software. This is pretty straight foward:
+Now that you've gotten a jail running, you need to install some software. This is pretty straightforward:
 
 ```
 pkg install dnsmasq
@@ -107,7 +107,7 @@ server=8.8.4.4
 server=2001:4860:4860::8844
 ```
 
-Finall pull down some adblocking:
+Finally, pull down some adblocking:
 ```
 cd /usr/local/etc/dnsmasq.conf.d
 fetch https://raw.githubusercontent.com/acidwars/AdBlock-Lists/master/adblock.conf

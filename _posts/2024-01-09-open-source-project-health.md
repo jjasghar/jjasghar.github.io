@@ -9,7 +9,7 @@ categories: opensource linux ibm
 
 ## Introduction
 
-These are some criteria for understanding the health of an open-source project. These guidelines should be researched and understood before leveraging anything from upstream. There will be situations where some of these guidelines may clash, and that is expected.  In this situation you should make a judgement call on what the risker option is of the offending guideline, take a moment and balance this. Many of these markers come with experience in the open-source ecosystem, and eventually, you get a “feel” for the health by just looking at the main pages of the open-source project.
+These are some criteria for understanding the health of an open-source project. These guidelines should be researched and understood before leveraging anything from upstream. There will be situations where some of these guidelines may clash, and that is expected.  In this situation you should make a judgement call on what the riskier option is of the offending guideline, take a moment and balance this. Many of these markers come with experience in the open-source ecosystem, and eventually, you get a “feel” for the health by just looking at the main pages of the open-source project.
 
 **Note**: These guidelines are not in any “order” or "have a value.” You should ask yourself questions before adopting or building upon any open-source project.
 
@@ -21,7 +21,7 @@ Reason: This lists how many people get emailed if anything happens to the reposi
 
 - When was the last “commit?”
 
-Reason: This shows how often things are fixed, or updates happen on the repository.  This could be as easy as a Documentation PR to a brand new feature, and anything in between. This goes hand in hand with the “watchers.” This also could be a CI platform running daily builds or security checks, this a sign of a positive health for a project; letting the bots keep the health is always a good sign.
+Reason: This shows how often things are fixed, or updates happen on the repository.  This could be as easy as a Documentation PR to a brand new feature, and anything in between. This goes hand in hand with the “watchers.” This also could be a CI platform running daily builds or security checks—this is a sign of a positive health for a project; letting the bots keep the health is always a good sign.
 
 - What is the “oldest issue” on the project?
 
@@ -33,7 +33,7 @@ Reason: This shows they can get people to adopt and “run” their project quic
 
 - Is there a clear path to commitment to the project or ways to help?
 
-Reason: If the documentation doesn’t show a straightforward way to join/engage/help the project, this is a significant red flag for the project. Having an open-source project is about building something together, and if you can’t find a way into the project, this is a negative healthy sign.
+Reason: If the documentation doesn’t show a straightforward way to join/engage/help the project, this is a significant red flag for the project. Having an open-source project is about building something together, and if you can’t find a way into the project, this is a negative health sign.
 
 - Is there more than “one” contributor?
 
@@ -45,7 +45,7 @@ Reason: With the issues of other open-source projects building upon other bits o
 
 - Is there a standard license for the project?
 
-Reason: As open-source developers, we must pay attention to the projects we want to use; if the project uses a “nonstandard” license, this could cause unforseen issues. The standard “acceptable” licenses for generic open source adoption are Apache License 2.0, BSD-3-Clause, and the MIT License. If a project is using something different, and you really need to understand the rules that the upstream project now abides by.
+Reason: As open-source developers, we must pay attention to the projects we want to use; if the project uses a “nonstandard” license, this could cause unforeseen issues. The standard “acceptable” licenses for generic open source adoption are Apache License 2.0, BSD-3-Clause, and the MIT License. If a project is using something different, you really need to understand the rules that the upstream project now abides by.
 
 - What is their policy for releasing “numbered” releases?
 
@@ -55,6 +55,6 @@ Reason: If they are going via the SemVer release process, how far are they from 
 
 Many of these positives and negatives are situational, and there are many more exceptions than this being a “steadfast” rubric to grade against. Like all open-source and professional developers, you must use your judgment and understand that taking code from upstream has associated risks.
 
-It should be mentioned that even with some of this negotiate traits, if you are thinking about adopting a project you can always help resolve the “marks against it.” Every negative in the open-source space can be turned to an opportunity to help commit and grow the project.
+It should be mentioned that even with some of these negative traits, if you are thinking about adopting a project you can always help resolve the “marks against it.” Every negative in the open-source space can be turned to an opportunity to help commit and grow the project.
 
 Though more often, the positives outweigh the negatives, which is the foundation upon which open-source is built.

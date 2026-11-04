@@ -10,10 +10,10 @@ weather it be a `gem` or `iso` over and over. I finally decided to create a
 local Squid proxy, to cache my downloads so I don't have to keep going out
 to the internet to pull things down.
 
-First thing first. Install Docker. There are a ton of how-tos, I'd google
+First things first. Install Docker. There are a ton of how-tos, I'd google
 for em.
 
-Awesome, lets start the next part. Pull down the defacto squid container:
+Awesome, let's start the next part. Pull down the de facto squid container:
 
 ```shell
 $ docker pull sameersbn/squid:3.3.8-23
@@ -94,7 +94,7 @@ $ cd squid
 ~/squid $ emacs squid.conf
 ```
 
-Make any changes you think you might need, I'm still learning them myself. After your done,
+Make any changes you think you might need, I'm still learning them myself. After you're done,
 start it back up!
 
 ```shell

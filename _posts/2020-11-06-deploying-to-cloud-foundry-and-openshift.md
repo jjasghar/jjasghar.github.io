@@ -47,7 +47,7 @@ Python 3.6.8 (default, Apr  2 2020, 13:34:55)
 [GCC 4.8.5 20150623 (Red Hat 4.8.5-39)] on linux
 ```
 
-Now install the dependancies, and verify it works as expected.
+Now install the dependencies, and verify it works as expected.
 
 ```bash
 ./venv/bin/pip install -r requirements.txt
@@ -97,19 +97,19 @@ the `--recent` if you want to take the _most_ recent logs.
 ibmcloud cf logs hellonerds --recent
 ```
 
-Awesome, and congrats, we have successfully ran our code locally and
-deployed our code to CF. Now lets look at the same code on OpenShift.
+Awesome, and congrats, we have successfully run our code locally and
+deployed our code to CF. Now let's look at the same code on OpenShift.
 
 ## OpenShift
 
-Now lets take the same code, and deploy it onto OpenShift. OpenShift
+Now let's take the same code, and deploy it onto OpenShift. OpenShift
 under the covers is Kubernetes, so we'll need to build a container
 and deploy it. If you notice, I already have a `Dockerfile` in the
 directory. If you want, you can build it locally, but as you can see
-it's very sparse, and does what you'd expect such what a simple app
+it's very sparse, and does what you'd expect of a simple app
 would require.
 
-The first step is you'll need to login you OpenShift cluster, there's
+The first step is you'll need to log into your OpenShift cluster, there's
 a handful of ways to do this, I use the "Copy Login Command" from the
 main console, and get something like:
 
@@ -136,7 +136,7 @@ oc new-app . # you can also do the following if you want to point it to a remote
 ```
 
 You'll notice that it'll find the `Dockerfile` almost instantly, and even
-identify that it's an `python:3.7-alpine`. Pretty neat eh?
+identify that it's a `python:3.7-alpine`. Pretty neat eh?
 
 It'll kick off the build, and you can track it like it says:
 
@@ -147,7 +147,7 @@ Successfully pushed image-registry.openshift-image-registry.svc:5000/cfpython/cl
 Push successful
 ```
 
-Next, we need to expose the app, thats with the following command:
+Next, we need to expose the app, that's with the following command:
 
 ```bash
 oc expose svc/cloud-native-python-example-app

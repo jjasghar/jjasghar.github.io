@@ -27,7 +27,7 @@ like this?
 
 It might come out all gross, yeah that's a different post about [cli-table](https://github.com/LearnBoost/cli-table) which I hope i'll be
 doing after this post.  Anyway i digress; that's great, so you get the data hubot gives you the date, but man you have your password in your
-shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckly, Matt Bridges showed
+shell script, you have to shell out to do it, and honestly, it seems a tad bit hacky right?  Luckily, Matt Bridges showed
 me how to leverage coffeescript and the [mysql npm](https://www.npmjs.org/package/mysql) package to do just that.
 
 First off, you'll need to add to your `package.json` something like:
@@ -45,7 +45,7 @@ At the top of your coffee script add something like this, it will open up the ab
   mysql = require 'mysql'
 ```
 
-Awesome, now lets convert that top sql to coffee, first thing you need to do is create the connection:
+Awesome, now let's convert that top sql to coffee, first thing you need to do is create the connection:
 
 ```js
   connection = mysql.createConnection
@@ -70,7 +70,7 @@ After this, now you'll want to do something like:
 ```
 
 This also is pretty self explanatory, you put your sql statement in as a variable, format it with mysql, open the connection via the query command, then
-if it errors, throws the error, otherwise outputs each row and a seporate `msg.send`.
+if it errors, throws the error, otherwise outputs each row and a separate `msg.send`.
 
 Yes, yes, this is dirty, gross and if you have anything more than 3-4 users you're gonna get annoyed really fast. Again, this is just an example, the cli-table tutorial
 will make this more enjoyable.

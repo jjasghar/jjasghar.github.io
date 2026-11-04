@@ -8,7 +8,7 @@ categories: git openstack sysadmin
 
 I have a bunch of [repos](https://github.com/stackforge/?query=cookbook-openstack) that I have to watch over and make patches against.
 Trying to figure out what branch I left checked out can be...well frustrating.
-I put all my [openstack](http://www.openstack.org) repos in a sub directory from my standard `~/repo/` directory. I wanted to figure out a way to check all the active branches that I had  checked out; and it turns out that it was hellva a lot more challanging that expected.
+I put all my [openstack](http://www.openstack.org) repos in a sub directory from my standard `~/repo/` directory. I wanted to figure out a way to check all the active branches that I had  checked out; and it turns out that it was helluva lot more challenging than expected.
 
 As a sysadmin, you probably say ok, `git branch | awk '/\*/ { print $2; }'` seems ok, but man that's a bitch to write.
 

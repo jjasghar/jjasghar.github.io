@@ -54,11 +54,11 @@ kubectl create clusterrolebinding cluster-admin-binding-${USER} --clusterrole cl
 ```
 
 This will make sure that when you apply the manifests the `prow` instance can
-create all the different things that is required on your Kubernetes cluster.
+create all the different things that are required on your Kubernetes cluster.
 
 ### Create a GitHub Secret
 
-Next you need ot cerate your secrets for your instance of `prow`. Using the following
+Next you need to create your secrets for your instance of `prow`. Using the following
 commands you can create your main `secret` to send the Webhook endpoint.
 Use the `github_token` you created earlier for the 3rd command.
 

@@ -96,7 +96,7 @@ output {
 
 I should tell you here, that the `keywords` won't work with hashtags. It seems
 that we connect to the "streaming" api, and at least with the account I set up
-you can only get words not hashtags. I'm investigating this farther.
+you can only get words not hashtags. I'm investigating this further.
 
 After this, run `docker compose up` again then:
 

@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Help! I lost my vaildation.pem"
+title: "Help! I lost my validation.pem"
 date: 2014-03-18 16:39:04 -0500
 comments: true
 categories: chef sysadmin
 ---
 
-So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my `validation.pem` and my `chef-webui.pem`...went missing. I had to regenerate my vaildation.pem without my chef-webui. These commands are on open source
+So I recently moved chef servers. I had a handful of hiccups on the way. The main one was my `validation.pem` and my `chef-webui.pem`...went missing. I had to regenerate my validation.pem without my chef-webui. These commands are on open source
 chef 11 server.
 
-(OK, fine I broke them, but this post is how to recreate either with `knife` on your workstation incase **cough**like me**cough** you have lost your chef-webui.)
+(OK, fine I broke them, but this post is how to recreate either with `knife` on your workstation in case **cough**like me**cough** you have lost your chef-webui.)
 
 It turns out there is a great simple command to re-create your validation.pem.
 

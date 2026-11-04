@@ -6,7 +6,7 @@ categories: vmware chef sysadmin
 ---
 
 Something I've started to discuss more often is the idea of using a
-[cookbook-generator][docscookbook] sooner then later. Unfortunately, if you start
+[cookbook-generator][docscookbook] sooner rather than later. Unfortunately, if you start
 too soon, it can cause some significant confusion to a newbie Chef user. My post
 here is going to do the best I can to explain why you should and give you a clear
 understanding why you need to put it in your workflow as soon as possible.
@@ -42,7 +42,7 @@ $ chef generate generator <name-generator>
 ```
 
 This gives you a generic generator, that you can start from scratch. Personally, I think it's
-a tad bit too stripped down for most, so lets start with something that is a bit more complete.
+a tad bit too stripped down for most, so let's start with something that is a bit more complete.
 
 ```bash
 ~ $ git clone https://github.com/chef-partners/cookbook-guide-generator.git
@@ -67,7 +67,7 @@ CONTRIBUTING.md Guardfile       README.md       TESTING.md      metadata.rb     
 ```
 
 As you can see, it's a pretty large framework for a typical community cookbook. Everything ranging
-from a `TESTING.md` to a `test/` directory, to even two `.kitchen.yml`s! Now, lets start playing with it.
+from a `TESTING.md` to a `test/` directory, to even two `.kitchen.yml`s! Now, let's start playing with it.
 Go ahead and open up the following:
 
 ```bash
@@ -78,7 +78,7 @@ Go ahead and open up the following:
 .kitchen.docker.yml .kitchen.yml
 ```
 
-Pretty slick eh? Now lets edit the contents of a file. Go ahead and do the following:
+Pretty slick eh? Now let's edit the contents of a file. Go ahead and do the following:
 
 ```bash
 ~ $ vi ~/<name-generator>/cookbooks/code_generator/cookbooks/code_generator/templates/default/kitchen.docker.yml.erb

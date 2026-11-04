@@ -68,7 +68,7 @@ $ bats test.bats
 ```
 
 Success! Congratulations you've written your first test and now know how get `bats-core`
-to read output. Now lets move to a more _real_ example.
+to read output. Now let's move to a more _real_ example.
 
 ## Red-Green Interate
 

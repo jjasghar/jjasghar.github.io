@@ -30,7 +30,7 @@ uname -r
 reboot
 ```
 
-Validate that you are running the newest kernal, then run the binary from Nvidia.
+Validate that you are running the newest kernel, then run the binary from Nvidia.
 
 ```bash
 uname -r

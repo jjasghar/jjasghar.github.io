@@ -5,24 +5,24 @@ date: 2022-06-06 08:34:01
 categories: sysadmin linux
 ---
 
-Lets say you're building a [Proxmox][proxmox] machine, and you've only been given
+Let's say you're building a [Proxmox][proxmox] machine, and you've only been given
 one IP. Could be a static IP on a hosted bare metal machine, could be your home
 lab, it doesn't really matter. If you wanted to spin up machine _inside_ of the
 Proxmox instance these notes are for you.
 
-First thing first, you need to create _two_ Linux Bridges. Lets say you have 
+First things first, you need to create _two_ Linux Bridges. Let's say you have 
 `eth0` as your physical NIC, with the IP of `192.168.1.100/24`. You'd want to
 create `vmbr0` giving it that `.100` address and `slaving` it to `eth0`.
 
-Now with that you can create `vmbr1` which'll be the actual NIC that you're
+Now with that you can create `vmbr1` which'll be the actual NIC that your
 internal network will live on. You can give it any IP range, but strongly suggest
 an internal network space like `10.`, `172.`, or `192.`.
 
 Now when you spin up machines "inside" your network add the `vmbr1` NIC to it, 
-wiether it be a LXC container or VM, and give it an IP in that space and you should
+whether it be a LXC container or VM, and give it an IP in that space and you should
 be able to `ping` around.
 
-If you want to get out to the internet you need to some `iptables` built.
+If you want to get out to the internet you need some `iptables` built.
 
 `ssh` into your host machine and run this:
 ```
@@ -45,7 +45,7 @@ iptables -t nat -A PREROUTING -p tcp -d <public-ip> --dport 9000 -i vmbr0 -j DNA
 Finally, adding static IPs isn't fun, so it's useful to have a DHCP server on that network.
 
 Here's the _minimal_ `dnsmasq` you can use to get it to give out IPs in `172.16.1.0/24`
-network. **Note**: the `172.168.1.1` is the IP for `vmbr1` which is the gateway, and
+network. **Note**: the `172.16.1.1` is the IP for `vmbr1` which is the gateway, and
 I'm only giving out IPs from `.50` to `.240`.
 
 ```ini

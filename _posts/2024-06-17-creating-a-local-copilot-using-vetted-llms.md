@@ -6,14 +6,14 @@ categories: ai linux programming
 ---
 
 First off, I want to thank [Daniel Avila][daniel] for his post [here][main].
-It inspired [Paul Czarkowski][paul] and I to create this [video][video] on how to build
+It inspired [Paul Czarkowski][paul] and me to create this [video][video] on how to build
 an IBM and Red Hat based version. Thank you Daniel!
 
 ## Installing `ollama`
 
 In order to jump down this path, you need to have a way to run local LLMs on your laptop. Luckily that's where
-`ollama` comes into play. You can do your research [here][ollama] but the short of it, it's a an application
-that will host/run the LLM on you laptop.
+`ollama` comes into play. You can do your research [here][ollama] but the short of it, it's an application
+that will host/run the LLM on your laptop.
 
 1. Head on over to <https://ollama.com/download> and download your version of `ollama` and start it up.
 2. Next you need to pull down (in this case) trusted LLM of `granite-code`.

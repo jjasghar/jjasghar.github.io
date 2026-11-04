@@ -12,7 +12,7 @@ whatever reason as soon as I got my head wrapped around it I fell in love.
 
 Here are my notes on building a new gerrit instance on Debian 10.
 
-First thing first, make sure your machine is up-to-date.
+First things first, make sure your machine is up-to-date.
 
 ```bash
 $ sudo apt-get update && sudo apt-get upgrade -y

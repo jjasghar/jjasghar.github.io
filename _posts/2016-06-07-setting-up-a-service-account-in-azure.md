@@ -7,12 +7,12 @@ categories: azure chef
 
 I have been tasked with some [Azure][azure] work for chef, including [knife-azure][knife].
 In the process of setting it up, the new version of Azure is called [ARM][arm],
-unfortunatly the majority of plugins play off of [ASM][asm] also known as classic.
+unfortunately the majority of plugins play off of [ASM][asm] also known as classic.
 
 The newest version of knife-azure 1.6.0, now supports `knife azurerm` commands
 to directly talk to ARM.
 
-Unfortunatly you need to have a [Service Account][service] for this to work. I
+Unfortunately you need to have a [Service Account][service] for this to work. I
 walked through this; and here are my notes for my future self. Including the errors: :wink:
 
 ```bash
@@ -92,7 +92,7 @@ I set my `.chef/knife.rb` with the following:
 knife[:azure_tenant_id] # found via: tenantId=$(azure account show -s <subscriptionId> --json | jq -r '.[0].tenantId')
 knife[:azure_subscription_id] # found via: <subscriptionId>
 knife[:azure_client_id] # appId=$(azure ad app show --search <principleappcreated> --json | jq -r '.[0].appId')
-knife[:azure_client_secret] # password you set at initally
+knife[:azure_client_secret] # password you set initially
 ```
 
 After this I was able to login via this account by `knife-azure` and create a vm:

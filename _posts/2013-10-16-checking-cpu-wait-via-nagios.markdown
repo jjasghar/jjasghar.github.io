@@ -6,9 +6,9 @@ comments: true
 categories: linux sysadmin nagios
 ---
 
-So our machines swap....swap alot. There are the  typical nagios system checks, you can have the `check_swap` call, but at my company the < 20 % hits so often we needed to figure out a way to get warned about crippling proformance. We discovered that when a machine has CPU WAIT spikes, the proformance for the machine tanks, so I tried to find a check for specificly monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.
+So our machines swap....swap a lot. There are the  typical nagios system checks, you can have the `check_swap` call, but at my company the < 20 % hits so often we needed to figure out a way to get warned about crippling performance. We discovered that when a machine has CPU WAIT spikes, the performance for the machine tanks, so I tried to find a check for specifically monitor the CPU WAIT.  I should mention also that most/all of the boxes we run are VMs, and waiting on IO for swap makes a sad sysadmin.
 
-I took a stab at creating a check myself and the following is a simple nagios check that you can run via NRPE.  The `PERCENTAGE` line is changeable, I'd make sure your alarm reflects your error cases. We choose 10 % because that's when we started seeing real prefomance issues, but as all sysadmins know any CPU WAIT is bad in general.
+I took a stab at creating a check myself and the following is a simple nagios check that you can run via NRPE.  The `PERCENTAGE` line is changeable, I'd make sure your alarm reflects your error cases. We choose 10 % because that's when we started seeing real performance issues, but as all sysadmins know any CPU WAIT is bad in general.
 
 ```bash
 #!/bin/bash
@@ -28,4 +28,4 @@ elif [ ${CPUWAIT} -ge ${PERCENTAGE} ]
 exit $stateid
 ```
 
-You are probably wondering "There are alot of great systems checks on [Nagios Exchange](http://exchange.nagios.org/)," but the site is so hard to use and useally much more than I need, like in this case.
+You are probably wondering "There are a lot of great systems checks on [Nagios Exchange](http://exchange.nagios.org/)," but the site is so hard to use and usually much more than I need, like in this case.

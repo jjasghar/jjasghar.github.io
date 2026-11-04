@@ -38,7 +38,7 @@ reason to.
 ## minikube
 <a name="minikube"></a>
 
-`minikube` is the defacto entry point for most people learning or figuring out how to run
+`minikube` is the de facto entry point for most people learning or figuring out how to run
 kubernetes on a local machine. I've even heard of some people using `minikube` to run Dev or
 QA environments on shared VMs on clouds. This feels a lot like the old [devstack][devstack]
 options back in the OpenStack days. Honestly, it has echos of it, and I feel like it's probably
@@ -78,7 +78,7 @@ minikube delete
 
 I should say, if you had installed `kubectl` we didn't have `export` anything or change any configuation
 around, from what I know that's by design. `kubectl` defaults to the localhost that `minikube` runs on,
-which allows for a small, but valuble, positive UX situation.
+which allows for a small, but valuable, positive UX situation.
 
 <a name="dockerindocker"></a>
 ## docker in docker
@@ -141,7 +141,7 @@ snap install microk8s --classic
 ```
 
 Obiviously if you don't have `snap` you're out of luck, but if you can swing it, this is a way
-to get a kuberenetes cluster up and running extremely quickly. One oddity with the system though
+to get a kubernetes cluster up and running extremely quickly. One oddity with the system though
 is every command is prefixed. Take a look at this example:
 
 ```bash

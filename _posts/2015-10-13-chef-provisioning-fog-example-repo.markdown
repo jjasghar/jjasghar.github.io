@@ -10,7 +10,7 @@ After my [post](http://jjasghar.github.io/blog/2015/09/25/chef-provisioning-fog-
 [chef-provisioning-fog](https://github.com/chef/chef-provisioning-fog) I realized that sometimes people don't want how to build
 the plane, they just want to fly.
 
-So I spent some time building a "skeleton" repo for for chef-provisioning-fog and called it
+So I spent some time building a "skeleton" repo for chef-provisioning-fog and called it
 [chef-provisioning-fog-example](https://github.com/jjasghar/chef-provisioning-fog-example). Turns out I wasn't the first person to
 think of this. [Martin Smith](https://github.com/martinb3/) had the exact same idea with
 [chef-provisioning-rackspace](https://github.com/martinb3/chef-provisioning-rackspace-example). I tip my hat to him for coming up

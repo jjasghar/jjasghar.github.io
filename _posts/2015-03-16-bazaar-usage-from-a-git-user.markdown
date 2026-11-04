@@ -14,7 +14,7 @@ the jury is still out on that for my opinion; but it really is a tad bit differe
 I'm putting a collection of commands here, so if you decided you'd like to put in
 a "PR" or in [launchpad](https://launchpad.net/)'s term "Propose for merging" merge.
 
-Lets say you've found a typo and you'd like to fix it; something like [this](https://code.launchpad.net/~d-jj/ironic/ironic-conductor/+merge/253085).
+Let's say you've found a typo and you'd like to fix it; something like [this](https://code.launchpad.net/~d-jj/ironic/ironic-conductor/+merge/253085).
 
 These steps assume you have a [launchpad id](https://login.launchpad.net/+login) and account set up correctly, and all you
 want to do is push up a change to an issue you've found.

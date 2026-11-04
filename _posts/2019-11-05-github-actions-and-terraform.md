@@ -6,7 +6,7 @@ categories: linux sysadmin terraform
 ---
 
 I was at a recent conference when people were discussing their usage of `terraform`.
-If you don't know, [terraform][terraform] has become the defacto standard for declaring
+If you don't know, [terraform][terraform] has become the de facto standard for declaring
 cloud infrastructures in a consistent and repeatable fashion. This is nothing new, and
 I've used it to declare [GCP][gcp], [AWS][aws], and even [IBM Cloud][ibm]. What caught my interest was
 using terraform to declare [GitHub resources][github] like repositories and team memberships.
@@ -60,7 +60,7 @@ All in all it wasn't too exciting, but the next part was where the real money is
 
 Ok, let me paint a little picture here. My theory was this: I make a Pull Request to my [asgharlabs][asgharlabsgit]
 repository, say add a repository for the organization, and GitHub Actions runs it through some validation.
-I check the `terraform plan` and if I agree that it'll do what expect, I can click the green merge button, and it
+I check the `terraform plan` and if I agree that it'll do what I expect, I can click the green merge button, and it
 merges into master completing the workflow with a `terraform apply`.
 
 I've always been a fan of [travisci][travisci], but with GitHub Actions, and the flexibility it has this

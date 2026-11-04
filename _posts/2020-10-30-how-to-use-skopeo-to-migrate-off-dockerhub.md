@@ -22,7 +22,7 @@ hopefully it'll help someone in the future.
 
 # Setup
 
-First thing first, you need to install the app that'll do the heavy lifting for you.
+First things first, you need to install the app that'll do the heavy lifting for you.
 This is from Red Hat and called [skopeo][skopeo]. There's a couple ways to do install
 it, check out [the install.md][installmd] for your operating system.
 

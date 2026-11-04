@@ -12,7 +12,7 @@ Then I learned it in a nutshell: you know when you run `chef-client` or `chef-so
 
 This isn't just limited to error reporting, you can report a bunch of stuff, but errors are something that admins should visualize ASAP.
 
-This is AMAZINGLY useful if you have more than a couple nodes. Lets say you have 100-200ish nodes (like me) and you decided that you wanted to run `knife ssh 'chef_environment:staging' 'sudo chef-client'`.
+This is AMAZINGLY useful if you have more than a couple nodes. Let's say you have 100-200ish nodes (like me) and you decided that you wanted to run `knife ssh 'chef_environment:staging' 'sudo chef-client'`.
 
 
 Awesome, so it kicks off, you have a few changes but you had a typo in your `role[db_slave]`. Well, if you've ever used `knife ssh` before you'll know that it streams everything real-time 

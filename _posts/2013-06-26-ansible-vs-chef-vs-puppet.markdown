@@ -72,4 +72,4 @@ Ok, now that my little tl;dr of the pluses are done, I can start my views overal
 Conclusion
 ---------
 
-So I'll say this because I believe this: each of these tools are for different "size" infrastructures.  You can argue as much as you want; saying that "yes well you can use each in of the different sizes", but they were all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the the small corporate/budding-enterprise space, and ansible for the start ups.
+So I'll say this because I believe this: each of these tools are for different "size" infrastructures.  You can argue as much as you want; saying that "yes well you can use each in of the different sizes", but they all seem to have a natural fit.  puppet for the corporate/enterprise space, chef for the small corporate/budding-enterprise space, and ansible for the start ups.

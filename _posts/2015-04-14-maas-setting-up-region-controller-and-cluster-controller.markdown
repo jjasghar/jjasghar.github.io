@@ -7,12 +7,12 @@ categories: maas sysadmin
 ---
 
 I attempted to set up a `region-controller` inside of MAAS recently. It was a disaster;
-I ended up breaking my whole environment. Luckly it was a demo environment, so I scratched
+I ended up breaking my whole environment. Luckily it was a demo environment, so I scratched
 it and started from square one again. This post is how I got it working, most of this is
 out of the internet, but this is a distilled version so you can just see what you need to
 do.
 
-First thing first, on what you want your `region-controller` to be:
+First things first, on what you want your `region-controller` to be:
 
 ```bash
 ~$ sudo cat /var/lib/maas/secret

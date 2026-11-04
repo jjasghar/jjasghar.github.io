@@ -56,7 +56,7 @@ Exception: NoMethodError: undefined method `[]' for nil:NilClass
 
 Crap..
 
-Ok, lets try out with `-VV`
+Ok, let's try out with `-VV`
 
 ```ruby
 DEBUG: openstack_username Im_awsome_admin
@@ -96,7 +96,7 @@ ERROR: No IP address available for bootstrapping.
 What the hell does that mean? Well I'm not going to explain it all but it seems that by default Rackspace names the "public" and "private" networks as "Fixed" and "Floating."
 This is triggered a fog issue, where it's looking at the label for a network either "public" or "private" and blows up. There is a ticket in for this [here](https://tickets.opscode.com/browse/KNIFE-231) but it looks like it's stalled from late summer, early fall. Lammmeeee.
 
-So you are probably saying "Why don't you just rename them?" Good for you, great idea...but no, Openstack doesn't support that. So at this time, it looks like you'll have to delete them and rebuild them with the "public" and "private" names. Hopefully you've noticed this at just the begining of building out your machines, otherwise you'll have to nuke and pave everything you've done to get the new networks in.
+So you are probably saying "Why don't you just rename them?" Good for you, great idea...but no, Openstack doesn't support that. So at this time, it looks like you'll have to delete them and rebuild them with the "public" and "private" names. Hopefully you've noticed this at just the beginning of building out your machines, otherwise you'll have to nuke and pave everything you've done to get the new networks in.
 
 
 Ah!, almost forgot. Before you go I should mention a quick note, notice the lowercase p in both public and private. Yes, it's THAT picky...

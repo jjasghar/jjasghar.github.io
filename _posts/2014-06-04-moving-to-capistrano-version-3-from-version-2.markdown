@@ -84,7 +84,7 @@ config
 ```
 
 and adding it directory to the `(:deploy_to)/repo/.capignore`. I believe you can add it to your the root of your repo,
-and it should get there too, but I didnt do it that way. The only place it's referanced is [here](https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L45) so if you see fit, you could probably just remove the referance.
+and it should get there too, but I didn't do it that way. The only place it's referenced is [here](https://gist.github.com/jjasghar/d9369c60c51f79d6e7cc#file-submodule_strategy-rb-L45) so if you see fit, you could probably just remove the reference.
 
 You should be able to do a `cap staging deploy` now and you should notice something like:
 

@@ -18,10 +18,10 @@ a free-ish version quite easily.
 I did mine with an iPhone, but assuming Android can export the `vcf`
 file, this should work great.
 
-First off, you need to find you contact in the Contacts App. You should
+First off, you need to find your contact in the Contacts App. You should
 find a “Share Contact” button at the bottom, select the specific contact
-info you want to share (you can even do Note too!), and “Save it files.”
-This will put it in you iCloud file share, and move over to your laptop.
+info you want to share (you can even do Note too!), and “Save to Files.”
+This will put it in your iCloud file share, and move over to your laptop.
 
 Grab the file from your iCloud share (`your name.vcf`) and copy it to
 someplace on your laptop. I suggest changing the file name to something
@@ -33,7 +33,7 @@ website, which was a logical place to post this `.vcf` file.
 After getting the file added to my repository, I now have a "permanent"
 link to <https://jjasghar.me/jj_vcard.vcf>.
 
-And now all I had to do was create a QRcode to it:
+And now all I had to do was create a QR code to it:
 
 ```bash
 qrencode https://jjasghar.me/jj_vcard.vcf -o ~/Downloads/jjasghar_vcard_github.png
@@ -43,5 +43,5 @@ And if I wanted a "tap" share contact, I put that same link into an NFC tag or p
 card, and BOOM (`:boom:` didn't seem to work) done! (this is where the "ish" comes into play; you need to purchase
 these)
 
-FYI: People think you need to program the vCard into the QRcode or NFC, but it’s not; it’s actually a web link to a hosted place. Leveraging something like GitHub for this
+FYI: People think you need to program the vCard into the QR code or NFC, but it’s not; it’s actually a web link to a hosted place. Leveraging something like GitHub for this
 now you don’t need to pay the monthly or subscription cost for the exact same sharing tech.

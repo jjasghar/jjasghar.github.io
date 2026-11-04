@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Welcome to Jekyll and and not octopress anymore!"
+title:  "Welcome to Jekyll and not octopress anymore!"
 date:   2016-04-17 09:42:15 -0500
 categories:
 ---

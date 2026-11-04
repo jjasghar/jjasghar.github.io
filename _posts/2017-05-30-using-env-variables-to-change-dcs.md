@@ -17,7 +17,7 @@ to flip back and forth between DCs. There are plugins like [knife-block][block],
 I have even used in the past, but some places don't allow for extra plugins. This
 is a suggested way to do it purely through Ruby, Chef and your Shell.
 
-First thing first, you need to edit your `knife.rb` to allow for the ability to switch,
+First things first, you need to edit your `knife.rb` to allow for the ability to switch,
 take this fake example:
 
 ```ruby

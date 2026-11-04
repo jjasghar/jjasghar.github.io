@@ -19,7 +19,7 @@ docker: Error response from daemon: OCI runtime create failed: container_linux.g
 ERRO[0003] error waiting for container: context canceled
 ```
 
-We did some googling, and discovered it was a difference between, [`containerd`][containerd] and the original [`docker`][docker] implementation. We found the [github issue][github] but it was buried in the comments. I've put this post together hopefully to short circut someones searching.
+We did some googling, and discovered it was a difference between, [`containerd`][containerd] and the original [`docker`][docker] implementation. We found the [github issue][github] but it was buried in the comments. I've put this post together hopefully to short-circuit someone's searching.
 
 If you have Fedora "31" which I'm assuming is any "new" Fedora, do the following:
 

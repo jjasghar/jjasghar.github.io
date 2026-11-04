@@ -17,10 +17,10 @@ drops you into the chef world, walks you through some basic patterns and then st
 leveraging both via knife bootstrap and cloud providers for windows, and even shows how to leverage winrm if you have no exposure to it. This is a great book, I strongly suggest
 getting your hands on it.
 
-## View as a *nix admin with chef knowlege
+## View as a *nix admin with chef knowledge
 
 As a *nix admin by profession, this was a great overview, allowed me to leverage my chef knowledge already and started thinking of what I can do for my
-company to leverage the repeatable windows chef infurstruture. It opened my eyes to some very basic but lacking windows support.  If you look at the following snippet:
+company to leverage the repeatable windows chef infrastructure. It opened my eyes to some very basic but lacking windows support.  If you look at the following snippet:
 
 ```ruby
 if platform_family? 'debian'
