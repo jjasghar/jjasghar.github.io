@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+	<title>JJ's Links</title>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="theme-color" content="#000000">
+	<link rel="icon" href="data:,">
+	<style>
+		:root {
+			color-scheme: dark;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html, body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+			color: #ffffff;
+			height: 100%;
+		}
+
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+			font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+			padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+		}
+
+		main {
+			width: 100%;
+			max-width: 480px;
+			padding: 24px;
+		}
+
+		h1 {
+			text-align: center;
+			font-size: 1.5rem;
+			font-weight: 600;
+			letter-spacing: 0.02em;
+			margin: 0 0 32px;
+			color: #ffffff;
+		}
+
+		.links {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		.link-button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			padding: 20px 24px;
+			background-color: #ffffff;
+			color: #000000;
+			text-decoration: none;
+			font-size: 1.15rem;
+			font-weight: 600;
+			border-radius: 16px;
+			-webkit-tap-highlight-color: transparent;
+			transition: transform 0.08s ease, opacity 0.08s ease;
+		}
+
+		.link-button:active {
+			transform: scale(0.97);
+			opacity: 0.85;
+		}
+	</style>
+	<script data-goatcounter="https://counter.asghar.uk/count"
+	        async src="//counter.asghar.uk/count.js">
+	</script>
+</head>
+<body>
+	<main>
+		<h1>JJ's Links</h1>
+		<div class="links">
+			<a class="link-button" href="https://reddit.com" target="_blank" rel="noopener">Reddit</a>
+			<a class="link-button" href="https://cnn.com" target="_blank" rel="noopener">CNN</a>
+			<a class="link-button" href="https://lobste.rs" target="_blank" rel="noopener">Lobsters</a>
+			<a class="link-button" href="https://h.asghar.uk/new" target="_blank" rel="noopener">New Note</a>
+		</div>
+	</main>
+</body>
+</html>

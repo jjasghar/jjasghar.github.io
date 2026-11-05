@@ -7,7 +7,7 @@ draft: false
 ## Public Talks
 
 - ATX PowerShell
-- All Things Open: 2018, 2021, 2024, 2025: IBM Lounge
+- All Things Open: 2018, 2021, 2024, 2025: IBM Lounge, [video 2026](https://www.youtube.com/watch?v=8ak3NPwZcRw)
 - All Things Open.AI: 2025
 - Austin Bare-Metal Club
 - Austin DevOps: [video 2016](https://www.youtube.com/watch?v=lZKhwSGxa58)
@@ -54,7 +54,7 @@ draft: false
 - Gitex EMEA: 2023
 - HPE and Chef engineering day: [video](https://www.periscope.tv/HPE_ConvergedDI/1YpKkWlEYnjKj)
 - IBM Dallas DevDay: 2025
-- IBM TechXchange: 2024, 2025
+- IBM TechXchange: 2024, 2025, 2026
 - IBM THINK Gov: 2019
 - Indianapolis DevOps Meetup
 - Interop ITX: 2017
@@ -83,7 +83,7 @@ draft: false
 - SRE Day: 2022
 - StackConf: 2022 Full and Ignite
 - TalkDevOps Toronto: [video](https://channel9.msdn.com/Blogs/TalkDevOps/TalkDevOps--Introduction-to-Chef-with-JJ-Ashgar-as-a-DotNet-Developer)
-- Texas Linux Fest: 2015, 2016, 2018, 2025
+- Texas Linux Fest: 2015, 2016, 2018, 2025, 2026
 - that.us Texas: 2022, 2023
 - The Cloud First EU: [video 2021](https://youtu.be/OGFkz81mKf8?t=22331)
 - VMUG Austin: 2018
